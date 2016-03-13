@@ -15,6 +15,8 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
+VERSION=0.1.0
+
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
     CONFIG_ENABLE_FCS16 ?= n
@@ -149,12 +151,16 @@ arduino-nano:
 	@mkdir -p ./releases/arduino/TinyProto-Nano/
 	@cp -rf -L ./src/arduino/* ./releases/arduino/TinyProto-Nano/
 	@echo "#define CONFIG_ENABLE_CHECKSUM" > ./releases/arduino/TinyProto-Nano/src/proto/tiny_config.h
+	@sed -i "s/VERSION/$(VERSION)/" ./releases/arduino/TinyProto-Nano/library.properties
+	@sed -i "s/LIBRARY/TinyProto-Nano/" ./releases/arduino/TinyProto-Nano/library.properties
 
 arduino-micro:
 	@mkdir -p ./releases/arduino/TinyProto-Micro/
 	@cp -rf -L ./src/arduino/* ./releases/arduino/TinyProto-Micro/
 	@echo "#define CONFIG_ENABLE_CHECKSUM" > ./releases/arduino/TinyProto-Micro/src/proto/tiny_config.h
 	@echo "#define CONFIG_ENABLE_FCS16" >> ./releases/arduino/TinyProto-Micro/src/proto/tiny_config.h
+	@sed -i "s/VERSION/$(VERSION)/" ./releases/arduino/TinyProto-Micro/library.properties
+	@sed -i "s/LIBRARY/TinyProto-Micro/" ./releases/arduino/TinyProto-Micro/library.properties
 
 arduino-full:
 	@mkdir -p ./releases/arduino/TinyProto-Full/
@@ -163,6 +169,8 @@ arduino-full:
 	@echo "#define CONFIG_ENABLE_FCS16" >> ./releases/arduino/TinyProto-Full/src/proto/tiny_config.h
 	@echo "#define CONFIG_ENABLE_FCS32" >> ./releases/arduino/TinyProto-Full/src/proto/tiny_config.h
 	@echo "#define CONFIG_ENABLE_STATS" >> ./releases/arduino/TinyProto-Full/src/proto/tiny_config.h
+	@sed -i "s/VERSION/$(VERSION)/" ./releases/arduino/TinyProto-Full/library.properties
+	@sed -i "s/LIBRARY/TinyProto-Full/" ./releases/arduino/TinyProto-Full/library.properties
 
 arduino-pkg: arduino-nano arduino-micro arduino-full
 	@echo "arduino package build ... [DONE]"

@@ -4,8 +4,8 @@ With this library you can easy communicate your Arduino with applications
 on PC and other boards. You don't need to think about data synchronization 
 between points.
 
-For more information about this library please visit us at
-<TODO>
+For more information about this library please visit
+https://github.com/lexus2k/tinyproto
 
 == License ==
 Copyright 2016 (C) Alexey Dynda
