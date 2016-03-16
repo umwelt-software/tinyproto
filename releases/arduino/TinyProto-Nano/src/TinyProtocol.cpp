@@ -25,7 +25,7 @@
 #   endif
 #endif
 
-#include "TinyProtocol.h"
+#include "TinyProto-Nano.h"
 
 namespace Tiny {
 ///////////////////////////////////////////////////////////////////////

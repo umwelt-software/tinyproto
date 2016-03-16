@@ -145,32 +145,51 @@ examples: $(OBJ_EXAMPLE) $(OBJ_UART) library
 	$(CC) $(CCFLAGS) -o $(BLD)/$(TARGET_EXAMPLE) $(OBJ_EXAMPLE) $(LIBS_EXAMPLE)
 	$(CC) $(CCFLAGS) -o $(BLD)/$(TARGET_UART) $(OBJ_UART) $(LIBS_EXAMPLE)
 
+#####################################################################################################
+####################### arduino libraries                                     #######################
+#####################################################################################################
 
-####################### arduino library ############################
+ARDUINO_BASE_LIB=TinyProtocol
+ARDUINO_NANO_LIB=TinyProto-Nano
+ARDUINO_MICRO_LIB=TinyProto-Micro
+ARDUINO_FULL_LIB=TinyProto-Full
+
+ARDUINO_BASE_DIR=./src/arduino
+ARDUINO_NANO_DIR=./releases/arduino/$(ARDUINO_NANO_LIB)
+ARDUINO_MICRO_DIR=./releases/arduino/$(ARDUINO_MICRO_LIB)
+ARDUINO_FULL_DIR=./releases/arduino/$(ARDUINO_FULL_LIB)
+
+
 arduino-nano:
-	@mkdir -p ./releases/arduino/TinyProto-Nano/
-	@cp -rf -L ./src/arduino/* ./releases/arduino/TinyProto-Nano/
-	@echo "#define CONFIG_ENABLE_CHECKSUM" > ./releases/arduino/TinyProto-Nano/src/proto/tiny_config.h
-	@sed -i "s/VERSION/$(VERSION)/" ./releases/arduino/TinyProto-Nano/library.properties
-	@sed -i "s/LIBRARY/TinyProto-Nano/" ./releases/arduino/TinyProto-Nano/library.properties
+	@mkdir -p $(ARDUINO_NANO_DIR)
+	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_NANO_DIR)/
+	@echo "#define CONFIG_ENABLE_CHECKSUM" > $(ARDUINO_NANO_DIR)/src/proto/tiny_config.h
+	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_NANO_DIR)/library.properties
+	@sed -i "s/LIBRARY/$(ARDUINO_NANO_LIB)/" $(ARDUINO_NANO_DIR)/library.properties
+	@mv $(ARDUINO_NANO_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_NANO_DIR)/src/$(ARDUINO_NANO_LIB).h
+	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_NANO_LIB).h/" $(ARDUINO_NANO_DIR)/src/TinyProtocol.cpp
 
 arduino-micro:
-	@mkdir -p ./releases/arduino/TinyProto-Micro/
-	@cp -rf -L ./src/arduino/* ./releases/arduino/TinyProto-Micro/
-	@echo "#define CONFIG_ENABLE_CHECKSUM" > ./releases/arduino/TinyProto-Micro/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_FCS16" >> ./releases/arduino/TinyProto-Micro/src/proto/tiny_config.h
-	@sed -i "s/VERSION/$(VERSION)/" ./releases/arduino/TinyProto-Micro/library.properties
-	@sed -i "s/LIBRARY/TinyProto-Micro/" ./releases/arduino/TinyProto-Micro/library.properties
+	@mkdir -p $(ARDUINO_MICRO_DIR)/
+	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_MICRO_DIR)/
+	@echo "#define CONFIG_ENABLE_CHECKSUM" > $(ARDUINO_MICRO_DIR)/src/proto/tiny_config.h
+	@echo "#define CONFIG_ENABLE_FCS16" >> $(ARDUINO_MICRO_DIR)/src/proto/tiny_config.h
+	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_MICRO_DIR)/library.properties
+	@sed -i "s/LIBRARY/$(ARDUINO_MICRO_LIB)/" $(ARDUINO_MICRO_DIR)/library.properties
+	@mv $(ARDUINO_MICRO_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_MICRO_DIR)/src/$(ARDUINO_MICRO_LIB).h
+	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_MICRO_LIB).h/" $(ARDUINO_MICRO_DIR)/src/TinyProtocol.cpp
 
 arduino-full:
-	@mkdir -p ./releases/arduino/TinyProto-Full/
-	@cp -rf -L ./src/arduino/* ./releases/arduino/TinyProto-Full/
-	@echo "#define CONFIG_ENABLE_CHECKSUM" > ./releases/arduino/TinyProto-Full/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_FCS16" >> ./releases/arduino/TinyProto-Full/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_FCS32" >> ./releases/arduino/TinyProto-Full/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_STATS" >> ./releases/arduino/TinyProto-Full/src/proto/tiny_config.h
-	@sed -i "s/VERSION/$(VERSION)/" ./releases/arduino/TinyProto-Full/library.properties
-	@sed -i "s/LIBRARY/TinyProto-Full/" ./releases/arduino/TinyProto-Full/library.properties
+	@mkdir -p $(ARDUINO_FULL_DIR)/
+	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_FULL_DIR)/
+	@echo "#define CONFIG_ENABLE_CHECKSUM" > $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
+	@echo "#define CONFIG_ENABLE_FCS16" >> $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
+	@echo "#define CONFIG_ENABLE_FCS32" >> $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
+	@echo "#define CONFIG_ENABLE_STATS" >> $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
+	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_FULL_DIR)/library.properties
+	@sed -i "s/LIBRARY/$(ARDUINO_FULL_LIB)/" $(ARDUINO_FULL_DIR)/library.properties
+	@mv $(ARDUINO_FULL_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_FULL_DIR)/src/$(ARDUINO_FULL_LIB).h
+	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_FULL_LIB).h/" $(ARDUINO_FULL_DIR)/src/TinyProtocol.cpp
 
 arduino-pkg: arduino-nano arduino-micro arduino-full
 	@echo "arduino package build ... [DONE]"
