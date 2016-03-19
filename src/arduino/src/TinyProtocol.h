@@ -281,6 +281,12 @@ public:
                                           m_buf[m_len++] = 0; }
 
     /**
+     * Adds data from packet to the new packet being built.
+     * @param pkt - reference to the Packet to add.
+     */
+    inline void put    (const Packet &pkt){ memcpy(&m_buf[m_len], pkt.m_buf, pkt.m_len); m_len += pkt.m_len; }
+
+    /**
      * Puts uid to the packet.
      * @warning uid is sent only if this functionality is enabled in the Proto.
      * @see Proto::enableUid

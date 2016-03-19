@@ -17,8 +17,8 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tiny_layer2.h"
 #include "crc.h"
+#include "tiny_layer2.h"
 
 #ifdef CONFIG_ENABLE_STATS
     #define STATS(x) x
@@ -86,7 +86,7 @@ inline static int __check_fcs_field(uint8_t fcs_bits, fcs_t fcs)
 #ifdef CONFIG_ENABLE_CHECKSUM
     if ((fcs_bits == 8) && (fcs == GOODCHECKSUM)) return 1;
 #endif
-    return 0;
+    return fcs_bits == 0;
 }
 
 
@@ -236,27 +236,21 @@ int tiny_close(STinyData *handle)
 
 int tiny_set_fcs_bits(STinyData *handle, uint8_t bits)
 {
-    int result;
+    int result = TINY_NO_ERROR;
     switch (bits)
     {
 #ifdef CONFIG_ENABLE_FCS16
     case 16:
-        handle->fcs_bits = bits;
-        result = TINY_NO_ERROR;
-        break;
 #endif
 #ifdef CONFIG_ENABLE_FCS32
     case 32:
-        handle->fcs_bits = bits;
-        result = TINY_NO_ERROR;
-        break;
 #endif
 #ifdef CONFIG_ENABLE_CHECKSUM
     case 8:
-        handle->fcs_bits = bits;
-        result = TINY_NO_ERROR;
-        break;
 #endif
+    case 0:
+        handle->fcs_bits = bits;
+        break;
     default:
         result = TINY_ERR_FAILED;
         break;
@@ -360,27 +354,37 @@ static int __send_frame_uid_state(STinyData *handle)
 }
 
 
+/**
+ * This is handler for SEND DATA state. It switches to
+ * TINY_TX_STATE_END only if all bytes are sent.
+ * If next byte is successfully sent, it returns 1.
+ * If switched to other state, it returns 1.
+ * If no byte is sent during the cycle, it returns 0.
+ * If error happened, it returns negative value.
+ * @param handle - pointer to Tiny Protocol structure
+ */
 static int __send_frame_data_state(STinyData *handle)
 {
     int result;
     uint8_t byte;
+    if (handle->tx.sentbytes >= handle->tx.framelen)
+    {
+        __commit_fcs_field(handle->fcs_bits, &handle->tx.fcs);
+#ifdef TINY_FCS_ENABLE
+        /* sending crc */
+        handle->tx.inprogress = handle->fcs_bits ? TINY_TX_STATE_SEND_CRC : TINY_TX_STATE_END;
+        handle->tx.bits = 0;
+#else
+        handle->tx.inprogress = TINY_TX_STATE_END;
+#endif
+        return 1;
+    }
     byte = handle->tx.pframe[handle->tx.sentbytes];
     result = __send_byte_state(handle, byte);
     if (result > 0)
     {
         __update_fcs_field(handle->fcs_bits, &handle->tx.fcs, byte);
         handle->tx.sentbytes++;
-        if (handle->tx.sentbytes == handle->tx.framelen)
-        {
-            __commit_fcs_field(handle->fcs_bits, &handle->tx.fcs);
-#ifdef TINY_FCS_ENABLE
-            /* sending crc */
-            handle->tx.inprogress = handle->fcs_bits ? TINY_TX_STATE_SEND_CRC : TINY_TX_STATE_END;
-            handle->tx.bits = 0;
-#else
-            handle->tx.inprogress = TINY_TX_STATE_END;
-#endif
-        }
     }
     return result;
 }
@@ -489,7 +493,10 @@ static int __wait_send_complete(STinyData *handle, uint8_t *pbuf, uint8_t flags)
     return result;
 }
 #else
-#define __wait_send_complete(handle, pbuf, flags)  0
+#define __wait_send_complete(handle, pbuf, flags)  \
+                             0; \
+                             handle->tx.pframe = pbuf; \
+                             handle->tx.inprogress = TINY_TX_STATE_START;
 #endif
 
 
@@ -526,7 +533,7 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
         do
         {
             result = __tiny_send_data(handle);
-            if (result != 0)
+            if ((result != 0) || (handle->tx.inprogress == TINY_TX_STATE_IDLE))
             {
                 /* exit on error and on successful send */
                 break;
@@ -692,7 +699,7 @@ static int __tiny_read_data(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int
 
 int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags)
 {
-    int                 result;
+    int                 result = TINY_NO_ERROR;
     uint8_t               byte;
 
     if (!handle)
@@ -710,21 +717,8 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
 #           else
             result = handle->read_func(&byte, 1);
 #           endif
-            if (result<0)
-            {
-                result = TINY_ERR_FAILED;
-                break;
-            }
-            /* if no data on UART, just exit */
-            if (result == 0)
-            {
-                result = TINY_NO_ERROR;
-                if (!(flags & TINY_FLAG_WAIT_FOREVER))
-                {
-                    break;
-                }
-            }
-            else /* Byte is received */
+            /* Byte is received */
+            if (result > 0)
             {
                 /* New frame must be started with 0x7E char */
                 if (byte != FLAG_SEQUENCE)
@@ -739,11 +733,23 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
                 handle->rx.prevbyte = byte;
                 __init_fcs_field(handle->fcs_bits, &handle->rx.fcs);
             }
+            else if (result<0)
+            {
+                result = TINY_ERR_FAILED;
+                break;
+            }
         }
         /* Some frame is in process of receiving. Continue to parse data */
-        result = __tiny_read_data(handle, uid, pbuf, len);
+        if (handle->rx.inprogress != TINY_RX_STATE_IDLE)
+        {
+            result = __tiny_read_data(handle, uid, pbuf, len);
+        }
         if (result == 0)
         {
+            if (!(flags & TINY_FLAG_WAIT_FOREVER))
+            {
+                break;
+            }
             TASK_YIELD();
         }
     }
