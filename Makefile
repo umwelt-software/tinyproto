@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.1.1
+VERSION=0.1.2
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -158,7 +158,7 @@ ARDUINO_BASE_DIR=./src/arduino
 ARDUINO_NANO_DIR=./releases/arduino/$(ARDUINO_NANO_LIB)
 ARDUINO_MICRO_DIR=./releases/arduino/$(ARDUINO_MICRO_LIB)
 ARDUINO_FULL_DIR=./releases/arduino/$(ARDUINO_FULL_LIB)
-
+ARDUINO_BASE_URL=https://github.com/lexus2k/tinyproto/tree/master/releases/arduino
 
 arduino-nano:
 	@mkdir -p $(ARDUINO_NANO_DIR)
@@ -166,6 +166,7 @@ arduino-nano:
 	@echo "#define CONFIG_ENABLE_CHECKSUM" > $(ARDUINO_NANO_DIR)/src/proto/tiny_config.h
 	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_NANO_DIR)/library.properties
 	@sed -i "s/LIBRARY/$(ARDUINO_NANO_LIB)/" $(ARDUINO_NANO_DIR)/library.properties
+	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_NANO_LIB),g" $(ARDUINO_NANO_DIR)/library.properties
 	@mv $(ARDUINO_NANO_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_NANO_DIR)/src/$(ARDUINO_NANO_LIB).h
 	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_NANO_LIB).h/" $(ARDUINO_NANO_DIR)/src/TinyProtocol.cpp
 
@@ -176,6 +177,7 @@ arduino-micro:
 	@echo "#define CONFIG_ENABLE_FCS16" >> $(ARDUINO_MICRO_DIR)/src/proto/tiny_config.h
 	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_MICRO_DIR)/library.properties
 	@sed -i "s/LIBRARY/$(ARDUINO_MICRO_LIB)/" $(ARDUINO_MICRO_DIR)/library.properties
+	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_MICRO_LIB),g" $(ARDUINO_MICRO_DIR)/library.properties
 	@mv $(ARDUINO_MICRO_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_MICRO_DIR)/src/$(ARDUINO_MICRO_LIB).h
 	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_MICRO_LIB).h/" $(ARDUINO_MICRO_DIR)/src/TinyProtocol.cpp
 
@@ -188,6 +190,7 @@ arduino-full:
 	@echo "#define CONFIG_ENABLE_STATS" >> $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
 	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_FULL_DIR)/library.properties
 	@sed -i "s/LIBRARY/$(ARDUINO_FULL_LIB)/" $(ARDUINO_FULL_DIR)/library.properties
+	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_FULL_LIB),g" $(ARDUINO_FULL_DIR)/library.properties
 	@mv $(ARDUINO_FULL_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_FULL_DIR)/src/$(ARDUINO_FULL_LIB).h
 	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_FULL_LIB).h/" $(ARDUINO_FULL_DIR)/src/TinyProtocol.cpp
 
