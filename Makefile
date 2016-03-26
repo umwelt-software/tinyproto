@@ -194,7 +194,7 @@ arduino-full:
 	@mv $(ARDUINO_FULL_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_FULL_DIR)/src/$(ARDUINO_FULL_LIB).h
 	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_FULL_LIB).h/" $(ARDUINO_FULL_DIR)/src/TinyProtocol.cpp
 
-arduino-pkg: arduino-nano arduino-micro arduino-full
+arduino-pkg: arduino-nano arduino-micro arduino-full doc
 	@echo "arduino package build ... [DONE]"
 
 

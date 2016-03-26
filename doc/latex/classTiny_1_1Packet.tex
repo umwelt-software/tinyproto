@@ -1,0 +1,324 @@
+\hypertarget{classTiny_1_1Packet}{}\section{Tiny\+:\+:Packet Class Reference}
+\label{classTiny_1_1Packet}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+
+
+{\ttfamily \#include $<$Tiny\+Protocol.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classTiny_1_1Packet_aad47b3053945b29b1b46d76b31b72960}{Packet} (char $\ast$buf, size\+\_\+t \hyperlink{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{size})
+\item 
+void \hyperlink{classTiny_1_1Packet_a9bfdb9244515ef3dbf1056c1e37d0902}{clear} ()
+\item 
+void \hyperlink{classTiny_1_1Packet_a52c746f604ee6c0e4e78902b4cf710a9}{put} (uint8\+\_\+t byte)
+\item 
+void \hyperlink{classTiny_1_1Packet_a6e1e5236908290f28c3b9a0818242b5b}{put} (char chr)
+\item 
+void \hyperlink{classTiny_1_1Packet_a0055b5d1c437104e38bf66ece8ab84ba}{put} (uint16\+\_\+t \hyperlink{classTiny_1_1Packet_a3307ba504caba9c5eee8f1f32cf1a749}{data})
+\item 
+void \hyperlink{classTiny_1_1Packet_aed30fc087142669b37ec99d9d6572e57}{put} (uint32\+\_\+t \hyperlink{classTiny_1_1Packet_a3307ba504caba9c5eee8f1f32cf1a749}{data})
+\item 
+void \hyperlink{classTiny_1_1Packet_a464ddc51642812e604ac39f775762165}{put} (int16\+\_\+t \hyperlink{classTiny_1_1Packet_a3307ba504caba9c5eee8f1f32cf1a749}{data})
+\item 
+void \hyperlink{classTiny_1_1Packet_a6b5880ebffa02df3a380a270809433e1}{put} (const char $\ast$str)
+\item 
+void \hyperlink{classTiny_1_1Packet_a5741e3aec04c9100ce00a6b702417231}{put} (const \hyperlink{classTiny_1_1Packet}{Packet} \&pkt)
+\item 
+void \hyperlink{classTiny_1_1Packet_ae8764bf70fd6f09df2cb15c02ce2aa30}{put\+Uid} (uint16\+\_\+t uid)
+\item 
+uint8\+\_\+t \hyperlink{classTiny_1_1Packet_a152feac05d3e972f614c17c36bf30513}{get\+Byte} ()
+\item 
+char \hyperlink{classTiny_1_1Packet_a260645f9d055da878f149a13ecd58844}{get\+Char} ()
+\item 
+uint16\+\_\+t \hyperlink{classTiny_1_1Packet_a71765e73adfbc67138f75c2b8ea7d74c}{get\+Uint16} ()
+\item 
+int16\+\_\+t \hyperlink{classTiny_1_1Packet_a7dfed04418564f93dd4d2b4e9144a861}{get\+Int16} ()
+\item 
+uint32\+\_\+t \hyperlink{classTiny_1_1Packet_a5dd4b89cb7224b62d4f0328c8e40f38f}{get\+Uint32} ()
+\item 
+char $\ast$ \hyperlink{classTiny_1_1Packet_a8bc9a3b3f41be292f9c5ac566afeb04b}{get\+String} ()
+\item 
+uint16\+\_\+t \hyperlink{classTiny_1_1Packet_a5333df49a8becff438d3e36b0ca8d3f0}{get\+Uid} ()
+\item 
+size\+\_\+t \hyperlink{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{size} ()
+\item 
+size\+\_\+t \hyperlink{classTiny_1_1Packet_ac6545b3b5df97d5f1ea1a15abc0570ed}{max\+Size} ()
+\item 
+char $\ast$ \hyperlink{classTiny_1_1Packet_a3307ba504caba9c5eee8f1f32cf1a749}{data} ()
+\item 
+uint8\+\_\+t \& \hyperlink{classTiny_1_1Packet_abfaef504eb88a4db88bca3b907770fa2}{operator\mbox{[}$\,$\mbox{]}} (size\+\_\+t idx)
+\item 
+\hyperlink{classTiny_1_1Packet}{Packet} \& \hyperlink{classTiny_1_1Packet_a2de2c7f2c3ea6baaab462dd7e4469ecb}{operator=} (char chr)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classTiny_1_1Packet_a45bd055fddab40aaf0c60bfb9e21aa6f}{}class {\bfseries Proto}\label{classTiny_1_1Packet_a45bd055fddab40aaf0c60bfb9e21aa6f}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Describes packet entity and provides A\+P\+I methods to manipulate the packet. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classTiny_1_1Packet_aad47b3053945b29b1b46d76b31b72960}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!Packet@{Packet}}
+\index{Packet@{Packet}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{Packet}]{\setlength{\rightskip}{0pt plus 5cm}Tiny\+::\+Packet\+::\+Packet (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{buf, }
+\item[{size\+\_\+t}]{size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_aad47b3053945b29b1b46d76b31b72960}
+Creates packet object. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ pointer to the buffer to store packet data \\
+\hline
+{\em size} & -\/ size of the buffer to hold packet data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+passed buffer must exist all lifecycle of the \hyperlink{classTiny_1_1Packet}{Packet} object. 
+\end{DoxyNote}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classTiny_1_1Packet_a9bfdb9244515ef3dbf1056c1e37d0902}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!clear@{clear}}
+\index{clear@{clear}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{clear}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::clear (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a9bfdb9244515ef3dbf1056c1e37d0902}
+Clears \hyperlink{classTiny_1_1Packet}{Packet} state. Buffer and its size are preserved. \hypertarget{classTiny_1_1Packet_a3307ba504caba9c5eee8f1f32cf1a749}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!data@{data}}
+\index{data@{data}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{data}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ Tiny\+::\+Packet\+::data (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a3307ba504caba9c5eee8f1f32cf1a749}
+Returns size of payload data in the received packet. \begin{DoxyReturn}{Returns}
+size of payload data. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a152feac05d3e972f614c17c36bf30513}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Byte@{get\+Byte}}
+\index{get\+Byte@{get\+Byte}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{get\+Byte}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t Tiny\+::\+Packet\+::get\+Byte (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a152feac05d3e972f614c17c36bf30513}
+Reads next byte from the packet. \begin{DoxyReturn}{Returns}
+byte from the packet. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a260645f9d055da878f149a13ecd58844}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Char@{get\+Char}}
+\index{get\+Char@{get\+Char}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{get\+Char}]{\setlength{\rightskip}{0pt plus 5cm}char Tiny\+::\+Packet\+::get\+Char (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a260645f9d055da878f149a13ecd58844}
+Reads next character from the packet. \begin{DoxyReturn}{Returns}
+character from the packet. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a7dfed04418564f93dd4d2b4e9144a861}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Int16@{get\+Int16}}
+\index{get\+Int16@{get\+Int16}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{get\+Int16}]{\setlength{\rightskip}{0pt plus 5cm}int16\+\_\+t Tiny\+::\+Packet\+::get\+Int16 (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a7dfed04418564f93dd4d2b4e9144a861}
+Reads next signed 16-\/bit integer from the packet. \begin{DoxyReturn}{Returns}
+signed 16-\/bit integer. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a8bc9a3b3f41be292f9c5ac566afeb04b}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+String@{get\+String}}
+\index{get\+String@{get\+String}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{get\+String}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ Tiny\+::\+Packet\+::get\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a8bc9a3b3f41be292f9c5ac566afeb04b}
+Reads zero-\/terminated string from the packet. \begin{DoxyReturn}{Returns}
+zero-\/terminated string. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a5333df49a8becff438d3e36b0ca8d3f0}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Uid@{get\+Uid}}
+\index{get\+Uid@{get\+Uid}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{get\+Uid}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t Tiny\+::\+Packet\+::get\+Uid (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a5333df49a8becff438d3e36b0ca8d3f0}
+Returns 16-\/bit identificator of the packet. \begin{DoxyWarning}{Warning}
+uid is valid only if uid functionality is enabled in the \hyperlink{classTiny_1_1Proto}{Proto} 
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Proto_a9fdd64b8296e27f3205cd0d3ea685eac}{Proto\+::enable\+Uid} 
+
+\hyperlink{classTiny_1_1Proto_aff9f3c59f58a8ca527ad0254ab806c5c}{Proto\+::disable\+Uid} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+16-\/bit uid. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a71765e73adfbc67138f75c2b8ea7d74c}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Uint16@{get\+Uint16}}
+\index{get\+Uint16@{get\+Uint16}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{get\+Uint16}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t Tiny\+::\+Packet\+::get\+Uint16 (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a71765e73adfbc67138f75c2b8ea7d74c}
+Reads next unsigned 16-\/bit integer from the packet. \begin{DoxyReturn}{Returns}
+unsigned 16-\/bit integer. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a5dd4b89cb7224b62d4f0328c8e40f38f}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Uint32@{get\+Uint32}}
+\index{get\+Uint32@{get\+Uint32}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{get\+Uint32}]{\setlength{\rightskip}{0pt plus 5cm}uint32\+\_\+t Tiny\+::\+Packet\+::get\+Uint32 (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a5dd4b89cb7224b62d4f0328c8e40f38f}
+Reads next unsigned 32-\/bit integer from the packet. \begin{DoxyReturn}{Returns}
+unsigned 32-\/bit integer. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_ac6545b3b5df97d5f1ea1a15abc0570ed}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!max\+Size@{max\+Size}}
+\index{max\+Size@{max\+Size}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{max\+Size}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t Tiny\+::\+Packet\+::max\+Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_ac6545b3b5df97d5f1ea1a15abc0570ed}
+Returns maximum size of packet buffer. \begin{DoxyReturn}{Returns}
+max size of packet buffer. 
+\end{DoxyReturn}
+\hypertarget{classTiny_1_1Packet_a2de2c7f2c3ea6baaab462dd7e4469ecb}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!operator=@{operator=}}
+\index{operator=@{operator=}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{operator=}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Packet}\& Tiny\+::\+Packet\+::operator= (
+\begin{DoxyParamCaption}
+\item[{char}]{chr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a2de2c7f2c3ea6baaab462dd7e4469ecb}
+Assign operator = puts next char to the packet. Several assign operators put one by one several chars. \hypertarget{classTiny_1_1Packet_abfaef504eb88a4db88bca3b907770fa2}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!operator\mbox{[}$\,$\mbox{]}@{operator[]}}
+\index{operator\mbox{[}$\,$\mbox{]}@{operator[]}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{operator[]}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t\& Tiny\+::\+Packet\+::operator\mbox{[}$\,$\mbox{]} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{idx}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_abfaef504eb88a4db88bca3b907770fa2}
+You may refer to \hyperlink{classTiny_1_1Packet}{Packet} payload data directly by using operator \mbox{[}\mbox{]} \hypertarget{classTiny_1_1Packet_a52c746f604ee6c0e4e78902b4cf710a9}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{byte}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a52c746f604ee6c0e4e78902b4cf710a9}
+Puts next byte to the packet. For example, after calling this method twice\+: put(5), put(10), -\/ the \hyperlink{classTiny_1_1Packet}{Packet} will contain 5,10. 
+\begin{DoxyParams}{Parameters}
+{\em byte} & -\/ data byte to put. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_a6e1e5236908290f28c3b9a0818242b5b}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put (
+\begin{DoxyParamCaption}
+\item[{char}]{chr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a6e1e5236908290f28c3b9a0818242b5b}
+Puts next char to the packet. For example, after calling this method twice\+: put(\textquotesingle{}a\textquotesingle{}), put(\textquotesingle{}c\textquotesingle{}), -\/ the \hyperlink{classTiny_1_1Packet}{Packet} will contain \textquotesingle{}ac\textquotesingle{}. 
+\begin{DoxyParams}{Parameters}
+{\em chr} & -\/ character to put. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_a0055b5d1c437104e38bf66ece8ab84ba}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a0055b5d1c437104e38bf66ece8ab84ba}
+Puts next 16-\/bit unsigned integer to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ data to put. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_aed30fc087142669b37ec99d9d6572e57}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put (
+\begin{DoxyParamCaption}
+\item[{uint32\+\_\+t}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_aed30fc087142669b37ec99d9d6572e57}
+Puts next 32-\/bit unsigned integer to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ data to put. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_a464ddc51642812e604ac39f775762165}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put (
+\begin{DoxyParamCaption}
+\item[{int16\+\_\+t}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a464ddc51642812e604ac39f775762165}
+Puts next 16-\/bit signed integer to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ data to put. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_a6b5880ebffa02df3a380a270809433e1}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{str}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a6b5880ebffa02df3a380a270809433e1}
+Puts next null-\/terminated string to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em str} & -\/ string to put. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_a5741e3aec04c9100ce00a6b702417231}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put (
+\begin{DoxyParamCaption}
+\item[{const {\bf Packet} \&}]{pkt}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a5741e3aec04c9100ce00a6b702417231}
+Adds data from packet to the new packet being built. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & -\/ reference to the \hyperlink{classTiny_1_1Packet}{Packet} to add. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_ae8764bf70fd6f09df2cb15c02ce2aa30}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!put\+Uid@{put\+Uid}}
+\index{put\+Uid@{put\+Uid}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{put\+Uid}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Packet\+::put\+Uid (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{uid}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_ae8764bf70fd6f09df2cb15c02ce2aa30}
+Puts uid to the packet. \begin{DoxyWarning}{Warning}
+uid is sent only if this functionality is enabled in the \hyperlink{classTiny_1_1Proto}{Proto}. 
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Proto_a9fdd64b8296e27f3205cd0d3ea685eac}{Proto\+::enable\+Uid} 
+
+\hyperlink{classTiny_1_1Proto_aff9f3c59f58a8ca527ad0254ab806c5c}{Proto\+::disable\+Uid} 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em uid} & -\/ 16-\/bit number to place to the packet. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!size@{size}}
+\index{size@{size}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{size}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t Tiny\+::\+Packet\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}
+Returns size of payload data in the received packet. \begin{DoxyReturn}{Returns}
+size of payload data. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/arduino/src/\hyperlink{TinyProtocol_8h}{Tiny\+Protocol.\+h}\end{DoxyCompactItemize}

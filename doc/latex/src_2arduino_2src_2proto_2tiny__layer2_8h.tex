@@ -1,0 +1,425 @@
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h}{}\section{src/arduino/src/proto/tiny\+\_\+layer2.h File Reference}
+\label{src_2arduino_2src_2proto_2tiny__layer2_8h}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+
+
+Tiny protocol A\+P\+I.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}tiny\+\_\+defines.\+h\char`\"{}}\\*
+Include dependency graph for tiny\+\_\+layer2.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{src_2arduino_2src_2proto_2tiny__layer2_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=227pt]{src_2arduino_2src_2proto_2tiny__layer2_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSTinyStats}{S\+Tiny\+Stats}
+\item 
+struct \hyperlink{structSTinyRxStatus}{S\+Tiny\+Rx\+Status}
+\item 
+struct \hyperlink{structSTinyTxStatus}{S\+Tiny\+Tx\+Status}
+\item 
+struct \hyperlink{structSTinyData}{S\+Tiny\+Data}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{}\#define \hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R}~(0)\label{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}
+
+\begin{DoxyCompactList}\small\item\em No error. For tiny\+\_\+send and tiny\+\_\+read functions, this means, no data sent or received. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{}\#define \hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D}~(-\/1)\label{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}
+
+\begin{DoxyCompactList}\small\item\em Generic error. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{}\#define \hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T}~(-\/2)\label{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}
+
+\begin{DoxyCompactList}\small\item\em Timeout happened. Not actually used for now. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{}\#define \hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E}~(-\/3)\label{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}
+
+\begin{DoxyCompactList}\small\item\em Data too large to fit the user buffer, valid for tiny\+\_\+read function. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{}\#define \hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A}~(-\/4)\label{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}
+
+\begin{DoxyCompactList}\small\item\em Some invalid data passed to Tiny A\+P\+I function. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{}\#define \hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y}~(-\/5)\label{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}
+
+\begin{DoxyCompactList}\small\item\em A\+P\+I function detected that operation cannot be performed right now. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{}\#define \hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C}~(-\/6)\label{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}
+
+\begin{DoxyCompactList}\small\item\em Out of sync -\/ received some data, which are not part of the frame (tiny\+\_\+read) \end{DoxyCompactList}\item 
+\hypertarget{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{}\#define \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T}~(0)\label{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}
+
+\begin{DoxyCompactList}\small\item\em This flag makes tiny A\+P\+I functions perform as non-\/blocking. \end{DoxyCompactList}\item 
+\hypertarget{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{}\#define \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}~(1)\label{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}
+
+\begin{DoxyCompactList}\small\item\em This flag makes tiny A\+P\+I functions perform in blocking mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int($\ast$ \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_aade691536f3244c04098c51f8027f59e}{write\+\_\+block\+\_\+cb\+\_\+t}) (const uint8\+\_\+t $\ast$buffer, int size)
+\item 
+typedef int($\ast$ \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a7d62f1fe7624886bc63482a49e3aec51}{read\+\_\+block\+\_\+cb\+\_\+t}) (uint8\+\_\+t $\ast$buffer, int size)
+\item 
+typedef void($\ast$ \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t}) (void $\ast$handle, \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}{E\+Tiny\+Frame\+Direction} direction, uint8\+\_\+t $\ast$pdata, int size)
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}{E\+Tiny\+Frame\+Direction} \{ {\bfseries T\+I\+N\+Y\+\_\+\+F\+R\+A\+M\+E\+\_\+\+T\+X}, 
+{\bfseries T\+I\+N\+Y\+\_\+\+F\+R\+A\+M\+E\+\_\+\+R\+X}, 
+{\bfseries T\+I\+N\+Y\+\_\+\+F\+R\+A\+M\+E\+\_\+\+T\+X}, 
+{\bfseries T\+I\+N\+Y\+\_\+\+F\+R\+A\+M\+E\+\_\+\+R\+X}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ad8127e87f864096d0bac5b3953911e98}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{inc_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{inc_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func)
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a5e66725a2818491d4e2b1134951d9229}{tiny\+\_\+set\+\_\+fcs\+\_\+bits} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t bits)
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a988a41addbe75dc15cc13006de6740e0}{tiny\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a470d59a60a496944e63031ba43a00e3d}{tiny\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\item 
+int \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{inc_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} read\+\_\+cb, \hyperlink{inc_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} send\+\_\+cb)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Tiny protocol A\+P\+I. 
+
+This is Tiny protocol implementation for microcontrollers 
+
+\subsection{Typedef Documentation}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!on\+\_\+frame\+\_\+cb\+\_\+t@{on\+\_\+frame\+\_\+cb\+\_\+t}}
+\index{on\+\_\+frame\+\_\+cb\+\_\+t@{on\+\_\+frame\+\_\+cb\+\_\+t}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{on\+\_\+frame\+\_\+cb\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ on\+\_\+frame\+\_\+cb\+\_\+t) (void $\ast$handle, {\bf E\+Tiny\+Frame\+Direction} direction, uint8\+\_\+t $\ast$pdata, int size)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}
+on\+\_\+frame\+\_\+cb\+\_\+t is a function to callback data going through Tiny level. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ handle of Tiny. \\
+\hline
+{\em direction} & -\/ frame is sent or received. \\
+\hline
+{\em pdata} & -\/ data sent or received over Tiny. \\
+\hline
+{\em size} & -\/ size of data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_a7d62f1fe7624886bc63482a49e3aec51}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}}
+\index{read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{read\+\_\+block\+\_\+cb\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef int($\ast$ read\+\_\+block\+\_\+cb\+\_\+t) (uint8\+\_\+t $\ast$buffer, int size)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_a7d62f1fe7624886bc63482a49e3aec51}
+The function reads data from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pdata} & -\/ pointer to user private data. -\/ absent in Arduino version \\
+\hline
+{\em buffer} & -\/ pointer to a buffer to read data to from the channel. \\
+\hline
+{\em size} & -\/ maximum size of the buffer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_aade691536f3244c04098c51f8027f59e}{write\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+the function must return negative value in case of error or number of bytes actually read or zero. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_aade691536f3244c04098c51f8027f59e}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}}
+\index{write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{write\+\_\+block\+\_\+cb\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef int($\ast$ write\+\_\+block\+\_\+cb\+\_\+t) (const uint8\+\_\+t $\ast$buffer, int size)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_aade691536f3244c04098c51f8027f59e}
+The function writes data to communication channel port. 
+\begin{DoxyParams}{Parameters}
+{\em pdata} & -\/ pointer to user private data -\/ absent in Arduino version \\
+\hline
+{\em buffer} & -\/ pointer to the data to send to channel. \\
+\hline
+{\em size} & -\/ size of data to write. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a7d62f1fe7624886bc63482a49e3aec51}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+the function must return negative value in case of error or number of bytes written or zero. 
+\end{DoxyReturn}
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!E\+Tiny\+Frame\+Direction@{E\+Tiny\+Frame\+Direction}}
+\index{E\+Tiny\+Frame\+Direction@{E\+Tiny\+Frame\+Direction}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{E\+Tiny\+Frame\+Direction}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf E\+Tiny\+Frame\+Direction}}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}
+Enum is used for callback functions to specify direction of the frame, processed by the protocol. 
+
+\subsection{Function Documentation}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_ac75ee03ea3691b0a8bf842d764b342d9}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+clear\+\_\+stat@{tiny\+\_\+clear\+\_\+stat}}
+\index{tiny\+\_\+clear\+\_\+stat@{tiny\+\_\+clear\+\_\+stat}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+clear\+\_\+stat}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+clear\+\_\+stat (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_ac75ee03ea3691b0a8bf842d764b342d9}
+The function clears Tiny statistics. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+
+\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R.
+\end{DoxyReturn}
+tiny\+\_\+clear\+\_\+stat function clears Tiny protocol statistics. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny protocol structure \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+
+\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_a48cf9ffab9eeb9665e61ae69e28938b8}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+close@{tiny\+\_\+close}}
+\index{tiny\+\_\+close@{tiny\+\_\+close}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+close}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+close (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_a48cf9ffab9eeb9665e61ae69e28938b8}
+The function closes channel. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ad8127e87f864096d0bac5b3953911e98}{tiny\+\_\+init()} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_a5f61774b2027a91f772f31d943acdd3f}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}}
+\index{tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+get\+\_\+stat}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+get\+\_\+stat (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{{\bf S\+Tiny\+Stats} $\ast$}]{stat}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_a5f61774b2027a91f772f31d943acdd3f}
+The function returns statistics per communication connection. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+{\em stat} & -\/ pointer of stucture to fill. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+
+\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_ad8127e87f864096d0bac5b3953911e98}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+init@{tiny\+\_\+init}}
+\index{tiny\+\_\+init@{tiny\+\_\+init}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{{\bf write\+\_\+block\+\_\+cb\+\_\+t}}]{write\+\_\+func, }
+\item[{{\bf read\+\_\+block\+\_\+cb\+\_\+t}}]{read\+\_\+func}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_ad8127e87f864096d0bac5b3953911e98}
+The function initializes internal structures for Tiny channel and return handle to be used with all Tiny and I\+P\+C functions. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data \\
+\hline
+{\em write\+\_\+func} & -\/ pointer to write data function (to communication channel). \\
+\hline
+{\em read\+\_\+func} & -\/ pointer to read function (from communication channel). \\
+\hline
+{\em pdata} & -\/ pointer to a user private data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+pdata parameter is not applicable for Arduino and is absent in its version. 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{inc_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
+
+\hyperlink{inc_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R or error code.
+\end{DoxyReturn}
+The function initializes internal structures for Tiny channel and return handle to be used with all Tiny and I\+P\+C functions. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data \\
+\hline
+{\em write\+\_\+func} & -\/ pointer to write data function (to communication channel). \\
+\hline
+{\em read\+\_\+func} & -\/ pointer to read function (from communication channel). \\
+\hline
+{\em pdata} & -\/ pointer to a user private data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{inc_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
+
+\hyperlink{inc_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R or error code. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_a470d59a60a496944e63031ba43a00e3d}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+read@{tiny\+\_\+read}}
+\index{tiny\+\_\+read@{tiny\+\_\+read}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+read}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+read (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{uint16\+\_\+t $\ast$}]{uid, }
+\item[{uint8\+\_\+t $\ast$}]{pbuf, }
+\item[{int}]{len, }
+\item[{uint8\+\_\+t}]{flags}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_a470d59a60a496944e63031ba43a00e3d}
+The function reads data from communication channel frame format\+: 0x7\+E, data..., F\+C\+S, 0x7\+E. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+{\em uid} & -\/ pointer to 16-\/bit uid variable to fill with packet info, can be N\+U\+L\+L. \\
+\hline
+{\em pbuf} & a const pointer to unsigned char -\/ buffer with data to send \\
+\hline
+{\em len} & an integer argument -\/ length of data to send \\
+\hline
+{\em flags} & -\/ T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+
+\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+
+\hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E} 
+
+\hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C} 
+
+\hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_a988a41addbe75dc15cc13006de6740e0}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+send@{tiny\+\_\+send}}
+\index{tiny\+\_\+send@{tiny\+\_\+send}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+send}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+send (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{uint16\+\_\+t $\ast$}]{uid, }
+\item[{uint8\+\_\+t $\ast$}]{pbuf, }
+\item[{int}]{len, }
+\item[{uint8\+\_\+t}]{flags}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_a988a41addbe75dc15cc13006de6740e0}
+The function sends data to communication channel in the following frame format\+: 0x7\+E, data..., F\+C\+S, 0x7\+E. \begin{DoxyNote}{Note}
+if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T, then this function may remember pbuf pointer and return immediately. So, it is responsibility of the caller to make pbuf data to be available all the time until frame is sent. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+{\em uid} & -\/ pointer to 16-\/bit variable containing packet uid, can be N\+U\+L\+L. \\
+\hline
+{\em pbuf} & -\/ a const pointer to unsigned char -\/ buffer with data to send \\
+\hline
+{\em len} & -\/ an integer argument -\/ length of data to send \\
+\hline
+{\em flags} & -\/ T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+
+\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+
+\hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
+
+\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+set\+\_\+callbacks@{tiny\+\_\+set\+\_\+callbacks}}
+\index{tiny\+\_\+set\+\_\+callbacks@{tiny\+\_\+set\+\_\+callbacks}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+set\+\_\+callbacks}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+set\+\_\+callbacks (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t}}]{read\+\_\+cb, }
+\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t}}]{send\+\_\+cb}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}
+The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+{\em read\+\_\+cb} & -\/ pointer to callback function. \\
+\hline
+{\em send\+\_\+cb} & -\/ pointer to callback function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R.
+\end{DoxyReturn}
+tiny\+\_\+set\+\_\+callbacks sets callback procs for specified Tiny protocol. callbacks will receive all data being sent or received. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny Protocol structure \\
+\hline
+{\em read\+\_\+cb} & -\/ an argument of on\+\_\+frame\+\_\+cb\+\_\+t type -\/ pointer to callback function. \\
+\hline
+{\em send\+\_\+cb} & -\/ an argument of on\+\_\+frame\+\_\+cb\+\_\+t type -\/ pointer to callback function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
+\end{DoxyReturn}
+\hypertarget{src_2arduino_2src_2proto_2tiny__layer2_8h_a5e66725a2818491d4e2b1134951d9229}{}\index{src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}!tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}}
+\index{tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}!src/arduino/src/proto/tiny\+\_\+layer2.\+h@{src/arduino/src/proto/tiny\+\_\+layer2.\+h}}
+\subsubsection[{tiny\+\_\+set\+\_\+fcs\+\_\+bits}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+set\+\_\+fcs\+\_\+bits (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{uint8\+\_\+t}]{bits}
+\end{DoxyParamCaption}
+)}\label{src_2arduino_2src_2proto_2tiny__layer2_8h_a5e66725a2818491d4e2b1134951d9229}
+The function sets number of bits used for fcs 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny structure \\
+\hline
+{\em bits} & -\/ number of bits to use for fcs\+: 16 or 32. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R 
+\end{DoxyReturn}
