@@ -2,7 +2,7 @@
  * This example sends <Hello> packet every second.
  * If some packet is received from remote side, it echos content back to the sender
  */
-#include <TinyProto-Nano.h>
+#include <TinyProtocol.h>
 
 const int PIN_LED = 13;
 

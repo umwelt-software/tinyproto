@@ -7,11 +7,11 @@
  * TinyProtocol uses some special frame format, that means that it will ignore not valid
  * chars received over UART. Each packet should be in the following format:
  * ~[UID]DATA[FCS]~
- * UID and FCS field are optional. In the example below, they are disabled. Nano versition
- * of Tiny protocol supports only simple 1-byte Checksum field. For CRC-16/CRC-32 use Micro and
+ * UID and FCS field are optional. In the example below, they are disabled. Nano version
+ * of Tiny protocol supports only simple 1-byte Checksum field. For CRC-16/CRC-32 use
  * Full versions of Tiny protocol.
  */
-#include <TinyProto-Nano.h>
+#include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
 Tiny::Proto  proto;

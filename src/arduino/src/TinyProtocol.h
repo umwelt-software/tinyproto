@@ -171,7 +171,7 @@ public:
     /**
      * Enables CRC 8-bit field in the protocol. This field
      * contains sum of all data bytes in the packet.
-     * 8-bit field is not supported by Nano version of Tiny library.
+     * 8-bit field is supported by Nano version of Tiny library.
      * @return true if successful
      *         false in case of error.
      */
@@ -189,7 +189,7 @@ public:
     /**
      * Enables CRC 32-bit field in the protocol. This field
      * contains FCS 32-bit CCITT like defined in RFC 1662.
-     * 32-bit field is not supported by Nano and Micro versions of
+     * 32-bit field is not supported by Nano version of
      * Tiny library.
      * @return true if successful
      *         false in case of error.

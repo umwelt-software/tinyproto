@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.1.2
+VERSION=0.2.0
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -88,7 +88,7 @@ ifeq ($(CONFIG_ENABLE_STATS),y)
 endif
 
 .PHONY: clean library examples all install install-lib doc \
-	arduino-nano arduino-micro arduino-full arduino-pkg
+	arduino-pkg
 
 # ************* Compiling example ******************
 
@@ -146,55 +146,23 @@ examples: $(OBJ_EXAMPLE) $(OBJ_UART) library
 	$(CC) $(CCFLAGS) -o $(BLD)/$(TARGET_UART) $(OBJ_UART) $(LIBS_EXAMPLE)
 
 #####################################################################################################
-####################### arduino libraries                                     #######################
+####################### arduino library                                       #######################
 #####################################################################################################
 
 ARDUINO_BASE_LIB=TinyProtocol
-ARDUINO_NANO_LIB=TinyProto-Nano
-ARDUINO_MICRO_LIB=TinyProto-Micro
-ARDUINO_FULL_LIB=TinyProto-Full
+ARDUINO_LIB=TinyProtocol
 
 ARDUINO_BASE_DIR=./src/arduino
-ARDUINO_NANO_DIR=./releases/arduino/$(ARDUINO_NANO_LIB)
-ARDUINO_MICRO_DIR=./releases/arduino/$(ARDUINO_MICRO_LIB)
-ARDUINO_FULL_DIR=./releases/arduino/$(ARDUINO_FULL_LIB)
+ARDUINO_DIR=./releases/arduino/$(ARDUINO_LIB)
 ARDUINO_BASE_URL=https://github.com/lexus2k/tinyproto/tree/master/releases/arduino
 
-arduino-nano:
-	@mkdir -p $(ARDUINO_NANO_DIR)
-	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_NANO_DIR)/
-	@echo "#define CONFIG_ENABLE_CHECKSUM" > $(ARDUINO_NANO_DIR)/src/proto/tiny_config.h
-	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_NANO_DIR)/library.properties
-	@sed -i "s/LIBRARY/$(ARDUINO_NANO_LIB)/" $(ARDUINO_NANO_DIR)/library.properties
-	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_NANO_LIB),g" $(ARDUINO_NANO_DIR)/library.properties
-	@mv $(ARDUINO_NANO_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_NANO_DIR)/src/$(ARDUINO_NANO_LIB).h
-	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_NANO_LIB).h/" $(ARDUINO_NANO_DIR)/src/TinyProtocol.cpp
-
-arduino-micro:
-	@mkdir -p $(ARDUINO_MICRO_DIR)/
-	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_MICRO_DIR)/
-	@echo "#define CONFIG_ENABLE_CHECKSUM" > $(ARDUINO_MICRO_DIR)/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_FCS16" >> $(ARDUINO_MICRO_DIR)/src/proto/tiny_config.h
-	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_MICRO_DIR)/library.properties
-	@sed -i "s/LIBRARY/$(ARDUINO_MICRO_LIB)/" $(ARDUINO_MICRO_DIR)/library.properties
-	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_MICRO_LIB),g" $(ARDUINO_MICRO_DIR)/library.properties
-	@mv $(ARDUINO_MICRO_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_MICRO_DIR)/src/$(ARDUINO_MICRO_LIB).h
-	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_MICRO_LIB).h/" $(ARDUINO_MICRO_DIR)/src/TinyProtocol.cpp
-
-arduino-full:
-	@mkdir -p $(ARDUINO_FULL_DIR)/
-	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_FULL_DIR)/
-	@echo "#define CONFIG_ENABLE_CHECKSUM" > $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_FCS16" >> $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_FCS32" >> $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
-	@echo "#define CONFIG_ENABLE_STATS" >> $(ARDUINO_FULL_DIR)/src/proto/tiny_config.h
-	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_FULL_DIR)/library.properties
-	@sed -i "s/LIBRARY/$(ARDUINO_FULL_LIB)/" $(ARDUINO_FULL_DIR)/library.properties
-	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_FULL_LIB),g" $(ARDUINO_FULL_DIR)/library.properties
-	@mv $(ARDUINO_FULL_DIR)/src/$(ARDUINO_BASE_LIB).h $(ARDUINO_FULL_DIR)/src/$(ARDUINO_FULL_LIB).h
-	@sed -i "s/$(ARDUINO_BASE_LIB).h/$(ARDUINO_FULL_LIB).h/" $(ARDUINO_FULL_DIR)/src/TinyProtocol.cpp
-
-arduino-pkg: arduino-nano arduino-micro arduino-full doc
+arduino-pkg:
+	@mkdir -p $(ARDUINO_DIR)
+	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_DIR)/
+	@mv $(ARDUINO_DIR)/library.properties.in $(ARDUINO_DIR)/library.properties
+	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_DIR)/library.properties
+	@sed -i "s/LIBRARY/$(ARDUINO_LIB)/" $(ARDUINO_DIR)/library.properties
+	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_LIB),g" $(ARDUINO_DIR)/library.properties
 	@echo "arduino package build ... [DONE]"
 
 
