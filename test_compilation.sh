@@ -34,6 +34,7 @@ test_linux_lib()
 
 test_arduino_lib()
 {
+    test_build y y y os/arduino test-arduino-lib
     test_build n n n os/arduino library -DARDUINO
     test_build n y n os/arduino library
     test_build y n n os/arduino library

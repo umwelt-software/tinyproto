@@ -139,6 +139,19 @@ install-lib: library
 	cp -rf ./include/*.h $(DESTDIR)/usr/include/
 	cp -rf ./include/$(OS)/*.h $(DESTDIR)/usr/include/
 
+####################### ARDUINO LIB TEST ###########################
+
+SRC_TEST_ARDUINO_LIB = \
+        src/lib/crc.c \
+        src/lib/tiny_layer2.c \
+	src/arduino/src/TinyProtocol.cpp
+
+OBJ_TEST_ARDUINO_LIB = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TEST_ARDUINO_LIB))))
+
+test-arduino-lib: $(OBJ_TEST_ARDUINO_LIB)
+
+
+
 ####################### Examples ###################################
 
 examples: $(OBJ_EXAMPLE) $(OBJ_UART) library

@@ -32,6 +32,8 @@
 
 #ifdef ARDUINO
 #   include <HardwareSerial.h>
+#else
+#   include <string.h>
 #endif
 
 namespace Tiny {
@@ -263,7 +265,7 @@ public:
      * Puts next 32-bit unsigned integer to the packet.
      * @param data - data to put.
      */
-    inline void put    (uint32_t data) { put((uint16_t)data & 0x0000FFFF);
+    inline void put    (uint32_t data) { put((uint16_t)(data & 0x0000FFFF));
                                          put((uint16_t)(data >> 16)); }
 
     /**
@@ -311,7 +313,7 @@ public:
      * Reads next unsigned 16-bit integer from the packet.
      * @return unsigned 16-bit integer.
      */
-    inline uint16_t getUint16()        { return (uint16_t)m_buf[m_p++] | (m_buf[m_p++] << 8); }
+    inline uint16_t getUint16()        { uint16_t t = m_buf[m_p++]; return t | ((uint16_t)m_buf[m_p++] << 8); }
 
     /**
      * Reads next signed 16-bit integer from the packet.

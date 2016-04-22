@@ -248,9 +248,11 @@ int tiny_set_fcs_bits(STinyData *handle, uint8_t bits)
 #ifdef CONFIG_ENABLE_CHECKSUM
     case 8:
 #endif
+#ifdef TINY_FCS_ENABLE
     case 0:
         handle->fcs_bits = bits;
         break;
+#endif
     default:
         result = TINY_ERR_FAILED;
         break;
