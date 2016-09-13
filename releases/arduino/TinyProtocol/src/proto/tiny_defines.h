@@ -27,13 +27,13 @@
  * all api functions become not thread-safe.
  */
 
-#define ARDUINO_NANO
-
 #undef  PLATFORM_MUTEX
 
 #define MUTEX_INIT(x)
 
 #define MUTEX_LOCK(x)
+
+#define MUTEX_TRY_LOCK(x)    0
 
 #define MUTEX_UNLOCK(x)
 

@@ -29,6 +29,8 @@
 
 #define MUTEX_LOCK(x)     pthread_mutex_lock(&x)
 
+#define MUTEX_TRY_LOCK(x) pthread_mutex_trylock(&x)
+
 #define MUTEX_UNLOCK(x)   pthread_mutex_unlock(&x)
 
 #define MUTEX_DESTROY(x)  pthread_mutex_destroy(&x)

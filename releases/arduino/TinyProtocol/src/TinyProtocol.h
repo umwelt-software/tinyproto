@@ -69,8 +69,8 @@ public:
      */
     inline void beginToSerial()
     {
-         begin([](const uint8_t *b, int s)->int { return Serial.write(b, s); },
-               [](uint8_t *b, int s)->int { return Serial.readBytes(b, s); });
+         begin([](void *p, const uint8_t *b, int s)->int { return Serial.write(b, s); },
+               [](void *p, uint8_t *b, int s)->int { return Serial.readBytes(b, s); });
     }
 
 #if HAVE_HWSERIAL1
@@ -81,8 +81,8 @@ public:
      */
     inline void beginToSerial1()
     {
-         begin([](const uint8_t *b, int s)->int { return Serial1.write(b, s); },
-               [](uint8_t *b, int s)->int { return Serial1.readBytes(b, s); });
+         begin([](void *p, const uint8_t *b, int s)->int { return Serial1.write(b, s); },
+               [](void *p, uint8_t *b, int s)->int { return Serial1.readBytes(b, s); });
     }
 #endif
 
@@ -94,8 +94,8 @@ public:
      */
     inline void beginToSerial2()
     {
-         begin([](const uint8_t *b, int s)->int { return Serial2.write(b, s); },
-               [](uint8_t *b, int s)->int { return Serial2.readBytes(b, s); });
+         begin([](void *p, const uint8_t *b, int s)->int { return Serial2.write(b, s); },
+               [](void *p, uint8_t *b, int s)->int { return Serial2.readBytes(b, s); });
     }
 #endif
 
@@ -107,8 +107,8 @@ public:
      */
     inline void beginToSerial3()
     {
-         begin([](const uint8_t *b, int s)->int { return Serial3.write(b, s); },
-               [](uint8_t *b, int s)->int { return Serial3.readBytes(b, s); });
+         begin([](void *p, const uint8_t *b, int s)->int { return Serial3.write(b, s); },
+               [](void *p, uint8_t *b, int s)->int { return Serial3.readBytes(b, s); });
     }
 #endif
 

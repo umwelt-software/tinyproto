@@ -29,15 +29,18 @@ struct \hyperlink{structSTinyData}{S\+Tiny\+Data}
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
+\hypertarget{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{}\#define \hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S}~(1)\label{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}
+
+\begin{DoxyCompactList}\small\item\em Tiny operation successful. Only tiny\+\_\+send\+\_\+start and tiny\+\_\+read\+\_\+start functions return this code. \end{DoxyCompactList}\item 
 \hypertarget{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{}\#define \hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R}~(0)\label{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}
 
 \begin{DoxyCompactList}\small\item\em No error. For tiny\+\_\+send and tiny\+\_\+read functions, this means, no data sent or received. \end{DoxyCompactList}\item 
 \hypertarget{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{}\#define \hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D}~(-\/1)\label{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}
 
-\begin{DoxyCompactList}\small\item\em Generic error. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Timeout. \end{DoxyCompactList}\item 
 \hypertarget{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{}\#define \hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T}~(-\/2)\label{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}
 
-\begin{DoxyCompactList}\small\item\em Timeout happened. Not actually used for now. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Timeout happened. The function must be called once again. \end{DoxyCompactList}\item 
 \hypertarget{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{}\#define \hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E}~(-\/3)\label{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}
 
 \begin{DoxyCompactList}\small\item\em Data too large to fit the user buffer, valid for tiny\+\_\+read function. \end{DoxyCompactList}\item 
@@ -53,7 +56,10 @@ struct \hyperlink{structSTinyData}{S\+Tiny\+Data}
 \hypertarget{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{}\#define \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T}~(0)\label{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}
 
 \begin{DoxyCompactList}\small\item\em This flag makes tiny A\+P\+I functions perform as non-\/blocking. \end{DoxyCompactList}\item 
-\hypertarget{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{}\#define \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}~(1)\label{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}
+\hypertarget{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{}\#define \hyperlink{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+A\+D\+\_\+\+A\+L\+L}~(1)\label{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}
+
+\begin{DoxyCompactList}\small\item\em This flag makes tiny\+\_\+read function to read whole frame event if it doesn\textquotesingle{}t fit the buffer. \end{DoxyCompactList}\item 
+\hypertarget{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{}\#define \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}~(0x80)\label{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}
 
 \begin{DoxyCompactList}\small\item\em This flag makes tiny A\+P\+I functions perform in blocking mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Typedefs}
@@ -131,7 +137,7 @@ The function reads data from communication channel.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_aade691536f3244c04098c51f8027f59e}{write\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 the function must return negative value in case of error or number of bytes actually read or zero. 
@@ -149,7 +155,7 @@ The function writes data to communication channel port.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a7d62f1fe7624886bc63482a49e3aec51}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 the function must return negative value in case of error or number of bytes written or zero. 
@@ -209,7 +215,7 @@ The function closes channel.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ad8127e87f864096d0bac5b3953911e98}{tiny\+\_\+init()} 
+\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init()} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
@@ -344,7 +350,7 @@ if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I
 \begin{DoxyParams}{Parameters}
 {\em handle} & -\/ pointer to Tiny data. \\
 \hline
-{\em uid} & -\/ pointer to 16-\/bit variable containing packet uid, can be N\+U\+L\+L. \\
+{\em uid} & -\/ pointer to 16-\/bit variable containing packet uid, can be N\+U\+L\+L. uid value must be spelled in network order bytes. \\
 \hline
 {\em pbuf} & -\/ a const pointer to unsigned char -\/ buffer with data to send \\
 \hline
@@ -363,9 +369,9 @@ if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I
 \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes.
 \end{DoxyReturn}
-\hypertarget{inc_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+set\+\_\+callbacks@{tiny\+\_\+set\+\_\+callbacks}}
+Returns negative value in case of error length of sent data \hypertarget{inc_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+set\+\_\+callbacks@{tiny\+\_\+set\+\_\+callbacks}}
 \index{tiny\+\_\+set\+\_\+callbacks@{tiny\+\_\+set\+\_\+callbacks}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
 \subsubsection[{tiny\+\_\+set\+\_\+callbacks}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+set\+\_\+callbacks (
 \begin{DoxyParamCaption}

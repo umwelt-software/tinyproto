@@ -34,13 +34,10 @@ extern "C" {
 #include "tiny_defines.h"
 
 /// \cond
-#if defined(CONFIG_ENABLE_FCS16) || defined(CONFIG_ENABLE_FCS32) || defined(CONFIG_ENABLE_CHECKSUM)
-    #define TINY_FCS_ENABLE
-    #ifdef CONFIG_ENABLE_FCS32
-        typedef uint32_t fcs_t;
-    #else
-        typedef uint16_t fcs_t;
-    #endif
+#ifdef CONFIG_ENABLE_FCS32
+    typedef uint32_t fcs_t;
+#else
+    typedef uint16_t fcs_t;
 #endif
 /// \endcond
 
@@ -48,12 +45,13 @@ extern "C" {
  * @defgroup ERROR_FLAGS Return error codes for Tiny API functions
  * @{
  */
-
+/// Tiny operation successful. Only tiny_send_start and tiny_read_start functions return this code
+#define TINY_SUCCESS                    (1)
 /// No error. For tiny_send and tiny_read functions, this means, no data sent or received
 #define TINY_NO_ERROR                   (0)
-/// Generic error.
+/// Timeout
 #define TINY_ERR_FAILED                 (-1)
-/// Timeout happened. Not actually used for now.
+/// Timeout happened. The function must be called once again.
 #define TINY_ERR_TIMEOUT                (-2)
 /// Data too large to fit the user buffer, valid for tiny_read function
 #define TINY_ERR_DATA_TOO_LARGE         (-3)
@@ -73,8 +71,10 @@ extern "C" {
 
 /// This flag makes tiny API functions perform as non-blocking
 #define TINY_FLAG_NO_WAIT               (0)
+/// This flag makes tiny_read function to read whole frame event if it doesn't fit the buffer
+#define TINY_FLAG_READ_ALL              (1)
 /// This flag makes tiny API functions perform in blocking mode
-#define TINY_FLAG_WAIT_FOREVER          (1)
+#define TINY_FLAG_WAIT_FOREVER          (0x80)
 
 /** @} */
 
@@ -83,11 +83,8 @@ typedef enum
 {
     TINY_TX_STATE_IDLE,
     TINY_TX_STATE_START,
-    TINY_TX_STATE_SEND_UID,
     TINY_TX_STATE_SEND_DATA,
-#ifdef TINY_FCS_ENABLE
     TINY_TX_STATE_SEND_CRC,
-#endif
     TINY_TX_STATE_END
 } ETinyTxState;
 
@@ -95,7 +92,6 @@ typedef enum
 {
     TINY_RX_STATE_IDLE,
     TINY_RX_STATE_START,
-    TINY_RX_STATE_READ_UID,
     TINY_RX_STATE_READ_DATA,
     TINY_RX_STATE_END
 } ETinyRxState;
@@ -121,11 +117,7 @@ typedef enum
  * @return the function must return negative value in case of error or number of bytes written
  *         or zero.
  */
-#ifndef ARDUINO_NANO
 typedef int (*write_block_cb_t)(void *pdata, const uint8_t *buffer, int size);
-#else
-typedef int (*write_block_cb_t)(const uint8_t *buffer, int size);
-#endif
 
 /**
  * The function reads data from communication channel.
@@ -136,11 +128,7 @@ typedef int (*write_block_cb_t)(const uint8_t *buffer, int size);
  * @return the function must return negative value in case of error or number of bytes actually read
  *         or zero.
  */
-#ifndef ARDUINO_NANO
 typedef int (*read_block_cb_t)(void *pdata, uint8_t *buffer, int size);
-#else
-typedef int (*read_block_cb_t)(uint8_t *buffer, int size);
-#endif
 
 
 /**
@@ -186,12 +174,10 @@ typedef struct
     int                 framelen;
     /// The state of Receive State machine
     uint8_t             inprogress;
-#ifdef TINY_FCS_ENABLE
     /// The field contains calculated checksum and not available in TINY_MINIMAL configuration
     fcs_t               fcs;
-#endif
     /// \cond
-    uint16_t            uid;
+    uint8_t             blockIndex;
     uint8_t             bits;
     uint8_t             prevbyte;
     /// \endcond
@@ -212,12 +198,10 @@ typedef struct
     int                 framelen;
     /// @see ETinyTxState
     uint8_t             inprogress;
-#ifdef TINY_FCS_ENABLE
     /// The field contains calculated checksum and not available in TINY_MINIMAL configuration
     fcs_t               fcs;                       // fcs field
-#endif
     /// \cond
-    uint16_t            uid;                       // uid field
+    uint8_t             blockIndex;                // index of the frame block being processed
     uint8_t             prevbyte;                  // last byte sent
     uint8_t             bits;                      // index of crc byte being sent
     /// \endcond
@@ -229,6 +213,10 @@ typedef struct
 *
 **************************************************************/
 
+/**
+ * This structure contains information about communication channel and its state.
+ * \warning This is for internal use only, and should not be accessed directly from the application.
+ */
 typedef struct
 {
     /// pointer to platform related write function
@@ -236,9 +224,7 @@ typedef struct
     /// pointer to platform related read function
     read_block_cb_t     read_func;
     /// pointer to application defined data, passed during protocol initialization - absent in Arduino version
-#ifndef ARDUINO_NANO
     void*               pdata;
-#endif
     /// @see STinyRxStatus
     STinyRxStatus       rx;
     /// @see STinyTxStatus
@@ -249,10 +235,8 @@ typedef struct
 #ifdef PLATFORM_COND
     PLATFORM_COND       send_condition;            // Condition is called, when send operation is completed
 #endif
-#ifdef TINY_FCS_ENABLE
     /// The field contains number of bits to use for FCS and not available in TINY_MINIMAL configuration
     uint8_t             fcs_bits;
-#endif
 #ifdef CONFIG_ENABLE_STATS
     /// @see STinyStats
     STinyStats          stat;
@@ -282,17 +266,10 @@ typedef struct
 * @see read_block_cb_t
 * @return TINY_NO_ERROR or error code.
 */
-#ifndef ARDUINO_NANO
 extern int tiny_init(STinyData *handle,
                write_block_cb_t write_func,
                read_block_cb_t read_func,
                void *pdata);
-#else
-extern int tiny_init(STinyData *handle,
-               write_block_cb_t write_func,
-               read_block_cb_t read_func);
-#endif
-
 
 /**
 * The function closes  channel.
@@ -320,7 +297,7 @@ extern int tiny_set_fcs_bits(STinyData *handle, uint8_t bits);
  *       pointer and return immediately. So, it is responsibility of the caller to make
  *       pbuf data to be available all the time until frame is sent.
  * @param handle - pointer to Tiny data.
- * @param uid - pointer to 16-bit variable containing packet uid, can be NULL.
+ * @param uid - pointer to 16-bit variable containing packet uid, can be NULL. uid value must be spelled in network order bytes.
  * @param pbuf - a const pointer to unsigned char - buffer with data to send
  * @param len - an integer argument - length of data to send
  * @param flags - TINY_FLAG_NO_WAIT

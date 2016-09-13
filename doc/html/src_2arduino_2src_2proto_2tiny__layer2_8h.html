@@ -132,17 +132,21 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:ga16cd043c890ed1fa381b3a20f75a626c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga16cd043c890ed1fa381b3a20f75a626c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga16cd043c890ed1fa381b3a20f75a626c">TINY_SUCCESS</a>&#160;&#160;&#160;(1)</td></tr>
+<tr class="memdesc:ga16cd043c890ed1fa381b3a20f75a626c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiny operation successful. Only tiny_send_start and tiny_read_start functions return this code. <br /></td></tr>
+<tr class="separator:ga16cd043c890ed1fa381b3a20f75a626c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga69c869a686b67bf0b7b8115599515d61"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga69c869a686b67bf0b7b8115599515d61"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61">TINY_NO_ERROR</a>&#160;&#160;&#160;(0)</td></tr>
 <tr class="memdesc:ga69c869a686b67bf0b7b8115599515d61"><td class="mdescLeft">&#160;</td><td class="mdescRight">No error. For tiny_send and tiny_read functions, this means, no data sent or received. <br /></td></tr>
 <tr class="separator:ga69c869a686b67bf0b7b8115599515d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga84e6ca143550038e1a71cf36078d1926"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga84e6ca143550038e1a71cf36078d1926"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926">TINY_ERR_FAILED</a>&#160;&#160;&#160;(-1)</td></tr>
-<tr class="memdesc:ga84e6ca143550038e1a71cf36078d1926"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic error. <br /></td></tr>
+<tr class="memdesc:ga84e6ca143550038e1a71cf36078d1926"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timeout. <br /></td></tr>
 <tr class="separator:ga84e6ca143550038e1a71cf36078d1926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gac9ba8076a1eb8613e8d1f07629ff0cd1"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#gac9ba8076a1eb8613e8d1f07629ff0cd1">TINY_ERR_TIMEOUT</a>&#160;&#160;&#160;(-2)</td></tr>
-<tr class="memdesc:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timeout happened. Not actually used for now. <br /></td></tr>
+<tr class="memdesc:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timeout happened. The function must be called once again. <br /></td></tr>
 <tr class="separator:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga7bbe7440d11ad304b0af68e011f4eab7"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7">TINY_ERR_DATA_TOO_LARGE</a>&#160;&#160;&#160;(-3)</td></tr>
@@ -164,17 +168,21 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e">TINY_FLAG_NO_WAIT</a>&#160;&#160;&#160;(0)</td></tr>
 <tr class="memdesc:gadadd60eb21d7949e6d097ad36aab9b2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This flag makes tiny API functions perform as non-blocking. <br /></td></tr>
 <tr class="separator:gadadd60eb21d7949e6d097ad36aab9b2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae41123cfeed375e618a4152c9bbd0d6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gae41123cfeed375e618a4152c9bbd0d6d"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FLAGS__GROUP.html#gae41123cfeed375e618a4152c9bbd0d6d">TINY_FLAG_READ_ALL</a>&#160;&#160;&#160;(1)</td></tr>
+<tr class="memdesc:gae41123cfeed375e618a4152c9bbd0d6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This flag makes tiny_read function to read whole frame event if it doesn't fit the buffer. <br /></td></tr>
+<tr class="separator:gae41123cfeed375e618a4152c9bbd0d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3a34267804581c5709d03f52d232b307"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga3a34267804581c5709d03f52d232b307"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">TINY_FLAG_WAIT_FOREVER</a>&#160;&#160;&#160;(1)</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">TINY_FLAG_WAIT_FOREVER</a>&#160;&#160;&#160;(0x80)</td></tr>
 <tr class="memdesc:ga3a34267804581c5709d03f52d232b307"><td class="mdescLeft">&#160;</td><td class="mdescRight">This flag makes tiny API functions perform in blocking mode. <br /></td></tr>
 <tr class="separator:ga3a34267804581c5709d03f52d232b307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:aade691536f3244c04098c51f8027f59e"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#aade691536f3244c04098c51f8027f59e">write_block_cb_t</a>) (const uint8_t *buffer, int size)</td></tr>
-<tr class="separator:aade691536f3244c04098c51f8027f59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d62f1fe7624886bc63482a49e3aec51"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a7d62f1fe7624886bc63482a49e3aec51">read_block_cb_t</a>) (uint8_t *buffer, int size)</td></tr>
-<tr class="separator:a7d62f1fe7624886bc63482a49e3aec51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f69e669de5baa69a43ee5cb439a7496"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a>) (void *pdata, const uint8_t *buffer, int size)</td></tr>
+<tr class="separator:a7f69e669de5baa69a43ee5cb439a7496"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3d867e030f59de94508902f2b84a7ec"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a>) (void *pdata, uint8_t *buffer, int size)</td></tr>
+<tr class="separator:ae3d867e030f59de94508902f2b84a7ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf94db3677aab46f4a42978d53cc23e3"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#acf94db3677aab46f4a42978d53cc23e3">on_frame_cb_t</a>) (void *handle, <a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#af5f6894a8940157d2d5e659bbe2aafa3">ETinyFrameDirection</a> direction, uint8_t *pdata, int size)</td></tr>
 <tr class="separator:acf94db3677aab46f4a42978d53cc23e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -189,8 +197,8 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad8127e87f864096d0bac5b3953911e98"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#ad8127e87f864096d0bac5b3953911e98">tiny_init</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="inc_2tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> write_func, <a class="el" href="inc_2tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> read_func)</td></tr>
-<tr class="separator:ad8127e87f864096d0bac5b3953911e98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9bfaed3c75551c8b7f3f8b25e766546"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#ab9bfaed3c75551c8b7f3f8b25e766546">tiny_init</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="inc_2tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> write_func, <a class="el" href="inc_2tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> read_func, void *pdata)</td></tr>
+<tr class="separator:ab9bfaed3c75551c8b7f3f8b25e766546"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48cf9ffab9eeb9665e61ae69e28938b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a48cf9ffab9eeb9665e61ae69e28938b8">tiny_close</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="separator:a48cf9ffab9eeb9665e61ae69e28938b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e66725a2818491d4e2b1134951d9229"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a5e66725a2818491d4e2b1134951d9229">tiny_set_fcs_bits</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t bits)</td></tr>
@@ -232,12 +240,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7d62f1fe7624886bc63482a49e3aec51"></a>
+<a class="anchor" id="ae3d867e030f59de94508902f2b84a7ec"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int(* read_block_cb_t) (uint8_t *buffer, int size)</td>
+          <td class="memname">typedef int(* read_block_cb_t) (void *pdata, uint8_t *buffer, int size)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -249,17 +257,17 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#aade691536f3244c04098c51f8027f59e">write_block_cb_t</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the function must return negative value in case of error or number of bytes actually read or zero. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="aade691536f3244c04098c51f8027f59e"></a>
+<a class="anchor" id="a7f69e669de5baa69a43ee5cb439a7496"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int(* write_block_cb_t) (const uint8_t *buffer, int size)</td>
+          <td class="memname">typedef int(* write_block_cb_t) (void *pdata, const uint8_t *buffer, int size)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -271,7 +279,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a7d62f1fe7624886bc63482a49e3aec51">read_block_cb_t</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the function must return negative value in case of error or number of bytes written or zero. </dd></dl>
 
 </div>
@@ -346,7 +354,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#ad8127e87f864096d0bac5b3953911e98">tiny_init()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#ab9bfaed3c75551c8b7f3f8b25e766546">tiny_init()</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
 
 </div>
@@ -388,7 +396,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad8127e87f864096d0bac5b3953911e98"></a>
+<a class="anchor" id="ab9bfaed3c75551c8b7f3f8b25e766546"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -408,7 +416,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="inc_2tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a>&#160;</td>
-          <td class="paramname"><em>read_func</em>&#160;</td>
+          <td class="paramname"><em>read_func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pdata</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -500,7 +514,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Generic error. ">TINY_ERR_FAILED</a> </dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7" title="Data too large to fit the user buffer, valid for tiny_read function. ">TINY_ERR_DATA_TOO_LARGE</a> </dd>
 <dd>
@@ -556,7 +570,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handle</td><td>- pointer to Tiny data. </td></tr>
-    <tr><td class="paramname">uid</td><td>- pointer to 16-bit variable containing packet uid, can be NULL. </td></tr>
+    <tr><td class="paramname">uid</td><td>- pointer to 16-bit variable containing packet uid, can be NULL. uid value must be spelled in network order bytes. </td></tr>
     <tr><td class="paramname">pbuf</td><td>- a const pointer to unsigned char - buffer with data to send </td></tr>
     <tr><td class="paramname">len</td><td>- an integer argument - length of data to send </td></tr>
     <tr><td class="paramname">flags</td><td>- TINY_FLAG_NO_WAIT </td></tr>
@@ -565,12 +579,13 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Generic error. ">TINY_ERR_FAILED</a> </dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd>
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e" title="This flag makes tiny API functions perform as non-blocking. ">TINY_FLAG_NO_WAIT</a> </dd>
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.</dd></dl>
+<p>Returns negative value in case of error length of sent data </p>
 
 </div>
 </div>

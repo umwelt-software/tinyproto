@@ -34,7 +34,7 @@ namespace Tiny {
 void Proto::begin(write_block_cb_t writecb,
                   read_block_cb_t readcb)
 {
-    tiny_init(&m_data, writecb, readcb);
+    tiny_init(&m_data, writecb, readcb, NULL);
 }
 
 void Proto::end()
