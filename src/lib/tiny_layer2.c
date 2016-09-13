@@ -141,17 +141,6 @@ inline static void  __commit_fcs_field(uint8_t fcs_bits, fcs_t* fcs)
 ***************************************************************/
 
 
-/**
-* The function initializes internal structures for Tiny channel and return handle
-* to be used with all Tiny and IPC functions.
-* @param handle - pointer to Tiny data
-* @param write_func - pointer to write data function (to communication channel).
-* @param read_func - pointer to read function (from communication channel).
-* @param pdata - pointer to a user private data.
-* @see write_block_cb_t
-* @see read_block_cb_t
-* @return TINY_NO_ERROR or error code.
-*/
 int tiny_init(STinyData *handle,
               write_block_cb_t write_func,
               read_block_cb_t read_func,
@@ -186,6 +175,7 @@ int tiny_init(STinyData *handle,
     return TINY_NO_ERROR;
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 int tiny_close(STinyData *handle)
 {
@@ -209,6 +199,7 @@ int tiny_close(STinyData *handle)
     return TINY_NO_ERROR;
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
 int tiny_set_fcs_bits(STinyData *handle, uint8_t bits)
 {
@@ -415,6 +406,7 @@ int tiny_send_start(STinyData *handle, uint8_t flags)
     {
         __send_unlock(handle);
         handle->tx.inprogress = TINY_TX_STATE_IDLE;
+        result = TINY_ERR_TIMEOUT;
     }
     handle->tx.blockIndex = 0;
     return result;
@@ -513,6 +505,22 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+void tiny_send_terminate(STinyData *handle)
+{
+    if (!handle)
+    {
+        return;
+    }
+    if (handle->tx.inprogress == TINY_TX_STATE_IDLE)
+    {
+        return;
+    }
+    __send_unlock(handle);
+    handle->tx.inprogress = TINY_TX_STATE_IDLE;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Returns negative value in case of error
  *         length of sent data
@@ -560,6 +568,10 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
             }
 #endif
         }
+    }
+    if ( ( result < 0 ) && ( result != TINY_ERR_TIMEOUT ) )
+    {
+         tiny_send_terminate( handle );
     }
     return result;
 }
@@ -736,6 +748,16 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
 }
 
 
+void tiny_read_terminate(STinyData *handle)
+{
+    if (!handle)
+    {
+        return;
+    }
+    handle->rx.inprogress = TINY_RX_STATE_IDLE;
+}
+
+
 int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags)
 {
     int result = TINY_NO_ERROR;
@@ -763,6 +785,10 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
         {
             result = tiny_read_buffer( handle, pbuf, len, flags | TINY_FLAG_READ_ALL );
         }
+        if ( (result < 0) && ( result != TINY_ERR_DATA_TOO_LARGE ) )
+        {
+            tiny_read_terminate( handle );
+        }
     }
     return result;
 }
@@ -785,13 +811,6 @@ int tiny_get_stat(STinyData *handle, STinyStats *stat)
 }
 
 
-/**
-* tiny_clear_stat function clears Tiny protocol statistics.
-* @param handle - pointer to Tiny protocol structure
-* @see TINY_ERR_INVALID_DATA
-* @see TINY_NO_ERROR
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
 int tiny_clear_stat(STinyData *handle)
 {
     if (handle)
@@ -806,14 +825,6 @@ int tiny_clear_stat(STinyData *handle)
 }
 
 
-/**
-* tiny_set_callbacks sets callback procs for specified Tiny protocol.
-* callbacks will receive all data being sent or received.
-* @param handle - pointer to Tiny Protocol structure
-* @param read_cb - an argument of on_frame_cb_t type - pointer to callback function.
-* @param send_cb - an argument of on_frame_cb_t type - pointer to callback function.
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
 int tiny_set_callbacks(STinyData *handle,
                on_frame_cb_t read_cb,
                on_frame_cb_t send_cb)

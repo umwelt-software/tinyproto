@@ -29,7 +29,7 @@ Full packet format\+:
 
 Each packet can be sent with simple api command\+: 
 \begin{DoxyCode}
-\textcolor{keywordtype}{int} \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a988a41addbe75dc15cc13006de6740e0}{tiny\_send}(SHdlcData *handle, uint16\_t *uid, uint8\_t *pbuf, \textcolor{keywordtype}{int} len, uint32\_t flags)
+\textcolor{keywordtype}{int} \hyperlink{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{tiny\_send}(SHdlcData *handle, uint16\_t *uid, uint8\_t *pbuf, \textcolor{keywordtype}{int} len, uint32\_t flags)
 \end{DoxyCode}
 
 
@@ -37,13 +37,13 @@ And be received via another simple api command\+:
 
 
 \begin{DoxyCode}
-\textcolor{keywordtype}{int} \hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a470d59a60a496944e63031ba43a00e3d}{tiny\_read}(SHdlcData *handle, uint16\_t *uid, uint8\_t *pbuf, \textcolor{keywordtype}{int} len, uint32\_t flags);
+\textcolor{keywordtype}{int} \hyperlink{group__SIMPLE__API_ga470d59a60a496944e63031ba43a00e3d}{tiny\_read}(SHdlcData *handle, uint16\_t *uid, uint8\_t *pbuf, \textcolor{keywordtype}{int} len, uint32\_t flags);
 \end{DoxyCode}
 
 
 uid parameter is optional and can be be simply N\+U\+L\+L. And F\+C\+S field can be disabled by calling 
 \begin{DoxyCode}
-\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_a5e66725a2818491d4e2b1134951d9229}{tiny\_set\_fcs\_bits}(&handle, 0);
+\hyperlink{group__ADVANCED__API_ga5e66725a2818491d4e2b1134951d9229}{tiny\_set\_fcs\_bits}(&handle, 0);
 \end{DoxyCode}
  In this case, U\+I\+D field and F\+C\+S field are not used, and the protocol packet looks as follows\+: 8 any len 8 $\vert$ 7\+E $\vert$ U\+S\+E\+R D\+A\+T\+A $\vert$ 7\+E $\vert$
 

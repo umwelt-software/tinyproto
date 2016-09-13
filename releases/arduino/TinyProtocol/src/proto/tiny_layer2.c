@@ -415,6 +415,7 @@ int tiny_send_start(STinyData *handle, uint8_t flags)
     {
         __send_unlock(handle);
         handle->tx.inprogress = TINY_TX_STATE_IDLE;
+        result = TINY_ERR_TIMEOUT;
     }
     handle->tx.blockIndex = 0;
     return result;
@@ -513,6 +514,22 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+void tiny_send_terminate(STinyData *handle)
+{
+    if (!handle)
+    {
+        return;
+    }
+    if (handle->tx.inprogress == TINY_TX_STATE_IDLE)
+    {
+        return;
+    }
+    __send_unlock(handle);
+    handle->tx.inprogress = TINY_TX_STATE_IDLE;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Returns negative value in case of error
  *         length of sent data
@@ -560,6 +577,10 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
             }
 #endif
         }
+    }
+    if ( ( result < 0 ) && ( result != TINY_ERR_TIMEOUT ) )
+    {
+         tiny_send_terminate( handle );
     }
     return result;
 }
@@ -736,6 +757,16 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
 }
 
 
+void tiny_read_terminate(STinyData *handle)
+{
+    if (!handle)
+    {
+        return;
+    }
+    handle->rx.inprogress = TINY_RX_STATE_IDLE;
+}
+
+
 int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags)
 {
     int result = TINY_NO_ERROR;
@@ -762,6 +793,10 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
         if ( handle->rx.blockIndex == 2 )
         {
             result = tiny_read_buffer( handle, pbuf, len, flags | TINY_FLAG_READ_ALL );
+        }
+        if ( (result < 0) && ( result != TINY_ERR_DATA_TOO_LARGE ) )
+        {
+            tiny_read_terminate( handle );
         }
     }
     return result;

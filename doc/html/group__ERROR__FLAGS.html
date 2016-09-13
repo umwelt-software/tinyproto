@@ -118,38 +118,6 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a">TINY_ERR_OUT_OF_SYNC</a>&#160;&#160;&#160;(-6)</td></tr>
 <tr class="memdesc:gae1949de45d9c478830dad9c9b996193a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Out of sync - received some data, which are not part of the frame (tiny_read) <br /></td></tr>
 <tr class="separator:gae1949de45d9c478830dad9c9b996193a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga16cd043c890ed1fa381b3a20f75a626c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga16cd043c890ed1fa381b3a20f75a626c"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga16cd043c890ed1fa381b3a20f75a626c">TINY_SUCCESS</a>&#160;&#160;&#160;(1)</td></tr>
-<tr class="memdesc:ga16cd043c890ed1fa381b3a20f75a626c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiny operation successful. Only tiny_send_start and tiny_read_start functions return this code. <br /></td></tr>
-<tr class="separator:ga16cd043c890ed1fa381b3a20f75a626c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga69c869a686b67bf0b7b8115599515d61"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga69c869a686b67bf0b7b8115599515d61"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61">TINY_NO_ERROR</a>&#160;&#160;&#160;(0)</td></tr>
-<tr class="memdesc:ga69c869a686b67bf0b7b8115599515d61"><td class="mdescLeft">&#160;</td><td class="mdescRight">No error. For tiny_send and tiny_read functions, this means, no data sent or received. <br /></td></tr>
-<tr class="separator:ga69c869a686b67bf0b7b8115599515d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga84e6ca143550038e1a71cf36078d1926"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga84e6ca143550038e1a71cf36078d1926"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926">TINY_ERR_FAILED</a>&#160;&#160;&#160;(-1)</td></tr>
-<tr class="memdesc:ga84e6ca143550038e1a71cf36078d1926"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timeout. <br /></td></tr>
-<tr class="separator:ga84e6ca143550038e1a71cf36078d1926"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gac9ba8076a1eb8613e8d1f07629ff0cd1"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#gac9ba8076a1eb8613e8d1f07629ff0cd1">TINY_ERR_TIMEOUT</a>&#160;&#160;&#160;(-2)</td></tr>
-<tr class="memdesc:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timeout happened. The function must be called once again. <br /></td></tr>
-<tr class="separator:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga7bbe7440d11ad304b0af68e011f4eab7"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7">TINY_ERR_DATA_TOO_LARGE</a>&#160;&#160;&#160;(-3)</td></tr>
-<tr class="memdesc:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data too large to fit the user buffer, valid for tiny_read function. <br /></td></tr>
-<tr class="separator:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga541a9e67a84e39595ad647d641c4df2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga541a9e67a84e39595ad647d641c4df2e"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e">TINY_ERR_INVALID_DATA</a>&#160;&#160;&#160;(-4)</td></tr>
-<tr class="memdesc:ga541a9e67a84e39595ad647d641c4df2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some invalid data passed to Tiny API function. <br /></td></tr>
-<tr class="separator:ga541a9e67a84e39595ad647d641c4df2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9b3e170e1c6ce269f216ef4a1ac61995"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga9b3e170e1c6ce269f216ef4a1ac61995"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga9b3e170e1c6ce269f216ef4a1ac61995">TINY_ERR_BUSY</a>&#160;&#160;&#160;(-5)</td></tr>
-<tr class="memdesc:ga9b3e170e1c6ce269f216ef4a1ac61995"><td class="mdescLeft">&#160;</td><td class="mdescRight">API function detected that operation cannot be performed right now. <br /></td></tr>
-<tr class="separator:ga9b3e170e1c6ce269f216ef4a1ac61995"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae1949de45d9c478830dad9c9b996193a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gae1949de45d9c478830dad9c9b996193a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a">TINY_ERR_OUT_OF_SYNC</a>&#160;&#160;&#160;(-6)</td></tr>
-<tr class="memdesc:gae1949de45d9c478830dad9c9b996193a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Out of sync - received some data, which are not part of the frame (tiny_read) <br /></td></tr>
-<tr class="separator:gae1949de45d9c478830dad9c9b996193a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 </div><!-- contents -->

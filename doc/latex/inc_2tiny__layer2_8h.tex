@@ -7,8 +7,7 @@ Tiny protocol A\+P\+I.
 
 {\ttfamily \#include $<$stdint.\+h$>$}\\*
 {\ttfamily \#include \char`\"{}tiny\+\_\+defines.\+h\char`\"{}}\\*
-Include dependency graph for tiny\+\_\+layer2.\+h\+:
-\nopagebreak
+Include dependency graph for tiny\+\_\+layer2.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -83,21 +82,35 @@ enum \hyperlink{inc_2tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}{E\+Tiny\
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{inc_2tiny__layer2_8h_ab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{inc_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{inc_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
+int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{inc_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{inc_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
 \item 
-int \hyperlink{inc_2tiny__layer2_8h_a48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+int \hyperlink{group__SIMPLE__API_ga48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \item 
-int \hyperlink{inc_2tiny__layer2_8h_a5e66725a2818491d4e2b1134951d9229}{tiny\+\_\+set\+\_\+fcs\+\_\+bits} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t bits)
+int \hyperlink{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{tiny\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em sends frame to user payload to communication channel \end{DoxyCompactList}\item 
+int \hyperlink{group__SIMPLE__API_ga470d59a60a496944e63031ba43a00e3d}{tiny\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
 \item 
-int \hyperlink{inc_2tiny__layer2_8h_a988a41addbe75dc15cc13006de6740e0}{tiny\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+int \hyperlink{group__ADVANCED__API_ga5e66725a2818491d4e2b1134951d9229}{tiny\+\_\+set\+\_\+fcs\+\_\+bits} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t bits)
 \item 
-int \hyperlink{inc_2tiny__layer2_8h_a470d59a60a496944e63031ba43a00e3d}{tiny\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+int \hyperlink{group__ADVANCED__API_ga159189fa29f3eaa79a76a3fa87b31084}{tiny\+\_\+send\+\_\+start} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em initiates sending of a new frame \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_gabe04a4e76adc5421deac4e3699a15646}{tiny\+\_\+send\+\_\+buffer} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em sends user provided data in the body of the frame \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_ga2e85c7e9efb0bbe9c6adfd923ec7c73c}{tiny\+\_\+send\+\_\+end} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em completes sending of a new frame \end{DoxyCompactList}\item 
+void \hyperlink{group__ADVANCED__API_ga73c9f1cfb0948bd559d3704749db540b}{tiny\+\_\+send\+\_\+terminate} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em terminates send operation \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_ga2f0547115de5b96a828d79f5491d22fa}{tiny\+\_\+read\+\_\+start} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em initiates receiving of a new frame \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_gade4e07eb12b8e32e6dd0c7b9757e8f39}{tiny\+\_\+read\+\_\+buffer} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em reads frame payload to provided buffer \end{DoxyCompactList}\item 
+void \hyperlink{group__ADVANCED__API_gaab48caab81a46d74fb52f2afb2649b61}{tiny\+\_\+read\+\_\+terminate} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em terminates read operation \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
 \item 
-int \hyperlink{inc_2tiny__layer2_8h_a5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
+int \hyperlink{group__ADVANCED__API_gac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \item 
-int \hyperlink{inc_2tiny__layer2_8h_ac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
-\item 
-int \hyperlink{inc_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{inc_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} read\+\_\+cb, \hyperlink{inc_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} send\+\_\+cb)
+int \hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{inc_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} read\+\_\+cb, \hyperlink{inc_2tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} send\+\_\+cb)
 \end{DoxyCompactItemize}
 
 
@@ -167,258 +180,3 @@ the function must return negative value in case of error or number of bytes writ
 \index{E\+Tiny\+Frame\+Direction@{E\+Tiny\+Frame\+Direction}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
 \subsubsection[{E\+Tiny\+Frame\+Direction}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf E\+Tiny\+Frame\+Direction}}\label{inc_2tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}
 Enum is used for callback functions to specify direction of the frame, processed by the protocol. 
-
-\subsection{Function Documentation}
-\hypertarget{inc_2tiny__layer2_8h_ac75ee03ea3691b0a8bf842d764b342d9}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+clear\+\_\+stat@{tiny\+\_\+clear\+\_\+stat}}
-\index{tiny\+\_\+clear\+\_\+stat@{tiny\+\_\+clear\+\_\+stat}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+clear\+\_\+stat}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+clear\+\_\+stat (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_ac75ee03ea3691b0a8bf842d764b342d9}
-The function clears Tiny statistics. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data. \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
-
-\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R.
-\end{DoxyReturn}
-tiny\+\_\+clear\+\_\+stat function clears Tiny protocol statistics. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny protocol structure \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
-
-\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
-\end{DoxyReturn}
-\hypertarget{inc_2tiny__layer2_8h_a48cf9ffab9eeb9665e61ae69e28938b8}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+close@{tiny\+\_\+close}}
-\index{tiny\+\_\+close@{tiny\+\_\+close}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+close}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+close (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_a48cf9ffab9eeb9665e61ae69e28938b8}
-The function closes channel. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data. \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{src_2arduino_2src_2proto_2tiny__layer2_8h_ab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init()} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
-\end{DoxyReturn}
-\hypertarget{inc_2tiny__layer2_8h_a5f61774b2027a91f772f31d943acdd3f}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}}
-\index{tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+get\+\_\+stat}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+get\+\_\+stat (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{{\bf S\+Tiny\+Stats} $\ast$}]{stat}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_a5f61774b2027a91f772f31d943acdd3f}
-The function returns statistics per communication connection. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data. \\
-\hline
-{\em stat} & -\/ pointer of stucture to fill. \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
-
-\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
-\end{DoxyReturn}
-\hypertarget{inc_2tiny__layer2_8h_ab9bfaed3c75551c8b7f3f8b25e766546}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+init@{tiny\+\_\+init}}
-\index{tiny\+\_\+init@{tiny\+\_\+init}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+init (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{{\bf write\+\_\+block\+\_\+cb\+\_\+t}}]{write\+\_\+func, }
-\item[{{\bf read\+\_\+block\+\_\+cb\+\_\+t}}]{read\+\_\+func, }
-\item[{void $\ast$}]{pdata}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_ab9bfaed3c75551c8b7f3f8b25e766546}
-The function initializes internal structures for Tiny channel and return handle to be used with all Tiny and I\+P\+C functions. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data \\
-\hline
-{\em write\+\_\+func} & -\/ pointer to write data function (to communication channel). \\
-\hline
-{\em read\+\_\+func} & -\/ pointer to read function (from communication channel). \\
-\hline
-{\em pdata} & -\/ pointer to a user private data. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyNote}{Note}
-pdata parameter is not applicable for Arduino and is absent in its version. 
-\end{DoxyNote}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{inc_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
-
-\hyperlink{inc_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R or error code.
-\end{DoxyReturn}
-The function initializes internal structures for Tiny channel and return handle to be used with all Tiny and I\+P\+C functions. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data \\
-\hline
-{\em write\+\_\+func} & -\/ pointer to write data function (to communication channel). \\
-\hline
-{\em read\+\_\+func} & -\/ pointer to read function (from communication channel). \\
-\hline
-{\em pdata} & -\/ pointer to a user private data. \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{inc_2tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
-
-\hyperlink{inc_2tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R or error code. 
-\end{DoxyReturn}
-\hypertarget{inc_2tiny__layer2_8h_a470d59a60a496944e63031ba43a00e3d}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+read@{tiny\+\_\+read}}
-\index{tiny\+\_\+read@{tiny\+\_\+read}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+read}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+read (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{uint16\+\_\+t $\ast$}]{uid, }
-\item[{uint8\+\_\+t $\ast$}]{pbuf, }
-\item[{int}]{len, }
-\item[{uint8\+\_\+t}]{flags}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_a470d59a60a496944e63031ba43a00e3d}
-The function reads data from communication channel frame format\+: 0x7\+E, data..., F\+C\+S, 0x7\+E. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data. \\
-\hline
-{\em uid} & -\/ pointer to 16-\/bit uid variable to fill with packet info, can be N\+U\+L\+L. \\
-\hline
-{\em pbuf} & a const pointer to unsigned char -\/ buffer with data to send \\
-\hline
-{\em len} & an integer argument -\/ length of data to send \\
-\hline
-{\em flags} & -\/ T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
-
-\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
-
-\hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E} 
-
-\hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C} 
-
-\hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
-\end{DoxyReturn}
-\hypertarget{inc_2tiny__layer2_8h_a988a41addbe75dc15cc13006de6740e0}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+send@{tiny\+\_\+send}}
-\index{tiny\+\_\+send@{tiny\+\_\+send}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+send}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+send (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{uint16\+\_\+t $\ast$}]{uid, }
-\item[{uint8\+\_\+t $\ast$}]{pbuf, }
-\item[{int}]{len, }
-\item[{uint8\+\_\+t}]{flags}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_a988a41addbe75dc15cc13006de6740e0}
-The function sends data to communication channel in the following frame format\+: 0x7\+E, data..., F\+C\+S, 0x7\+E. \begin{DoxyNote}{Note}
-if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T, then this function may remember pbuf pointer and return immediately. So, it is responsibility of the caller to make pbuf data to be available all the time until frame is sent. 
-\end{DoxyNote}
-
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data. \\
-\hline
-{\em uid} & -\/ pointer to 16-\/bit variable containing packet uid, can be N\+U\+L\+L. uid value must be spelled in network order bytes. \\
-\hline
-{\em pbuf} & -\/ a const pointer to unsigned char -\/ buffer with data to send \\
-\hline
-{\em len} & -\/ an integer argument -\/ length of data to send \\
-\hline
-{\em flags} & -\/ T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
-
-\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
-
-\hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
-
-\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes.
-\end{DoxyReturn}
-Returns negative value in case of error length of sent data \hypertarget{inc_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+set\+\_\+callbacks@{tiny\+\_\+set\+\_\+callbacks}}
-\index{tiny\+\_\+set\+\_\+callbacks@{tiny\+\_\+set\+\_\+callbacks}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+set\+\_\+callbacks}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+set\+\_\+callbacks (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t}}]{read\+\_\+cb, }
-\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t}}]{send\+\_\+cb}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_ac562103dd1699b82fddf29dccdc0ec7c}
-The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny data. \\
-\hline
-{\em read\+\_\+cb} & -\/ pointer to callback function. \\
-\hline
-{\em send\+\_\+cb} & -\/ pointer to callback function. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R.
-\end{DoxyReturn}
-tiny\+\_\+set\+\_\+callbacks sets callback procs for specified Tiny protocol. callbacks will receive all data being sent or received. 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny Protocol structure \\
-\hline
-{\em read\+\_\+cb} & -\/ an argument of on\+\_\+frame\+\_\+cb\+\_\+t type -\/ pointer to callback function. \\
-\hline
-{\em send\+\_\+cb} & -\/ an argument of on\+\_\+frame\+\_\+cb\+\_\+t type -\/ pointer to callback function. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
-\end{DoxyReturn}
-\hypertarget{inc_2tiny__layer2_8h_a5e66725a2818491d4e2b1134951d9229}{}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}!tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}}
-\index{tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}!inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
-\subsubsection[{tiny\+\_\+set\+\_\+fcs\+\_\+bits}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+set\+\_\+fcs\+\_\+bits (
-\begin{DoxyParamCaption}
-\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{uint8\+\_\+t}]{bits}
-\end{DoxyParamCaption}
-)}\label{inc_2tiny__layer2_8h_a5e66725a2818491d4e2b1134951d9229}
-The function sets number of bits used for fcs 
-\begin{DoxyParams}{Parameters}
-{\em handle} & -\/ pointer to Tiny structure \\
-\hline
-{\em bits} & -\/ number of bits to use for fcs\+: 16 or 32. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R 
-\end{DoxyReturn}

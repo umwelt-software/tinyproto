@@ -97,10 +97,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>USER DATA of any length</li>
 <li>FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field. Refer to RFC1662 for examples. FCS field is also optional and can be disabled. But in this case transport errors are not detected.</li>
 </ul>
-<p>Each packet can be sent with simple api command: </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a988a41addbe75dc15cc13006de6740e0">tiny_send</a>(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, <span class="keywordtype">int</span> len, uint32_t flags)</div>
+<p>Each packet can be sent with simple api command: </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="group__SIMPLE__API.html#ga988a41addbe75dc15cc13006de6740e0">tiny_send</a>(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, <span class="keywordtype">int</span> len, uint32_t flags)</div>
 </div><!-- fragment --><p>And be received via another simple api command:</p>
-<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a470d59a60a496944e63031ba43a00e3d">tiny_read</a>(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, <span class="keywordtype">int</span> len, uint32_t flags);</div>
-</div><!-- fragment --><p>uid parameter is optional and can be be simply NULL. And FCS field can be disabled by calling </p><div class="fragment"><div class="line"><a class="code" href="src_2arduino_2src_2proto_2tiny__layer2_8h.html#a5e66725a2818491d4e2b1134951d9229">tiny_set_fcs_bits</a>(&amp;handle, 0);</div>
+<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="group__SIMPLE__API.html#ga470d59a60a496944e63031ba43a00e3d">tiny_read</a>(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, <span class="keywordtype">int</span> len, uint32_t flags);</div>
+</div><!-- fragment --><p>uid parameter is optional and can be be simply NULL. And FCS field can be disabled by calling </p><div class="fragment"><div class="line"><a class="code" href="group__ADVANCED__API.html#ga5e66725a2818491d4e2b1134951d9229">tiny_set_fcs_bits</a>(&amp;handle, 0);</div>
 </div><!-- fragment --><p> In this case, UID field and FCS field are not used, and the protocol packet looks as follows: 8 any len 8 | 7E | USER DATA | 7E |</p>
 <p>So, the protocol itself adds a little overhead to the user data: 2 bytes of packet delimiter in the simplest case. And in the case of full packet format (both with UID and 32-bit FCS fields) the protocol adds 8 bytes of overhead. </p>
 </div></div><!-- contents -->

@@ -1,0 +1,181 @@
+\hypertarget{tiny__layer2_8h}{}\section{inc/tiny\+\_\+layer2.h File Reference}
+\label{tiny__layer2_8h}\index{inc/tiny\+\_\+layer2.\+h@{inc/tiny\+\_\+layer2.\+h}}
+
+
+Tiny protocol A\+P\+I.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}tiny\+\_\+defines.\+h\char`\"{}}\\*
+Include dependency graph for tiny\+\_\+layer2.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{tiny__layer2_8h__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSTinyStats}{S\+Tiny\+Stats}
+\item 
+struct \hyperlink{structSTinyRxStatus}{S\+Tiny\+Rx\+Status}
+\item 
+struct \hyperlink{structSTinyTxStatus}{S\+Tiny\+Tx\+Status}
+\item 
+struct \hyperlink{structSTinyData}{S\+Tiny\+Data}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{}\#define \hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S}~(1)\label{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}
+
+\begin{DoxyCompactList}\small\item\em Tiny operation successful. Only tiny\+\_\+send\+\_\+start and tiny\+\_\+read\+\_\+start functions return this code. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{}\#define \hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R}~(0)\label{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}
+
+\begin{DoxyCompactList}\small\item\em No error. For tiny\+\_\+send and tiny\+\_\+read functions, this means, no data sent or received. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{}\#define \hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D}~(-\/1)\label{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}
+
+\begin{DoxyCompactList}\small\item\em Timeout. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{}\#define \hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T}~(-\/2)\label{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}
+
+\begin{DoxyCompactList}\small\item\em Timeout happened. The function must be called once again. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{}\#define \hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E}~(-\/3)\label{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}
+
+\begin{DoxyCompactList}\small\item\em Data too large to fit the user buffer, valid for tiny\+\_\+read function. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{}\#define \hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A}~(-\/4)\label{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}
+
+\begin{DoxyCompactList}\small\item\em Some invalid data passed to Tiny A\+P\+I function. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{}\#define \hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y}~(-\/5)\label{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}
+
+\begin{DoxyCompactList}\small\item\em A\+P\+I function detected that operation cannot be performed right now. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{}\#define \hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C}~(-\/6)\label{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}
+
+\begin{DoxyCompactList}\small\item\em Out of sync -\/ received some data, which are not part of the frame (tiny\+\_\+read) \end{DoxyCompactList}\item 
+\hypertarget{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{}\#define \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T}~(0)\label{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}
+
+\begin{DoxyCompactList}\small\item\em This flag makes tiny A\+P\+I functions perform as non-\/blocking. \end{DoxyCompactList}\item 
+\hypertarget{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{}\#define \hyperlink{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+A\+D\+\_\+\+A\+L\+L}~(1)\label{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}
+
+\begin{DoxyCompactList}\small\item\em This flag makes tiny\+\_\+read function to read whole frame event if it doesn\textquotesingle{}t fit the buffer. \end{DoxyCompactList}\item 
+\hypertarget{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{}\#define \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}~(0x80)\label{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}
+
+\begin{DoxyCompactList}\small\item\em This flag makes tiny A\+P\+I functions perform in blocking mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int($\ast$ \hyperlink{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, const uint8\+\_\+t $\ast$buffer, int size)
+\item 
+typedef int($\ast$ \hyperlink{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, uint8\+\_\+t $\ast$buffer, int size)
+\item 
+typedef void($\ast$ \hyperlink{tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t}) (void $\ast$handle, \hyperlink{tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}{E\+Tiny\+Frame\+Direction} direction, uint8\+\_\+t $\ast$pdata, int size)
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}{E\+Tiny\+Frame\+Direction} \{ {\bfseries T\+I\+N\+Y\+\_\+\+F\+R\+A\+M\+E\+\_\+\+T\+X}, 
+{\bfseries T\+I\+N\+Y\+\_\+\+F\+R\+A\+M\+E\+\_\+\+R\+X}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
+\item 
+int \hyperlink{group__SIMPLE__API_ga48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\item 
+int \hyperlink{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{tiny\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em sends frame to user payload to communication channel \end{DoxyCompactList}\item 
+int \hyperlink{group__SIMPLE__API_ga470d59a60a496944e63031ba43a00e3d}{tiny\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\item 
+int \hyperlink{group__ADVANCED__API_ga5e66725a2818491d4e2b1134951d9229}{tiny\+\_\+set\+\_\+fcs\+\_\+bits} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t bits)
+\item 
+int \hyperlink{group__ADVANCED__API_ga159189fa29f3eaa79a76a3fa87b31084}{tiny\+\_\+send\+\_\+start} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em initiates sending of a new frame \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_gabe04a4e76adc5421deac4e3699a15646}{tiny\+\_\+send\+\_\+buffer} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em sends user provided data in the body of the frame \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_ga2e85c7e9efb0bbe9c6adfd923ec7c73c}{tiny\+\_\+send\+\_\+end} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em completes sending of a new frame \end{DoxyCompactList}\item 
+void \hyperlink{group__ADVANCED__API_ga73c9f1cfb0948bd559d3704749db540b}{tiny\+\_\+send\+\_\+terminate} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em terminates send operation \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_ga2f0547115de5b96a828d79f5491d22fa}{tiny\+\_\+read\+\_\+start} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em initiates receiving of a new frame \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_gade4e07eb12b8e32e6dd0c7b9757e8f39}{tiny\+\_\+read\+\_\+buffer} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em reads frame payload to provided buffer \end{DoxyCompactList}\item 
+void \hyperlink{group__ADVANCED__API_gaab48caab81a46d74fb52f2afb2649b61}{tiny\+\_\+read\+\_\+terminate} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em terminates read operation \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
+\item 
+int \hyperlink{group__ADVANCED__API_gac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\item 
+int \hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} read\+\_\+cb, \hyperlink{tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{on\+\_\+frame\+\_\+cb\+\_\+t} send\+\_\+cb)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Tiny protocol A\+P\+I. 
+
+This is Tiny protocol implementation for microcontrollers 
+
+\subsection{Typedef Documentation}
+\hypertarget{tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}{}\index{tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}!on\+\_\+frame\+\_\+cb\+\_\+t@{on\+\_\+frame\+\_\+cb\+\_\+t}}
+\index{on\+\_\+frame\+\_\+cb\+\_\+t@{on\+\_\+frame\+\_\+cb\+\_\+t}!tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}}
+\subsubsection[{on\+\_\+frame\+\_\+cb\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ on\+\_\+frame\+\_\+cb\+\_\+t) (void $\ast$handle, {\bf E\+Tiny\+Frame\+Direction} direction, uint8\+\_\+t $\ast$pdata, int size)}\label{tiny__layer2_8h_acf94db3677aab46f4a42978d53cc23e3}
+on\+\_\+frame\+\_\+cb\+\_\+t is a function to callback data going through Tiny level. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ handle of Tiny. \\
+\hline
+{\em direction} & -\/ frame is sent or received. \\
+\hline
+{\em pdata} & -\/ data sent or received over Tiny. \\
+\hline
+{\em size} & -\/ size of data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None. 
+\end{DoxyReturn}
+\hypertarget{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{}\index{tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}!read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}}
+\index{read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}!tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}}
+\subsubsection[{read\+\_\+block\+\_\+cb\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef int($\ast$ read\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, uint8\+\_\+t $\ast$buffer, int size)}\label{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}
+The function reads data from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pdata} & -\/ pointer to user private data. -\/ absent in Arduino version \\
+\hline
+{\em buffer} & -\/ pointer to a buffer to read data to from the channel. \\
+\hline
+{\em size} & -\/ maximum size of the buffer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+the function must return negative value in case of error or number of bytes actually read or zero. 
+\end{DoxyReturn}
+\hypertarget{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{}\index{tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}!write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}}
+\index{write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}!tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}}
+\subsubsection[{write\+\_\+block\+\_\+cb\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef int($\ast$ write\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, const uint8\+\_\+t $\ast$buffer, int size)}\label{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}
+The function writes data to communication channel port. 
+\begin{DoxyParams}{Parameters}
+{\em pdata} & -\/ pointer to user private data -\/ absent in Arduino version \\
+\hline
+{\em buffer} & -\/ pointer to the data to send to channel. \\
+\hline
+{\em size} & -\/ size of data to write. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+the function must return negative value in case of error or number of bytes written or zero. 
+\end{DoxyReturn}
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}{}\index{tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}!E\+Tiny\+Frame\+Direction@{E\+Tiny\+Frame\+Direction}}
+\index{E\+Tiny\+Frame\+Direction@{E\+Tiny\+Frame\+Direction}!tiny\+\_\+layer2.\+h@{tiny\+\_\+layer2.\+h}}
+\subsubsection[{E\+Tiny\+Frame\+Direction}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf E\+Tiny\+Frame\+Direction}}\label{tiny__layer2_8h_af5f6894a8940157d2d5e659bbe2aafa3}
+Enum is used for callback functions to specify direction of the frame, processed by the protocol. 
