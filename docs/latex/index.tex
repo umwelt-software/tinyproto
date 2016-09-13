@@ -1,0 +1,50 @@
+This is Tiny protocol implementation for microcontrollers (Arduino, Stellaris).
+
+\section*{Tiny Protocol}
+
+\subsection*{Introduction}
+
+This protocol is intended to be used in low-\/memory systems, like microcontrollers (Stellaris, Arduino). It is also can be compiled for desktop Linux systems, and it is possible to build it for Windows.
+
+\subsection*{Tiny Protocol A\+P\+I.}
+
+Linux A\+P\+I supports C-\/\+Style functions, while Arduino A\+P\+I supports both C-\/\+Style and C++ classes. Usage C++ Arduino classes makes easy use of the protocol for Arduino projects. Please refer to documentation.
+
+\subsection*{Tiny Protocol Packet structure.}
+
+Full packet format\+: 
+\begin{DoxyPre}
+   8    16     any len     8/16/32  8
+ | 7E | UID |  USER DATA  |  FCS  | 7E |
+\end{DoxyPre}
+
+
+
+\begin{DoxyItemize}
+\item 7\+E is standard packet delimiter (commonly used on layer 2) as defined in H\+D\+L\+C/\+P\+P\+P framing.
+\item U\+I\+D can be used for your own needs. This field is intented for use with higher levels protocols. This field is optional, you may omit U\+I\+D parameter in Tiny Protocol A\+P\+I functions.
+\item U\+S\+E\+R D\+A\+T\+A of any length
+\item F\+C\+S is standard checksum. Depending on your selection, this is 8-\/bit, 16-\/bit or 32-\/bit field. Refer to R\+F\+C1662 for examples. F\+C\+S field is also optional and can be disabled. But in this case transport errors are not detected.
+\end{DoxyItemize}
+
+Each packet can be sent with simple api command\+: 
+\begin{DoxyCode}
+\textcolor{keywordtype}{int} \hyperlink{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{tiny\_send}(SHdlcData *handle, uint16\_t *uid, uint8\_t *pbuf, \textcolor{keywordtype}{int} len, uint32\_t flags)
+\end{DoxyCode}
+
+
+And be received via another simple api command\+:
+
+
+\begin{DoxyCode}
+\textcolor{keywordtype}{int} \hyperlink{group__SIMPLE__API_ga470d59a60a496944e63031ba43a00e3d}{tiny\_read}(SHdlcData *handle, uint16\_t *uid, uint8\_t *pbuf, \textcolor{keywordtype}{int} len, uint32\_t flags);
+\end{DoxyCode}
+
+
+uid parameter is optional and can be be simply N\+U\+L\+L. And F\+C\+S field can be disabled by calling 
+\begin{DoxyCode}
+\hyperlink{group__ADVANCED__API_ga5e66725a2818491d4e2b1134951d9229}{tiny\_set\_fcs\_bits}(&handle, 0);
+\end{DoxyCode}
+ In this case, U\+I\+D field and F\+C\+S field are not used, and the protocol packet looks as follows\+: 8 any len 8 $\vert$ 7\+E $\vert$ U\+S\+E\+R D\+A\+T\+A $\vert$ 7\+E $\vert$
+
+So, the protocol itself adds a little overhead to the user data\+: 2 bytes of packet delimiter in the simplest case. And in the case of full packet format (both with U\+I\+D and 32-\/bit F\+C\+S fields) the protocol adds 8 bytes of overhead. 

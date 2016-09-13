@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.3.0
+VERSION=0.3.1
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -87,7 +87,7 @@ ifeq ($(CONFIG_ENABLE_STATS),y)
     CCFLAGS += -DCONFIG_ENABLE_STATS
 endif
 
-.PHONY: clean library examples all install install-lib doc \
+.PHONY: clean library examples all install install-lib docs \
 	arduino-pkg
 
 # ************* Compiling example ******************
@@ -181,7 +181,7 @@ arduino-pkg:
 
 ####################### all      ###################################
 
-doc:
+docs:
 	doxygen doxygen.cfg
 
 all: examples library doc

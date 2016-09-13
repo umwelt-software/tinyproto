@@ -1,0 +1,32 @@
+\hypertarget{group__ERROR__FLAGS}{}\section{Return error codes for Tiny A\+P\+I functions}
+\label{group__ERROR__FLAGS}\index{Return error codes for Tiny A\+P\+I functions@{Return error codes for Tiny A\+P\+I functions}}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{}\#define \hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S}~(1)\label{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}
+
+\begin{DoxyCompactList}\small\item\em Tiny operation successful. Only tiny\+\_\+send\+\_\+start and tiny\+\_\+read\+\_\+start functions return this code. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{}\#define \hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R}~(0)\label{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}
+
+\begin{DoxyCompactList}\small\item\em No error. For tiny\+\_\+send and tiny\+\_\+read functions, this means, no data sent or received. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{}\#define \hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D}~(-\/1)\label{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}
+
+\begin{DoxyCompactList}\small\item\em Timeout. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{}\#define \hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T}~(-\/2)\label{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}
+
+\begin{DoxyCompactList}\small\item\em Timeout happened. The function must be called once again. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{}\#define \hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E}~(-\/3)\label{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}
+
+\begin{DoxyCompactList}\small\item\em Data too large to fit the user buffer, valid for tiny\+\_\+read function. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{}\#define \hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A}~(-\/4)\label{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}
+
+\begin{DoxyCompactList}\small\item\em Some invalid data passed to Tiny A\+P\+I function. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{}\#define \hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y}~(-\/5)\label{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}
+
+\begin{DoxyCompactList}\small\item\em A\+P\+I function detected that operation cannot be performed right now. \end{DoxyCompactList}\item 
+\hypertarget{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{}\#define \hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C}~(-\/6)\label{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}
+
+\begin{DoxyCompactList}\small\item\em Out of sync -\/ received some data, which are not part of the frame (tiny\+\_\+read) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
