@@ -1,5 +1,0 @@
-<map id="STinyData" name="STinyData">
-<area shape="rect" id="node2" href="$structSTinyTxStatus.html" title="STinyTxStatus" alt="" coords="5,5,115,32"/>
-<area shape="rect" id="node3" href="$structSTinyRxStatus.html" title="STinyRxStatus" alt="" coords="139,5,250,32"/>
-<area shape="rect" id="node4" href="$structSTinyStats.html" title="STinyStats" alt="" coords="274,5,361,32"/>
-</map>
