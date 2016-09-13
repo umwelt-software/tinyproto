@@ -285,6 +285,8 @@ extern int tiny_close(STinyData *handle);
 
 
 /**
+ * @brief sends frame to user payload to communication channel
+ *
  * The function sends data to communication channel in the following
  * frame format: 0x7E, data..., FCS, 0x7E.
  * \note if flags field is set to TINY_FLAG_NO_WAIT, then this function may remember pbuf

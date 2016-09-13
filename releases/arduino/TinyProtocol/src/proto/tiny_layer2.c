@@ -141,17 +141,6 @@ inline static void  __commit_fcs_field(uint8_t fcs_bits, fcs_t* fcs)
 ***************************************************************/
 
 
-/**
-* The function initializes internal structures for Tiny channel and return handle
-* to be used with all Tiny and IPC functions.
-* @param handle - pointer to Tiny data
-* @param write_func - pointer to write data function (to communication channel).
-* @param read_func - pointer to read function (from communication channel).
-* @param pdata - pointer to a user private data.
-* @see write_block_cb_t
-* @see read_block_cb_t
-* @return TINY_NO_ERROR or error code.
-*/
 int tiny_init(STinyData *handle,
               write_block_cb_t write_func,
               read_block_cb_t read_func,
@@ -186,6 +175,7 @@ int tiny_init(STinyData *handle,
     return TINY_NO_ERROR;
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 int tiny_close(STinyData *handle)
 {
@@ -209,6 +199,7 @@ int tiny_close(STinyData *handle)
     return TINY_NO_ERROR;
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
 int tiny_set_fcs_bits(STinyData *handle, uint8_t bits)
 {
@@ -820,13 +811,6 @@ int tiny_get_stat(STinyData *handle, STinyStats *stat)
 }
 
 
-/**
-* tiny_clear_stat function clears Tiny protocol statistics.
-* @param handle - pointer to Tiny protocol structure
-* @see TINY_ERR_INVALID_DATA
-* @see TINY_NO_ERROR
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
 int tiny_clear_stat(STinyData *handle)
 {
     if (handle)
@@ -841,14 +825,6 @@ int tiny_clear_stat(STinyData *handle)
 }
 
 
-/**
-* tiny_set_callbacks sets callback procs for specified Tiny protocol.
-* callbacks will receive all data being sent or received.
-* @param handle - pointer to Tiny Protocol structure
-* @param read_cb - an argument of on_frame_cb_t type - pointer to callback function.
-* @param send_cb - an argument of on_frame_cb_t type - pointer to callback function.
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
 int tiny_set_callbacks(STinyData *handle,
                on_frame_cb_t read_cb,
                on_frame_cb_t send_cb)
