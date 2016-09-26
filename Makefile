@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.3.1
+VERSION=0.3.3
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
