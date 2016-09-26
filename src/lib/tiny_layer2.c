@@ -578,6 +578,13 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+int tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len)
+{
+    return tiny_send(handle, 0, pbuf, len, TINY_FLAG_WAIT_FOREVER);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 
 /**************************************************************
 *
@@ -747,6 +754,7 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
     return result;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
 
 void tiny_read_terminate(STinyData *handle)
 {
@@ -757,6 +765,7 @@ void tiny_read_terminate(STinyData *handle)
     handle->rx.inprogress = TINY_RX_STATE_IDLE;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags)
 {
@@ -791,6 +800,13 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
         }
     }
     return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+int tiny_simple_read(STinyData *handle, uint8_t *pbuf, int len)
+{
+    return tiny_read(handle, 0, pbuf, len, TINY_FLAG_WAIT_FOREVER);
 }
 
 

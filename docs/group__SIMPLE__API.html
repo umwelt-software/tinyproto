@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.1</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -91,10 +91,16 @@ Functions</h2></td></tr>
 <tr class="memitem:ga48cf9ffab9eeb9665e61ae69e28938b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#ga48cf9ffab9eeb9665e61ae69e28938b8">tiny_close</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="separator:ga48cf9ffab9eeb9665e61ae69e28938b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga988a41addbe75dc15cc13006de6740e0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#ga988a41addbe75dc15cc13006de6740e0">tiny_send</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags)</td></tr>
-<tr class="memdesc:ga988a41addbe75dc15cc13006de6740e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">sends frame to user payload to communication channel  <a href="#ga988a41addbe75dc15cc13006de6740e0">More...</a><br /></td></tr>
+<tr class="memdesc:ga988a41addbe75dc15cc13006de6740e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">sends frame with user payload to communication channel  <a href="#ga988a41addbe75dc15cc13006de6740e0">More...</a><br /></td></tr>
 <tr class="separator:ga988a41addbe75dc15cc13006de6740e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga470d59a60a496944e63031ba43a00e3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#ga470d59a60a496944e63031ba43a00e3d">tiny_read</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags)</td></tr>
 <tr class="separator:ga470d59a60a496944e63031ba43a00e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafae39ccf72f1f22f4dc47bd54998e88c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#gafae39ccf72f1f22f4dc47bd54998e88c">tiny_simple_send</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t *pbuf, int len)</td></tr>
+<tr class="memdesc:gafae39ccf72f1f22f4dc47bd54998e88c"><td class="mdescLeft">&#160;</td><td class="mdescRight">sends frame with user payload to communication channel in blocking mode  <a href="#gafae39ccf72f1f22f4dc47bd54998e88c">More...</a><br /></td></tr>
+<tr class="separator:gafae39ccf72f1f22f4dc47bd54998e88c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac9eaac50ab16b9891ca74e5c5e46b778"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#gac9eaac50ab16b9891ca74e5c5e46b778">tiny_simple_read</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t *pbuf, int len)</td></tr>
+<tr class="memdesc:gac9eaac50ab16b9891ca74e5c5e46b778"><td class="mdescLeft">&#160;</td><td class="mdescRight">reads frame from the channel in blocking mode.  <a href="#gac9eaac50ab16b9891ca74e5c5e46b778">More...</a><br /></td></tr>
+<tr class="separator:gac9eaac50ab16b9891ca74e5c5e46b778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
@@ -280,7 +286,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>sends frame to user payload to communication channel </p>
+<p>sends frame with user payload to communication channel </p>
 <p>The function sends data to communication channel in the following frame format: 0x7E, data..., FCS, 0x7E. </p><dl class="section note"><dt>Note</dt><dd>if flags field is set to TINY_FLAG_NO_WAIT, then this function may remember pbuf pointer and return immediately. So, it is responsibility of the caller to make pbuf data to be available all the time until frame is sent. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -301,6 +307,105 @@ Functions</h2></td></tr>
 <a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.</dd></dl>
 <p>Returns negative value in case of error length of sent data </p>
+
+</div>
+</div>
+<a class="anchor" id="gac9eaac50ab16b9891ca74e5c5e46b778"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tiny_simple_read </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structSTinyData.html">STinyData</a> *&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>pbuf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>reads frame from the channel in blocking mode. </p>
+<p>The function reads user data from communication channel </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>- pointer to Tiny data. </td></tr>
+    <tr><td class="paramname">pbuf</td><td>a const pointer to unsigned char - buffer with data to send </td></tr>
+    <tr><td class="paramname">len</td><td>an integer argument - length of data to send </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
+<dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd>
+<dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7" title="Data too large to fit the user buffer, valid for tiny_read function. ">TINY_ERR_DATA_TOO_LARGE</a> </dd>
+<dd>
+<a class="el" href="group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a" title="Out of sync - received some data, which are not part of the frame (tiny_read) ">TINY_ERR_OUT_OF_SYNC</a> </dd>
+<dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga9b3e170e1c6ce269f216ef4a1ac61995" title="API function detected that operation cannot be performed right now. ">TINY_ERR_BUSY</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED, TINY_ERR_OUT_OF_SYNC, TINY_ERR_BUSY, TINY_ERR_DATA_TOO_LARGE or number of sent bytes. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>TINY_ERR_DATA_TOO_LARGE can be returned in successful case. If frame is received, but passed buffer to the function is too small to fit all. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="gafae39ccf72f1f22f4dc47bd54998e88c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tiny_simple_send </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structSTinyData.html">STinyData</a> *&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>pbuf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>sends frame with user payload to communication channel in blocking mode </p>
+<p>The function sends data to communication channel. Unlike <a class="el" href="group__SIMPLE__API.html#ga988a41addbe75dc15cc13006de6740e0" title="sends frame with user payload to communication channel ">tiny_send()</a>, the function works in blocking mode, i.e. it returns control only if user data are successfully sent, or in case of error. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>- pointer to Tiny data. </td></tr>
+    <tr><td class="paramname">pbuf</td><td>- a const pointer to unsigned char - buffer with data to send </td></tr>
+    <tr><td class="paramname">len</td><td>- an integer argument - length of data to send </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
+<dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes. </dd></dl>
 
 </div>
 </div>

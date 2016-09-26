@@ -285,7 +285,7 @@ extern int tiny_close(STinyData *handle);
 
 
 /**
- * @brief sends frame to user payload to communication channel
+ * @brief sends frame with user payload to communication channel
  *
  * The function sends data to communication channel in the following
  * frame format: 0x7E, data..., FCS, 0x7E.
@@ -322,6 +322,42 @@ extern int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, 
  * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
  */
 extern int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags);
+
+
+/**
+ * @brief sends frame with user payload to communication channel in blocking mode
+ *
+ * The function sends data to communication channel.
+ * Unlike tiny_send(), the function works in blocking mode, i.e. it returns
+ * control only if user data are successfully sent, or in case of error.
+ * @param handle - pointer to Tiny data.
+ * @param pbuf - a const pointer to unsigned char - buffer with data to send
+ * @param len - an integer argument - length of data to send
+ * @see TINY_ERR_INVALID_DATA
+ * @see TINY_ERR_FAILED
+ * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
+ */
+extern int tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len);
+
+
+/**
+ * @brief reads frame from the channel in blocking mode.
+ *
+ * The function reads user data from communication channel
+ * @param handle - pointer to Tiny data.
+ * @param pbuf a const pointer to unsigned char - buffer with data to send
+ * @param len an integer argument - length of data to send
+ * @see TINY_ERR_INVALID_DATA
+ * @see TINY_ERR_FAILED
+ * @see TINY_ERR_DATA_TOO_LARGE
+ * @see TINY_ERR_OUT_OF_SYNC
+ * @see TINY_ERR_BUSY
+ * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED, TINY_ERR_OUT_OF_SYNC, TINY_ERR_BUSY, TINY_ERR_DATA_TOO_LARGE
+ *         or number of sent bytes.
+ * @note TINY_ERR_DATA_TOO_LARGE can be returned in successful case. If frame is received, but passed buffer
+ *       to the function is too small to fit all.
+ */
+extern int tiny_simple_read(STinyData *handle, uint8_t *pbuf, int len);
 
 /**
  * @}

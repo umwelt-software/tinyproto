@@ -8,9 +8,13 @@ int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+
 int \hyperlink{group__SIMPLE__API_ga48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \item 
 int \hyperlink{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{tiny\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
-\begin{DoxyCompactList}\small\item\em sends frame to user payload to communication channel \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em sends frame with user payload to communication channel \end{DoxyCompactList}\item 
 int \hyperlink{group__SIMPLE__API_ga470d59a60a496944e63031ba43a00e3d}{tiny\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
-\end{DoxyCompactItemize}
+\item 
+int \hyperlink{group__SIMPLE__API_gafae39ccf72f1f22f4dc47bd54998e88c}{tiny\+\_\+simple\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len)
+\begin{DoxyCompactList}\small\item\em sends frame with user payload to communication channel in blocking mode \end{DoxyCompactList}\item 
+int \hyperlink{group__SIMPLE__API_gac9eaac50ab16b9891ca74e5c5e46b778}{tiny\+\_\+simple\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len)
+\begin{DoxyCompactList}\small\item\em reads frame from the channel in blocking mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -118,7 +122,7 @@ T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\
 )}\label{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}
 
 
-sends frame to user payload to communication channel 
+sends frame with user payload to communication channel 
 
 The function sends data to communication channel in the following frame format\+: 0x7\+E, data..., F\+C\+S, 0x7\+E. \begin{DoxyNote}{Note}
 if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T, then this function may remember pbuf pointer and return immediately. So, it is responsibility of the caller to make pbuf data to be available all the time until frame is sent. 
@@ -148,4 +152,72 @@ if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes.
 \end{DoxyReturn}
-Returns negative value in case of error length of sent data 
+Returns negative value in case of error length of sent data \hypertarget{group__SIMPLE__API_gac9eaac50ab16b9891ca74e5c5e46b778}{}\index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+simple\+\_\+read@{tiny\+\_\+simple\+\_\+read}}
+\index{tiny\+\_\+simple\+\_\+read@{tiny\+\_\+simple\+\_\+read}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
+\subsubsection[{tiny\+\_\+simple\+\_\+read}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+simple\+\_\+read (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{uint8\+\_\+t $\ast$}]{pbuf, }
+\item[{int}]{len}
+\end{DoxyParamCaption}
+)}\label{group__SIMPLE__API_gac9eaac50ab16b9891ca74e5c5e46b778}
+
+
+reads frame from the channel in blocking mode. 
+
+The function reads user data from communication channel 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+{\em pbuf} & a const pointer to unsigned char -\/ buffer with data to send \\
+\hline
+{\em len} & an integer argument -\/ length of data to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+
+\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+
+\hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E} 
+
+\hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C} 
+
+\hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E or number of sent bytes. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E can be returned in successful case. If frame is received, but passed buffer to the function is too small to fit all. 
+\end{DoxyNote}
+\hypertarget{group__SIMPLE__API_gafae39ccf72f1f22f4dc47bd54998e88c}{}\index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+simple\+\_\+send@{tiny\+\_\+simple\+\_\+send}}
+\index{tiny\+\_\+simple\+\_\+send@{tiny\+\_\+simple\+\_\+send}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
+\subsubsection[{tiny\+\_\+simple\+\_\+send}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+simple\+\_\+send (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{uint8\+\_\+t $\ast$}]{pbuf, }
+\item[{int}]{len}
+\end{DoxyParamCaption}
+)}\label{group__SIMPLE__API_gafae39ccf72f1f22f4dc47bd54998e88c}
+
+
+sends frame with user payload to communication channel in blocking mode 
+
+The function sends data to communication channel. Unlike \hyperlink{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{tiny\+\_\+send()}, the function works in blocking mode, i.\+e. it returns control only if user data are successfully sent, or in case of error. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+{\em pbuf} & -\/ a const pointer to unsigned char -\/ buffer with data to send \\
+\hline
+{\em len} & -\/ an integer argument -\/ length of data to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+
+\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
+\end{DoxyReturn}

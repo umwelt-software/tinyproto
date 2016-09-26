@@ -184,13 +184,13 @@ arduino-pkg:
 docs:
 	doxygen doxygen.cfg
 
-all: examples library doc
+all: examples library docs
 
 install: install-lib
 	$(STRIP) $(DESTDIR)/$@
 
 clean:
 	rm -rf $(BLD)
-	rm -rf doc
+	rm -rf docs
 	rm -rf releases
 

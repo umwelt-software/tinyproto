@@ -86,9 +86,13 @@ int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+
 int \hyperlink{group__SIMPLE__API_ga48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \item 
 int \hyperlink{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{tiny\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
-\begin{DoxyCompactList}\small\item\em sends frame to user payload to communication channel \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em sends frame with user payload to communication channel \end{DoxyCompactList}\item 
 int \hyperlink{group__SIMPLE__API_ga470d59a60a496944e63031ba43a00e3d}{tiny\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint16\+\_\+t $\ast$uid, uint8\+\_\+t $\ast$pbuf, int len, uint8\+\_\+t flags)
 \item 
+int \hyperlink{group__SIMPLE__API_gafae39ccf72f1f22f4dc47bd54998e88c}{tiny\+\_\+simple\+\_\+send} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len)
+\begin{DoxyCompactList}\small\item\em sends frame with user payload to communication channel in blocking mode \end{DoxyCompactList}\item 
+int \hyperlink{group__SIMPLE__API_gac9eaac50ab16b9891ca74e5c5e46b778}{tiny\+\_\+simple\+\_\+read} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len)
+\begin{DoxyCompactList}\small\item\em reads frame from the channel in blocking mode. \end{DoxyCompactList}\item 
 int \hyperlink{group__ADVANCED__API_ga5e66725a2818491d4e2b1134951d9229}{tiny\+\_\+set\+\_\+fcs\+\_\+bits} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t bits)
 \item 
 int \hyperlink{group__ADVANCED__API_ga159189fa29f3eaa79a76a3fa87b31084}{tiny\+\_\+send\+\_\+start} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
