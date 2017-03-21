@@ -1,5 +1,5 @@
 /*
-    Copyright 2016 (C) Alexey Dynda
+    Copyright 2016-2017 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -18,6 +18,7 @@
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 
 #include "fakewire.h"
@@ -33,25 +34,33 @@ int fakeWireInit(fake_line_t *fl, fake_wire_t *rx, fake_wire_t *tx, int noise)
     tx->readptr = 0;
     rx->writeptr = 0;
     rx->readptr = 0;
+    pthread_mutex_init(&tx->lock, NULL);
     return 0;
 }
 
 int fakeWireRead(void *pdata, uint8_t *data, int length)
 {
     fake_line_t *fl = (fake_line_t *)pdata;
+    pthread_mutex_lock( &fl->rx->lock );
     int size = 0;
-    while ((fl->rx->writeptr != fl->rx->readptr) && (size < length))
+    while (size < length)
     {
+        if ( fl->rx->readptr == fl->rx->writeptr )
+        {
+            break;
+        }
         data[size] = fl->rx->buf[fl->rx->readptr];
+        fprintf(stderr, "%p: IN %02X\n", pdata, data[size]);
 /*        if ((fl->noise) && ((rand() & 0xFF) == 0))
             data[size]^= 0x28;*/
         /* Atomic move of the pointer */
-        if (fl->rx->readptr >= sizeof(fl->rx->buf))
+        if (fl->rx->readptr >= sizeof(fl->rx->buf) - 1)
             fl->rx->readptr = 0;
         else
             fl->rx->readptr++;
         size++;
     }
+    pthread_mutex_unlock( &fl->rx->lock );
     return size;
 }
 
@@ -60,27 +69,32 @@ int fakeWireWrite(void *pdata, const uint8_t *data, int length)
 {
     fake_line_t *fl = (fake_line_t *)pdata;
     int size = 0;
-    int lastpos;
+    pthread_mutex_lock( &fl->tx->lock );
     while (size < length)
     {
+        int writeptr = fl->tx->writeptr + 1;
+        if (writeptr >= sizeof(fl->tx->buf))
+        {
+            writeptr = 0;
+        }
         /* Atomic read */
-        lastpos = fl->tx->readptr;
-        lastpos = (lastpos == 0 ? sizeof(fl->tx->buf) : lastpos) - 1;
-        if (fl->tx->writeptr == lastpos)
+        if (writeptr == fl->tx->readptr)
+        {
+            /* no space to write */
             break;
+        }
+        fprintf(stderr, "%p: OUT %02X\n", pdata, data[size]);
         fl->tx->buf[fl->tx->writeptr] = data[size];
-        /* Making atomic change */
-        if (fl->tx->writeptr >= sizeof(fl->tx->buf))
-            fl->tx->writeptr = 0;
-        else
-            fl->tx->writeptr++;
+        fl->tx->writeptr = writeptr;
         size++;
     }
+    pthread_mutex_unlock( &fl->tx->lock );
     return size;
 }
 
 
 int fakeWireClose(fake_line_t *fl)
 {
+   pthread_mutex_destroy(&fl->tx->lock);
    return 0;
 }

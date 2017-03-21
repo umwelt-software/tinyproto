@@ -73,6 +73,8 @@ extern "C" {
 #define TINY_FLAG_NO_WAIT               (0)
 /// This flag makes tiny_read function to read whole frame event if it doesn't fit the buffer
 #define TINY_FLAG_READ_ALL              (1)
+/// Informs advanced API that caller wants to start transmit new frame to the channel
+#define TINY_FLAG_LOCK_SEND             (2)
 /// This flag makes tiny API functions perform in blocking mode
 #define TINY_FLAG_WAIT_FOREVER          (0x80)
 
@@ -204,6 +206,7 @@ typedef struct
     uint8_t             blockIndex;                // index of the frame block being processed
     uint8_t             prevbyte;                  // last byte sent
     uint8_t             bits;                      // index of crc byte being sent
+    uint8_t             locked;
     /// \endcond
 } STinyTxStatus;
 
@@ -259,28 +262,30 @@ typedef struct
  */
 
 /**
-* The function initializes internal structures for Tiny channel and return handle
-* to be used with all Tiny and IPC functions.
-* @param handle - pointer to Tiny data
-* @param write_func - pointer to write data function (to communication channel).
-* @param read_func - pointer to read function (from communication channel).
-* @param pdata - pointer to a user private data.
-* @note pdata parameter is not applicable for Arduino and is absent in its version.
-* @see write_block_cb_t
-* @see read_block_cb_t
-* @return TINY_NO_ERROR or error code.
-*/
+ * The function initializes internal structures for Tiny channel and return handle
+ * to be used with all Tiny and IPC functions.
+ * @param handle - pointer to Tiny data
+ * @param write_func - pointer to write data function (to communication channel).
+ * @param read_func - pointer to read function (from communication channel).
+ * @param pdata - pointer to a user private data.
+ * @note pdata parameter is not applicable for Arduino and is absent in its version.
+ * @see write_block_cb_t
+ * @see read_block_cb_t
+ * @return TINY_NO_ERROR or error code.
+ * @remarks This function is not thread safe.
+ */
 extern int tiny_init(STinyData *handle,
                write_block_cb_t write_func,
                read_block_cb_t read_func,
                void *pdata);
 
 /**
-* The function closes  channel.
-* @param handle - pointer to Tiny data.
-* @see tiny_init()
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
+ * The function closes  channel.
+ * @param handle - pointer to Tiny data.
+ * @see tiny_init()
+ * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
+ * @remarks This function is not thread safe.
+ */
 extern int tiny_close(STinyData *handle);
 
 
@@ -296,12 +301,17 @@ extern int tiny_close(STinyData *handle);
  * @param uid - pointer to 16-bit variable containing packet uid, can be NULL. uid value must be spelled in network order bytes.
  * @param pbuf - a const pointer to unsigned char - buffer with data to send
  * @param len - an integer argument - length of data to send
- * @param flags - TINY_FLAG_NO_WAIT
+ * @param flags - TINY_FLAG_NO_WAIT, TINY_FLAG_WAIT_FOREVER, TINY_FLAG_LOCK_SEND
  * @see TINY_ERR_INVALID_DATA
  * @see TINY_ERR_FAILED
  * @see TINY_FLAG_NO_WAIT
  * @see TINY_FLAG_WAIT_FOREVER
  * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
+ * @note - if you need to start send operation in non-blocking mode, call function with TINY_FLAG_LOCK_SEND flag
+ *         for the first time. Next calls should be done without TINY_FLAG_LOCK_SEND flag until tiny_send returns
+ *         length of send data or error code.
+ *
+ * @remarks This function is thread safe.
  */
 extern int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t flags);
 
@@ -320,6 +330,7 @@ extern int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, 
  * @see TINY_ERR_OUT_OF_SYNC
  * @see TINY_ERR_BUSY
  * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
+ * @remarks This function is not thread safe.
  */
 extern int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags);
 
@@ -336,9 +347,9 @@ extern int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, u
  * @see TINY_ERR_INVALID_DATA
  * @see TINY_ERR_FAILED
  * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
+ * @remarks This function is thread safe.
  */
 extern int tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len);
-
 
 /**
  * @brief reads frame from the channel in blocking mode.
@@ -356,6 +367,7 @@ extern int tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len);
  *         or number of sent bytes.
  * @note TINY_ERR_DATA_TOO_LARGE can be returned in successful case. If frame is received, but passed buffer
  *       to the function is too small to fit all.
+ * @remarks This function is not thread safe.
  */
 extern int tiny_simple_read(STinyData *handle, uint8_t *pbuf, int len);
 
@@ -374,6 +386,7 @@ extern int tiny_simple_read(STinyData *handle, uint8_t *pbuf, int len);
  * @param bits - number of bits to use for fcs: 16 or 32.
  * @return TINY_ERR_FAILED
  *         TINY_NO_ERROR
+ * @remarks This function is not thread safe.
  */
 extern int tiny_set_fcs_bits(STinyData *handle, uint8_t bits);
 
@@ -384,6 +397,7 @@ extern int tiny_set_fcs_bits(STinyData *handle, uint8_t bits);
  * The function initiates sending of a new frame by writing frame start marker to
  * communication channel. If the function is executed successfully, then
  * tiny_send_buffer and tiny_send_end can be used to pass the data.
+ * If platform supports mutexes, the function locks internal mutex automatically.
  *
  * @param handle - pointer to Tiny data.
  * @param flags - TINY_FLAG_NO_WAIT or TINY_FLAG_WAIT_FOREVER
@@ -398,6 +412,9 @@ extern int tiny_set_fcs_bits(STinyData *handle, uint8_t bits);
  * @see TINY_ERR_FAILED
  * @see TINY_FLAG_NO_WAIT
  * @see TINY_FLAG_WAIT_FOREVER
+ * @see tiny_lock
+ * @see tiny_unlock
+ * @remarks This function is thread safe.
  */
 extern int tiny_send_start(STinyData *handle, uint8_t flags);
 
@@ -433,6 +450,7 @@ extern int tiny_send_start(STinyData *handle, uint8_t flags);
  * @see TINY_FLAG_WAIT_FOREVER
  * @warning any failed send operation (tiny_send_buffer, tiny_send_end), except timeout cases,
  *          must be terminated with tiny_send_terminate, otherwise the thread can be blocked.
+ * @remarks This function is not thread safe.
  */
 extern int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags);
 
@@ -458,6 +476,7 @@ extern int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t 
  * @see TINY_ERR_FAILED
  * @see TINY_FLAG_NO_WAIT
  * @see TINY_FLAG_WAIT_FOREVER
+ * @remarks This function is not thread safe.
  */
 extern int tiny_send_end(STinyData *handle, uint8_t flags);
 
@@ -497,6 +516,7 @@ extern void tiny_send_terminate(STinyData *handle);
  * @see TINY_ERR_FAILED
  * @see TINY_FLAG_NO_WAIT
  * @see TINY_FLAG_WAIT_FOREVER
+ * @remarks This function is not thread safe.
  */
 extern int tiny_read_start(STinyData * handle, uint8_t flags);
 
@@ -548,6 +568,7 @@ extern int tiny_read_start(STinyData * handle, uint8_t flags);
  * @see TINY_FLAG_READ_ALL
  * @warning any failed read operation (tiny_read_buffer), except TINY_ERR_DATA_TOO_LARGE case,
  *          must be terminated with tiny_read_terminate.
+ * @remarks This function is not thread safe.
  */
 extern int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags);
 
@@ -556,43 +577,73 @@ extern int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t f
  * @brief terminates read operation
  *
  * This function is to be used, when it is required to reset receive state in
- * case of communication error
+ * case of communication error.
  *
  * @param handle - pointer to Tiny data.
+ * @remarks This function is not thread safe.
  */
 extern void tiny_read_terminate(STinyData *handle);
 
 
+/**
+ * @brief locks Tiny state machine for send operations
+ *
+ * This function should be used to perform send operation from
+ * parallel threads.
+ *
+ * @param handle - pointer to Tiny data
+ * @param flags - TINY_FLAG_NO_WAIT or TINY_FLAG_WAIT_FOREVER
+ * @return TINY_SUCCESS or TINY_ERR_FAILED.
+ * @remarks This function is thread safe.
+ */
+extern int tiny_lock(STinyData *handle, uint8_t flags);
+
+
+/**
+ * @brief unlock Tiny state machine for send operations
+ *
+ * This function should be used to perform send operation from
+ * parallel threads to unlock parallel threads.
+ *
+ * @param handle - pointer to Tiny data.
+ * @remarks This function is thread safe.
+ */
+extern void tiny_unlock(STinyData *handle);
+
+
 #ifdef CONFIG_ENABLE_STATS
 /**
-* The function returns statistics per communication connection.
-* @param handle - pointer to Tiny data.
-* @param stat - pointer of stucture to fill.
-* @see TINY_ERR_INVALID_DATA
-* @see TINY_NO_ERROR
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
+ * The function returns statistics per communication connection.
+ * @param handle - pointer to Tiny data.
+ * @param stat - pointer of stucture to fill.
+ * @see TINY_ERR_INVALID_DATA
+ * @see TINY_NO_ERROR
+ * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
+ * @remarks This function is not thread safe.
+ */
 extern int tiny_get_stat(STinyData *handle, STinyStats *stat);
 
 
 /**
-* The function clears Tiny statistics.
-* @param handle - pointer to Tiny data.
-* @see TINY_ERR_INVALID_DATA
-* @see TINY_NO_ERROR
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
+ * The function clears Tiny statistics.
+ * @param handle - pointer to Tiny data.
+ * @see TINY_ERR_INVALID_DATA
+ * @see TINY_NO_ERROR
+ * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
+ * @remarks This function is not thread safe.
+ */
 extern int tiny_clear_stat(STinyData *handle);
 
 
 /**
-* The function sets callback procs for specified Tiny channel.
-* callbacks will receive all data being sent or received.
-* @param handle - pointer to Tiny data.
-* @param read_cb - pointer to callback function.
-* @param send_cb - pointer to callback function.
-* @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
-*/
+ * The function sets callback procs for specified Tiny channel.
+ * callbacks will receive all data being sent or received.
+ * @param handle - pointer to Tiny data.
+ * @param read_cb - pointer to callback function.
+ * @param send_cb - pointer to callback function.
+ * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
+ * @remarks This function is not thread safe.
+ */
 extern int tiny_set_callbacks(STinyData *handle,
                on_frame_cb_t read_cb,
                on_frame_cb_t send_cb);

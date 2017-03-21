@@ -47,6 +47,7 @@ void *receiveThread(void *arg)
     char inbuf[PROTO_BUF_SIZE];
     int side = (uint64_t)arg;
     int result;
+    uint8_t send_flags = TINY_FLAG_NO_WAIT | TINY_FLAG_LOCK_SEND;
 
     printf("Hi\n");
 
@@ -55,13 +56,19 @@ void *receiveThread(void *arg)
         printf("Failed to initialize HDLC protocol\n");
         return (void *)-1;
     }
+    tiny_set_fcs_bits(&channel, 16);
     while ((n_sent < 32000) && (!stop_flag))
     {
         snprintf(outbuf, PROTO_BUF_SIZE - 1, "This is frame Number %i (stream %i)", n_sent, side);
-        result = tiny_send(&channel, &n_sent, (uint8_t *)outbuf, strlen(outbuf) + 1, TINY_FLAG_NO_WAIT);
+        result = tiny_send(&channel, &n_sent, (uint8_t *)outbuf, strlen(outbuf) + 1, send_flags);
+        if (result == 0)
+        {
+            send_flags = TINY_FLAG_NO_WAIT;
+        }
         if (result == strlen(outbuf) + 1)
         {
             printf("[STREAM: %i, SENT]: [%u] %s\n", side, n_sent, outbuf);
+            send_flags = TINY_FLAG_NO_WAIT | TINY_FLAG_LOCK_SEND;
             n_sent++;
         }
         result = tiny_read(&channel, &n_received, (uint8_t *)inbuf, PROTO_BUF_SIZE, TINY_FLAG_NO_WAIT);
@@ -69,6 +76,11 @@ void *receiveThread(void *arg)
         {
             printf("[STREAM: %i, RECEIVED]: [%u] %s\n", side, n_received, inbuf);
             //n_received++;
+        }
+        else if (result < 0)
+        {
+            printf("[STREAM: %i, RECEIVED]: [%u] %s [BUG: %i]\n", side, n_received, inbuf, result);
+            break;
         }
     }
 

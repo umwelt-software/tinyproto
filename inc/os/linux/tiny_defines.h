@@ -22,6 +22,8 @@
 
 #include <pthread.h>
 #include <unistd.h>
+#include <stdint.h>
+#include <time.h>
 
 #define PLATFORM_MUTEX    pthread_mutex_t
 
@@ -46,6 +48,15 @@
 #define COND_SIGNAL(x)    pthread_cond_signal(&x)
 
 #define TASK_YIELD()      sleep(0)
+
+
+static inline uint16_t PLATFORM_TICKS()
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (ts.tv_sec * 1000) + ts.tv_nsec / 1000000;
+}
+
 
 #endif /* _TINY_DEFINES_H_ */
 

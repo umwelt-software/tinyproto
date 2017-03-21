@@ -30,7 +30,7 @@
 *
 *  INTERNAL FRAME STRUCTURE
 *
-*   8    16     any len      16/32   8
+*   8    16     any len     8/16/32  8
 * | 7E | UID |  USER DATA  |  FCS  | 7E |
 *
 * 7E is standard frame delimiter (commonly use on layer 2)
@@ -77,13 +77,13 @@ inline static int __check_fcs_field(uint8_t fcs_bits, fcs_t fcs)
 {
     /* Check CRC */
 #ifdef CONFIG_ENABLE_FCS32
-    if ((fcs_bits == 32) && (fcs == PPPGOODFCS32)) return 1;
+    if ((fcs_bits == 32) && ((uint32_t)fcs == PPPGOODFCS32)) return 1;
 #endif
 #ifdef CONFIG_ENABLE_FCS16
-    if ((fcs_bits == 16) && (fcs == PPPGOODFCS16)) return 1;
+    if ((fcs_bits == 16) && ((uint16_t)fcs == PPPGOODFCS16)) return 1;
 #endif
 #ifdef CONFIG_ENABLE_CHECKSUM
-    if ((fcs_bits == 8) && (fcs == GOODCHECKSUM)) return 1;
+    if ((fcs_bits == 8) && ((uint8_t)fcs == GOODCHECKSUM)) return 1;
 #endif
     return fcs_bits == 0;
 }
@@ -119,7 +119,7 @@ inline static void  __commit_fcs_field(uint8_t fcs_bits, fcs_t* fcs)
     {
 #ifdef CONFIG_ENABLE_FCS16
     case 16:
-        *fcs = *fcs^0xFFFFFFFF; break;
+        *fcs = *fcs^0xFFFF; break;
 #endif
 #ifdef CONFIG_ENABLE_FCS32
     case 32:
@@ -127,7 +127,7 @@ inline static void  __commit_fcs_field(uint8_t fcs_bits, fcs_t* fcs)
 #endif
 #ifdef CONFIG_ENABLE_CHECKSUM
     case 8:
-        *fcs = 0xFFFF - *fcs; break;
+        *fcs = 0x00 - *fcs; break;
 #endif
     default:
         break;
@@ -167,6 +167,7 @@ int tiny_init(STinyData *handle,
     handle->rx.inprogress = TINY_RX_STATE_IDLE;
     handle->tx.inprogress = TINY_TX_STATE_IDLE;
     handle->tx.pframe = 0;
+    handle->tx.locked = 0;
     MUTEX_INIT(handle->send_mutex);
     COND_INIT(handle->send_condition);
 #ifdef CONFIG_ENABLE_STATS
@@ -183,15 +184,10 @@ int tiny_close(STinyData *handle)
     {
         return TINY_ERR_INVALID_DATA;
     }
-    if (handle->rx.inprogress)
-    {
-        handle->rx.inprogress = TINY_RX_STATE_IDLE;
-    }
-    if (handle->tx.inprogress)
-    {
-        MUTEX_UNLOCK(handle->send_mutex);
-        handle->tx.inprogress = TINY_TX_STATE_IDLE;
-    }
+    MUTEX_TRY_LOCK(handle->send_mutex);
+    MUTEX_UNLOCK(handle->send_mutex);
+    handle->tx.inprogress = TINY_TX_STATE_IDLE;
+    handle->rx.inprogress = TINY_RX_STATE_IDLE;
     COND_DESTROY(handle->send_condition);
     MUTEX_DESTROY(handle->send_mutex);
     handle->write_func = 0;
@@ -232,32 +228,6 @@ int tiny_set_fcs_bits(STinyData *handle, uint8_t bits)
 *
 ***************************************************************/
 
-#define DATA_BYTE_SENT  2
-#define BITS_NO_UID     0
-#define BITS_UID_16     16
-
-/////////////////////////////////////////////////////////////////////////
-
-/**
- * Returns 0 if successful
- */
-static inline int __send_lock(STinyData * handle, uint8_t flags)
-{
-    if (flags & TINY_FLAG_WAIT_FOREVER)
-    {
-         MUTEX_LOCK(handle->send_mutex);
-         return 0;
-    }
-    return MUTEX_TRY_LOCK(handle->send_mutex);
-}
-
-////////////////////////////////////////////////////////////////////////
-
-static inline void __send_unlock(STinyData * handle)
-{
-    MUTEX_UNLOCK(handle->send_mutex);
-}
-
 /////////////////////////////////////////////////////////////////////////
 
 /**
@@ -277,14 +247,15 @@ static int __send_frame_flag_state(STinyData *handle)
         return TINY_ERR_FAILED;
     }
     if (result == 0)
+    {
         return TINY_NO_ERROR;
-    if (handle->tx.inprogress == TINY_TX_STATE_START)
+    }
+    if (handle->tx.inprogress == TINY_TX_STATE_IDLE)
     {
          handle->tx.sentbytes = 0;
          handle->tx.prevbyte = 0;
          __init_fcs_field(handle->fcs_bits, &handle->tx.fcs);
          handle->tx.inprogress = TINY_TX_STATE_SEND_DATA;
-         handle->tx.bits = 0;
     }
     else
     {
@@ -295,6 +266,14 @@ static int __send_frame_flag_state(STinyData *handle)
 
 ///////////////////////////////////////////////////////////////////////
 
+/**
+ * Sends byte to communication channel. Converts byte if escape sequence
+ * should be sent.
+ * @return TINY_NO_ERROR if escape byte is sent
+ *         TINY_ERR_BUSY if byte cannot be sent to the channel right now
+ *         TINY_ERR_FAILED if failed to send byte
+ *         TINY_SUCCESS if byte is sent
+ */
 static int __send_byte_state(STinyData *handle, uint8_t byte)
 {
     int result;
@@ -308,8 +287,14 @@ static int __send_byte_state(STinyData *handle, uint8_t byte)
         byte = TINY_ESCAPE_CHAR;
     }
     result = handle->write_func(handle->pdata, &byte, 1);
-    if (result <= 0)
+    if (result == 0)
+    {
+        result = TINY_ERR_BUSY;
+    }
+    if (result < 0)
+    {
         return result;
+    }
     /* We calculate crc only for user data */
     handle->tx.prevbyte = byte;
     return byte != TINY_ESCAPE_CHAR;
@@ -325,6 +310,10 @@ static int __send_byte_state(STinyData *handle, uint8_t byte)
  * If no byte is sent during the cycle, it returns 0.
  * If error happened, it returns negative value.
  * @param handle - pointer to Tiny Protocol structure
+ * @return TINY_NO_ERROR if in progress,
+ *         TINY_SUCCESS if buffer is sent completely
+ *         TINY_ERR_FAILED if error occured
+ *         TINY_ERR_BUSY if data cannot be sent right now
  */
 static int __send_frame_data_state(STinyData *handle)
 {
@@ -335,7 +324,7 @@ static int __send_frame_data_state(STinyData *handle)
         /* sending crc */
         handle->tx.inprogress = handle->fcs_bits ? TINY_TX_STATE_SEND_CRC : TINY_TX_STATE_END;
         handle->tx.bits = (uint8_t)-8;
-        return 1;
+        return TINY_SUCCESS;
     }
     byte = handle->tx.pframe[handle->tx.sentbytes];
     result = __send_byte_state(handle, byte);
@@ -343,6 +332,7 @@ static int __send_frame_data_state(STinyData *handle)
     {
         __update_fcs_field(handle->fcs_bits, &handle->tx.fcs, byte);
         handle->tx.sentbytes++;
+        result = TINY_NO_ERROR;
     }
     return result;
 }
@@ -375,22 +365,23 @@ static int __send_frame_crc_state(STinyData *handle)
 
 int tiny_send_start(STinyData *handle, uint8_t flags)
 {
-    int result = TINY_NO_ERROR;
+    int result = TINY_ERR_FAILED;
 
     if (!handle)
     {
         return TINY_ERR_INVALID_DATA;
     }
 
-    result = __send_lock(handle, flags);
-    if (result != TINY_NO_ERROR)
+    result = tiny_lock( handle, flags );
+    if (result != TINY_SUCCESS)
     {
         return result;
     }
-    handle->tx.bits = BITS_NO_UID;
-    handle->tx.inprogress = TINY_TX_STATE_START;
-    handle->tx.framelen = 0;
-    handle->tx.pframe = 0;
+    if (handle->tx.inprogress != TINY_TX_STATE_IDLE)
+    {
+        tiny_unlock( handle );
+        return TINY_ERR_FAILED;
+    }
 
     do
     {
@@ -404,11 +395,17 @@ int tiny_send_start(STinyData *handle, uint8_t flags)
     /* Failed to send marker for some reason: maybe device is busy */
     if (result == 0)
     {
-        __send_unlock(handle);
-        handle->tx.inprogress = TINY_TX_STATE_IDLE;
         result = TINY_ERR_TIMEOUT;
     }
-    handle->tx.blockIndex = 0;
+    if ( result < 0 )
+    {
+        tiny_unlock( handle );
+    }
+    else
+    {
+        handle->tx.pframe = 0;
+        handle->tx.blockIndex = 0;
+    }
     return result;
 }
 
@@ -424,10 +421,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
     }
     if (!handle->tx.pframe && pbuf)
     {
-        if ( (handle->tx.inprogress == TINY_TX_STATE_END) || (handle->tx.inprogress == TINY_TX_STATE_SEND_CRC) )
-        {
-            handle->tx.inprogress = TINY_TX_STATE_SEND_DATA;
-        }
+        handle->tx.inprogress = TINY_TX_STATE_SEND_DATA;
         handle->tx.pframe = pbuf;
         handle->tx.sentbytes = 0;
         handle->tx.framelen = len;
@@ -435,7 +429,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
     do
     {
         result = __send_frame_data_state(handle);
-        if ((handle->tx.inprogress == TINY_TX_STATE_END) || (handle->tx.inprogress == TINY_TX_STATE_SEND_CRC) )
+        if ( result == TINY_SUCCESS )
         {
             handle->tx.pframe = 0;
             handle->tx.blockIndex++;
@@ -445,12 +439,16 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
             break;
         }
         /* Repeat cycle if byte is sent successfully */
-        if (result > 0)
+        if (result == TINY_NO_ERROR)
         {
             continue;
         }
         if (result < 0)
         {
+            if ( result == TINY_ERR_BUSY )
+            {
+                result = TINY_NO_ERROR;
+            }
             break;
         }
     } while (flags & TINY_FLAG_WAIT_FOREVER);
@@ -484,7 +482,7 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
         if (handle->tx.inprogress == TINY_TX_STATE_IDLE)
         {
             STATS(handle->stat.framesSent++);
-            __send_unlock(handle);
+            tiny_unlock(handle);
             result = TINY_SUCCESS;
             break;
         }
@@ -497,6 +495,10 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
         /* Exit if error */
         if (result < 0)
         {
+            if ( result == TINY_ERR_BUSY )
+            {
+                result = TINY_NO_ERROR;
+            }
             break;
         }
     } while (flags & TINY_FLAG_WAIT_FOREVER);
@@ -515,7 +517,7 @@ void tiny_send_terminate(STinyData *handle)
     {
         return;
     }
-    __send_unlock(handle);
+    tiny_unlock(handle);
     handle->tx.inprogress = TINY_TX_STATE_IDLE;
 }
 
@@ -528,7 +530,7 @@ void tiny_send_terminate(STinyData *handle)
 int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t flags)
 {
     int result = TINY_NO_ERROR;
-    if (handle->tx.inprogress == TINY_TX_STATE_IDLE)
+    if ( flags & (TINY_FLAG_LOCK_SEND|TINY_FLAG_WAIT_FOREVER) )
     {
         result = tiny_send_start(handle, flags);
         if (result == TINY_SUCCESS)
@@ -552,17 +554,20 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
     }
     if ( handle->tx.blockIndex == 2 )
     {
-        result = tiny_send_buffer(handle, pbuf, len, flags);
+        result = tiny_send_buffer( handle, pbuf, len, flags );
     }
     if ( handle->tx.blockIndex == 3 )
     {
         result = tiny_send_end(handle, flags);
         if (result == TINY_SUCCESS)
         {
-            result = len;
+            if (len != 0)
+            {
+                result = len;
+            }
 #ifdef CONFIG_ENABLE_STATS
             /* If write callback is not null and frame is sent */
-            if (handle->write_cb && (result>0))
+            if ( handle->write_cb && (result>0) )
             {
                  handle->write_cb(handle, TINY_FRAME_TX, pbuf, len);
             }
@@ -580,7 +585,7 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
 
 int tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len)
 {
-    return tiny_send(handle, 0, pbuf, len, TINY_FLAG_WAIT_FOREVER);
+    return tiny_send(handle, 0, pbuf, len, TINY_FLAG_WAIT_FOREVER | TINY_FLAG_LOCK_SEND );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -596,7 +601,7 @@ int tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len)
 int tiny_read_start(STinyData * handle, uint8_t flags)
 {
     int                 result = TINY_NO_ERROR;
-    uint8_t               byte;
+    uint8_t             byte;
 
     if (!handle)
     {
@@ -826,6 +831,7 @@ int tiny_get_stat(STinyData *handle, STinyStats *stat)
     return TINY_NO_ERROR;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_clear_stat(STinyData *handle)
 {
@@ -840,6 +846,7 @@ int tiny_clear_stat(STinyData *handle)
     return TINY_NO_ERROR;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_set_callbacks(STinyData *handle,
                on_frame_cb_t read_cb,
@@ -849,12 +856,42 @@ int tiny_set_callbacks(STinyData *handle,
     {
         return TINY_ERR_INVALID_DATA;
     }
-    MUTEX_LOCK(handle->send_mutex);
+    tiny_lock( handle, TINY_FLAG_WAIT_FOREVER );
     handle->read_cb = read_cb;
     handle->write_cb = send_cb;
-    MUTEX_UNLOCK(handle->send_mutex);
+    tiny_unlock( handle );
     return TINY_NO_ERROR;
 }
 
 #endif /* CONFIG_ENABLE_STATS */
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+int tiny_lock(STinyData *handle, uint8_t flags)
+{
+    if (flags & TINY_FLAG_WAIT_FOREVER)
+    {
+         MUTEX_LOCK(handle->send_mutex);
+         handle->tx.locked = 1;
+         return TINY_SUCCESS;
+    }
+    if (MUTEX_TRY_LOCK(handle->send_mutex) == 0)
+    {
+         handle->tx.locked = 1;
+         return TINY_SUCCESS;
+    }
+    return TINY_ERR_FAILED;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+void tiny_unlock(STinyData *handle)
+{
+    if (handle->tx.locked)
+    {
+        handle->tx.locked = 0;
+        MUTEX_UNLOCK(handle->send_mutex);
+    }
+}
+
 

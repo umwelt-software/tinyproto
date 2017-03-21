@@ -21,11 +21,13 @@
 #define _FAKE_WIRE_H_
 
 #include <stdint.h>
+#include <pthread.h>
 
 typedef struct
 {
     int writeptr;
     int readptr;
+    pthread_mutex_t  lock;
     uint8_t buf[1024];
 } fake_wire_t;
 

@@ -51,6 +51,14 @@
 
 #define TASK_YIELD()
 
+#ifndef millis
+#include <stdint.h>
+inline uint16_t millis() { return 0; }
+#endif
+
+#define PLATFORM_TICKS()    millis()
+
+
 #endif /* _TINY_DEFINES_H_ */
 
 
