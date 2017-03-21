@@ -662,7 +662,15 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
         /* Exit if  error */
         if (result<0) return result;
         /* Exit if no data awaiting */
-        if ((result == 0) && !(flags & TINY_FLAG_WAIT_FOREVER)) return result;
+        if (result == 0)
+        {
+            if (!(flags & TINY_FLAG_WAIT_FOREVER))
+            {
+                return result;
+            }
+            TASK_YIELD();
+            continue;
+        }
 
         /* If next byte after 0x7E is 0x7E, tiny data have wrong frame alignment.
            Start to read new frame and register error. */
