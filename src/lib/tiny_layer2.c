@@ -184,7 +184,7 @@ int tiny_close(STinyData *handle)
     {
         return TINY_ERR_INVALID_DATA;
     }
-    MUTEX_TRY_LOCK(handle->send_mutex);
+    if ( MUTEX_TRY_LOCK(handle->send_mutex) == 0 ) {};
     MUTEX_UNLOCK(handle->send_mutex);
     handle->tx.inprogress = TINY_TX_STATE_IDLE;
     handle->rx.inprogress = TINY_RX_STATE_IDLE;

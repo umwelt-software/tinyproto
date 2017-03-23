@@ -59,6 +59,9 @@ struct \hyperlink{structSTinyData}{S\+Tiny\+Data}
 \hypertarget{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{}\#define \hyperlink{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+A\+D\+\_\+\+A\+L\+L}~(1)\label{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}
 
 \begin{DoxyCompactList}\small\item\em This flag makes tiny\+\_\+read function to read whole frame event if it doesn\textquotesingle{}t fit the buffer. \end{DoxyCompactList}\item 
+\hypertarget{group__FLAGS__GROUP_ga593e3353339a36dcd0746057e2864958}{}\#define \hyperlink{group__FLAGS__GROUP_ga593e3353339a36dcd0746057e2864958}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+L\+O\+C\+K\+\_\+\+S\+E\+N\+D}~(2)\label{group__FLAGS__GROUP_ga593e3353339a36dcd0746057e2864958}
+
+\begin{DoxyCompactList}\small\item\em Informs advanced A\+P\+I that caller wants to start transmit new frame to the channel. \end{DoxyCompactList}\item 
 \hypertarget{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{}\#define \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}~(0x80)\label{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}
 
 \begin{DoxyCompactList}\small\item\em This flag makes tiny A\+P\+I functions perform in blocking mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -109,6 +112,10 @@ int \hyperlink{group__ADVANCED__API_gade4e07eb12b8e32e6dd0c7b9757e8f39}{tiny\+\_
 \begin{DoxyCompactList}\small\item\em reads frame payload to provided buffer \end{DoxyCompactList}\item 
 void \hyperlink{group__ADVANCED__API_gaab48caab81a46d74fb52f2afb2649b61}{tiny\+\_\+read\+\_\+terminate} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \begin{DoxyCompactList}\small\item\em terminates read operation \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}{tiny\+\_\+lock} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em locks Tiny state machine for send operations \end{DoxyCompactList}\item 
+void \hyperlink{group__ADVANCED__API_gae4bfad55a4ef5814a5af50f044f6d7cd}{tiny\+\_\+unlock} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em unlock Tiny state machine for send operations \end{DoxyCompactList}\item 
 int \hyperlink{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
 \item 
 int \hyperlink{group__ADVANCED__API_gac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)

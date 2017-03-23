@@ -39,6 +39,9 @@ The function closes channel.
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{}\index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+init@{tiny\+\_\+init}}
 \index{tiny\+\_\+init@{tiny\+\_\+init}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+init (
@@ -71,6 +74,9 @@ pdata parameter is not applicable for Arduino and is absent in its version.
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R or error code. 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__SIMPLE__API_ga470d59a60a496944e63031ba43a00e3d}{}\index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+read@{tiny\+\_\+read}}
 \index{tiny\+\_\+read@{tiny\+\_\+read}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+read}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+read (
@@ -109,6 +115,9 @@ The function reads data from communication channel frame format\+: 0x7\+E, data.
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__SIMPLE__API_ga988a41addbe75dc15cc13006de6740e0}{}\index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+send@{tiny\+\_\+send}}
 \index{tiny\+\_\+send@{tiny\+\_\+send}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+send}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+send (
@@ -137,7 +146,7 @@ if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I
 \hline
 {\em len} & -\/ an integer argument -\/ length of data to send \\
 \hline
-{\em flags} & -\/ T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T \\
+{\em flags} & -\/ T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T, T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R, T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+L\+O\+C\+K\+\_\+\+S\+E\+N\+D \\
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
@@ -150,8 +159,14 @@ if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I
 \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes.
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
 \end{DoxyReturn}
+\begin{DoxyNote}{Note}
+-\/ if you need to start send operation in non-\/blocking mode, call function with T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+L\+O\+C\+K\+\_\+\+S\+E\+N\+D flag for the first time. Next calls should be done without T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+L\+O\+C\+K\+\_\+\+S\+E\+N\+D flag until tiny\+\_\+send returns length of send data or error code.
+\end{DoxyNote}
+\begin{DoxyRemark}{Remarks}
+This function is thread safe.
+\end{DoxyRemark}
 Returns negative value in case of error length of sent data \hypertarget{group__SIMPLE__API_gac9eaac50ab16b9891ca74e5c5e46b778}{}\index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+simple\+\_\+read@{tiny\+\_\+simple\+\_\+read}}
 \index{tiny\+\_\+simple\+\_\+read@{tiny\+\_\+simple\+\_\+read}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+simple\+\_\+read}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+simple\+\_\+read (
@@ -191,6 +206,9 @@ T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\
 \begin{DoxyNote}{Note}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E can be returned in successful case. If frame is received, but passed buffer to the function is too small to fit all. 
 \end{DoxyNote}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__SIMPLE__API_gafae39ccf72f1f22f4dc47bd54998e88c}{}\index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+simple\+\_\+send@{tiny\+\_\+simple\+\_\+send}}
 \index{tiny\+\_\+simple\+\_\+send@{tiny\+\_\+simple\+\_\+send}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+simple\+\_\+send}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+simple\+\_\+send (
@@ -221,3 +239,6 @@ The function sends data to communication channel. Unlike \hyperlink{group__SIMPL
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is thread safe. 
+\end{DoxyRemark}

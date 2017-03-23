@@ -11,12 +11,14 @@ var searchData=
   ['tiny_5ferr_5finvalid_5fdata',['TINY_ERR_INVALID_DATA',['../group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e',1,'tiny_layer2.h']]],
   ['tiny_5ferr_5fout_5fof_5fsync',['TINY_ERR_OUT_OF_SYNC',['../group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a',1,'tiny_layer2.h']]],
   ['tiny_5ferr_5ftimeout',['TINY_ERR_TIMEOUT',['../group__ERROR__FLAGS.html#gac9ba8076a1eb8613e8d1f07629ff0cd1',1,'tiny_layer2.h']]],
+  ['tiny_5fflag_5flock_5fsend',['TINY_FLAG_LOCK_SEND',['../group__FLAGS__GROUP.html#ga593e3353339a36dcd0746057e2864958',1,'tiny_layer2.h']]],
   ['tiny_5fflag_5fno_5fwait',['TINY_FLAG_NO_WAIT',['../group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e',1,'tiny_layer2.h']]],
   ['tiny_5fflag_5fread_5fall',['TINY_FLAG_READ_ALL',['../group__FLAGS__GROUP.html#gae41123cfeed375e618a4152c9bbd0d6d',1,'tiny_layer2.h']]],
   ['tiny_5fflag_5fwait_5fforever',['TINY_FLAG_WAIT_FOREVER',['../group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307',1,'tiny_layer2.h']]],
   ['tiny_5fget_5fstat',['tiny_get_stat',['../group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f',1,'tiny_get_stat(STinyData *handle, STinyStats *stat):&#160;tiny_layer2.c'],['../group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f',1,'tiny_get_stat(STinyData *handle, STinyStats *stat):&#160;tiny_layer2.c']]],
   ['tiny_5finit',['tiny_init',['../group__SIMPLE__API.html#gab9bfaed3c75551c8b7f3f8b25e766546',1,'tiny_init(STinyData *handle, write_block_cb_t write_func, read_block_cb_t read_func, void *pdata):&#160;tiny_layer2.c'],['../group__SIMPLE__API.html#gab9bfaed3c75551c8b7f3f8b25e766546',1,'tiny_init(STinyData *handle, write_block_cb_t write_func, read_block_cb_t read_func, void *pdata):&#160;tiny_layer2.c']]],
   ['tiny_5flayer2_2eh',['tiny_layer2.h',['../tiny__layer2_8h.html',1,'']]],
+  ['tiny_5flock',['tiny_lock',['../group__ADVANCED__API.html#gac318682c20279f9f20ffc6f636a7f1c9',1,'tiny_lock(STinyData *handle, uint8_t flags):&#160;tiny_layer2.c'],['../group__ADVANCED__API.html#gac318682c20279f9f20ffc6f636a7f1c9',1,'tiny_lock(STinyData *handle, uint8_t flags):&#160;tiny_layer2.c']]],
   ['tiny_5fno_5ferror',['TINY_NO_ERROR',['../group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61',1,'tiny_layer2.h']]],
   ['tiny_5fread',['tiny_read',['../group__SIMPLE__API.html#ga470d59a60a496944e63031ba43a00e3d',1,'tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags):&#160;tiny_layer2.c'],['../group__SIMPLE__API.html#ga470d59a60a496944e63031ba43a00e3d',1,'tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags):&#160;tiny_layer2.c']]],
   ['tiny_5fread_5fbuffer',['tiny_read_buffer',['../group__ADVANCED__API.html#gade4e07eb12b8e32e6dd0c7b9757e8f39',1,'tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags):&#160;tiny_layer2.c'],['../group__ADVANCED__API.html#gade4e07eb12b8e32e6dd0c7b9757e8f39',1,'tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags):&#160;tiny_layer2.c']]],
@@ -32,6 +34,7 @@ var searchData=
   ['tiny_5fsimple_5fread',['tiny_simple_read',['../group__SIMPLE__API.html#gac9eaac50ab16b9891ca74e5c5e46b778',1,'tiny_simple_read(STinyData *handle, uint8_t *pbuf, int len):&#160;tiny_layer2.c'],['../group__SIMPLE__API.html#gac9eaac50ab16b9891ca74e5c5e46b778',1,'tiny_simple_read(STinyData *handle, uint8_t *pbuf, int len):&#160;tiny_layer2.c']]],
   ['tiny_5fsimple_5fsend',['tiny_simple_send',['../group__SIMPLE__API.html#gafae39ccf72f1f22f4dc47bd54998e88c',1,'tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len):&#160;tiny_layer2.c'],['../group__SIMPLE__API.html#gafae39ccf72f1f22f4dc47bd54998e88c',1,'tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len):&#160;tiny_layer2.c']]],
   ['tiny_5fsuccess',['TINY_SUCCESS',['../group__ERROR__FLAGS.html#ga16cd043c890ed1fa381b3a20f75a626c',1,'tiny_layer2.h']]],
+  ['tiny_5funlock',['tiny_unlock',['../group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd',1,'tiny_unlock(STinyData *handle):&#160;tiny_layer2.c'],['../group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd',1,'tiny_unlock(STinyData *handle):&#160;tiny_layer2.c']]],
   ['tinyprotocol_2eh',['TinyProtocol.h',['../TinyProtocol_8h.html',1,'']]],
   ['tx',['tx',['../structSTinyData.html#aa099adb35f3494332747eb18851fbb23',1,'STinyData']]]
 ];

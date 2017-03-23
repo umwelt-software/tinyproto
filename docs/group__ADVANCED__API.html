@@ -109,6 +109,12 @@ Functions</h2></td></tr>
 <tr class="memitem:gaab48caab81a46d74fb52f2afb2649b61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gaab48caab81a46d74fb52f2afb2649b61">tiny_read_terminate</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="memdesc:gaab48caab81a46d74fb52f2afb2649b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">terminates read operation  <a href="#gaab48caab81a46d74fb52f2afb2649b61">More...</a><br /></td></tr>
 <tr class="separator:gaab48caab81a46d74fb52f2afb2649b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac318682c20279f9f20ffc6f636a7f1c9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac318682c20279f9f20ffc6f636a7f1c9">tiny_lock</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t flags)</td></tr>
+<tr class="memdesc:gac318682c20279f9f20ffc6f636a7f1c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">locks Tiny state machine for send operations  <a href="#gac318682c20279f9f20ffc6f636a7f1c9">More...</a><br /></td></tr>
+<tr class="separator:gac318682c20279f9f20ffc6f636a7f1c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd">tiny_unlock</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
+<tr class="memdesc:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">unlock Tiny state machine for send operations  <a href="#gae4bfad55a4ef5814a5af50f044f6d7cd">More...</a><br /></td></tr>
+<tr class="separator:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5f61774b2027a91f772f31d943acdd3f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f">tiny_get_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="structSTinyStats.html">STinyStats</a> *stat)</td></tr>
 <tr class="separator:ga5f61774b2027a91f772f31d943acdd3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac75ee03ea3691b0a8bf842d764b342d9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac75ee03ea3691b0a8bf842d764b342d9">tiny_clear_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
@@ -141,6 +147,7 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -178,6 +185,45 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="gac318682c20279f9f20ffc6f636a7f1c9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tiny_lock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structSTinyData.html">STinyData</a> *&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>locks Tiny state machine for send operations </p>
+<p>This function should be used to perform send operation from parallel threads.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>- pointer to Tiny data </td></tr>
+    <tr><td class="paramname">flags</td><td>- TINY_FLAG_NO_WAIT or TINY_FLAG_WAIT_FOREVER </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_SUCCESS or TINY_ERR_FAILED. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe. </dd></dl>
 
 </div>
 </div>
@@ -248,6 +294,7 @@ The read data can be considered as valid, only when last buffer is successfully 
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#gae41123cfeed375e618a4152c9bbd0d6d" title="This flag makes tiny_read function to read whole frame event if it doesn&#39;t fit the buffer...">TINY_FLAG_READ_ALL</a> </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>any failed read operation (tiny_read_buffer), except TINY_ERR_DATA_TOO_LARGE case, must be terminated with tiny_read_terminate. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -298,6 +345,7 @@ The read data can be considered as valid, only when last buffer is successfully 
 <a class="el" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e" title="This flag makes tiny API functions perform as non-blocking. ">TINY_FLAG_NO_WAIT</a> </dd>
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -316,13 +364,14 @@ The read data can be considered as valid, only when last buffer is successfully 
 </div><div class="memdoc">
 
 <p>terminates read operation </p>
-<p>This function is to be used, when it is required to reset receive state in case of communication error</p>
+<p>This function is to be used, when it is required to reset receive state in case of communication error.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handle</td><td>- pointer to Tiny data. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -387,6 +436,7 @@ The read data can be considered as valid, only when last buffer is successfully 
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>any failed send operation (tiny_send_buffer, tiny_send_end), except timeout cases, must be terminated with tiny_send_terminate, otherwise the thread can be blocked. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -423,7 +473,7 @@ The read data can be considered as valid, only when last buffer is successfully 
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>TINY_SUCCESS if send frame is completed successfully. TINY_ERR_TIMEOUT/TINY_NO_ERROR if non-blocking operation is requested and the channel is busy TINY_ERR_FAILED if writing to the channel failed TINY_ERR_INVALID_DATA if invalid handle is passed</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_SUCCESS if send frame is completed successfully. TINY_NO_ERROR if non-blocking operation is requested and the channel is busy TINY_ERR_FAILED if writing to the channel failed TINY_ERR_INVALID_DATA if invalid handle is passed</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga16cd043c890ed1fa381b3a20f75a626c" title="Tiny operation successful. Only tiny_send_start and tiny_read_start functions return this code...">TINY_SUCCESS</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd>
@@ -436,7 +486,8 @@ The read data can be considered as valid, only when last buffer is successfully 
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e" title="This flag makes tiny API functions perform as non-blocking. ">TINY_FLAG_NO_WAIT</a> </dd>
 <dd>
-<a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a></dd></dl>
+<a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe.</dd></dl>
 <p>Returns TINY_SUCCESS if frame sent is competed negative value in case of error </p>
 
 </div>
@@ -466,7 +517,7 @@ The read data can be considered as valid, only when last buffer is successfully 
 </div><div class="memdoc">
 
 <p>initiates sending of a new frame </p>
-<p>The function initiates sending of a new frame by writing frame start marker to communication channel. If the function is executed successfully, then tiny_send_buffer and tiny_send_end can be used to pass the data.</p>
+<p>The function initiates sending of a new frame by writing frame start marker to communication channel. If the function is executed successfully, then tiny_send_buffer and tiny_send_end can be used to pass the data. If platform supports mutexes, the function locks internal mutex automatically.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handle</td><td>- pointer to Tiny data. </td></tr>
@@ -485,7 +536,12 @@ The read data can be considered as valid, only when last buffer is successfully 
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e" title="This flag makes tiny API functions perform as non-blocking. ">TINY_FLAG_NO_WAIT</a> </dd>
 <dd>
-<a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd></dl>
+<a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd>
+<dd>
+<a class="el" href="group__ADVANCED__API.html#gac318682c20279f9f20ffc6f636a7f1c9" title="locks Tiny state machine for send operations ">tiny_lock</a> </dd>
+<dd>
+<a class="el" href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd" title="unlock Tiny state machine for send operations ">tiny_unlock</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe. </dd></dl>
 
 </div>
 </div>
@@ -552,6 +608,7 @@ The read data can be considered as valid, only when last buffer is successfully 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -586,6 +643,33 @@ The read data can be considered as valid, only when last buffer is successfully 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_FAILED TINY_NO_ERROR </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="gae4bfad55a4ef5814a5af50f044f6d7cd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_unlock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structSTinyData.html">STinyData</a> *&#160;</td>
+          <td class="paramname"><em>handle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>unlock Tiny state machine for send operations </p>
+<p>This function should be used to perform send operation from parallel threads to unlock parallel threads.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>- pointer to Tiny data. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe. </dd></dl>
 
 </div>
 </div>

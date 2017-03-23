@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.3.3
+VERSION=0.4.0
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -122,6 +122,8 @@ TARGET_TINY = libtinyp.a
 SRC_TINY = \
         src/lib/crc.c \
         src/lib/tiny_layer2.c \
+#        src/lib/tiny_list.c \
+#        src/lib/tiny_request_pool.c \
 
 OBJ_TINY = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TINY))))
 
@@ -144,7 +146,9 @@ install-lib: library
 SRC_TEST_ARDUINO_LIB = \
         src/lib/crc.c \
         src/lib/tiny_layer2.c \
-	src/arduino/src/TinyProtocol.cpp
+	src/arduino/src/TinyProtocol.cpp \
+#        src/lib/tiny_request_pool.c \
+#        src/lib/tiny_list.c \
 
 OBJ_TEST_ARDUINO_LIB = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TEST_ARDUINO_LIB))))
 

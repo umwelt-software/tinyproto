@@ -19,6 +19,10 @@ int \hyperlink{group__ADVANCED__API_gade4e07eb12b8e32e6dd0c7b9757e8f39}{tiny\+\_
 \begin{DoxyCompactList}\small\item\em reads frame payload to provided buffer \end{DoxyCompactList}\item 
 void \hyperlink{group__ADVANCED__API_gaab48caab81a46d74fb52f2afb2649b61}{tiny\+\_\+read\+\_\+terminate} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \begin{DoxyCompactList}\small\item\em terminates read operation \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}{tiny\+\_\+lock} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, uint8\+\_\+t flags)
+\begin{DoxyCompactList}\small\item\em locks Tiny state machine for send operations \end{DoxyCompactList}\item 
+void \hyperlink{group__ADVANCED__API_gae4bfad55a4ef5814a5af50f044f6d7cd}{tiny\+\_\+unlock} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em unlock Tiny state machine for send operations \end{DoxyCompactList}\item 
 int \hyperlink{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
 \item 
 int \hyperlink{group__ADVANCED__API_gac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
@@ -51,6 +55,9 @@ The function clears Tiny statistics.
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}}
 \index{tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+get\+\_\+stat}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+get\+\_\+stat (
@@ -74,6 +81,36 @@ The function returns statistics per communication connection.
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
+\hypertarget{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+lock@{tiny\+\_\+lock}}
+\index{tiny\+\_\+lock@{tiny\+\_\+lock}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
+\subsubsection[{tiny\+\_\+lock}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+lock (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{uint8\+\_\+t}]{flags}
+\end{DoxyParamCaption}
+)}\label{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}
+
+
+locks Tiny state machine for send operations 
+
+This function should be used to perform send operation from parallel threads.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data \\
+\hline
+{\em flags} & -\/ T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T or T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S or T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D. 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_gade4e07eb12b8e32e6dd0c7b9757e8f39}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+read\+\_\+buffer@{tiny\+\_\+read\+\_\+buffer}}
 \index{tiny\+\_\+read\+\_\+buffer@{tiny\+\_\+read\+\_\+buffer}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+read\+\_\+buffer}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+read\+\_\+buffer (
@@ -131,6 +168,9 @@ length in bytes of data received if executed successfully T\+I\+N\+Y\+\_\+\+N\+O
 \begin{DoxyWarning}{Warning}
 any failed read operation (tiny\+\_\+read\+\_\+buffer), except T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E case, must be terminated with tiny\+\_\+read\+\_\+terminate. 
 \end{DoxyWarning}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_ga2f0547115de5b96a828d79f5491d22fa}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+read\+\_\+start@{tiny\+\_\+read\+\_\+start}}
 \index{tiny\+\_\+read\+\_\+start@{tiny\+\_\+read\+\_\+start}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+read\+\_\+start}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+read\+\_\+start (
@@ -170,6 +210,9 @@ T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if new frame is detected in communication 
 
 \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
 \end{DoxySeeAlso}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_gaab48caab81a46d74fb52f2afb2649b61}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+read\+\_\+terminate@{tiny\+\_\+read\+\_\+terminate}}
 \index{tiny\+\_\+read\+\_\+terminate@{tiny\+\_\+read\+\_\+terminate}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+read\+\_\+terminate}]{\setlength{\rightskip}{0pt plus 5cm}void tiny\+\_\+read\+\_\+terminate (
@@ -181,13 +224,16 @@ T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if new frame is detected in communication 
 
 terminates read operation 
 
-This function is to be used, when it is required to reset receive state in case of communication error
+This function is to be used, when it is required to reset receive state in case of communication error.
 
 
 \begin{DoxyParams}{Parameters}
 {\em handle} & -\/ pointer to Tiny data. \\
 \hline
 \end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_gabe04a4e76adc5421deac4e3699a15646}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+send\+\_\+buffer@{tiny\+\_\+send\+\_\+buffer}}
 \index{tiny\+\_\+send\+\_\+buffer@{tiny\+\_\+send\+\_\+buffer}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+send\+\_\+buffer}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+send\+\_\+buffer (
@@ -237,6 +283,9 @@ length in bytes of data sent if executed successfully T\+I\+N\+Y\+\_\+\+N\+O\+\_
 \begin{DoxyWarning}{Warning}
 any failed send operation (tiny\+\_\+send\+\_\+buffer, tiny\+\_\+send\+\_\+end), except timeout cases, must be terminated with tiny\+\_\+send\+\_\+terminate, otherwise the thread can be blocked. 
 \end{DoxyWarning}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_ga2e85c7e9efb0bbe9c6adfd923ec7c73c}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+send\+\_\+end@{tiny\+\_\+send\+\_\+end}}
 \index{tiny\+\_\+send\+\_\+end@{tiny\+\_\+send\+\_\+end}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+send\+\_\+end}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+send\+\_\+end (
@@ -259,7 +308,7 @@ The function completes sending of a new frame by writing F\+C\+S block and frame
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if send frame is completed successfully. T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T/\+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R if non-\/blocking operation is requested and the channel is busy T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D if writing to the channel failed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A if invalid handle is passed
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if send frame is completed successfully. T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R if non-\/blocking operation is requested and the channel is busy T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D if writing to the channel failed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A if invalid handle is passed
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
 \hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S} 
@@ -274,8 +323,11 @@ T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if send frame is completed successfully. T
 
 \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
 
-\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}
+\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
 \end{DoxySeeAlso}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe.
+\end{DoxyRemark}
 Returns T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if frame sent is competed negative value in case of error \hypertarget{group__ADVANCED__API_ga159189fa29f3eaa79a76a3fa87b31084}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+send\+\_\+start@{tiny\+\_\+send\+\_\+start}}
 \index{tiny\+\_\+send\+\_\+start@{tiny\+\_\+send\+\_\+start}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+send\+\_\+start}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+send\+\_\+start (
@@ -288,7 +340,7 @@ Returns T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if frame sent is competed negative
 
 initiates sending of a new frame 
 
-The function initiates sending of a new frame by writing frame start marker to communication channel. If the function is executed successfully, then tiny\+\_\+send\+\_\+buffer and tiny\+\_\+send\+\_\+end can be used to pass the data.
+The function initiates sending of a new frame by writing frame start marker to communication channel. If the function is executed successfully, then tiny\+\_\+send\+\_\+buffer and tiny\+\_\+send\+\_\+end can be used to pass the data. If platform supports mutexes, the function locks internal mutex automatically.
 
 
 \begin{DoxyParams}{Parameters}
@@ -312,7 +364,14 @@ T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if new frame transmission is started succe
 \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
 
 \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
+
+\hyperlink{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}{tiny\+\_\+lock} 
+
+\hyperlink{group__ADVANCED__API_gae4bfad55a4ef5814a5af50f044f6d7cd}{tiny\+\_\+unlock} 
 \end{DoxySeeAlso}
+\begin{DoxyRemark}{Remarks}
+This function is thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_ga73c9f1cfb0948bd559d3704749db540b}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+send\+\_\+terminate@{tiny\+\_\+send\+\_\+terminate}}
 \index{tiny\+\_\+send\+\_\+terminate@{tiny\+\_\+send\+\_\+terminate}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+send\+\_\+terminate}]{\setlength{\rightskip}{0pt plus 5cm}void tiny\+\_\+send\+\_\+terminate (
@@ -352,6 +411,9 @@ The function sets callback procs for specified Tiny channel. callbacks will rece
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_ga5e66725a2818491d4e2b1134951d9229}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}}
 \index{tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
 \subsubsection[{tiny\+\_\+set\+\_\+fcs\+\_\+bits}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+set\+\_\+fcs\+\_\+bits (
@@ -370,3 +432,27 @@ The function sets number of bits used for fcs
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R 
 \end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
+\hypertarget{group__ADVANCED__API_gae4bfad55a4ef5814a5af50f044f6d7cd}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+unlock@{tiny\+\_\+unlock}}
+\index{tiny\+\_\+unlock@{tiny\+\_\+unlock}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
+\subsubsection[{tiny\+\_\+unlock}]{\setlength{\rightskip}{0pt plus 5cm}void tiny\+\_\+unlock (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle}
+\end{DoxyParamCaption}
+)}\label{group__ADVANCED__API_gae4bfad55a4ef5814a5af50f044f6d7cd}
+
+
+unlock Tiny state machine for send operations 
+
+This function should be used to perform send operation from parallel threads to unlock parallel threads.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+This function is thread safe. 
+\end{DoxyRemark}

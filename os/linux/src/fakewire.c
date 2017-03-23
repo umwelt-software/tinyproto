@@ -50,7 +50,7 @@ int fakeWireRead(void *pdata, uint8_t *data, int length)
             break;
         }
         data[size] = fl->rx->buf[fl->rx->readptr];
-        fprintf(stderr, "%p: IN %02X\n", pdata, data[size]);
+//        fprintf(stderr, "%p: IN %02X\n", pdata, data[size]);
 /*        if ((fl->noise) && ((rand() & 0xFF) == 0))
             data[size]^= 0x28;*/
         /* Atomic move of the pointer */
@@ -83,7 +83,7 @@ int fakeWireWrite(void *pdata, const uint8_t *data, int length)
             /* no space to write */
             break;
         }
-        fprintf(stderr, "%p: OUT %02X\n", pdata, data[size]);
+//        fprintf(stderr, "%p: OUT %02X\n", pdata, data[size]);
         fl->tx->buf[fl->tx->writeptr] = data[size];
         fl->tx->writeptr = writeptr;
         size++;

@@ -125,6 +125,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__SIMPLE__API.html#gab9bfaed3c75551c8b7f3f8b25e766546">tiny_init()</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -177,6 +178,7 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_NO_ERROR or error code. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -241,6 +243,7 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga9b3e170e1c6ce269f216ef4a1ac61995" title="API function detected that operation cannot be performed right now. ">TINY_ERR_BUSY</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -294,7 +297,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">uid</td><td>- pointer to 16-bit variable containing packet uid, can be NULL. uid value must be spelled in network order bytes. </td></tr>
     <tr><td class="paramname">pbuf</td><td>- a const pointer to unsigned char - buffer with data to send </td></tr>
     <tr><td class="paramname">len</td><td>- an integer argument - length of data to send </td></tr>
-    <tr><td class="paramname">flags</td><td>- TINY_FLAG_NO_WAIT </td></tr>
+    <tr><td class="paramname">flags</td><td>- TINY_FLAG_NO_WAIT, TINY_FLAG_WAIT_FOREVER, TINY_FLAG_LOCK_SEND </td></tr>
   </table>
   </dd>
 </dl>
@@ -305,7 +308,9 @@ Functions</h2></td></tr>
 <a class="el" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e" title="This flag makes tiny API functions perform as non-blocking. ">TINY_FLAG_NO_WAIT</a> </dd>
 <dd>
 <a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307" title="This flag makes tiny API functions perform in blocking mode. ">TINY_FLAG_WAIT_FOREVER</a> </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>- if you need to start send operation in non-blocking mode, call function with TINY_FLAG_LOCK_SEND flag for the first time. Next calls should be done without TINY_FLAG_LOCK_SEND flag until tiny_send returns length of send data or error code.</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe.</dd></dl>
 <p>Returns negative value in case of error length of sent data </p>
 
 </div>
@@ -360,6 +365,7 @@ Functions</h2></td></tr>
 <a class="el" href="group__ERROR__FLAGS.html#ga9b3e170e1c6ce269f216ef4a1ac61995" title="API function detected that operation cannot be performed right now. ">TINY_ERR_BUSY</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED, TINY_ERR_OUT_OF_SYNC, TINY_ERR_BUSY, TINY_ERR_DATA_TOO_LARGE or number of sent bytes. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>TINY_ERR_DATA_TOO_LARGE can be returned in successful case. If frame is received, but passed buffer to the function is too small to fit all. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
 </div>
@@ -406,6 +412,7 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe. </dd></dl>
 
 </div>
 </div>

@@ -28,7 +28,7 @@ typedef struct
     int writeptr;
     int readptr;
     pthread_mutex_t  lock;
-    uint8_t buf[1024];
+    uint8_t buf[256*1024];
 } fake_wire_t;
 
 typedef struct
