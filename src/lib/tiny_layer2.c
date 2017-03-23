@@ -295,9 +295,12 @@ static int __send_byte_state(STinyData *handle, uint8_t byte)
     {
         return result;
     }
-    /* We calculate crc only for user data */
     handle->tx.prevbyte = byte;
-    return byte != TINY_ESCAPE_CHAR;
+    if ( TINY_ESCAPE_CHAR == byte )
+    {
+        return TINY_NO_ERROR;
+    }
+    return TINY_SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -328,7 +331,7 @@ static int __send_frame_data_state(STinyData *handle)
     }
     byte = handle->tx.pframe[handle->tx.sentbytes];
     result = __send_byte_state(handle, byte);
-    if (result > 0)
+    if ( result == TINY_SUCCESS )
     {
         __update_fcs_field(handle->fcs_bits, &handle->tx.fcs, byte);
         handle->tx.sentbytes++;
@@ -391,6 +394,7 @@ int tiny_send_start(STinyData *handle, uint8_t flags)
         {
             break;
         }
+        TASK_YIELD();
     } while (flags & TINY_FLAG_WAIT_FOREVER);
     /* Failed to send marker for some reason: maybe device is busy */
     if (result == 0)
@@ -426,7 +430,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
         handle->tx.sentbytes = 0;
         handle->tx.framelen = len;
     }
-    do
+    while (1)
     {
         result = __send_frame_data_state(handle);
         if ( result == TINY_SUCCESS )
@@ -447,11 +451,19 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
         {
             if ( result == TINY_ERR_BUSY )
             {
+                TASK_YIELD();
                 result = TINY_NO_ERROR;
             }
+            else
+            {
+                break;
+            }
+        }
+        if (!(flags & TINY_FLAG_WAIT_FOREVER))
+        {
             break;
         }
-    } while (flags & TINY_FLAG_WAIT_FOREVER);
+    };
     return result;
 }
 
@@ -469,7 +481,7 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
     {
         return TINY_ERR_INVALID_DATA;
     }
-    do
+    while (1)
     {
         if (handle->tx.inprogress == TINY_TX_STATE_SEND_CRC)
         {
@@ -497,11 +509,19 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
         {
             if ( result == TINY_ERR_BUSY )
             {
+                TASK_YIELD();
                 result = TINY_NO_ERROR;
             }
+            else
+            {
+                break;
+            }
+        }
+        if (!(flags & TINY_FLAG_WAIT_FOREVER))
+        {
             break;
         }
-    } while (flags & TINY_FLAG_WAIT_FOREVER);
+    };
     return result;
 }
 
@@ -629,7 +649,6 @@ int tiny_read_start(STinyData * handle, uint8_t flags)
                 break;
             }
             /* Ok, we're at the beginning of new frame. Init state machine. */
-            handle->rx.inprogress = TINY_RX_STATE_START;
             handle->rx.prevbyte = byte;
             __init_fcs_field(handle->fcs_bits, &handle->rx.fcs);
             result = TINY_SUCCESS;
@@ -660,13 +679,16 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
     {
         result = handle->read_func(handle->pdata, &byte, 1);
         /* Exit if  error */
-        if (result<0) return result;
+        if (result<0)
+        {
+            break;
+        }
         /* Exit if no data awaiting */
         if (result == 0)
         {
             if (!(flags & TINY_FLAG_WAIT_FOREVER))
             {
-                return result;
+                break;
             }
             TASK_YIELD();
             continue;
@@ -788,6 +810,7 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
         result = tiny_read_start( handle, flags );
         if (result == TINY_SUCCESS )
         {
+            handle->rx.inprogress = TINY_RX_STATE_START;
             handle->rx.blockIndex = 1;
             if (!uid) handle->rx.blockIndex++;
             result = TINY_NO_ERROR;

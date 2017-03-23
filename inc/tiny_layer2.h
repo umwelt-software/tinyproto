@@ -465,7 +465,7 @@ extern int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t 
  * @param handle - pointer to Tiny data.
  * @param flags - TINY_FLAG_NO_WAIT or TINY_FLAG_WAIT_FOREVER
  * @return TINY_SUCCESS if send frame is completed successfully.
- *         TINY_ERR_TIMEOUT/TINY_NO_ERROR if non-blocking operation is requested and the channel is busy
+ *         TINY_NO_ERROR if non-blocking operation is requested and the channel is busy
  *         TINY_ERR_FAILED if writing to the channel failed
  *         TINY_ERR_INVALID_DATA if invalid handle is passed
  *
