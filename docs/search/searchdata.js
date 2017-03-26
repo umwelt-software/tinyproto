@@ -6,9 +6,8 @@ var indexSectionsWithContent =
   3: "bcdegmoprstw",
   4: "bfioprstw",
   5: "orw",
-  6: "e",
-  7: "frt",
-  8: "t"
+  6: "frt",
+  7: "t"
 };
 
 var indexSectionNames =
@@ -19,9 +18,8 @@ var indexSectionNames =
   3: "functions",
   4: "variables",
   5: "typedefs",
-  6: "enums",
-  7: "groups",
-  8: "pages"
+  6: "groups",
+  7: "pages"
 };
 
 var indexSectionLabels =
@@ -32,8 +30,7 @@ var indexSectionLabels =
   3: "Functions",
   4: "Variables",
   5: "Typedefs",
-  6: "Enumerations",
-  7: "Modules",
-  8: "Pages"
+  6: "Modules",
+  7: "Pages"
 };
 

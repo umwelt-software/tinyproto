@@ -56,7 +56,7 @@ $(BLD)/%.o: %.c
 
 $(BLD)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(CXX) $(CCFLAGS) -c $< -o $@
+	$(CXX) -std=c++11 $(CCFLAGS) -c $< -o $@
 
 #.cpp.o:
 #	mkdir -p $(BLD)/$(dir $@)
@@ -87,27 +87,17 @@ ifeq ($(CONFIG_ENABLE_STATS),y)
     CCFLAGS += -DCONFIG_ENABLE_STATS
 endif
 
-.PHONY: clean library examples all install install-lib docs \
-	arduino-pkg
-
-# ************* Compiling example ******************
-
-LIBS_EXAMPLE += -L. -L$(BLD) -lm -lpthread -ltinyp
-
-TARGET_EXAMPLE = testproto
+.PHONY: clean library all install install-lib docs \
+	arduino-pkg unittest check
 
 TARGET_UART = testuart
 
-SRC_EXAMPLE = \
-        $(OS)/src/uart.c \
-        $(OS)/src/fakewire.c \
-        src/examples/testproto.c
+SRC_UNIT_TEST = \
+	unittest/fake_wire.cpp \
+	unittest/main.cpp \
+	unittest/basic_tests.cpp
 
-OBJ_EXAMPLE = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_EXAMPLE))))
-
-SRC_UART_TEST = \
-        $(OS)/src/uart.c \
-        src/examples/testuart.c
+OBJ_UNIT_TEST = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_UNIT_TEST))))
 
 OBJ_UART = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_UART_TEST))))
 
@@ -154,14 +144,6 @@ OBJ_TEST_ARDUINO_LIB = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TES
 
 test-arduino-lib: $(OBJ_TEST_ARDUINO_LIB)
 
-
-
-####################### Examples ###################################
-
-examples: $(OBJ_EXAMPLE) $(OBJ_UART) library
-	$(CC) $(CCFLAGS) -o $(BLD)/$(TARGET_EXAMPLE) $(OBJ_EXAMPLE) $(LIBS_EXAMPLE)
-	$(CC) $(CCFLAGS) -o $(BLD)/$(TARGET_UART) $(OBJ_UART) $(LIBS_EXAMPLE)
-
 #####################################################################################################
 ####################### arduino library                                       #######################
 #####################################################################################################
@@ -188,7 +170,7 @@ arduino-pkg:
 docs:
 	doxygen doxygen.cfg
 
-all: examples library docs
+all: library docs unittest
 
 install: install-lib
 	$(STRIP) $(DESTDIR)/$@
@@ -198,3 +180,8 @@ clean:
 	rm -rf docs
 	rm -rf releases
 
+unittest: $(OBJ_UNIT_TEST) library
+	$(CXX) $(CCFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L. -L$(BLD) -lm -lpthread -ltinyp -lCppUTest -lCppUTestExt
+
+check: unittest
+	bld/unit_test

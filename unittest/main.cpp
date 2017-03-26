@@ -1,5 +1,5 @@
 /*
-    Copyright 2016 (C) Alexey Dynda
+    Copyright 2017 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -15,33 +15,12 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
-#ifndef _FAKE_WIRE_H_
-#define _FAKE_WIRE_H_
+#include "CppUTest/CommandLineTestRunner.h"
 
-#include <stdint.h>
-#include <pthread.h>
-
-typedef struct
+int main(int argc, char** argv)
 {
-    int writeptr;
-    int readptr;
-    pthread_mutex_t  lock;
-    uint8_t buf[256*1024];
-} fake_wire_t;
+    return CommandLineTestRunner::RunAllTests(argc, argv);
+}
 
-typedef struct
-{
-    fake_wire_t *rx;
-    fake_wire_t *tx;
-    int noise;
-} fake_line_t;
-
-
-int fakeWireInit(fake_line_t *fl, fake_wire_t *rx, fake_wire_t *tx, int noise);
-int fakeWireRead(void *pdata, uint8_t *data, int length);
-int fakeWireWrite(void *pdata, const uint8_t *data, int length);
-int fakeWireClose(fake_line_t *fl);
-
-#endif /* _FAKE_WIRE_H_ */

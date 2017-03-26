@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.3</span>
+   &#160;<span id="projectnumber">0.4</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -86,8 +86,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:gac5cabf56a5b22e96036b9e5bff926f1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac5cabf56a5b22e96036b9e5bff926f1d">tiny_enable_uid</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t on)</td></tr>
+<tr class="memdesc:gac5cabf56a5b22e96036b9e5bff926f1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The function enables uid support. Enables uid support. The function affects on tiny_on_rx_byte and on_frame_cb_t behavior.  <a href="#gac5cabf56a5b22e96036b9e5bff926f1d">More...</a><br /></td></tr>
+<tr class="separator:gac5cabf56a5b22e96036b9e5bff926f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5e66725a2818491d4e2b1134951d9229"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#ga5e66725a2818491d4e2b1134951d9229">tiny_set_fcs_bits</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t bits)</td></tr>
 <tr class="separator:ga5e66725a2818491d4e2b1134951d9229"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaf9bf6423bd0b8388c3387225b805278"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gaaf9bf6423bd0b8388c3387225b805278">tiny_on_rx_byte</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t *pbuf, int len, uint8_t byte)</td></tr>
+<tr class="memdesc:gaaf9bf6423bd0b8388c3387225b805278"><td class="mdescLeft">&#160;</td><td class="mdescRight">The function processes one rx byte. Used in event-based mode. This function processes single received byte. If new frame is completely received, read_cb handler is called and application can take actions on receive frame. Refer to tiny_set_callbacks.  <a href="#gaaf9bf6423bd0b8388c3387225b805278">More...</a><br /></td></tr>
+<tr class="separator:gaaf9bf6423bd0b8388c3387225b805278"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga159189fa29f3eaa79a76a3fa87b31084"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#ga159189fa29f3eaa79a76a3fa87b31084">tiny_send_start</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, uint8_t flags)</td></tr>
 <tr class="memdesc:ga159189fa29f3eaa79a76a3fa87b31084"><td class="mdescLeft">&#160;</td><td class="mdescRight">initiates sending of a new frame  <a href="#ga159189fa29f3eaa79a76a3fa87b31084">More...</a><br /></td></tr>
 <tr class="separator:ga159189fa29f3eaa79a76a3fa87b31084"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,12 +121,12 @@ Functions</h2></td></tr>
 <tr class="memitem:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd">tiny_unlock</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="memdesc:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">unlock Tiny state machine for send operations  <a href="#gae4bfad55a4ef5814a5af50f044f6d7cd">More...</a><br /></td></tr>
 <tr class="separator:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> read_cb, <a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> send_cb)</td></tr>
+<tr class="separator:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5f61774b2027a91f772f31d943acdd3f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f">tiny_get_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="structSTinyStats.html">STinyStats</a> *stat)</td></tr>
 <tr class="separator:ga5f61774b2027a91f772f31d943acdd3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac75ee03ea3691b0a8bf842d764b342d9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac75ee03ea3691b0a8bf842d764b342d9">tiny_clear_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="separator:gac75ee03ea3691b0a8bf842d764b342d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__layer2_8h.html#acf94db3677aab46f4a42978d53cc23e3">on_frame_cb_t</a> read_cb, <a class="el" href="tiny__layer2_8h.html#acf94db3677aab46f4a42978d53cc23e3">on_frame_cb_t</a> send_cb)</td></tr>
-<tr class="separator:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
@@ -147,6 +153,42 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="gac5cabf56a5b22e96036b9e5bff926f1d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_enable_uid </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structSTinyData.html">STinyData</a> *&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>on</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The function enables uid support. Enables uid support. The function affects on tiny_on_rx_byte and on_frame_cb_t behavior. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>- pointer to Tiny structure </td></tr>
+    <tr><td class="paramname">on</td><td>- 0 to disable UID support. 1 to enable UID support. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>
@@ -224,6 +266,62 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_SUCCESS or TINY_ERR_FAILED. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="gaaf9bf6423bd0b8388c3387225b805278"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tiny_on_rx_byte </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structSTinyData.html">STinyData</a> *&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>pbuf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>byte</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The function processes one rx byte. Used in event-based mode. This function processes single received byte. If new frame is completely received, read_cb handler is called and application can take actions on receive frame. Refer to tiny_set_callbacks. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>- pointer to Tiny data </td></tr>
+    <tr><td class="paramname">pbuf</td><td>- pointer to a buffer to store bytes being received. </td></tr>
+    <tr><td class="paramname">len</td><td>- maximum size of receiver buffer. </td></tr>
+    <tr><td class="paramname">byte</td><td>- byte received from communication channel. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_NO_ERROR if byte is processed successfully and more bytes is required. TINY_ERR_OUT_OF_SYNC if sync error occured on communication channel TINY_ERR_DATA_TOO_LARGE TINY_SUCCESS </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function may be used in interrupt handlers. This depends on on_frame_cb_t handler set for receive operations, which is implemented by applications. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>to not perform blocking send operations in receive handler if you're using tiny_on_rx_byte in interrupt handler. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> </dd>
+<dd>
+<a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a>. </dd></dl>
 
 </div>
 </div>
@@ -583,13 +681,13 @@ The read data can be considered as valid, only when last buffer is successfully 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__layer2_8h.html#acf94db3677aab46f4a42978d53cc23e3">on_frame_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td>
           <td class="paramname"><em>read_cb</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__layer2_8h.html#acf94db3677aab46f4a42978d53cc23e3">on_frame_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td>
           <td class="paramname"><em>send_cb</em>&#160;</td>
         </tr>
         <tr>

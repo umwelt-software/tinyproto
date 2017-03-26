@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.3</span>
+   &#160;<span id="projectnumber">0.4</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -168,12 +168,11 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">handle</td><td>- pointer to Tiny data </td></tr>
     <tr><td class="paramname">write_func</td><td>- pointer to write data function (to communication channel). </td></tr>
-    <tr><td class="paramname">read_func</td><td>- pointer to read function (from communication channel). </td></tr>
-    <tr><td class="paramname">pdata</td><td>- pointer to a user private data. </td></tr>
+    <tr><td class="paramname">read_func</td><td>- pointer to read function (from communication channel). read_func is not required and should be NULL, if event-based API of Tiny Protocol is used. For event-based API please, refer to <a class="el" href="group__ADVANCED__API.html#gaaf9bf6423bd0b8388c3387225b805278" title="The function processes one rx byte. Used in event-based mode. This function processes single received...">tiny_on_rx_byte()</a>. </td></tr>
+    <tr><td class="paramname">pdata</td><td>- pointer to a user private data. This pointer is passed to write_func/read_func. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>pdata parameter is not applicable for Arduino and is absent in its version. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> </dd>
 <dd>
 <a class="el" href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> </dd></dl>

@@ -1,5 +1,5 @@
 /*
-    Copyright 2016 (C) Alexey Dynda
+    Copyright 2016-2017 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -146,7 +146,7 @@ int tiny_init(STinyData *handle,
               read_block_cb_t read_func,
               void *pdata)
 {
-    if (!handle || !write_func || !read_func)
+    if (!handle || !write_func)
     {
         return TINY_ERR_INVALID_DATA;
     }
@@ -221,6 +221,12 @@ int tiny_set_fcs_bits(STinyData *handle, uint8_t bits)
     return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+void tiny_enable_uid(STinyData *handle, uint8_t on)
+{
+    handle->uid_support = on;
+}
 
 /**************************************************************
 *
@@ -585,13 +591,11 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
             {
                 result = len;
             }
-#ifdef CONFIG_ENABLE_STATS
             /* If write callback is not null and frame is sent */
             if ( handle->write_cb && (result>0) )
             {
-                 handle->write_cb(handle, TINY_FRAME_TX, pbuf, len);
+                 handle->write_cb(handle, uid ? *uid : 0, pbuf, len);
             }
-#endif
         }
     }
     if ( ( result < 0 ) && ( result != TINY_ERR_TIMEOUT ) )
@@ -617,6 +621,122 @@ int tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len)
 *
 ***************************************************************/
 
+int tiny_on_rx_byte(STinyData * handle, uint8_t *pbuf, int len, uint8_t byte)
+{
+    if (!handle)
+    {
+        return TINY_ERR_INVALID_DATA;
+    }
+    if ( handle->rx.inprogress == TINY_RX_STATE_IDLE )
+    {
+        /* New frame must be started with 0x7E char */
+        if (byte != FLAG_SEQUENCE)
+        {
+            STATS(handle->stat.oosyncBytes++);
+            return TINY_ERR_OUT_OF_SYNC;
+        }
+        /* Ok, we're at the beginning of new frame. Init state machine. */
+        handle->rx.prevbyte = byte;
+        handle->rx.framelen = 0;
+        handle->rx.bits = 0;
+        handle->rx.inprogress = TINY_RX_STATE_READ_DATA;
+        __init_fcs_field(handle->fcs_bits, &handle->rx.fcs);
+        return TINY_SUCCESS;
+    }
+    /* If next byte after 0x7E is 0x7E, tiny data have wrong frame alignment.
+       Start to read new frame and register error. */
+    if ((byte == FLAG_SEQUENCE) && (handle->rx.prevbyte == FLAG_SEQUENCE))
+    {
+        STATS(handle->stat.framesBroken++);
+        /* Read next byte */
+        return TINY_ERR_OUT_OF_SYNC;
+    }
+    /* If received byte is 0x7E, this means end of frame */
+    if ((byte == FLAG_SEQUENCE) && (handle->rx.prevbyte != FLAG_SEQUENCE))
+    {
+        /* End of frame */
+        /* Tell that we have done and ready to receive next frame. */
+        handle->rx.inprogress = TINY_RX_STATE_IDLE;
+        /* Frame is too short. There should be at least 16-bit FCS field. */
+        if (handle->rx.framelen < (handle->fcs_bits >> 3))
+        {
+            STATS(handle->stat.framesBroken++);
+            return TINY_ERR_FAILED;
+        }
+        handle->rx.framelen -= (handle->fcs_bits >> 3); // subtract number of bytes of FCS field
+        if (handle->rx.framelen>=len)
+        {
+            STATS(handle->stat.framesBroken++);
+            return TINY_ERR_DATA_TOO_LARGE;
+        }
+        /* Check CRC */
+        if (!__check_fcs_field(handle->fcs_bits, handle->rx.fcs))
+        {
+            STATS(handle->stat.framesBroken++);
+            return TINY_ERR_FAILED;
+        }
+        /* Call read callback if callback is defined */
+        if (handle->read_cb)
+        {
+            if (handle->uid_support)
+            {
+                handle->read_cb(handle,
+                                *((uint16_t *)pbuf),
+                                pbuf + sizeof(uint16_t),
+                                handle->rx.framelen - sizeof(uint16_t));
+            }
+            else
+            {
+                handle->read_cb(handle,
+                                0,
+                                pbuf,
+                                handle->rx.framelen);
+            }
+        }
+        STATS(handle->stat.bytesReceived += handle->rx.framelen);
+        STATS(handle->stat.framesReceived++);
+        return TINY_SUCCESS;
+    }
+    /* If escape char is received - wait for second char */
+    if (byte == TINY_ESCAPE_CHAR)
+    {
+        /* Remember last byte received */
+        handle->rx.prevbyte = byte;
+        /* Read next byte */
+        return TINY_NO_ERROR;
+    }
+    /* If previous byte is 0x7D, we should decode the byte after */
+    if (TINY_ESCAPE_CHAR == handle->rx.prevbyte)
+    {
+        /* Remember last byte received */
+        handle->rx.prevbyte = byte;
+        byte ^=  TINY_ESCAPE_BIT; // Update byte and continue
+    }
+    else
+    {
+        /* Just remember last byte */
+        handle->rx.prevbyte = byte;
+    }
+    switch (handle->rx.inprogress)
+    {
+        case TINY_RX_STATE_READ_DATA:
+            /* if there is place in buffer save byte.
+               2-byte FCS field support is responsibility of Tiny and not visible to upper layer.
+               Thus we do not need to have free place for last 2 bytes. */
+            if (handle->rx.framelen < len)
+            {
+                pbuf[handle->rx.framelen] = byte;
+            }
+            handle->rx.framelen++;
+            break;
+        default:
+            break;
+    }
+    __update_fcs_field(handle->fcs_bits, &handle->rx.fcs, byte);
+    return TINY_NO_ERROR;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_read_start(STinyData * handle, uint8_t flags)
 {
@@ -664,6 +784,7 @@ int tiny_read_start(STinyData * handle, uint8_t flags)
     return result;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
 {
@@ -729,13 +850,24 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
                 result = TINY_ERR_FAILED;
                 break;
             }
-#ifdef CONFIG_ENABLE_STATS
             /* Call read callback if callback is defined */
             if (handle->read_cb)
             {
-                handle->read_cb(handle, TINY_FRAME_RX, pbuf, handle->rx.framelen);
+                if (handle->uid_support)
+                {
+                    handle->read_cb(handle,
+                                    *((uint16_t *)pbuf),
+                                    pbuf + sizeof(uint16_t),
+                                    handle->rx.framelen - sizeof(uint16_t));
+                }
+                else
+                {
+                    handle->read_cb(handle,
+                                    0,
+                                    pbuf,
+                                    handle->rx.framelen);
+                }
             }
-#endif
             STATS(handle->stat.bytesReceived += handle->rx.framelen);
             STATS(handle->stat.framesReceived++);
             result = handle->rx.framelen;

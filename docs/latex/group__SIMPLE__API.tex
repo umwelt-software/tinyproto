@@ -58,14 +58,11 @@ The function initializes internal structures for Tiny channel and return handle 
 \hline
 {\em write\+\_\+func} & -\/ pointer to write data function (to communication channel). \\
 \hline
-{\em read\+\_\+func} & -\/ pointer to read function (from communication channel). \\
+{\em read\+\_\+func} & -\/ pointer to read function (from communication channel). read\+\_\+func is not required and should be N\+U\+L\+L, if event-\/based A\+P\+I of Tiny Protocol is used. For event-\/based A\+P\+I please, refer to \hyperlink{group__ADVANCED__API_gaaf9bf6423bd0b8388c3387225b805278}{tiny\+\_\+on\+\_\+rx\+\_\+byte()}. \\
 \hline
-{\em pdata} & -\/ pointer to a user private data. \\
+{\em pdata} & -\/ pointer to a user private data. This pointer is passed to write\+\_\+func/read\+\_\+func. \\
 \hline
 \end{DoxyParams}
-\begin{DoxyNote}{Note}
-pdata parameter is not applicable for Arduino and is absent in its version. 
-\end{DoxyNote}
 \begin{DoxySeeAlso}{See also}
 \hyperlink{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
 
