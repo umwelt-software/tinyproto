@@ -1,6 +1,5 @@
 /*
  * This example sends <Hello> packet every second.
- * If some packet is received from remote side, it echos content back to the sender
  */
 #include <TinyProtocol.h>
 
@@ -33,10 +32,11 @@ void loop()
     unsigned long start = millis();
     /* read answer from remote side */
     int len;
-    do {
+    do
+    {
         len = proto.read(g_inBuf, sizeof(g_inBuf), TINY_FLAG_NO_WAIT);
-        /* Wait 100ms for any answer from remote side */
-        if (millis() - start >= 100)
+        /* Wait 1000ms for any answer from remote side */
+        if (millis() - start >= 1000)
         {
             break;
         }

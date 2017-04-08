@@ -189,6 +189,7 @@ public:
 
 private:
     friend class        Proto;
+    friend class        ProtoHd;
 
     uint8_t*            m_buf;
     uint16_t            m_uid;

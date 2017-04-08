@@ -1,5 +1,5 @@
 /*
-    Copyright 2016 (C) Alexey Dynda
+    Copyright 2016-2017 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -38,8 +38,6 @@
 #endif
 
 namespace Tiny {
-
-class Packet;
 
 /**
  *  Proto class incapsulates Protocol functionality.

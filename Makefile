@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.5.0
+VERSION=0.5.1
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -142,6 +142,7 @@ SRC_TEST_ARDUINO_LIB = \
         src/lib/crc.c \
         src/lib/tiny_layer2.c \
 	src/arduino/src/TinyProtocol.cpp \
+	src/arduino/src/TinyProtocolHd.cpp \
 #        src/lib/tiny_request_pool.c \
 #        src/lib/tiny_list.c \
 

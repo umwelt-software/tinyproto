@@ -42,7 +42,7 @@ void tiny_remove_request(tiny_request *request)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static uint8_t decline_function(list_element *element)
+static uint8_t decline_function(list_element *element, uint16_t data)
 {
     ((tiny_request *)element)->state = TINY_HD_REQUEST_DECLINED;
     return 1;
@@ -52,24 +52,27 @@ static uint8_t decline_function(list_element *element)
 
 void tiny_decline_requests()
 {
-    tiny_list_enumerate((list_element *)s_pool, decline_function);
+    tiny_list_enumerate((list_element *)s_pool, decline_function, 0);
     tiny_list_clear((list_element **)&s_pool);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+uint8_t commit_function(list_element *element, uint16_t data)
+{
+    if (data == ((tiny_request *)element)->uid)
+    {
+        ((tiny_request *)element)->state = TINY_HD_REQUEST_SUCCESSFUL;
+        return 0;
+    }
+    return 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void tiny_commit_request(uint16_t uid)
 {
-    uint8_t commit_function(list_element *element)
-    {
-        if (uid == ((tiny_request *)element)->uid)
-        {
-            ((tiny_request *)element)->state = TINY_HD_REQUEST_SUCCESSFUL;
-            return 0;
-        }
-        return 1;
-    }
-    tiny_list_enumerate((list_element *)s_pool, commit_function);
+    tiny_list_enumerate((list_element *)s_pool, commit_function, uid);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

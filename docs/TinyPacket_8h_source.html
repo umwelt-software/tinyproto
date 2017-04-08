@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.5</span>
+   &#160;<span id="projectnumber">0.5.1</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -174,23 +174,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class        </span><a class="code" href="classTiny_1_1Proto.html">Proto</a>;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    uint8_t*            m_buf;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    uint16_t            m_uid;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    uint8_t             m_size;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    uint8_t             m_len;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    uint8_t             m_p;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;};</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class        </span><a class="code" href="classTiny_1_1ProtoHd.html">ProtoHd</a>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    uint8_t*            m_buf;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    uint16_t            m_uid;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    uint8_t             m_size;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    uint8_t             m_len;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    uint8_t             m_p;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;};</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;} <span class="comment">// Tiny namespace</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;} <span class="comment">// Tiny namespace</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;</div>
 <div class="ttc" id="classTiny_1_1Packet_html_a52c746f604ee6c0e4e78902b4cf710a9"><div class="ttname"><a href="classTiny_1_1Packet.html#a52c746f604ee6c0e4e78902b4cf710a9">Tiny::Packet::put</a></div><div class="ttdeci">void put(uint8_t byte)</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:64</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a71765e73adfbc67138f75c2b8ea7d74c"><div class="ttname"><a href="classTiny_1_1Packet.html#a71765e73adfbc67138f75c2b8ea7d74c">Tiny::Packet::getUint16</a></div><div class="ttdeci">uint16_t getUint16()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:132</div></div>
 <div class="ttc" id="namespaceTiny_html"><div class="ttname"><a href="namespaceTiny.html">Tiny</a></div><div class="ttdef"><b>Definition:</b> TinyPacket.h:37</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a5333df49a8becff438d3e36b0ca8d3f0"><div class="ttname"><a href="classTiny_1_1Packet.html#a5333df49a8becff438d3e36b0ca8d3f0">Tiny::Packet::getUid</a></div><div class="ttdeci">uint16_t getUid()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:159</div></div>
+<div class="ttc" id="classTiny_1_1ProtoHd_html"><div class="ttname"><a href="classTiny_1_1ProtoHd.html">Tiny::ProtoHd</a></div><div class="ttdef"><b>Definition:</b> TinyProtocolHd.h:49</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_aad47b3053945b29b1b46d76b31b72960"><div class="ttname"><a href="classTiny_1_1Packet.html#aad47b3053945b29b1b46d76b31b72960">Tiny::Packet::Packet</a></div><div class="ttdeci">Packet(char *buf, size_t size)</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:52</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a152feac05d3e972f614c17c36bf30513"><div class="ttname"><a href="classTiny_1_1Packet.html#a152feac05d3e972f614c17c36bf30513">Tiny::Packet::getByte</a></div><div class="ttdeci">uint8_t getByte()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:120</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_ae8764bf70fd6f09df2cb15c02ce2aa30"><div class="ttname"><a href="classTiny_1_1Packet.html#ae8764bf70fd6f09df2cb15c02ce2aa30">Tiny::Packet::putUid</a></div><div class="ttdeci">void putUid(uint16_t uid)</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:114</div></div>
@@ -204,7 +206,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classTiny_1_1Packet_html_aed30fc087142669b37ec99d9d6572e57"><div class="ttname"><a href="classTiny_1_1Packet.html#aed30fc087142669b37ec99d9d6572e57">Tiny::Packet::put</a></div><div class="ttdeci">void put(uint32_t data)</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:84</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a8bc9a3b3f41be292f9c5ac566afeb04b"><div class="ttname"><a href="classTiny_1_1Packet.html#a8bc9a3b3f41be292f9c5ac566afeb04b">Tiny::Packet::getString</a></div><div class="ttdeci">char * getString()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:150</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a7dfed04418564f93dd4d2b4e9144a861"><div class="ttname"><a href="classTiny_1_1Packet.html#a7dfed04418564f93dd4d2b4e9144a861">Tiny::Packet::getInt16</a></div><div class="ttdeci">int16_t getInt16()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:138</div></div>
-<div class="ttc" id="classTiny_1_1Proto_html"><div class="ttname"><a href="classTiny_1_1Proto.html">Tiny::Proto</a></div><div class="ttdef"><b>Definition:</b> TinyProtocol.h:49</div></div>
+<div class="ttc" id="classTiny_1_1Proto_html"><div class="ttname"><a href="classTiny_1_1Proto.html">Tiny::Proto</a></div><div class="ttdef"><b>Definition:</b> TinyProtocol.h:47</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a9bfdb9244515ef3dbf1056c1e37d0902"><div class="ttname"><a href="classTiny_1_1Packet.html#a9bfdb9244515ef3dbf1056c1e37d0902">Tiny::Packet::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:57</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a3307ba504caba9c5eee8f1f32cf1a749"><div class="ttname"><a href="classTiny_1_1Packet.html#a3307ba504caba9c5eee8f1f32cf1a749">Tiny::Packet::data</a></div><div class="ttdeci">char * data()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:177</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html_a872f81d4ad35e49b232101c7c12e34f2"><div class="ttname"><a href="classTiny_1_1Packet.html#a872f81d4ad35e49b232101c7c12e34f2">Tiny::Packet::size</a></div><div class="ttdeci">size_t size()</div><div class="ttdef"><b>Definition:</b> TinyPacket.h:165</div></div>

@@ -87,12 +87,14 @@ void tiny_list_clear(list_element **head)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void tiny_list_enumerate(list_element *head, uint8_t (*enumerate_func)(list_element *element))
+void tiny_list_enumerate(list_element *head,
+                         uint8_t (*enumerate_func)(list_element *element, uint16_t data),
+                         uint16_t data)
 {
     MUTEX_LOCK(s_mutex);
     while (head)
     {
-        if (!enumerate_func(head))
+        if (!enumerate_func(head, data))
         {
             break;
         }
