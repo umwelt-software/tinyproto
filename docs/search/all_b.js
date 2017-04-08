@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['sentbytes',['sentbytes',['../structSTinyTxStatus.html#ab5074839815ccf15744e258ce4816c06',1,'STinyTxStatus']]],
-  ['size',['size',['../classTiny_1_1Packet.html#a872f81d4ad35e49b232101c7c12e34f2',1,'Tiny::Packet']]],
-  ['stat',['stat',['../structSTinyData.html#a16ba8c9e60d6aee3fcd4909f85561f3d',1,'STinyData']]],
-  ['stinydata',['STinyData',['../structSTinyData.html',1,'']]],
-  ['stinyrxstatus',['STinyRxStatus',['../structSTinyRxStatus.html',1,'']]],
-  ['stinystats',['STinyStats',['../structSTinyStats.html',1,'']]],
-  ['stinytxstatus',['STinyTxStatus',['../structSTinyTxStatus.html',1,'']]]
+  ['return_20error_20codes_20for_20tiny_20api_20functions',['Return error codes for Tiny API functions',['../group__ERROR__FLAGS.html',1,'']]],
+  ['read',['read',['../classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e',1,'Tiny::Proto::read(char *buf, int size, uint8_t flags=TINY_FLAG_WAIT_FOREVER)'],['../classTiny_1_1Proto.html#aedef629f8b8968db7c8693bb45039651',1,'Tiny::Proto::read(Packet &amp;pkt, uint8_t flags=TINY_FLAG_WAIT_FOREVER)']]],
+  ['read_5fblock_5fcb_5ft',['read_block_cb_t',['../tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec',1,'tiny_layer2.h']]],
+  ['read_5fcb',['read_cb',['../structSTinyData.html#a31ba50154472c11e0d063b0aeef95f4d',1,'STinyData']]],
+  ['read_5ffunc',['read_func',['../structSTinyData.html#a9714041284fd99230be0e7efbc8c60cf',1,'STinyData']]],
+  ['rx',['rx',['../structSTinyData.html#aa3b43db99a1a6bf3d562f932d5a539db',1,'STinyData']]]
 ];

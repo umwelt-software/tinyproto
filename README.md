@@ -14,7 +14,7 @@ reading bytes from communication line.
 2. Resources required
 
 Tiny Protocol has low memory consumption. The only memory needed to work is
-a) Memory for Tiny Protocol state machine (30 bytes for Arduino Nano Atmega368p)
+a) Memory for Tiny Protocol state machine (36 bytes for Arduino Nano Atmega368p)
 b) Memory to hold data being sent or received.
 
 Tiny protocol has C-Style API, which is suitable for many low-resource systems.
@@ -25,11 +25,11 @@ for sending from parallel threads. Please, not that read operations are not thre
 
 3. Features
 
-It supports simple checksum, FCS16 (CCITT-16) and FCS32 (CCITT-32), allowing to protect
-payload data, being sent through unreliable communication channels (for example, high speed
-UARTS at 4Mbps).
-It supports sending and receiving the frames of maximum 64K size.
+ * Simple 8-bit checksum to control data validity
+ * FCS16 (CCITT-16) to control data validity
+ * FCS32 (CCITT-32) to control data validity
+ * Using uids with user data
+ * Sending frames with acknowledgement
+ * Sending and receiving the frames of maximum 64K size.
+ * Low memory consumptions (36 bytes for Tiny Protocol engine)
 
-4. TODO.
-
-Implement acknowledge/retransmission support.

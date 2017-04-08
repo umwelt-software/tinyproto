@@ -17,47 +17,17 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _FAKE_WIRE_H_
-#define _FAKE_WIRE_H_
+#ifndef _TINY_HELPER_H_
+#define _TINY_HELPER_H_
 
 #include <functional>
 #include <stdint.h>
-#include <pthread.h>
+#include "fake_channel.h"
 #include "tiny_layer2.h"
-
-
-class FakeWire
-{
-public:
-    FakeWire();
-    ~FakeWire();
-    int read(uint8_t * data, int length);
-    int write(const uint8_t * data, int length);
-    void reset();
-private:
-    int m_writeptr;
-    int m_readptr;
-    pthread_mutex_t  m_lock;
-    uint8_t m_buf[1024];
-};
-
-class FakeChannel
-{
-public:
-    FakeChannel(FakeWire *tx, FakeWire *rx);
-    ~FakeChannel();
-    static int read(void * appdata, uint8_t * data, int length);
-    static int write(void * appdata, const uint8_t * data, int length);
-    int read(uint8_t * data, int length);
-    int write(const uint8_t * data, int length);
-private:
-    FakeWire * m_tx;
-    FakeWire * m_rx;
-};
-
 
 class TinyHelper
 {
+private:
     STinyData     m_handle;
 public:
     TinyHelper(FakeChannel         * channel,
@@ -77,5 +47,6 @@ private:
     static int    read_data(void * appdata, uint8_t * data, int length);
     static int    write_data(void * appdata, const uint8_t * data, int length);
 };
+
 
 #endif /* _FAKE_WIRE_H_ */

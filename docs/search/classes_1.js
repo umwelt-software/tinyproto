@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['stinydata',['STinyData',['../structSTinyData.html',1,'']]],
-  ['stinyrxstatus',['STinyRxStatus',['../structSTinyRxStatus.html',1,'']]],
-  ['stinystats',['STinyStats',['../structSTinyStats.html',1,'']]],
-  ['stinytxstatus',['STinyTxStatus',['../structSTinyTxStatus.html',1,'']]]
+  ['packet',['Packet',['../classTiny_1_1Packet.html',1,'Tiny']]],
+  ['proto',['Proto',['../classTiny_1_1Proto.html',1,'Tiny']]]
 ];

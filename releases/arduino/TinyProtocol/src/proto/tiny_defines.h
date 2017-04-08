@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #ifndef _TINY_DEFINES_H_
 #define _TINY_DEFINES_H_
@@ -50,11 +50,6 @@
 #define COND_SIGNAL(x)
 
 #define TASK_YIELD()
-
-#ifndef millis
-#include <stdint.h>
-inline uint16_t millis() { return 0; }
-#endif
 
 #define PLATFORM_TICKS()    millis()
 

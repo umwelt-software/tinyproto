@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "fake_wire.h"
+#include "helpers/tiny_helper.h"
 
 
 TEST_GROUP(BasicTests)

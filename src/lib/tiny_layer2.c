@@ -967,7 +967,7 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
             }
 
         }
-        if ( (result < 0) && ( result != TINY_ERR_DATA_TOO_LARGE ) )
+        if ( result < 0 )
         {
             tiny_read_terminate( handle );
         }

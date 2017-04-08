@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.4</span>
+   &#160;<span id="projectnumber">0.5</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -232,16 +232,14 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
-<dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7" title="Data too large to fit the user buffer, valid for tiny_read function. ">TINY_ERR_DATA_TOO_LARGE</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a" title="Out of sync - received some data, which are not part of the frame (tiny_read) ">TINY_ERR_OUT_OF_SYNC</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga9b3e170e1c6ce269f216ef4a1ac61995" title="API function detected that operation cannot be performed right now. ">TINY_ERR_BUSY</a> </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_OUT_OF_SYNC - if first byte received from the channel is not packet marker. You may ignore this error. TINY_ERR_DATA_TOO_LARGE - if incoming packet is too large to fit the buffer TINY_ERR_FAILED - if something wrong with received data TINY_BUSY - if another receive operation is in progress. TINY_NO_ERROR - if nothing is received in non-blocking mode greater 0 - number of received bytes in pbuf buffer. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
 </div>

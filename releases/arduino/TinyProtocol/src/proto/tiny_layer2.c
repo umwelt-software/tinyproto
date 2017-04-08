@@ -73,6 +73,8 @@ inline static void __init_fcs_field(uint8_t fcs_bits, fcs_t* fcs)
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 inline static int __check_fcs_field(uint8_t fcs_bits, fcs_t fcs)
 {
     /* Check CRC */
@@ -88,6 +90,7 @@ inline static int __check_fcs_field(uint8_t fcs_bits, fcs_t fcs)
     return fcs_bits == 0;
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
 inline static void  __update_fcs_field(uint8_t fcs_bits, fcs_t* fcs, uint8_t byte)
 {
@@ -111,6 +114,7 @@ inline static void  __update_fcs_field(uint8_t fcs_bits, fcs_t* fcs, uint8_t byt
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
 inline static void  __commit_fcs_field(uint8_t fcs_bits, fcs_t* fcs)
 {
@@ -850,24 +854,6 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
                 result = TINY_ERR_FAILED;
                 break;
             }
-            /* Call read callback if callback is defined */
-            if (handle->read_cb)
-            {
-                if (handle->uid_support)
-                {
-                    handle->read_cb(handle,
-                                    *((uint16_t *)pbuf),
-                                    pbuf + sizeof(uint16_t),
-                                    handle->rx.framelen - sizeof(uint16_t));
-                }
-                else
-                {
-                    handle->read_cb(handle,
-                                    0,
-                                    pbuf,
-                                    handle->rx.framelen);
-                }
-            }
             STATS(handle->stat.bytesReceived += handle->rx.framelen);
             STATS(handle->stat.framesReceived++);
             result = handle->rx.framelen;
@@ -961,8 +947,27 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
         if ( handle->rx.blockIndex == 2 )
         {
             result = tiny_read_buffer( handle, pbuf, len, flags | TINY_FLAG_READ_ALL );
+            /* Call read callback if callback is defined */
+            if ( (result > 0) && (handle->read_cb) )
+            {
+                if (uid)
+                {
+                    handle->read_cb(handle,
+                                    *uid,
+                                    pbuf,
+                                    result);
+                }
+                else
+                {
+                    handle->read_cb(handle,
+                                    0,
+                                    pbuf,
+                                    result);
+                }
+            }
+
         }
-        if ( (result < 0) && ( result != TINY_ERR_DATA_TOO_LARGE ) )
+        if ( result < 0 )
         {
             tiny_read_terminate( handle );
         }
@@ -1009,6 +1014,8 @@ int tiny_clear_stat(STinyData *handle)
     return TINY_NO_ERROR;
 }
 
+#endif /* CONFIG_ENABLE_STATS */
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_set_callbacks(STinyData *handle,
@@ -1020,13 +1027,40 @@ int tiny_set_callbacks(STinyData *handle,
         return TINY_ERR_INVALID_DATA;
     }
     tiny_lock( handle, TINY_FLAG_WAIT_FOREVER );
-    handle->read_cb = read_cb;
-    handle->write_cb = send_cb;
+    if ( 0 != read_cb )
+    {
+        handle->read_cb = read_cb;
+    }
+    if ( 0 != send_cb )
+    {
+        handle->write_cb = send_cb;
+    }
     tiny_unlock( handle );
     return TINY_NO_ERROR;
 }
 
-#endif /* CONFIG_ENABLE_STATS */
+////////////////////////////////////////////////////////////////////////////////////////////
+
+int tiny_get_callbacks(STinyData *handle,
+               on_frame_cb_t *read_cb,
+               on_frame_cb_t *send_cb)
+{
+    if (!handle)
+    {
+        return TINY_ERR_INVALID_DATA;
+    }
+    tiny_lock( handle, TINY_FLAG_WAIT_FOREVER );
+    if ( 0 != read_cb )
+    {
+        *read_cb = handle->read_cb;
+    }
+    if ( 0 != send_cb )
+    {
+        *send_cb = handle->write_cb;
+    }
+    tiny_unlock( handle );
+    return TINY_NO_ERROR;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 

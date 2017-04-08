@@ -245,6 +245,7 @@ typedef struct
     /** This callback is called when it is not null and when
         new frame is successfully sent. */
     on_frame_cb_t       write_cb;
+    /// flag indicates if uid support is enabled. It is important for tiny_on_rx_byte()
     uint8_t             uid_support;
 } STinyData;
 
@@ -319,12 +320,16 @@ extern int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, 
  * @param pbuf a const pointer to unsigned char - buffer with data to send
  * @param len an integer argument - length of data to send
  * @param flags - TINY_FLAG_NO_WAIT
- * @see TINY_ERR_INVALID_DATA
  * @see TINY_ERR_FAILED
  * @see TINY_ERR_DATA_TOO_LARGE
  * @see TINY_ERR_OUT_OF_SYNC
  * @see TINY_ERR_BUSY
- * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
+ * @return TINY_ERR_OUT_OF_SYNC    - if first byte received from the channel is not packet marker. You may ignore this error.
+ *         TINY_ERR_DATA_TOO_LARGE - if incoming packet is too large to fit the buffer
+ *         TINY_ERR_FAILED         - if something wrong with received data
+ *         TINY_BUSY               - if another receive operation is in progress.
+ *         TINY_NO_ERROR           - if nothing is received in non-blocking mode
+ *         greater 0               - number of received bytes in pbuf buffer.
  * @remarks This function is not thread safe.
  */
 extern int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags);
@@ -642,17 +647,32 @@ extern void tiny_unlock(STinyData *handle);
 
 
 /**
+ * @brief set callbacks for processing frames
  * The function sets callback procs for specified Tiny channel.
  * callbacks will receive all data being sent or received.
  * @param handle - pointer to Tiny data.
  * @param read_cb - pointer to callback function.
  * @param send_cb - pointer to callback function.
  * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
- * @remarks This function is not thread safe.
+ * @remarks This function is thread safe.
  */
 extern int tiny_set_callbacks(STinyData *handle,
                on_frame_cb_t read_cb,
                on_frame_cb_t send_cb);
+
+
+/**
+ * @brief returns callbacks assigned for frame processing
+ * The function returns set callbacks.
+ * @param handle  - pointer to Tiny data.
+ * @param read_cb - pointer to store read callback to. can be NULL.
+ * @param send_cb - pointer to store write callback to. can be NULL.
+ * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
+ * @remarks This function is thread safe.
+ */
+extern int tiny_get_callbacks(STinyData *handle,
+               on_frame_cb_t *read_cb,
+               on_frame_cb_t *send_cb);
 
 
 #ifdef CONFIG_ENABLE_STATS

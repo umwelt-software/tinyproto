@@ -28,7 +28,9 @@ int \hyperlink{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}{tiny\+\_
 void \hyperlink{group__ADVANCED__API_gae4bfad55a4ef5814a5af50f044f6d7cd}{tiny\+\_\+unlock} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \begin{DoxyCompactList}\small\item\em unlock Tiny state machine for send operations \end{DoxyCompactList}\item 
 int \hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} read\+\_\+cb, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} send\+\_\+cb)
-\item 
+\begin{DoxyCompactList}\small\item\em set callbacks for processing frames The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received. \end{DoxyCompactList}\item 
+int \hyperlink{group__ADVANCED__API_gabe38a1f81966f6901eb2f6969b568298}{tiny\+\_\+get\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$read\+\_\+cb, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$send\+\_\+cb)
+\begin{DoxyCompactList}\small\item\em returns callbacks assigned for frame processing The function returns set callbacks. \end{DoxyCompactList}\item 
 int \hyperlink{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
 \item 
 int \hyperlink{group__ADVANCED__API_gac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
@@ -83,6 +85,34 @@ The function enables uid support. Enables uid support. The function affects on t
 \end{DoxyParams}
 \begin{DoxyRemark}{Remarks}
 This function is not thread safe. 
+\end{DoxyRemark}
+\hypertarget{group__ADVANCED__API_gabe38a1f81966f6901eb2f6969b568298}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+get\+\_\+callbacks@{tiny\+\_\+get\+\_\+callbacks}}
+\index{tiny\+\_\+get\+\_\+callbacks@{tiny\+\_\+get\+\_\+callbacks}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
+\subsubsection[{tiny\+\_\+get\+\_\+callbacks}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+get\+\_\+callbacks (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
+\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$}]{read\+\_\+cb, }
+\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$}]{send\+\_\+cb}
+\end{DoxyParamCaption}
+)}\label{group__ADVANCED__API_gabe38a1f81966f6901eb2f6969b568298}
+
+
+returns callbacks assigned for frame processing The function returns set callbacks. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny data. \\
+\hline
+{\em read\+\_\+cb} & -\/ pointer to store read callback to. can be N\+U\+L\+L. \\
+\hline
+{\em send\+\_\+cb} & -\/ pointer to store write callback to. can be N\+U\+L\+L. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is thread safe. 
 \end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}}
 \index{tiny\+\_\+get\+\_\+stat@{tiny\+\_\+get\+\_\+stat}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}
@@ -467,7 +497,11 @@ This function is to be used, when it is required to reset send state in case of 
 \item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t}}]{send\+\_\+cb}
 \end{DoxyParamCaption}
 )}\label{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}
-The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received. 
+
+
+set callbacks for processing frames The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received. 
+
+
 \begin{DoxyParams}{Parameters}
 {\em handle} & -\/ pointer to Tiny data. \\
 \hline
@@ -480,7 +514,7 @@ The function sets callback procs for specified Tiny channel. callbacks will rece
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
 \end{DoxyReturn}
 \begin{DoxyRemark}{Remarks}
-This function is not thread safe. 
+This function is thread safe. 
 \end{DoxyRemark}
 \hypertarget{group__ADVANCED__API_ga5e66725a2818491d4e2b1134951d9229}{}\index{Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}!tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}}
 \index{tiny\+\_\+set\+\_\+fcs\+\_\+bits@{tiny\+\_\+set\+\_\+fcs\+\_\+bits}!Tiny advanced A\+P\+I functions@{Tiny advanced A\+P\+I functions}}

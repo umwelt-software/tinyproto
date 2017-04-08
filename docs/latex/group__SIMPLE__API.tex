@@ -99,8 +99,6 @@ The function reads data from communication channel frame format\+: 0x7\+E, data.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
-
 \hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
 
 \hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E} 
@@ -110,7 +108,7 @@ The function reads data from communication channel frame format\+: 0x7\+E, data.
 \hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+S\+Y} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D or number of sent bytes. 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C -\/ if first byte received from the channel is not packet marker. You may ignore this error. T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E -\/ if incoming packet is too large to fit the buffer T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D -\/ if something wrong with received data T\+I\+N\+Y\+\_\+\+B\+U\+S\+Y -\/ if another receive operation is in progress. T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R -\/ if nothing is received in non-\/blocking mode greater 0 -\/ number of received bytes in pbuf buffer. 
 \end{DoxyReturn}
 \begin{DoxyRemark}{Remarks}
 This function is not thread safe. 

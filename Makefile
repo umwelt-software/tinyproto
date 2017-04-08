@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.4.0
+VERSION=0.5.0
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -93,9 +93,13 @@ endif
 TARGET_UART = testuart
 
 SRC_UNIT_TEST = \
-	unittest/fake_wire.cpp \
+	unittest/helpers/fake_wire.cpp \
+	unittest/helpers/fake_channel.cpp \
+	unittest/helpers/tiny_helper.cpp \
+	unittest/helpers/tiny_hd_helper.cpp \
 	unittest/main.cpp \
-	unittest/basic_tests.cpp
+	unittest/basic_tests.cpp \
+	unittest/hd_tests.cpp
 
 OBJ_UNIT_TEST = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_UNIT_TEST))))
 
@@ -112,8 +116,9 @@ TARGET_TINY = libtinyp.a
 SRC_TINY = \
         src/lib/crc.c \
         src/lib/tiny_layer2.c \
-#        src/lib/tiny_list.c \
-#        src/lib/tiny_request_pool.c \
+	src/lib/tiny_hd.c \
+        src/lib/tiny_list.c \
+        src/lib/tiny_rq_pool.c \
 
 OBJ_TINY = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TINY))))
 

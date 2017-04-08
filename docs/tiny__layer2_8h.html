@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.4</span>
+   &#160;<span id="projectnumber">0.5</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -235,7 +235,11 @@ Functions</h2></td></tr>
 <tr class="memdesc:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">unlock Tiny state machine for send operations  <a href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd">More...</a><br /></td></tr>
 <tr class="separator:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> read_cb, <a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> send_cb)</td></tr>
+<tr class="memdesc:gac562103dd1699b82fddf29dccdc0ec7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">set callbacks for processing frames The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received.  <a href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">More...</a><br /></td></tr>
 <tr class="separator:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabe38a1f81966f6901eb2f6969b568298"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">tiny_get_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *read_cb, <a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *send_cb)</td></tr>
+<tr class="memdesc:gabe38a1f81966f6901eb2f6969b568298"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns callbacks assigned for frame processing The function returns set callbacks.  <a href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">More...</a><br /></td></tr>
+<tr class="separator:gabe38a1f81966f6901eb2f6969b568298"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5f61774b2027a91f772f31d943acdd3f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f">tiny_get_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="structSTinyStats.html">STinyStats</a> *stat)</td></tr>
 <tr class="separator:ga5f61774b2027a91f772f31d943acdd3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac75ee03ea3691b0a8bf842d764b342d9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac75ee03ea3691b0a8bf842d764b342d9">tiny_clear_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
@@ -264,7 +268,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c" title="set callbacks for processing frames The function sets callback procs for specified Tiny channel...">tiny_set_callbacks</a> </dd></dl>
 
 </div>
 </div>
