@@ -52,6 +52,13 @@ private:
     STinyHdData         m_data;
 
 public:
+    /**
+     * Initializes ProtoHd class object.
+     * @param buffer     - buffer to use to store bytes being receive.
+     *                     Buffer size must have the size to fix the packet of maximum size.
+     * @param bufferSize - size of the buffer to use
+     * @param onReceive  - handler to process the messages being received.
+     */
     inline ProtoHd(void * buffer,
                    int    bufferSize,
                    void (*onReceive)(uint8_t *buf, int len))

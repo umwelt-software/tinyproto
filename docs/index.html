@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Tiny protocol: Tiny protocol API</title>
+<title>Tiny protocol: Tiny Protocol</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.5.1</span>
+   &#160;<span id="projectnumber">0.5.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -40,6 +40,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -78,31 +79,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Tiny protocol API </div>  </div>
+<div class="title">Tiny Protocol </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>This is Tiny protocol implementation for microcontrollers (Arduino, Stellaris).</p>
-<h1>Tiny Protocol</h1>
-<h2>Introduction</h2>
-<p>This protocol is intended to be used in low-memory systems, like microcontrollers (Stellaris, Arduino). It is also can be compiled for desktop Linux systems, and it is possible to build it for Windows.</p>
-<h2>Tiny Protocol API.</h2>
-<p>Linux API supports C-Style functions, while Arduino API supports both C-Style and C++ classes. Usage C++ Arduino classes makes easy use of the protocol for Arduino projects. Please refer to documentation.</p>
-<h2>Tiny Protocol Packet structure.</h2>
-<p>Full packet format: </p><pre>
-   8    16     any len     8/16/32  8
- | 7E | UID |  USER DATA  |  FCS  | 7E |
-</pre><ul>
-<li>7E is standard packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing.</li>
-<li>UID can be used for your own needs. This field is intented for use with higher levels protocols. This field is optional, you may omit UID parameter in Tiny Protocol API functions.</li>
-<li>USER DATA of any length</li>
-<li>FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field. Refer to RFC1662 for examples. FCS field is also optional and can be disabled. But in this case transport errors are not detected.</li>
+<div class="toc"><h3>Table of Contents</h3>
+<ul><li class="level1"><a href="#introduction">Introduction</a></li>
+<li class="level1"><a href="#api">Tiny Protocol API</a></li>
+<li class="level1"><a href="#packet">Packet Structure</a></li>
+<li class="level1"><a href="#arduino_section">Arduino related documentation</a></li>
 </ul>
-<p>Each packet can be sent with simple api command: </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="group__SIMPLE__API.html#ga988a41addbe75dc15cc13006de6740e0">tiny_send</a>(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, <span class="keywordtype">int</span> len, uint32_t flags)</div>
-</div><!-- fragment --><p>And be received via another simple api command:</p>
-<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="group__SIMPLE__API.html#ga470d59a60a496944e63031ba43a00e3d">tiny_read</a>(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, <span class="keywordtype">int</span> len, uint32_t flags);</div>
-</div><!-- fragment --><p>uid parameter is optional and can be be simply NULL. And FCS field can be disabled by calling </p><div class="fragment"><div class="line"><a class="code" href="group__ADVANCED__API.html#ga5e66725a2818491d4e2b1134951d9229">tiny_set_fcs_bits</a>(&amp;handle, 0);</div>
-</div><!-- fragment --><p> In this case, UID field and FCS field are not used, and the protocol packet looks as follows: 8 any len 8 | 7E | USER DATA | 7E |</p>
-<p>So, the protocol itself adds a little overhead to the user data: 2 bytes of packet delimiter in the simplest case. And in the case of full packet format (both with UID and 32-bit FCS fields) the protocol adds 8 bytes of overhead. </p>
+</div>
+<div class="textblock"><p>This is Tiny protocol implementation for microcontrollers (Arduino, Stellaris).</p>
+<h1><a class="anchor" id="introduction"></a>
+Introduction</h1>
+<p>This protocol is intended to be used in low-memory systems, like microcontrollers (Stellaris, Arduino). It is also can be compiled for desktop Linux systems, and it is possible to build it for Windows.</p>
+<h1><a class="anchor" id="api"></a>
+Tiny Protocol API</h1>
+<p>Linux API supports C-Style functions, while Arduino API supports both C-Style and C++ classes. Usage C++ Arduino classes makes easy use of the protocol for Arduino projects. Please refer to documentation.</p>
+<h1><a class="anchor" id="packet"></a>
+Packet Structure</h1>
+<p>Full packet format: </p><pre>
+     8       16       any len    None/8/16/32     8
+ |   7E   |  UID  |  USER DATA  |    FCS     |   7E   |
+</pre><ul>
+<li>7E is packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing. packet delimiter is used by the protocol to find first and last byte of the frame being transmitted.</li>
+<li>UID mean unique identifier of the frame. For Half Duplex Tiny Protocol (<a class="el" href="group__HALF__DUPLEX__API.html">Tiny Half Duplex API functions</a>) it is widely used in acknowledge frames. This field is optional, you may omit UID parameter in <a class="el" href="group__SIMPLE__API.html">Tiny simple API functions</a> and <a class="el" href="group__ADVANCED__API.html">Tiny advanced API functions</a> functions.</li>
+<li>USER DATA of any length. This field contains user data with replaced 0x7D and 0x7E bytes by special sequenced as defined in HDLC/PPP framing. Length of data is now limited on buffer used to receive frames and/or 32767 bytes (Tiny Protocol using 16-bit field to store frame length).</li>
+<li>FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field, or it can be absent at all. Refer to RFC1662 for examples. FCS field is also optional and can be disabled. But in this case transport errors are not detected.</li>
+</ul>
+<h1><a class="anchor" id="arduino_section"></a>
+Arduino related documentation</h1>
+<p><a class="el" href="arduino.html">Arduino related API (C++)</a> </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

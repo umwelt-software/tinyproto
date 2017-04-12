@@ -52,6 +52,14 @@ public:
     Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; }
 
     /**
+     * Creates packet object.
+     * @param buf - pointer to the buffer to store packet data
+     * @param size - size of the buffer to hold packet data
+     * @note passed buffer must exist all lifecycle of the Packet object.
+     */
+    Packet(uint8_t *buf, size_t size)  { m_len = 0; m_size = size; m_buf = buf; }
+
+    /**
      * Clears Packet state. Buffer and its size are preserved.
      */
     inline void clear  ()              { m_len = 0; m_p = 0; }

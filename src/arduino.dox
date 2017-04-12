@@ -1,0 +1,222 @@
+/**
+ @file
+ @brief Arduino reated API.
+
+ \page arduino Arduino related API (C++)
+
+ This is Tiny protocol implementation for microcontrollers (Arduino, Stellaris).
+
+ \tableofcontents
+
+ \section arduino_tiny Simple Tiny Protocol examples
+
+ Simple Tiny Protocol examples section is applicable only when working with \ref SIMPLE_API and \ref ADVANCED_API.
+ If you want to work with Tiny Half Duplex protocol, please refere to \ref arduino_tiny_hd
+ section.
+
+ \subsection arduino_tiny_init Initialization
+
+@code{.cpp}
+Tiny::Proto proto;
+
+void setup()
+{
+    proto.beginToSerial();
+}
+@endcode
+
+ \subsection arduino_tiny_send Sending/Receiving data over protocol
+
+ \subsubsection arduino_tiny_send_receive1 Variant 1
+
+First variant: without using any helpers to work with data
+@code{.cpp}
+Tiny::Proto proto;
+
+/* The buffer must be defined globally */
+uint8_t g_buffer[16];
+
+void loop()
+{
+    if (needToSend)
+    {
+        /* define buffer, you want to use */
+        uint8_t buffer[16];
+
+        /* Prepare data you want to send here */
+        buffer[0] = 10;
+        buffer[1] = 20;
+
+        /* Send 2 bytes to remote side */
+        proto.write( buffer, 2 );
+    }
+    int length;
+    length = proto.read( g_buffer, sizeof(g_buffer), TINY_FLAG_NO_WAIT );
+    if ( length > 0 )
+    {
+        /* Parse your data received from remote side here. */
+    }
+}
+@endcode
+
+ \subsubsection arduino_tiny_send_receive2 Variant 2
+
+Second variant: with using special helper to pack the data being sent
+@code{.cpp}
+Tiny::Proto proto;
+
+/* The buffer must be defined globally */
+uint8_t g_buffer[16];
+Tiny::Packet packet(g_buffer, sizeof(g_buffer));
+
+void loop()
+{
+    if (needToSend)
+    {
+        /* define buffer, you want to use */
+        uint8_t buffer[16];
+        /* Create helper object to simplify packing of data being sent */
+        Tiny::Packet packet(buffer, sizeof(buffer));
+
+        /* Pack data you want to send here */
+        packet.put( "message" );
+
+        /* Send message to remote side */
+        proto.write( packet );
+    }
+    int length;
+    length = proto.read( packet, TINY_FLAG_NO_WAIT );
+    if ( length > 0 )
+    {
+        /* Parse your data received from remote side here. */
+        /* For example, read sent ealier in example above "message" */
+        char * str = packet.getString();
+    }
+}
+@endcode
+
+ \subsection arduino_tiny_close Stopping communication
+
+@code{.cpp}
+Tiny::Proto proto;
+
+void loop()
+{
+    ...
+    if ( needToStop )
+    {
+        proto.end();
+    }
+}
+@endcode
+
+
+ \section arduino_tiny_hd Half Duplex Tiny Protocol examples
+
+ Half Duplex Tiny Protocol examples section is applicable when working with \ref HALF_DUPLEX_API,
+ \ref SIMPLE_API and \ref ADVANCED_API.
+
+ \subsection arduino_tiny_hd_init Initialization
+
+@code{.cpp}
+
+uint8_t g_buffer[64];
+
+void onReceiveData(uint8_t *buffer, int len)
+{
+}
+
+Tiny::ProtoHd proto(g_buffer, sizeof(g_buffer), onReceiveData);
+
+void setup()
+{
+    proto.beginToSerial();
+}
+@endcode
+
+ \subsection arduino_tiny_hd_send_receive Sending/Receiving data over protocol
+
+ \subsubsection arduino_tiny_hd_send_receive1 Variant 1
+
+First variant: without using any helpers to work with data
+@code{.cpp}
+uint8_t g_buffer[64];
+
+void onReceiveData(uint8_t *buffer, int len)
+{
+    /* Parse your received data from remote side here. */
+}
+
+Tiny::ProtoHd proto(g_buffer, sizeof(g_buffer), onReceiveData);
+
+void loop()
+{
+    if (needToSend)
+    {
+        /* define buffer, you want to use */
+        uint8_t buffer[16];
+
+        /* Prepare data you want to send here */
+        buffer[0] = 10;
+        buffer[1] = 20;
+
+        /* Send 2 bytes to remote side */
+        proto.write( buffer, 2 );
+    }
+    proto.run();
+    ...
+}
+@endcode
+
+ \subsubsection arduino_tiny_hd_send_receive2 Variant 2
+
+Second variant: with using special helper to pack the data being sent
+@code{.cpp}
+uint8_t g_buffer[64];
+
+void onReceiveData(uint8_t *buffer, int len)
+{
+    /* Parse your received data here. */
+    /* For example, read sent ealier in example above "message" */
+    Tiny::Packet packet(buffer, len);
+    char * str = packet.getString();
+}
+
+Tiny::ProtoHd proto(g_buffer, sizeof(g_buffer), onReceiveData);
+
+void loop()
+{
+    if (needToSend)
+    {
+        /* define buffer, you want to use */
+        uint8_t buffer[16];
+        /* Create helper object to simplify packing of data being sent */
+        Tiny::Packet packet(buffer, sizeof(buffer));
+
+        /* Pack data you want to send here */
+        packet.put( "message" );
+
+        /* Send message to remote side */
+        proto.write( packet );
+    }
+    proto.run();
+    ...
+}
+@endcode
+
+ \subsection arduino_tiny_hd_close Stopping communication
+
+@code{.cpp}
+Tiny::ProtoHd proto(g_buffer, sizeof(g_buffer), onReceiveData);
+
+void loop()
+{
+    ...
+    if ( needToStop )
+    {
+        proto.end();
+    }
+}
+@endcode
+
+*/

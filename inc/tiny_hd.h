@@ -82,7 +82,7 @@ typedef struct STinyHdInit_
 } STinyHdInit;
 
 /**
- * @defgroup HALF_DUPLEX_API Tiny simple API functions
+ * @defgroup HALF_DUPLEX_API Tiny Half Duplex API functions
  * @{
  */
 

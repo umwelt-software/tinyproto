@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['getbyte',['getByte',['../classTiny_1_1Packet.html#a152feac05d3e972f614c17c36bf30513',1,'Tiny::Packet']]],
-  ['getchar',['getChar',['../classTiny_1_1Packet.html#a260645f9d055da878f149a13ecd58844',1,'Tiny::Packet']]],
-  ['getint16',['getInt16',['../classTiny_1_1Packet.html#a7dfed04418564f93dd4d2b4e9144a861',1,'Tiny::Packet']]],
-  ['getstring',['getString',['../classTiny_1_1Packet.html#a8bc9a3b3f41be292f9c5ac566afeb04b',1,'Tiny::Packet']]],
-  ['getuid',['getUid',['../classTiny_1_1Packet.html#a5333df49a8becff438d3e36b0ca8d3f0',1,'Tiny::Packet']]],
-  ['getuint16',['getUint16',['../classTiny_1_1Packet.html#a71765e73adfbc67138f75c2b8ea7d74c',1,'Tiny::Packet']]],
-  ['getuint32',['getUint32',['../classTiny_1_1Packet.html#a5dd4b89cb7224b62d4f0328c8e40f38f',1,'Tiny::Packet']]]
+  ['fcs',['fcs',['../structSTinyRxStatus.html#a609d1743d90eff27819207961850ee48',1,'STinyRxStatus::fcs()'],['../structSTinyTxStatus.html#a48dd8a16aab283ac5fc6d8d77f30e8cc',1,'STinyTxStatus::fcs()']]],
+  ['fcs_5fbits',['fcs_bits',['../structSTinyData.html#a3cf4d6009cc472630e20a68d6fa50186',1,'STinyData']]],
+  ['flags_20for_20tiny_20api_20functions',['Flags for Tiny API functions',['../group__FLAGS__GROUP.html',1,'']]],
+  ['framelen',['framelen',['../structSTinyRxStatus.html#ad9f6055b8e74f10894c48ff2247f51c4',1,'STinyRxStatus::framelen()'],['../structSTinyTxStatus.html#a9f6d1382fec34b6c7daf60d95c5a540d',1,'STinyTxStatus::framelen()']]],
+  ['framesbroken',['framesBroken',['../structSTinyStats.html#abe4f4a9455b532e22f29e60789386130',1,'STinyStats']]],
+  ['framesreceived',['framesReceived',['../structSTinyStats.html#a19dfd3a62dbb9d86f6fb77eb1ea6f871',1,'STinyStats']]],
+  ['framessent',['framesSent',['../structSTinyStats.html#a0bc110aa81a7dea0d0d64e359fb06dc3',1,'STinyStats']]]
 ];

@@ -1,0 +1,63 @@
+\hypertarget{tiny__hd_8h}{}\section{inc/tiny\+\_\+hd.h File Reference}
+\label{tiny__hd_8h}\index{inc/tiny\+\_\+hd.\+h@{inc/tiny\+\_\+hd.\+h}}
+
+
+Tiny Protocol Half Duplex A\+P\+I.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}tiny\+\_\+layer2.\+h\char`\"{}}\\*
+Include dependency graph for tiny\+\_\+hd.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{tiny__hd_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{tiny__hd_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSTinyHdData__}{S\+Tiny\+Hd\+Data\+\_\+}
+\item 
+struct \hyperlink{structSTinyHdInit__}{S\+Tiny\+Hd\+Init\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structSTinyHdData__}{S\+Tiny\+Hd\+Data\+\_\+} \hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data}
+\item 
+typedef struct \hyperlink{structSTinyHdInit__}{S\+Tiny\+Hd\+Init\+\_\+} \hyperlink{tiny__hd_8h_a784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__HALF__DUPLEX__API_ga747e6a3a0b5d2a9e1fe0c143c20057e9}{tiny\+\_\+hd\+\_\+init} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle, \hyperlink{tiny__hd_8h_a784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init} $\ast$init)
+\begin{DoxyCompactList}\small\item\em Initialized communication for Tiny Half Duplex protocol. \end{DoxyCompactList}\item 
+void \hyperlink{group__HALF__DUPLEX__API_ga275846730a88b9654345d5defbda31e7}{tiny\+\_\+hd\+\_\+close} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em stops Tiny Half Duplex state machine \end{DoxyCompactList}\item 
+int \hyperlink{group__HALF__DUPLEX__API_gac962595f09883dea1dd0992a608a17b9}{tiny\+\_\+hd\+\_\+run} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
+\begin{DoxyCompactList}\small\item\em runs receive functions of Tiny Half Duplex protocol. \end{DoxyCompactList}\item 
+int \hyperlink{group__HALF__DUPLEX__API_ga5aad8dcb504b80bac923496f2686a6d6}{tiny\+\_\+send\+\_\+wait\+\_\+ack} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle, void $\ast$buf, uint16\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Sends userdata and waits for acknowledgement from remote side. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Tiny Protocol Half Duplex A\+P\+I. 
+
+This is Tiny Half-\/\+Duplex protocol implementation for microcontrollers. It is built on top of Tiny Protocol (tiny\+\_\+layer2.\+c) 
+
+\subsection{Typedef Documentation}
+\hypertarget{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{}\index{tiny\+\_\+hd.\+h@{tiny\+\_\+hd.\+h}!S\+Tiny\+Hd\+Data@{S\+Tiny\+Hd\+Data}}
+\index{S\+Tiny\+Hd\+Data@{S\+Tiny\+Hd\+Data}!tiny\+\_\+hd.\+h@{tiny\+\_\+hd.\+h}}
+\subsubsection[{S\+Tiny\+Hd\+Data}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf S\+Tiny\+Hd\+Data\+\_\+}  {\bf S\+Tiny\+Hd\+Data}}\label{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}
+This structure contains service data, required for half-\/duplex functioning. \hypertarget{tiny__hd_8h_a784f1a0f0ae7f06da4bc288fa3f22408}{}\index{tiny\+\_\+hd.\+h@{tiny\+\_\+hd.\+h}!S\+Tiny\+Hd\+Init@{S\+Tiny\+Hd\+Init}}
+\index{S\+Tiny\+Hd\+Init@{S\+Tiny\+Hd\+Init}!tiny\+\_\+hd.\+h@{tiny\+\_\+hd.\+h}}
+\subsubsection[{S\+Tiny\+Hd\+Init}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf S\+Tiny\+Hd\+Init\+\_\+}  {\bf S\+Tiny\+Hd\+Init}}\label{tiny__hd_8h_a784f1a0f0ae7f06da4bc288fa3f22408}
+This structure is used for initialization of Tiny Half Duplex protocol. 

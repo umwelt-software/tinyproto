@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tiny_20protocol_20api',['Tiny protocol API',['../index.html',1,'']]]
+  ['arduino_20related_20api_20_28c_2b_2b_29',['Arduino related API (C++)',['../arduino.html',1,'']]]
 ];

@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.5.1</span>
+   &#160;<span id="projectnumber">0.5.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -40,6 +40,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -103,6 +104,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aad47b3053945b29b1b46d76b31b72960"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1Packet.html#aad47b3053945b29b1b46d76b31b72960">Packet</a> (char *buf, size_t <a class="el" href="classTiny_1_1Packet.html#a872f81d4ad35e49b232101c7c12e34f2">size</a>)</td></tr>
 <tr class="separator:aad47b3053945b29b1b46d76b31b72960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac542e1cd0bc08fea60f94ac1db1e1ff4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1Packet.html#ac542e1cd0bc08fea60f94ac1db1e1ff4">Packet</a> (uint8_t *buf, size_t <a class="el" href="classTiny_1_1Packet.html#a872f81d4ad35e49b232101c7c12e34f2">size</a>)</td></tr>
+<tr class="separator:ac542e1cd0bc08fea60f94ac1db1e1ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bfdb9244515ef3dbf1056c1e37d0902"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1Packet.html#a9bfdb9244515ef3dbf1056c1e37d0902">clear</a> ()</td></tr>
 <tr class="separator:a9bfdb9244515ef3dbf1056c1e37d0902"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52c746f604ee6c0e4e78902b4cf710a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1Packet.html#a52c746f604ee6c0e4e78902b4cf710a9">put</a> (uint8_t byte)</td></tr>
@@ -169,6 +172,48 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoHd</b></td></tr
           <td class="memname">Tiny::Packet::Packet </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates packet object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>- pointer to the buffer to store packet data </td></tr>
+    <tr><td class="paramname">size</td><td>- size of the buffer to hold packet data </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>passed buffer must exist all lifecycle of the <a class="el" href="classTiny_1_1Packet.html">Packet</a> object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac542e1cd0bc08fea60f94ac1db1e1ff4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Tiny::Packet::Packet </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
           <td class="paramname"><em>buf</em>, </td>
         </tr>
         <tr>

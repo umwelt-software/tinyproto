@@ -2,64 +2,50 @@
  @file
  @brief Tiny Microcontroller Communication Protocol.
 
- \mainpage Tiny protocol API
+ \mainpage Tiny Protocol
 
  This is Tiny protocol implementation for microcontrollers (Arduino, Stellaris).
 
-# Tiny Protocol
+ \tableofcontents
 
-## Introduction
+ \section introduction Introduction
 
 This protocol is intended to be used in low-memory systems, like
 microcontrollers (Stellaris, Arduino). It is also can be compiled
 for desktop Linux systems, and it is possible to build it for
 Windows.
 
-## Tiny Protocol API.
+ \section api Tiny Protocol API
 
 Linux API supports C-Style functions, while Arduino API supports both
 C-Style and C++ classes. Usage C++ Arduino classes makes easy use of the
 protocol for Arduino projects. Please refer to documentation.
 
-## Tiny Protocol Packet structure.
+ \section packet Packet Structure
 
 Full packet format:
 <pre>
-   8    16     any len     8/16/32  8
- | 7E | UID |  USER DATA  |  FCS  | 7E |
+     8       16       any len    None/8/16/32     8
+ |   7E   |  UID  |  USER DATA  |    FCS     |   7E   |
 </pre>
 
- - 7E is standard packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing.
- - UID can be used for your own needs. This field is intented for use with higher levels protocols.
-This field is optional, you may omit UID parameter in Tiny Protocol API functions.
- - USER DATA of any length
- - FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field. Refer to
-   RFC1662 for examples. FCS field is also optional and can be disabled. But in this case transport
-   errors are not detected.
+ - 7E is packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing.
+   packet delimiter is used by the protocol to find first and last byte of the frame
+   being transmitted.
+ - UID mean unique identifier of the frame. For Half Duplex Tiny Protocol (\ref HALF_DUPLEX_API) it is widely used
+   in acknowledge frames. This field is optional, you may omit UID parameter in \ref SIMPLE_API
+   and \ref ADVANCED_API functions.
+ - USER DATA of any length. This field contains user data with replaced 0x7D and 0x7E bytes by
+   special sequenced as defined in HDLC/PPP framing. Length of data is now limited on buffer
+   used to receive frames and/or 32767 bytes (Tiny Protocol using 16-bit field to store frame
+   length).
+ - FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field, or it
+   can be absent at all. Refer to RFC1662 for examples. FCS field is also optional and can be disabled.
+   But in this case transport errors are not detected.
 
-Each packet can be sent with simple api command:
-@code{.c}
-    int tiny_send(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint32_t flags)
-@endcode
+ \section arduino_section Arduino related documentation
 
-And be received via another simple api command:
-
-@code{.c}
-    int tiny_read(SHdlcData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint32_t flags);
-@endcode
-
-uid parameter is optional and can be be simply NULL. And FCS field can be disabled by calling
-@code{.c}
-    tiny_set_fcs_bits(&handle, 0);
-@endcode
-In this case, UID field and FCS field are not used, and the protocol packet looks as follows:
-   8     any len       8
- | 7E |  USER DATA  | 7E |
-
-So, the protocol itself adds a little overhead to the user data: 2 bytes of packet delimiter
- in the simplest case. And in the case of full packet format (both with UID and 32-bit FCS fields)
-the protocol adds 8 bytes of overhead.
- 
+\ref arduino
 
 */
 

@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.5.1</span>
+   &#160;<span id="projectnumber">0.5.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -40,6 +40,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -100,8 +101,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1a55191980c259f2c760997d9c07cb48"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a55191980c259f2c760997d9c07cb48"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoHd</b> (void *buffer, int bufferSize, void(*onReceive)(uint8_t *buf, int len))</td></tr>
+<tr class="memitem:a1a55191980c259f2c760997d9c07cb48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoHd.html#a1a55191980c259f2c760997d9c07cb48">ProtoHd</a> (void *buffer, int bufferSize, void(*onReceive)(uint8_t *buf, int len))</td></tr>
 <tr class="separator:a1a55191980c259f2c760997d9c07cb48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a112ae02531837a852af7ca3c9a32a7eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoHd.html#a112ae02531837a852af7ca3c9a32a7eb">begin</a> (<a class="el" href="tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> writecb, <a class="el" href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> readcb)</td></tr>
 <tr class="separator:a112ae02531837a852af7ca3c9a32a7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,7 +132,56 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classTiny_1_1ProtoHd.html">ProtoHd</a> class incapsulates Half Duplex Protocol functionality. Half Duplex version of the Protocol allows to send messages with confirmation. Remember that you may use always C-style API functions instead C++. Please refer to documentation. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a1a55191980c259f2c760997d9c07cb48"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Tiny::ProtoHd::ProtoHd </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bufferSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void(*)(uint8_t *buf, int len)&#160;</td>
+          <td class="paramname"><em>onReceive</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Initializes <a class="el" href="classTiny_1_1ProtoHd.html">ProtoHd</a> class object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>- buffer to use to store bytes being receive. Buffer size must have the size to fix the packet of maximum size. </td></tr>
+    <tr><td class="paramname">bufferSize</td><td>- size of the buffer to use </td></tr>
+    <tr><td class="paramname">onReceive</td><td>- handler to process the messages being received. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a112ae02531837a852af7ca3c9a32a7eb"></a>
 <div class="memitem">
 <div class="memproto">

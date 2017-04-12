@@ -9,6 +9,8 @@
 \item 
 \hyperlink{classTiny_1_1Packet_aad47b3053945b29b1b46d76b31b72960}{Packet} (char $\ast$buf, size\+\_\+t \hyperlink{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{size})
 \item 
+\hyperlink{classTiny_1_1Packet_ac542e1cd0bc08fea60f94ac1db1e1ff4}{Packet} (uint8\+\_\+t $\ast$buf, size\+\_\+t \hyperlink{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{size})
+\item 
 void \hyperlink{classTiny_1_1Packet_a9bfdb9244515ef3dbf1056c1e37d0902}{clear} ()
 \item 
 void \hyperlink{classTiny_1_1Packet_a52c746f604ee6c0e4e78902b4cf710a9}{put} (uint8\+\_\+t byte)
@@ -74,6 +76,24 @@ Describes packet entity and provides A\+P\+I methods to manipulate the packet.
 \item[{size\+\_\+t}]{size}
 \end{DoxyParamCaption}
 )\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_aad47b3053945b29b1b46d76b31b72960}
+Creates packet object. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ pointer to the buffer to store packet data \\
+\hline
+{\em size} & -\/ size of the buffer to hold packet data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+passed buffer must exist all lifecycle of the \hyperlink{classTiny_1_1Packet}{Packet} object. 
+\end{DoxyNote}
+\hypertarget{classTiny_1_1Packet_ac542e1cd0bc08fea60f94ac1db1e1ff4}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!Packet@{Packet}}
+\index{Packet@{Packet}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
+\subsubsection[{Packet}]{\setlength{\rightskip}{0pt plus 5cm}Tiny\+::\+Packet\+::\+Packet (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t $\ast$}]{buf, }
+\item[{size\+\_\+t}]{size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_ac542e1cd0bc08fea60f94ac1db1e1ff4}
 Creates packet object. 
 \begin{DoxyParams}{Parameters}
 {\em buf} & -\/ pointer to the buffer to store packet data \\
