@@ -2,7 +2,6 @@
 
 Tiny Microcontroller Communication Protocol.
 
-
 1. Introduction
 
 Tiny Protocol is layer 2 simple protocol. It is intended to be used in low-memory systems,
@@ -33,3 +32,5 @@ for sending from parallel threads. Please, not that read operations are not thre
  * Sending and receiving the frames of maximum 64K size.
  * Low memory consumptions (36 bytes for Tiny Protocol engine)
 
+For more information, please refer to [Documentation](http://lexus2k.github.io/tinyproto)
+Please refer to [Arduino version](https://github.com/lexus2k/arduino-protocol) if you need to add library to Arduino IDE.
