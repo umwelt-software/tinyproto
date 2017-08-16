@@ -158,6 +158,7 @@ arduino-pkg:
 	@cp -rf -L ./src/lib/* $(ARDUINO_DIR)/src/proto/
 	@cp -rf -L ./tools $(ARDUINO_DIR)/
 	@cp -f -L ./inc/*.h $(ARDUINO_DIR)/src/proto/
+	@cp -f -L ./inc/serial_api.h $(ARDUINO_DIR)/src/proto/serial/
 	@cp -f -L ./inc/os/arduino/*.h $(ARDUINO_DIR)/src/proto/
 	@mv $(ARDUINO_DIR)/library.properties.in $(ARDUINO_DIR)/library.properties
 	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_DIR)/library.properties
