@@ -7,7 +7,8 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classTiny_1_1ProtoHd_a1a55191980c259f2c760997d9c07cb48}{Proto\+Hd} (void $\ast$buffer, int buffer\+Size, void($\ast$on\+Receive)(uint8\+\_\+t $\ast$buf, int len))
+\hypertarget{classTiny_1_1ProtoHd_a1a55191980c259f2c760997d9c07cb48}{}{\bfseries Proto\+Hd} (void $\ast$buffer, int buffer\+Size, void($\ast$on\+Receive)(uint8\+\_\+t $\ast$buf, int len))\label{classTiny_1_1ProtoHd_a1a55191980c259f2c760997d9c07cb48}
+
 \item 
 void \hyperlink{classTiny_1_1ProtoHd_a112ae02531837a852af7ca3c9a32a7eb}{begin} (\hyperlink{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
 \item 
@@ -39,27 +40,6 @@ bool \hyperlink{classTiny_1_1ProtoHd_a4110a0112548d5e47d312d190930ad20}{enable\+
 
 \subsection{Detailed Description}
 \hyperlink{classTiny_1_1ProtoHd}{Proto\+Hd} class incapsulates Half Duplex Protocol functionality. Half Duplex version of the Protocol allows to send messages with confirmation. Remember that you may use always C-\/style A\+P\+I functions instead C++. Please refer to documentation. 
-
-\subsection{Constructor \& Destructor Documentation}
-\hypertarget{classTiny_1_1ProtoHd_a1a55191980c259f2c760997d9c07cb48}{}\index{Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}!Proto\+Hd@{Proto\+Hd}}
-\index{Proto\+Hd@{Proto\+Hd}!Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}}
-\subsubsection[{Proto\+Hd}]{\setlength{\rightskip}{0pt plus 5cm}Tiny\+::\+Proto\+Hd\+::\+Proto\+Hd (
-\begin{DoxyParamCaption}
-\item[{void $\ast$}]{buffer, }
-\item[{int}]{buffer\+Size, }
-\item[{void($\ast$)(uint8\+\_\+t $\ast$buf, int len)}]{on\+Receive}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1ProtoHd_a1a55191980c259f2c760997d9c07cb48}
-Initializes \hyperlink{classTiny_1_1ProtoHd}{Proto\+Hd} class object. 
-\begin{DoxyParams}{Parameters}
-{\em buffer} & -\/ buffer to use to store bytes being receive. Buffer size must have the size to fix the packet of maximum size. \\
-\hline
-{\em buffer\+Size} & -\/ size of the buffer to use \\
-\hline
-{\em on\+Receive} & -\/ handler to process the messages being received. \\
-\hline
-\end{DoxyParams}
-
 
 \subsection{Member Function Documentation}
 \hypertarget{classTiny_1_1ProtoHd_a112ae02531837a852af7ca3c9a32a7eb}{}\index{Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}!begin@{begin}}

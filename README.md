@@ -31,6 +31,7 @@ for sending from parallel threads. Please, not that read operations are not thre
  * Sending frames with acknowledgement
  * Sending and receiving the frames of maximum 64K size.
  * Low memory consumptions (36 bytes for Tiny Protocol engine)
+ * Tool for communicating with uC devices (with win32 binary)
 
 For more information, please refer to [Documentation](http://lexus2k.github.io/tinyproto).
 

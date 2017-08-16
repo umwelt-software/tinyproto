@@ -46,6 +46,7 @@ var searchData=
   ['tiny_5fsimple_5fsend',['tiny_simple_send',['../group__SIMPLE__API.html#gafae39ccf72f1f22f4dc47bd54998e88c',1,'tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len):&#160;tiny_layer2.c'],['../group__SIMPLE__API.html#gafae39ccf72f1f22f4dc47bd54998e88c',1,'tiny_simple_send(STinyData *handle, uint8_t *pbuf, int len):&#160;tiny_layer2.c']]],
   ['tiny_5fsuccess',['TINY_SUCCESS',['../group__ERROR__FLAGS.html#ga16cd043c890ed1fa381b3a20f75a626c',1,'tiny_layer2.h']]],
   ['tiny_5funlock',['tiny_unlock',['../group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd',1,'tiny_unlock(STinyData *handle):&#160;tiny_layer2.c'],['../group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd',1,'tiny_unlock(STinyData *handle):&#160;tiny_layer2.c']]],
+  ['tinylightprotocol_2eh',['TinyLightProtocol.h',['../TinyLightProtocol_8h.html',1,'']]],
   ['tinypacket_2eh',['TinyPacket.h',['../TinyPacket_8h.html',1,'']]],
   ['tinyprotocol_2eh',['TinyProtocol.h',['../TinyProtocol_8h.html',1,'']]],
   ['tinyprotocolhd_2eh',['TinyProtocolHd.h',['../TinyProtocolHd_8h.html',1,'']]],

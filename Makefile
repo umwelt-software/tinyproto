@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.5.2
+VERSION=0.6.0
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -88,7 +88,7 @@ ifeq ($(CONFIG_ENABLE_STATS),y)
 endif
 
 .PHONY: clean library all install install-lib docs \
-	arduino-pkg unittest check
+	arduino-pkg unittest check release
 
 TARGET_UART = testuart
 
@@ -103,7 +103,10 @@ SRC_UNIT_TEST = \
 
 OBJ_UNIT_TEST = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_UNIT_TEST))))
 
-OBJ_UART = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_UART_TEST))))
+SRC_SPERF = \
+        tools/sperf/sperf.c
+
+OBJ_SPERF = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_SPERF))))
 
 ####################### Compiling library #########################
 
@@ -116,12 +119,13 @@ TARGET_TINY = libtinyp.a
 SRC_TINY = \
         src/lib/crc.c \
         src/lib/tiny_layer2.c \
-	src/lib/tiny_hd.c \
+        src/lib/tiny_light.c \
+        src/lib/tiny_hd.c \
         src/lib/tiny_list.c \
         src/lib/tiny_rq_pool.c \
+        src/lib/serial/serial_linux.c
 
 OBJ_TINY = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TINY))))
-
 
 library: $(OBJ_TINY)
 	@echo SDK_BASEDIR: $(SDK_BASEDIR)
@@ -136,26 +140,12 @@ install-lib: library
 	cp -rf ./include/*.h $(DESTDIR)/usr/include/
 	cp -rf ./include/$(OS)/*.h $(DESTDIR)/usr/include/
 
-####################### ARDUINO LIB TEST ###########################
-
-SRC_TEST_ARDUINO_LIB = \
-        src/lib/crc.c \
-        src/lib/tiny_layer2.c \
-	src/arduino/src/TinyProtocol.cpp \
-	src/arduino/src/TinyProtocolHd.cpp \
-#        src/lib/tiny_request_pool.c \
-#        src/lib/tiny_list.c \
-
-OBJ_TEST_ARDUINO_LIB = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TEST_ARDUINO_LIB))))
-
-test-arduino-lib: $(OBJ_TEST_ARDUINO_LIB)
-
 #####################################################################################################
 ####################### arduino library                                       #######################
 #####################################################################################################
 
 ARDUINO_BASE_LIB=TinyProtocol
-ARDUINO_LIB=TinyProtocol
+ARDUINO_LIB=TinyProto
 
 ARDUINO_BASE_DIR=./src/arduino
 ARDUINO_DIR=./releases/arduino/$(ARDUINO_LIB)
@@ -164,11 +154,33 @@ ARDUINO_BASE_URL=https://github.com/lexus2k/tinyproto/tree/master/releases/ardui
 arduino-pkg:
 	@mkdir -p $(ARDUINO_DIR)
 	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_DIR)/
+	@mkdir -p $(ARDUINO_DIR)/src/proto
+	@cp -rf -L ./src/lib/* $(ARDUINO_DIR)/src/proto/
+	@cp -rf -L ./tools $(ARDUINO_DIR)/
+	@cp -f -L ./inc/*.h $(ARDUINO_DIR)/src/proto/
+	@cp -f -L ./inc/os/arduino/*.h $(ARDUINO_DIR)/src/proto/
 	@mv $(ARDUINO_DIR)/library.properties.in $(ARDUINO_DIR)/library.properties
 	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_DIR)/library.properties
 	@sed -i "s/LIBRARY/$(ARDUINO_LIB)/" $(ARDUINO_DIR)/library.properties
 	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_LIB),g" $(ARDUINO_DIR)/library.properties
 	@echo "arduino package build ... [DONE]"
+
+####################### ARDUINO LIB TEST ###########################
+
+SRC_TEST_ARDUINO_LIB = \
+        $(ARDUINO_DIR)/src/proto/crc.c \
+        $(ARDUINO_DIR)/src/proto/tiny_layer2.c \
+	$(ARDUINO_DIR)/src/TinyProtocol.cpp \
+	$(ARDUINO_DIR)/src/TinyProtocolHd.cpp \
+#        src/lib/tiny_request_pool.c \
+#        src/lib/tiny_list.c \
+
+OBJ_TEST_ARDUINO_LIB = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TEST_ARDUINO_LIB))))
+
+$(OBJ_TEST_ARDUINO_LIB): arduino-pkg
+
+test-arduino-lib: $(OBJ_TEST_ARDUINO_LIB)
+
 
 
 ####################### all      ###################################
@@ -176,7 +188,7 @@ arduino-pkg:
 docs:
 	doxygen doxygen.cfg
 
-all: library docs unittest
+all: library docs unittest sperf
 
 install: install-lib
 	$(STRIP) $(DESTDIR)/$@
@@ -187,7 +199,12 @@ clean:
 	rm -rf releases
 
 unittest: $(OBJ_UNIT_TEST) library
-	$(CXX) $(CCFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L. -L$(BLD) -lm -lpthread -ltinyp -lCppUTest -lCppUTestExt
+	$(CXX) $(CCFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L. -L$(BLD) -lm -pthread -ltinyp -lCppUTest -lCppUTestExt
+
+sperf: $(OBJ_SPERF) library
+	$(CC) $(CCFLAGS) -o $(BLD)/sperf $(OBJ_SPERF) -L. -L$(BLD) -lm -pthread -ltinyp
 
 check: unittest
-	bld/unit_test
+	$(BLD)/unit_test
+
+release: arduino-pkg docs
