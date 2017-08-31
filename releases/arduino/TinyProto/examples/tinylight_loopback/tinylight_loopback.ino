@@ -1,15 +1,19 @@
 /*
- * This example sends back every packet received over UART. 
- * To test this example, just compile it and upload to Arduino controller.
- * Open Serial Monitor in Arduino IDE. send anything typing data around 
- * '~' chars (for example, ~Welcome~ ), and Arduino will send back the packet to you.
- * 
- * TinyProtocol uses some special frame format, that means that it will ignore not valid
- * chars received over UART. Each packet should be in the following format:
- * ~DATA~
- * UID and FCS field are optional. In the example below, they are disabled. Nano version
- * of Tiny protocol supports only simple 1-byte Checksum field. For CRC-16/CRC-32 use
- * Full versions of Tiny protocol.
+ * This example sends back every buffer received over UART.
+ *
+ * !README!
+ * The sketch is developed to perform UART tests between Arduino
+ * and PC.
+ * 1. Burn this program to Arduino
+ * 2. Compile sperf tool (see tools folder) for your system
+ * 3. Connect Arduino TX and RX lines to your PC com port
+ * 4. Run sperf on the PC (use correct port name on your system):
+ *      sperf /dev/ttyUSB0
+ *      sperf COM1
+ * 5. sperf will print the test speed results
+ *
+ * Also, this example demonstrates how to pass data between 2 systems
+ * By default the sketch and sperf works as 115200 speed.
  */
 #include <TinyLightProtocol.h>
 
