@@ -43,14 +43,17 @@ int main(int argc, char *argv[])
     uint8_t outBuffer[4096];
     uint8_t inBuffer[4096];
     STinyLightData tiny;
+    /* Initialize tiny light protocol */
     tiny_light_init(&tiny, SerialSend, SerialReceive, hPort);
     /* Wait for remote side to be ready */
     for (;;)
     {
+        /* Send single byte to remote device */
         if ( tiny_light_send( &tiny, outBuffer, 1 ) < 0 )
         {
             continue;
         }
+        /* Check if we receive byte back */
         int err = tiny_light_read( &tiny, inBuffer, sizeof(inBuffer) );
         if ( err == 1 )
         {
@@ -62,11 +65,15 @@ int main(int argc, char *argv[])
     time_t startTs = time(NULL);
     uint32_t bytesSent = 0;
     uint32_t bytesReceived = 0;
+    /* Run test for 15 seconds */
     while ( time(NULL) < (startTs + 15) )
     {
+        /* Prepare data to send */
         sprintf((char *)outBuffer, "%u TEST IS GOING. MIDDLE SIZE PKT", bytesSent);
         int len = strlen((char *)outBuffer) + 1;
+        /* Send data to remote side */
         tiny_light_send( &tiny, outBuffer, len );
+        /* Wait until the data are sent back to us by remote side */
         int temp = tiny_light_read( &tiny, inBuffer, sizeof(inBuffer) );
         if ( temp == len)
         {

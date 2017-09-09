@@ -109,7 +109,8 @@ extern int tiny_light_send(void *handle, const uint8_t *pbuf, int len);
 /**
  * @brief reads frame from the channel in blocking mode.
  *
- * The function reads user data from communication channel
+ * The function reads user data from communication channel. Returns error if no data on timeout
+ * Timeout is defined by write_block_cb_t, read_block_cb_t functions.
  * @param handle - pointer to Tiny Light data.
  * @param pbuf a const pointer to unsigned char - buffer with data to send
  * @param len an integer argument - length of data to send
