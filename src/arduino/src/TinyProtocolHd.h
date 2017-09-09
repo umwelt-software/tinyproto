@@ -49,9 +49,16 @@ namespace Tiny {
 class ProtoHd
 {
 private:
+    /** The variable contain protocol state */
     STinyHdData         m_data;
 
 public:
+    /**
+     * Initializes ProtoHd object
+     * @param buffer - buffer to store the frames being received.
+     * @param bufferSize - size of the buffer
+     * @param onReceive - callback to call when the frame is received completely.
+     */
     inline ProtoHd(void * buffer,
                    int    bufferSize,
                    void (*onReceive)(uint8_t *buf, int len))
@@ -196,9 +203,13 @@ public:
     bool enableCrc32    ();
 
 private:
+    /** buffer to receive data to */
     void               *m_buffer;
+    /** max buffer size */
     int                 m_bufferSize;
+    /** Callback, when new frame is received */
     void              (*m_onReceive)(uint8_t *buf, int len);
+    /** Internal function */
     static void         onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
 };
