@@ -1,38 +1,91 @@
 # Tiny Protocol
 
-Tiny Microcontroller Communication Protocol.
+## Introduction
 
-1. Introduction
-
-Tiny Protocol is layer 2 simple protocol. It is intended to be used in low-memory systems,
-like microcontrollers (Stellaris, Arduino). It is also can be compiled
-for desktop Linux systems, and it can be built it for
-Windows. All you need is to implement callback for writing and
+Tiny Protocol is layer 2 simple protocol. It is intended to be used for the systems with
+small amount of resources. It is also can be compiled for desktop Linux system, and it can
+be built it for Windows. All you need is to implement callback for writing and
 reading bytes from communication line.
 
-2. Resources required
+## History
 
-Tiny Protocol has low memory consumption. The only memory needed to work is
-a) Memory for Tiny Protocol state machine (36 bytes for Arduino Nano Atmega368p)
-b) Memory to hold data being sent or received.
+To implement communication with synchronization between two microcontrollers, I needed some
+protocol. Passing raw bytes over communication channel has big disadvantages: absence of 
+synchronization, no error correction, that means if some device is connected to another 
+one at any time point, there is a big chance to get some garbage on communication line.
+Thus, the first version of TinyProto appeared. It supports error checking and framing for
+the data being sent. But very soon I realized, that in many cases the communication channels
+are stable enough, but having error detection requires a lot of place for code in uC flash.
+And then TinyProto Light version was implemented.
 
-Tiny protocol has C-Style API, which is suitable for many low-resource systems.
-Also, Arduino version has C++ API, which requires no additional memory.
+## Features
 
-On Desktop systems, which supports mutexes and threads, Tiny Protocol API can be used
-for sending from parallel threads. Please, not that read operations are not thread-safe.
-
-3. Features
-
- * Simple 8-bit checksum to control data validity
- * FCS16 (CCITT-16) to control data validity
- * FCS32 (CCITT-32) to control data validity
- * Using uids with user data
- * Sending frames with acknowledgement
- * Sending and receiving the frames of maximum 64K size.
- * Low memory consumptions (36 bytes for Tiny Protocol engine)
+ * Error detection (absent in TinyProto Light version)
+   * Simple 8-bit checksum
+   * FCS16 (CCITT-16)
+   * FCS32 (CCITT-32)
+ * Passing UID with each frame (absent in TinyProto Light version)
+ * Frame transfer acknowledgement (TinyProto Half Duplex version)
+ * Frames of maximum 64K size.
+ * Low SRAM consumption (36 bytes for Tiny Protocol engine)
+ * Low Flash consumption (many features can be disabled at compilation time)
  * Tool for communicating with uC devices (with win32 binary)
 
-For more information, please refer to [Documentation](http://lexus2k.github.io/tinyproto).
+## Supported platforms
 
-Please refer to [Arduino version](https://github.com/lexus2k/arduino-protocol) if you need to add library to Arduino IDE.
+ * Any platform, where C/C++ compiler is available (C99, C++11)
+
+## TinyProto available implementations
+
+ * TinyProtocol Light (refer to [tiny_light.h](inc/tiny_light.h))
+   * Data framing
+   * No error detection
+   * Only blocking operations
+   * No send confirmation
+ * TinyProtocol (refer to [tiny_layer2.h](inc/tiny_layer2.h))
+   * Simple (no uids, blocking operations) and Full version
+   * Passing uid with the frame (optional)
+   * Error correction support (checksum, FCS16, FCS32)
+   * Blocking and non-blocking APIs
+   * No send confirmation
+ * TinyProtocol Half Duplex (refer to [tiny_hd.h](inc/tiny_hd.h))
+   * Based on top of TinyProtocol
+   * Additionally to TinyProtocol supports frame acknowledgements
+
+## Setting up for Arduino
+
+ * Download source from https://github.com/lexus2k/tinyproto
+ * Put the /tinyproto/releases/arduino/ folder content  to Arduino/libraries/ folder
+
+## Running demo example for Arduino
+
+ * Connect your Arduino board to PC
+ * Burn and run tinylight_loopback sketch on Arduino board
+ * Run sperf tool on the PC
+
+sperf sends frames to Arduino board, and tinylight_loopback sketch sends all frames back to PC.
+
+
+For more information about this library, please, visit https://github.com/lexus2k/tinyproto.
+Doxygen documentation can be found at [github.io site](http://lexus2k.github.io/tinyproto).
+If you found any problem or have any idea, please, report to Issues section.
+
+## License
+
+Copyright 2016-2017 (C) Alexey Dynda
+
+This file is part of Tiny Protocol Library.
+
+Protocol Library is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Protocol Library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
+
