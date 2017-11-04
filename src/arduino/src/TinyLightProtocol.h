@@ -46,7 +46,7 @@ namespace Tiny {
 class ProtoLight
 {
 public:
-    inline ProtoLight() { }
+    inline ProtoLight(): m_data{0} { }
 
     /**
      * Initializes protocol internal variables.

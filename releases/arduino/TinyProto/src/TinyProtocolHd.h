@@ -61,8 +61,8 @@ public:
      */
     inline ProtoHd(void * buffer,
                    int    bufferSize,
-                   void (*onReceive)(uint8_t *buf, int len)):
-				   m_data{0}
+                   void (*onReceive)(uint8_t *buf, int len))
+           :m_data{0}
     {
         m_buffer      = buffer;
         m_bufferSize  = bufferSize;

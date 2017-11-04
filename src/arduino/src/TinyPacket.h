@@ -50,7 +50,7 @@ public:
      * @param size - size of the buffer to hold packet data
      * @note passed buffer must exist all lifecycle of the Packet object.
      */
-    Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_uid=0; m_p = 0; }
+    Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_uid =0; m_p=0; }
 
     /**
      * Clears Packet state. Buffer and its size are preserved.
