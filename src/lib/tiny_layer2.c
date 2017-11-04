@@ -1000,7 +1000,7 @@ int tiny_get_stat(STinyData *handle, STinyStats *stat)
 
 int tiny_clear_stat(STinyData *handle)
 {
-    if (handle)
+    if (!handle)
         return TINY_ERR_INVALID_DATA;
     handle->stat.bytesSent = 0;
     handle->stat.bytesReceived = 0;
