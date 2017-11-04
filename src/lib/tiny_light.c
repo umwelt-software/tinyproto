@@ -111,7 +111,7 @@ static int tiny_send_byte(void *handle, uint8_t byte)
  */
 int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 {
-    int result = TINY_NO_ERROR;
+    int result;
 
     uint8_t byte = FLAG_SEQUENCE;
     result = ((STinyLightData *)handle)->write_func(((STinyLightData *)handle)->pdata, &byte, 1);

@@ -34,7 +34,7 @@ namespace Tiny
 
 void ProtoHd::onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int size)
 {
-    ((ProtoHd*)handle)->m_onReceive(pdata, size);
+    (reinterpret_cast<ProtoHd*>(handle))->m_onReceive(pdata, size);
 }
 
 void ProtoHd::begin(write_block_cb_t writecb,

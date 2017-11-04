@@ -24,10 +24,10 @@ uint32_t TinyHelper::s_handleOffset;
 
 TinyHelper::TinyHelper(FakeChannel * channel,
                        const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb)
+    :m_onRxFrameCb(onRxFrameCb)
 {
     s_handleOffset = (uint8_t *)this - (uint8_t *)(&m_handle);
     m_channel = channel;
-    m_onRxFrameCb = onRxFrameCb;
     tiny_init( &m_handle, TinyHelper::write_data, TinyHelper::read_data, this );
     if (m_onRxFrameCb)
     {

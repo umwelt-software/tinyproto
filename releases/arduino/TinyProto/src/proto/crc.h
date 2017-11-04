@@ -42,7 +42,7 @@ uint16_t crc16(uint16_t crc, uint8_t* data, int data_length);
 #define PPPINITFCS32    0xffffffff   /* Initial FCS value */
 #define PPPGOODFCS32    0xdebb20e3   /* Good final FCS value */
 uint32_t crc32_byte(uint32_t crc, uint8_t data);
-uint32_t crc32(uint32_t crc, uint8_t* data, int data_length);
+uint32_t crc32(uint32_t crc, uint8_t *buf, int size);
 #endif
 
 #endif

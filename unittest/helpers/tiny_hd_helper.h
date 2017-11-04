@@ -35,7 +35,7 @@ private:
     STinyHdData   m_handle;
 public:
     TinyHelperHd(FakeChannel * channel,
-                 int   rxbufferSize,
+                 int rxBufferSize,
                  const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb = nullptr,
                  bool  multithread_mode = false);
     ~TinyHelperHd();

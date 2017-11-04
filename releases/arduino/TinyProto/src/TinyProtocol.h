@@ -47,7 +47,7 @@ namespace Tiny {
 class Proto
 {
 public:
-    inline Proto() { m_uidEnabled = false; }
+    inline Proto(): m_data{0} { m_uidEnabled = false; }
 
     /**
      * Initializes protocol internal variables.

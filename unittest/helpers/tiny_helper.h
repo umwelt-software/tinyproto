@@ -35,7 +35,7 @@ public:
     ~TinyHelper();
     void enableUid();
     int send(uint16_t *uid, uint8_t *buf, int len, uint8_t flags);
-    int read(uint16_t *uid, uint8_t *buf, int len, uint8_t flags);
+    int read(uint16_t *uid, uint8_t *buf, int maxLen, uint8_t flags);
     int on_rx_byte(uint8_t *buf, int len, uint8_t byte);
 private:
     static uint32_t s_handleOffset;

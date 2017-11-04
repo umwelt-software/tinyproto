@@ -50,7 +50,7 @@ public:
      * @param size - size of the buffer to hold packet data
      * @note passed buffer must exist all lifecycle of the Packet object.
      */
-    Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; }
+    Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_uid =0; m_p=0; }
 
     /**
      * Clears Packet state. Buffer and its size are preserved.
@@ -157,19 +157,19 @@ public:
      * @see Proto::disableUid
      * @return 16-bit uid.
      */
-    inline uint16_t getUid   ()        { return m_uid; }
+    inline uint16_t getUid   () const  { return m_uid; }
 
     /**
      * Returns size of payload data in the received packet.
      * @return size of payload data.
      */
-    inline size_t size       ()        { return m_len; }
+    inline size_t size       () const  { return m_len; }
 
     /**
      * Returns maximum size of packet buffer.
      * @return max size of packet buffer.
      */
-    inline size_t maxSize    ()        { return m_size; }
+    inline size_t maxSize    () const  { return m_size; }
 
     /**
      * Returns size of payload data in the received packet.

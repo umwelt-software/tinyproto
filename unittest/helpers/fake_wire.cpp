@@ -20,6 +20,7 @@
 #include "fake_wire.h"
 
 FakeWire::FakeWire()
+    :m_buf{0}
 {
     m_writeptr = 0;
     m_readptr = 0;

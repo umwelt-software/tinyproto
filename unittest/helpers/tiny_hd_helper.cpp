@@ -26,14 +26,13 @@ TinyHelperHd::TinyHelperHd(FakeChannel * channel,
                            int rxBufferSize,
                            const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb,
                            bool  multithread_mode)
+    :m_onRxFrameCb(onRxFrameCb)
+    ,m_forceStop(false)
 {
     s_handleOffset = (uint8_t *)this - (uint8_t *)(&m_handle);
     m_buffer = new uint8_t[rxBufferSize];
     m_channel = channel;
     m_thread = nullptr;
-    m_forceStop = false;
-    m_onRxFrameCb = onRxFrameCb;
-
     STinyHdInit   init = {0};
     init.write_func       = TinyHelperHd::write_data;
     init.read_func        = TinyHelperHd::read_data;
