@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.6.2</span>
+   &#160;<span id="projectnumber">0.6.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -137,7 +137,7 @@ Variant 1</h3>
 <div class="line">        proto.<a class="code" href="classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33">write</a>( buffer, 2 );</div>
 <div class="line">    }</div>
 <div class="line">    <span class="keywordtype">int</span> length;</div>
-<div class="line">    length = proto.<a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>( g_buffer, <span class="keyword">sizeof</span>(g_buffer), <a class="code" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e">TINY_FLAG_NO_WAIT</a> );</div>
+<div class="line">    length = proto.<a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>( g_buffer, <span class="keyword">sizeof</span>(g_buffer), TINY_FLAG_NO_WAIT );</div>
 <div class="line">    <span class="keywordflow">if</span> ( length &gt; 0 )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Parse your data received from remote side here. */</span></div>
@@ -167,7 +167,7 @@ Variant 2</h3>
 <div class="line">        proto.<a class="code" href="classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33">write</a>( packet );</div>
 <div class="line">    }</div>
 <div class="line">    <span class="keywordtype">int</span> length;</div>
-<div class="line">    length = proto.<a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>( packet, <a class="code" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e">TINY_FLAG_NO_WAIT</a> );</div>
+<div class="line">    length = proto.<a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>( packet, TINY_FLAG_NO_WAIT );</div>
 <div class="line">    <span class="keywordflow">if</span> ( length &gt; 0 )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Parse your data received from remote side here. */</span></div>

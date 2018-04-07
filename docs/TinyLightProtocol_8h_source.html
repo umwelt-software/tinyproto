@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.6.2</span>
+   &#160;<span id="projectnumber">0.6.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -128,10 +128,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classTiny_1_1ProtoLight.html">   46</a></span>&#160;<span class="keyword">class </span><a class="code" href="classTiny_1_1ProtoLight.html">ProtoLight</a></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">inline</span> <a class="code" href="classTiny_1_1ProtoLight.html">ProtoLight</a>() { }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">inline</span> <a class="code" href="classTiny_1_1ProtoLight.html">ProtoLight</a>(): m_data{0} { }</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classTiny_1_1ProtoLight.html#ad27dfcef54a8316228469ef0a4267962">begin</a>          (<a class="code" href="tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> writecb,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                         <a class="code" href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> readcb);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classTiny_1_1ProtoLight.html#ad27dfcef54a8316228469ef0a4267962">begin</a>          (write_block_cb_t writecb,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                         read_block_cb_t readcb);</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#ifdef ARDUINO</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
@@ -162,12 +162,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classTiny_1_1ProtoLight_html_acf18a8b73ee6c6394270c903ad7882b8"><div class="ttname"><a href="classTiny_1_1ProtoLight.html#acf18a8b73ee6c6394270c903ad7882b8">Tiny::ProtoLight::read</a></div><div class="ttdeci">int read(char *buf, int size)</div></div>
 <div class="ttc" id="classTiny_1_1ProtoLight_html_ad27dfcef54a8316228469ef0a4267962"><div class="ttname"><a href="classTiny_1_1ProtoLight.html#ad27dfcef54a8316228469ef0a4267962">Tiny::ProtoLight::begin</a></div><div class="ttdeci">void begin(write_block_cb_t writecb, read_block_cb_t readcb)</div></div>
 <div class="ttc" id="classTiny_1_1ProtoLight_html_a50bf63fe1891edda48980ca2893485d7"><div class="ttname"><a href="classTiny_1_1ProtoLight.html#a50bf63fe1891edda48980ca2893485d7">Tiny::ProtoLight::beginToSerial</a></div><div class="ttdeci">void beginToSerial()</div></div>
-<div class="ttc" id="tiny__layer2_8h_html_a7f69e669de5baa69a43ee5cb439a7496"><div class="ttname"><a href="tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a></div><div class="ttdeci">int(* write_block_cb_t)(void *pdata, const uint8_t *buffer, int size)</div><div class="ttdef"><b>Definition:</b> tiny_layer2.h:112</div></div>
 <div class="ttc" id="classTiny_1_1ProtoLight_html_a46a27ee9d0b55c88672c98abf04dbdce"><div class="ttname"><a href="classTiny_1_1ProtoLight.html#a46a27ee9d0b55c88672c98abf04dbdce">Tiny::ProtoLight::write</a></div><div class="ttdeci">int write(char *buf, int size)</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html"><div class="ttname"><a href="classTiny_1_1Packet.html">Tiny::Packet</a></div><div class="ttdef"><b>Definition:</b> TinyPacket.h:44</div></div>
 <div class="ttc" id="classTiny_1_1ProtoLight_html"><div class="ttname"><a href="classTiny_1_1ProtoLight.html">Tiny::ProtoLight</a></div><div class="ttdef"><b>Definition:</b> TinyLightProtocol.h:46</div></div>
 <div class="ttc" id="classTiny_1_1ProtoLight_html_a948b2a0e37177b7434581adc64b36497"><div class="ttname"><a href="classTiny_1_1ProtoLight.html#a948b2a0e37177b7434581adc64b36497">Tiny::ProtoLight::end</a></div><div class="ttdeci">void end()</div></div>
-<div class="ttc" id="tiny__layer2_8h_html_ae3d867e030f59de94508902f2b84a7ec"><div class="ttname"><a href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a></div><div class="ttdeci">int(* read_block_cb_t)(void *pdata, uint8_t *buffer, int size)</div><div class="ttdef"><b>Definition:</b> tiny_layer2.h:123</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

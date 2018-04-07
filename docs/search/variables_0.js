@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['bytesreceived',['bytesReceived',['../structSTinyStats.html#ab58c342d0fc862c193bff6f71dc725ac',1,'STinyStats']]],
-  ['bytessent',['bytesSent',['../structSTinyStats.html#a3ee26fa17e5afd758b4c7f2086bc0cbc',1,'STinyStats']]]
+  ['element',['element',['../structtiny__request__.html#a02c8fb6d26d0cfb0264423a1cb643159',1,'tiny_request_']]]
 ];

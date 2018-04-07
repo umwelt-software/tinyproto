@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.6.2</span>
+   &#160;<span id="projectnumber">0.6.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -99,7 +99,7 @@ Collaboration diagram for STinyData:</div>
 <div class="dyncontent">
 <div class="center"><img src="structSTinyData__coll__graph.png" border="0" usemap="#STinyData_coll__map" alt="Collaboration graph"/></div>
 <map name="STinyData_coll__map" id="STinyData_coll__map">
-<area shape="rect" id="node2" href="structSTinyTxStatus.html" title="STinyTxStatus" alt="" coords="5,5,115,32"/><area shape="rect" id="node3" href="structSTinyRxStatus.html" title="STinyRxStatus" alt="" coords="139,5,250,32"/><area shape="rect" id="node4" href="structSTinyStats.html" title="STinyStats" alt="" coords="274,5,361,32"/></map>
+<area shape="rect" id="node2" href="structSTinyTxStatus.html" title="STinyTxStatus" alt="" coords="5,5,115,32"/><area shape="rect" id="node3" href="structSTinyRxStatus.html" title="STinyRxStatus" alt="" coords="139,5,250,32"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -108,14 +108,14 @@ Public Attributes</h2></td></tr>
 void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a3ac48d44af9b2912dd980c7377a020be">pdata</a></td></tr>
 <tr class="memdesc:a3ac48d44af9b2912dd980c7377a020be"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to application defined data, passed during protocol initialization - absent in Arduino version <br /></td></tr>
 <tr class="separator:a3ac48d44af9b2912dd980c7377a020be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16ba8c9e60d6aee3fcd4909f85561f3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSTinyStats.html">STinyStats</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a16ba8c9e60d6aee3fcd4909f85561f3d">stat</a></td></tr>
+<tr class="memitem:a16ba8c9e60d6aee3fcd4909f85561f3d"><td class="memItemLeft" align="right" valign="top">STinyStats&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a16ba8c9e60d6aee3fcd4909f85561f3d">stat</a></td></tr>
 <tr class="separator:a16ba8c9e60d6aee3fcd4909f85561f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26c40b0b7e18776af99745624c460c5a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26c40b0b7e18776af99745624c460c5a"></a>
-<a class="el" href="tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a26c40b0b7e18776af99745624c460c5a">write_func</a></td></tr>
+write_block_cb_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a26c40b0b7e18776af99745624c460c5a">write_func</a></td></tr>
 <tr class="memdesc:a26c40b0b7e18776af99745624c460c5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to platform related write function <br /></td></tr>
 <tr class="separator:a26c40b0b7e18776af99745624c460c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9714041284fd99230be0e7efbc8c60cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9714041284fd99230be0e7efbc8c60cf"></a>
-<a class="el" href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a9714041284fd99230be0e7efbc8c60cf">read_func</a></td></tr>
+read_block_cb_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a9714041284fd99230be0e7efbc8c60cf">read_func</a></td></tr>
 <tr class="memdesc:a9714041284fd99230be0e7efbc8c60cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to platform related read function <br /></td></tr>
 <tr class="separator:a9714041284fd99230be0e7efbc8c60cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3b43db99a1a6bf3d562f932d5a539db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSTinyRxStatus.html">STinyRxStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#aa3b43db99a1a6bf3d562f932d5a539db">rx</a></td></tr>
@@ -126,10 +126,10 @@ void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a3cf4d6009cc472630e20a68d6fa50186">fcs_bits</a></td></tr>
 <tr class="memdesc:a3cf4d6009cc472630e20a68d6fa50186"><td class="mdescLeft">&#160;</td><td class="mdescRight">The field contains number of bits to use for FCS and not available in TINY_MINIMAL configuration. <br /></td></tr>
 <tr class="separator:a3cf4d6009cc472630e20a68d6fa50186"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31ba50154472c11e0d063b0aeef95f4d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a31ba50154472c11e0d063b0aeef95f4d">read_cb</a></td></tr>
+<tr class="memitem:a31ba50154472c11e0d063b0aeef95f4d"><td class="memItemLeft" align="right" valign="top">on_frame_cb_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#a31ba50154472c11e0d063b0aeef95f4d">read_cb</a></td></tr>
 <tr class="memdesc:a31ba50154472c11e0d063b0aeef95f4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to callback function  <a href="#a31ba50154472c11e0d063b0aeef95f4d">More...</a><br /></td></tr>
 <tr class="separator:a31ba50154472c11e0d063b0aeef95f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada334c88e86bfd2c10191f65818c3fb3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#ada334c88e86bfd2c10191f65818c3fb3">write_cb</a></td></tr>
+<tr class="memitem:ada334c88e86bfd2c10191f65818c3fb3"><td class="memItemLeft" align="right" valign="top">on_frame_cb_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyData.html#ada334c88e86bfd2c10191f65818c3fb3">write_cb</a></td></tr>
 <tr class="memdesc:ada334c88e86bfd2c10191f65818c3fb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to callback function to get data being sent  <a href="#ada334c88e86bfd2c10191f65818c3fb3">More...</a><br /></td></tr>
 <tr class="separator:ada334c88e86bfd2c10191f65818c3fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa004bdc7db38cbbef4df4a4d94ca6a4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa004bdc7db38cbbef4df4a4d94ca6a4b"></a>
@@ -145,7 +145,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> STinyData::read_cb</td>
+          <td class="memname">on_frame_cb_t STinyData::read_cb</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -173,11 +173,11 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structSTinyStats.html">STinyStats</a> STinyData::stat</td>
+          <td class="memname">STinyStats STinyData::stat</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structSTinyStats.html">STinyStats</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>STinyStats </dd></dl>
 
 </div>
 </div>
@@ -199,7 +199,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="tiny__layer2_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> STinyData::write_cb</td>
+          <td class="memname">on_frame_cb_t STinyData::write_cb</td>
         </tr>
       </table>
 </div><div class="memdoc">

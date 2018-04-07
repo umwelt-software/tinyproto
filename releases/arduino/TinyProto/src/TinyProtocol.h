@@ -153,8 +153,8 @@ public:
 
     /**
      * Reads packet from communication channel.
-     * @param pkt - Packet object to put data to
-     * @param flags - @ref FLAGS_GROUP
+     * @param pkt   Packet object to put data to
+     * @param flags @ref FLAGS_GROUP
      * @see Packet
      * @return negative value in case of error
      *         zero if nothing is read

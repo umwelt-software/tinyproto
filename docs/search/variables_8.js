@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['read_5fcb',['read_cb',['../structSTinyData.html#a31ba50154472c11e0d063b0aeef95f4d',1,'STinyData']]],
-  ['read_5ffunc',['read_func',['../structSTinyHdInit__.html#a5de352b11ca7915737bc459cde7c566d',1,'STinyHdInit_::read_func()'],['../structSTinyData.html#a9714041284fd99230be0e7efbc8c60cf',1,'STinyData::read_func()']]],
-  ['rx',['rx',['../structSTinyData.html#aa3b43db99a1a6bf3d562f932d5a539db',1,'STinyData']]]
+  ['sentbytes',['sentbytes',['../structSTinyTxStatus.html#ab5074839815ccf15744e258ce4816c06',1,'STinyTxStatus']]],
+  ['stat',['stat',['../structSTinyData.html#a16ba8c9e60d6aee3fcd4909f85561f3d',1,'STinyData']]],
+  ['state',['state',['../structtiny__request__.html#a019207b55569a48a82a2922dd3cc7eb2',1,'tiny_request_']]]
 ];

@@ -27,11 +27,11 @@ int \hyperlink{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}{tiny\+\_
 \begin{DoxyCompactList}\small\item\em locks Tiny state machine for send operations \end{DoxyCompactList}\item 
 void \hyperlink{group__ADVANCED__API_gae4bfad55a4ef5814a5af50f044f6d7cd}{tiny\+\_\+unlock} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \begin{DoxyCompactList}\small\item\em unlock Tiny state machine for send operations \end{DoxyCompactList}\item 
-int \hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} read\+\_\+cb, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} send\+\_\+cb)
+int \hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, on\+\_\+frame\+\_\+cb\+\_\+t read\+\_\+cb, on\+\_\+frame\+\_\+cb\+\_\+t send\+\_\+cb)
 \begin{DoxyCompactList}\small\item\em set callbacks for processing frames The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received. \end{DoxyCompactList}\item 
-int \hyperlink{group__ADVANCED__API_gabe38a1f81966f6901eb2f6969b568298}{tiny\+\_\+get\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$read\+\_\+cb, \hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$send\+\_\+cb)
+int \hyperlink{group__ADVANCED__API_gabe38a1f81966f6901eb2f6969b568298}{tiny\+\_\+get\+\_\+callbacks} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, on\+\_\+frame\+\_\+cb\+\_\+t $\ast$read\+\_\+cb, on\+\_\+frame\+\_\+cb\+\_\+t $\ast$send\+\_\+cb)
 \begin{DoxyCompactList}\small\item\em returns callbacks assigned for frame processing The function returns set callbacks. \end{DoxyCompactList}\item 
-int \hyperlink{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{structSTinyStats}{S\+Tiny\+Stats} $\ast$stat)
+int \hyperlink{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}{tiny\+\_\+get\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, S\+Tiny\+Stats $\ast$stat)
 \item 
 int \hyperlink{group__ADVANCED__API_gac75ee03ea3691b0a8bf842d764b342d9}{tiny\+\_\+clear\+\_\+stat} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \end{DoxyCompactItemize}
@@ -54,9 +54,9 @@ The function clears Tiny statistics.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A 
 
-\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
@@ -91,8 +91,8 @@ This function is not thread safe.
 \subsubsection[{tiny\+\_\+get\+\_\+callbacks}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+get\+\_\+callbacks (
 \begin{DoxyParamCaption}
 \item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$}]{read\+\_\+cb, }
-\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t} $\ast$}]{send\+\_\+cb}
+\item[{on\+\_\+frame\+\_\+cb\+\_\+t $\ast$}]{read\+\_\+cb, }
+\item[{on\+\_\+frame\+\_\+cb\+\_\+t $\ast$}]{send\+\_\+cb}
 \end{DoxyParamCaption}
 )}\label{group__ADVANCED__API_gabe38a1f81966f6901eb2f6969b568298}
 
@@ -119,7 +119,7 @@ This function is thread safe.
 \subsubsection[{tiny\+\_\+get\+\_\+stat}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+get\+\_\+stat (
 \begin{DoxyParamCaption}
 \item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{{\bf S\+Tiny\+Stats} $\ast$}]{stat}
+\item[{S\+Tiny\+Stats $\ast$}]{stat}
 \end{DoxyParamCaption}
 )}\label{group__ADVANCED__API_ga5f61774b2027a91f772f31d943acdd3f}
 The function returns statistics per communication connection. 
@@ -130,9 +130,9 @@ The function returns statistics per communication connection.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A 
 
-\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A, T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R. 
@@ -205,7 +205,7 @@ to not perform blocking send operations in receive handler if you\textquotesingl
 This function is not thread safe. 
 \end{DoxyRemark}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{tiny__layer2_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} 
+on\+\_\+frame\+\_\+cb\+\_\+t 
 
 \hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks}. 
 \end{DoxySeeAlso}
@@ -249,19 +249,19 @@ The read data can be considered as valid, only when last buffer is successfully 
 length in bytes of data received if executed successfully T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R if non-\/blocking operation is requested and the channel is busy T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D if writing to the channel failed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A if invalid handle is passed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E if all data do not fit in buffer.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S} 
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S 
 
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A 
 
-\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D 
 
-\hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E 
 
-\hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T 
 
-\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R 
 
-\hyperlink{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+A\+D\+\_\+\+A\+L\+L} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+A\+D\+\_\+\+A\+L\+L 
 \end{DoxySeeAlso}
 \begin{DoxyWarning}{Warning}
 any failed read operation (tiny\+\_\+read\+\_\+buffer), except T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+G\+E case, must be terminated with tiny\+\_\+read\+\_\+terminate. 
@@ -294,19 +294,19 @@ The function initiates receiving of a new frame. It waits for frame start marker
 T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if new frame is detected in communication channel. T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R if nothing is awaiting in the communication channel and function is in non-\/blocking mode T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D if writing to the channel failed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A if invalid handle is passed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C if not valid byte is received
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S} 
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S 
 
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A 
 
-\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R 
 
-\hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+N\+C 
 
-\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D 
 
-\hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T 
 
-\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R 
 \end{DoxySeeAlso}
 \begin{DoxyRemark}{Remarks}
 This function is not thread safe. 
@@ -366,17 +366,17 @@ if flags field is set to T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I
 length in bytes of data sent if executed successfully T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R if non-\/blocking operation is requested and the channel is busy T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D if writing to the channel failed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A if invalid handle is passed
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S} 
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S 
 
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A 
 
-\hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T 
 
-\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D 
 
-\hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T 
 
-\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R 
 \end{DoxySeeAlso}
 \begin{DoxyWarning}{Warning}
 any failed send operation (tiny\+\_\+send\+\_\+buffer, tiny\+\_\+send\+\_\+end), except timeout cases, must be terminated with tiny\+\_\+send\+\_\+terminate, otherwise the thread can be blocked. 
@@ -409,19 +409,19 @@ The function completes sending of a new frame by writing F\+C\+S block and frame
 T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if send frame is completed successfully. T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R if non-\/blocking operation is requested and the channel is busy T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D if writing to the channel failed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A if invalid handle is passed
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S} 
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S 
 
-\hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R} 
+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+O\+R 
 
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A 
 
-\hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T 
 
-\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D 
 
-\hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T 
 
-\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R 
 \end{DoxySeeAlso}
 \begin{DoxyRemark}{Remarks}
 This function is not thread safe.
@@ -451,17 +451,17 @@ The function initiates sending of a new frame by writing frame start marker to c
 T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S if new frame transmission is started successfully T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T if non-\/blocking operation is requested and the channel is busy T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D if writing to the channel failed T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A if invalid handle is passed
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S} 
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+S\+S 
 
-\hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+T\+A 
 
-\hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+U\+T 
 
-\hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D} 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+E\+D 
 
-\hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+I\+T 
 
-\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R} 
+T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R 
 
 \hyperlink{group__ADVANCED__API_gac318682c20279f9f20ffc6f636a7f1c9}{tiny\+\_\+lock} 
 
@@ -493,8 +493,8 @@ This function is to be used, when it is required to reset send state in case of 
 \subsubsection[{tiny\+\_\+set\+\_\+callbacks}]{\setlength{\rightskip}{0pt plus 5cm}int tiny\+\_\+set\+\_\+callbacks (
 \begin{DoxyParamCaption}
 \item[{{\bf S\+Tiny\+Data} $\ast$}]{handle, }
-\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t}}]{read\+\_\+cb, }
-\item[{{\bf on\+\_\+frame\+\_\+cb\+\_\+t}}]{send\+\_\+cb}
+\item[{on\+\_\+frame\+\_\+cb\+\_\+t}]{read\+\_\+cb, }
+\item[{on\+\_\+frame\+\_\+cb\+\_\+t}]{send\+\_\+cb}
 \end{DoxyParamCaption}
 )}\label{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}
 

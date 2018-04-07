@@ -41,6 +41,21 @@
 #define TINY_ESCAPE_CHAR         0x7D
 #define TINY_ESCAPE_BIT          0x20
 
+//////////////////////////////////////////////////////////////////////////////
+
+static int tiny_light_clear_stat(STinyLightData *handle)
+{
+    if (!handle)
+        return TINY_ERR_INVALID_DATA;
+    handle->stat.bytesSent = 0;
+    handle->stat.bytesReceived = 0;
+    handle->stat.framesBroken = 0;
+    handle->stat.framesReceived = 0;
+    handle->stat.framesSent = 0;
+    handle->stat.oosyncBytes = 0;
+    return TINY_NO_ERROR;
+}
+
 /**************************************************************
 *
 *                 OPEN/CLOSE FUNCTIONS
@@ -60,7 +75,7 @@ int tiny_light_init(void *handle,
     ((STinyLightData *)handle)->write_func = write_func;
     ((STinyLightData *)handle)->read_func = read_func;
 #ifdef CONFIG_ENABLE_STATS
-    tiny_clear_stat(handle);
+    tiny_light_clear_stat((STinyLightData *)handle);
 #endif
     return TINY_NO_ERROR;
 }

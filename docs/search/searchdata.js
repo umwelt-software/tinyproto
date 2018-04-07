@@ -4,9 +4,9 @@ var indexSectionsWithContent =
   1: "lpst",
   2: "amt",
   3: "bcdegmoprstw",
-  4: "befhimoprstuw",
-  5: "orsw",
-  6: "frt",
+  4: "efhimoprstuw",
+  5: "s",
+  6: "t",
   7: "at"
 };
 

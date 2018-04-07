@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['uid',['uid',['../structtiny__request__.html#aefa85d07e09d6772963532b6cf1ed125',1,'tiny_request_::uid()'],['../structSTinyHdData__.html#a7084eac08b744ad0aa2624b854866825',1,'STinyHdData_::uid()']]],
-  ['uid_5fsupport',['uid_support',['../structSTinyData.html#aa004bdc7db38cbbef4df4a4d94ca6a4b',1,'STinyData']]]
+  ['write_5fcb',['write_cb',['../structSTinyData.html#ada334c88e86bfd2c10191f65818c3fb3',1,'STinyData']]],
+  ['write_5ffunc',['write_func',['../structSTinyHdInit__.html#a0bd05a4fc43236ff37d67aec4d2a0952',1,'STinyHdInit_::write_func()'],['../structSTinyData.html#a26c40b0b7e18776af99745624c460c5a',1,'STinyData::write_func()']]]
 ];

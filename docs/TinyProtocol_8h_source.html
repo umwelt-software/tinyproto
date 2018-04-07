@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.6.2</span>
+   &#160;<span id="projectnumber">0.6.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -128,10 +128,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classTiny_1_1Proto.html">   47</a></span>&#160;<span class="keyword">class </span><a class="code" href="classTiny_1_1Proto.html">Proto</a></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">inline</span> <a class="code" href="classTiny_1_1Proto.html">Proto</a>() { m_uidEnabled = <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">inline</span> <a class="code" href="classTiny_1_1Proto.html">Proto</a>(): m_data{0} { m_uidEnabled = <span class="keyword">false</span>; }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classTiny_1_1Proto.html#a6f5f4ebec42dc6e679c25e79284d7705">begin</a>          (<a class="code" href="tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> writecb,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                         <a class="code" href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> readcb);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classTiny_1_1Proto.html#a6f5f4ebec42dc6e679c25e79284d7705">begin</a>          (write_block_cb_t writecb,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                         read_block_cb_t readcb);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#ifdef ARDUINO</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
@@ -172,13 +172,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classTiny_1_1Proto.html#ae9f52fa1c4f18981672ad7af12633d4e">end</a>            ();</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33">write</a>          (<span class="keywordtype">char</span>* buf, <span class="keywordtype">int</span> size, uint8_t flags = <a class="code" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">TINY_FLAG_WAIT_FOREVER</a>);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33">write</a>          (<span class="keywordtype">char</span>* buf, <span class="keywordtype">int</span> size, uint8_t flags = TINY_FLAG_WAIT_FOREVER);</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>           (<span class="keywordtype">char</span>* buf, <span class="keywordtype">int</span> size, uint8_t flags = <a class="code" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">TINY_FLAG_WAIT_FOREVER</a>);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>           (<span class="keywordtype">char</span>* buf, <span class="keywordtype">int</span> size, uint8_t flags = TINY_FLAG_WAIT_FOREVER);</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33">write</a>          (<a class="code" href="classTiny_1_1Packet.html">Packet</a> &amp;pkt, uint8_t flags = <a class="code" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">TINY_FLAG_WAIT_FOREVER</a>);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33">write</a>          (<a class="code" href="classTiny_1_1Packet.html">Packet</a> &amp;pkt, uint8_t flags = TINY_FLAG_WAIT_FOREVER);</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>           (<a class="code" href="classTiny_1_1Packet.html">Packet</a> &amp;pkt, uint8_t flags = <a class="code" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">TINY_FLAG_WAIT_FOREVER</a>);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">read</a>           (<a class="code" href="classTiny_1_1Packet.html">Packet</a> &amp;pkt, uint8_t flags = TINY_FLAG_WAIT_FOREVER);</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classTiny_1_1Proto.html#a8992983d7ada115b0aa24db41594947c">disableCrc</a>     ();</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
@@ -205,12 +205,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classTiny_1_1Proto_html_a2ef1c80490d9343b896180ab8b8a6f77"><div class="ttname"><a href="classTiny_1_1Proto.html#a2ef1c80490d9343b896180ab8b8a6f77">Tiny::Proto::enableCrc32</a></div><div class="ttdeci">bool enableCrc32()</div></div>
 <div class="ttc" id="classTiny_1_1Proto_html_acc00ac10509eaa11a83b0b88a2278b3e"><div class="ttname"><a href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">Tiny::Proto::read</a></div><div class="ttdeci">int read(char *buf, int size, uint8_t flags=TINY_FLAG_WAIT_FOREVER)</div></div>
 <div class="ttc" id="TinyPacket_8h_html"><div class="ttname"><a href="TinyPacket_8h.html">TinyPacket.h</a></div><div class="ttdoc">Tiny protocol Arduino API. </div></div>
-<div class="ttc" id="group__FLAGS__GROUP_html_ga3a34267804581c5709d03f52d232b307"><div class="ttname"><a href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">TINY_FLAG_WAIT_FOREVER</a></div><div class="ttdeci">#define TINY_FLAG_WAIT_FOREVER</div><div class="ttdoc">This flag makes tiny API functions perform in blocking mode. </div><div class="ttdef"><b>Definition:</b> tiny_layer2.h:79</div></div>
 <div class="ttc" id="namespaceTiny_html"><div class="ttname"><a href="namespaceTiny.html">Tiny</a></div><div class="ttdef"><b>Definition:</b> TinyLightProtocol.h:39</div></div>
 <div class="ttc" id="classTiny_1_1Proto_html_a794afcac2ca15544247c34b059bc1289"><div class="ttname"><a href="classTiny_1_1Proto.html#a794afcac2ca15544247c34b059bc1289">Tiny::Proto::enableCrc16</a></div><div class="ttdeci">bool enableCrc16()</div></div>
-<div class="ttc" id="structSTinyData_html"><div class="ttname"><a href="structSTinyData.html">STinyData</a></div><div class="ttdef"><b>Definition:</b> tiny_layer2.h:215</div></div>
+<div class="ttc" id="structSTinyData_html"><div class="ttname"><a href="structSTinyData.html">STinyData</a></div><div class="ttdef"><b>Definition:</b> tiny_layer2.h:110</div></div>
 <div class="ttc" id="classTiny_1_1Proto_html_a1dcad822337b6155148b1da9222fdd82"><div class="ttname"><a href="classTiny_1_1Proto.html#a1dcad822337b6155148b1da9222fdd82">Tiny::Proto::beginToSerial</a></div><div class="ttdeci">void beginToSerial()</div><div class="ttdef"><b>Definition:</b> TinyProtocol.h:69</div></div>
-<div class="ttc" id="tiny__layer2_8h_html_a7f69e669de5baa69a43ee5cb439a7496"><div class="ttname"><a href="tiny__layer2_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a></div><div class="ttdeci">int(* write_block_cb_t)(void *pdata, const uint8_t *buffer, int size)</div><div class="ttdef"><b>Definition:</b> tiny_layer2.h:112</div></div>
 <div class="ttc" id="classTiny_1_1Proto_html_aedbc025e1534105134e4a2499d32207c"><div class="ttname"><a href="classTiny_1_1Proto.html#aedbc025e1534105134e4a2499d32207c">Tiny::Proto::beginToSerial3</a></div><div class="ttdeci">void beginToSerial3()</div><div class="ttdef"><b>Definition:</b> TinyProtocol.h:107</div></div>
 <div class="ttc" id="classTiny_1_1Packet_html"><div class="ttname"><a href="classTiny_1_1Packet.html">Tiny::Packet</a></div><div class="ttdef"><b>Definition:</b> TinyPacket.h:44</div></div>
 <div class="ttc" id="classTiny_1_1Proto_html_a9fdd64b8296e27f3205cd0d3ea685eac"><div class="ttname"><a href="classTiny_1_1Proto.html#a9fdd64b8296e27f3205cd0d3ea685eac">Tiny::Proto::enableUid</a></div><div class="ttdeci">void enableUid()</div><div class="ttdef"><b>Definition:</b> TinyProtocol.h:206</div></div>
@@ -223,7 +221,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classTiny_1_1Proto_html_a8992983d7ada115b0aa24db41594947c"><div class="ttname"><a href="classTiny_1_1Proto.html#a8992983d7ada115b0aa24db41594947c">Tiny::Proto::disableCrc</a></div><div class="ttdeci">void disableCrc()</div></div>
 <div class="ttc" id="classTiny_1_1Proto_html_a707f3112e0ca3651d4b0f3df6c19dd8c"><div class="ttname"><a href="classTiny_1_1Proto.html#a707f3112e0ca3651d4b0f3df6c19dd8c">Tiny::Proto::beginToSerial1</a></div><div class="ttdeci">void beginToSerial1()</div><div class="ttdef"><b>Definition:</b> TinyProtocol.h:81</div></div>
 <div class="ttc" id="classTiny_1_1Proto_html_a6d06cd3b1530e4986ce42a9987c522c4"><div class="ttname"><a href="classTiny_1_1Proto.html#a6d06cd3b1530e4986ce42a9987c522c4">Tiny::Proto::beginToSerial2</a></div><div class="ttdeci">void beginToSerial2()</div><div class="ttdef"><b>Definition:</b> TinyProtocol.h:94</div></div>
-<div class="ttc" id="tiny__layer2_8h_html_ae3d867e030f59de94508902f2b84a7ec"><div class="ttname"><a href="tiny__layer2_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a></div><div class="ttdeci">int(* read_block_cb_t)(void *pdata, uint8_t *buffer, int size)</div><div class="ttdef"><b>Definition:</b> tiny_layer2.h:123</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

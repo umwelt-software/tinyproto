@@ -7,7 +7,7 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classTiny_1_1Packet_aad47b3053945b29b1b46d76b31b72960}{Packet} (char $\ast$buf, size\+\_\+t \hyperlink{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{size})
+\hyperlink{classTiny_1_1Packet_aad47b3053945b29b1b46d76b31b72960}{Packet} (char $\ast$buf, size\+\_\+t \hyperlink{classTiny_1_1Packet_a2e866d3f461e67281c3af3dd9e93ba0c}{size})
 \item 
 void \hyperlink{classTiny_1_1Packet_a9bfdb9244515ef3dbf1056c1e37d0902}{clear} ()
 \item 
@@ -39,11 +39,11 @@ uint32\+\_\+t \hyperlink{classTiny_1_1Packet_a5dd4b89cb7224b62d4f0328c8e40f38f}{
 \item 
 char $\ast$ \hyperlink{classTiny_1_1Packet_a8bc9a3b3f41be292f9c5ac566afeb04b}{get\+String} ()
 \item 
-uint16\+\_\+t \hyperlink{classTiny_1_1Packet_a5333df49a8becff438d3e36b0ca8d3f0}{get\+Uid} ()
+uint16\+\_\+t \hyperlink{classTiny_1_1Packet_ae73cb83f0e42b6043479587e4d4371b0}{get\+Uid} () const 
 \item 
-size\+\_\+t \hyperlink{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{size} ()
+size\+\_\+t \hyperlink{classTiny_1_1Packet_a2e866d3f461e67281c3af3dd9e93ba0c}{size} () const 
 \item 
-size\+\_\+t \hyperlink{classTiny_1_1Packet_ac6545b3b5df97d5f1ea1a15abc0570ed}{max\+Size} ()
+size\+\_\+t \hyperlink{classTiny_1_1Packet_a59bd34666fb4d872699d36a8d77b90f5}{max\+Size} () const 
 \item 
 char $\ast$ \hyperlink{classTiny_1_1Packet_a3307ba504caba9c5eee8f1f32cf1a749}{data} ()
 \item 
@@ -147,13 +147,13 @@ signed 16-\/bit integer.
 Reads zero-\/terminated string from the packet. \begin{DoxyReturn}{Returns}
 zero-\/terminated string. 
 \end{DoxyReturn}
-\hypertarget{classTiny_1_1Packet_a5333df49a8becff438d3e36b0ca8d3f0}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Uid@{get\+Uid}}
+\hypertarget{classTiny_1_1Packet_ae73cb83f0e42b6043479587e4d4371b0}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!get\+Uid@{get\+Uid}}
 \index{get\+Uid@{get\+Uid}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
 \subsubsection[{get\+Uid}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t Tiny\+::\+Packet\+::get\+Uid (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a5333df49a8becff438d3e36b0ca8d3f0}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_ae73cb83f0e42b6043479587e4d4371b0}
 Returns 16-\/bit identificator of the packet. \begin{DoxyWarning}{Warning}
 uid is valid only if uid functionality is enabled in the \hyperlink{classTiny_1_1Proto}{Proto} 
 \end{DoxyWarning}
@@ -185,13 +185,13 @@ unsigned 16-\/bit integer.
 Reads next unsigned 32-\/bit integer from the packet. \begin{DoxyReturn}{Returns}
 unsigned 32-\/bit integer. 
 \end{DoxyReturn}
-\hypertarget{classTiny_1_1Packet_ac6545b3b5df97d5f1ea1a15abc0570ed}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!max\+Size@{max\+Size}}
+\hypertarget{classTiny_1_1Packet_a59bd34666fb4d872699d36a8d77b90f5}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!max\+Size@{max\+Size}}
 \index{max\+Size@{max\+Size}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
 \subsubsection[{max\+Size}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t Tiny\+::\+Packet\+::max\+Size (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_ac6545b3b5df97d5f1ea1a15abc0570ed}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a59bd34666fb4d872699d36a8d77b90f5}
 Returns maximum size of packet buffer. \begin{DoxyReturn}{Returns}
 max size of packet buffer. 
 \end{DoxyReturn}
@@ -313,13 +313,13 @@ uid is sent only if this functionality is enabled in the \hyperlink{classTiny_1_
 {\em uid} & -\/ 16-\/bit number to place to the packet. \\
 \hline
 \end{DoxyParams}
-\hypertarget{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!size@{size}}
+\hypertarget{classTiny_1_1Packet_a2e866d3f461e67281c3af3dd9e93ba0c}{}\index{Tiny\+::\+Packet@{Tiny\+::\+Packet}!size@{size}}
 \index{size@{size}!Tiny\+::\+Packet@{Tiny\+::\+Packet}}
 \subsubsection[{size}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t Tiny\+::\+Packet\+::size (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a872f81d4ad35e49b232101c7c12e34f2}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{classTiny_1_1Packet_a2e866d3f461e67281c3af3dd9e93ba0c}
 Returns size of payload data in the received packet. \begin{DoxyReturn}{Returns}
 size of payload data. 
 \end{DoxyReturn}

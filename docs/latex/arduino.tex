@@ -33,7 +33,7 @@ uint8\_t g\_buffer[16];
         proto.\hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write}( buffer, 2 );
     \}
     \textcolor{keywordtype}{int} length;
-    length = proto.\hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read}( g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{TINY\_FLAG\_NO\_WAIT} );
+    length = proto.\hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read}( g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), TINY\_FLAG\_NO\_WAIT );
     \textcolor{keywordflow}{if} ( length > 0 )
     \{
         \textcolor{comment}{/* Parse your data received from remote side here. */}
@@ -65,7 +65,7 @@ uint8\_t g\_buffer[16];
         proto.\hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write}( packet );
     \}
     \textcolor{keywordtype}{int} length;
-    length = proto.\hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read}( packet, \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{TINY\_FLAG\_NO\_WAIT} );
+    length = proto.\hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read}( packet, TINY\_FLAG\_NO\_WAIT );
     \textcolor{keywordflow}{if} ( length > 0 )
     \{
         \textcolor{comment}{/* Parse your data received from remote side here. */}

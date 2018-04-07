@@ -7,7 +7,7 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{classTiny_1_1Proto_a6f5f4ebec42dc6e679c25e79284d7705}{begin} (\hyperlink{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
+void \hyperlink{classTiny_1_1Proto_a6f5f4ebec42dc6e679c25e79284d7705}{begin} (write\+\_\+block\+\_\+cb\+\_\+t writecb, read\+\_\+block\+\_\+cb\+\_\+t readcb)
 \item 
 void \hyperlink{classTiny_1_1Proto_a1dcad822337b6155148b1da9222fdd82}{begin\+To\+Serial} ()
 \item 
@@ -19,13 +19,13 @@ void \hyperlink{classTiny_1_1Proto_aedbc025e1534105134e4a2499d32207c}{begin\+To\
 \item 
 void \hyperlink{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}{end} ()
 \item 
-int \hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write} (char $\ast$buf, int size, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R})
+int \hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write} (char $\ast$buf, int size, uint8\+\_\+t flags=T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R)
 \item 
-int \hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read} (char $\ast$buf, int size, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R})
+int \hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read} (char $\ast$buf, int size, uint8\+\_\+t flags=T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R)
 \item 
-int \hyperlink{classTiny_1_1Proto_ade93766700805a81be6a3317d846b276}{write} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R})
+int \hyperlink{classTiny_1_1Proto_ade93766700805a81be6a3317d846b276}{write} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt, uint8\+\_\+t flags=T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R)
 \item 
-int \hyperlink{classTiny_1_1Proto_aedef629f8b8968db7c8693bb45039651}{read} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R})
+int \hyperlink{classTiny_1_1Proto_aedef629f8b8968db7c8693bb45039651}{read} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt, uint8\+\_\+t flags=T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R)
 \item 
 void \hyperlink{classTiny_1_1Proto_a8992983d7ada115b0aa24db41594947c}{disable\+Crc} ()
 \item 
@@ -49,8 +49,8 @@ void \hyperlink{classTiny_1_1Proto_aff9f3c59f58a8ca527ad0254ab806c5c}{disable\+U
 \index{begin@{begin}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
 \subsubsection[{begin}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Proto\+::begin (
 \begin{DoxyParamCaption}
-\item[{{\bf write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb, }
-\item[{{\bf read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb}
+\item[{write\+\_\+block\+\_\+cb\+\_\+t}]{writecb, }
+\item[{read\+\_\+block\+\_\+cb\+\_\+t}]{readcb}
 \end{DoxyParamCaption}
 )}\label{classTiny_1_1Proto_a6f5f4ebec42dc6e679c25e79284d7705}
 Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}{end()}. 
@@ -167,7 +167,7 @@ Resets protocol state. \hypertarget{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88
 \begin{DoxyParamCaption}
 \item[{char $\ast$}]{buf, }
 \item[{int}]{size, }
-\item[{uint8\+\_\+t}]{flags = {\ttfamily {\bf T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}}}
+\item[{uint8\+\_\+t}]{flags = {\ttfamily TINY\+\_\+FLAG\+\_\+WAIT\+\_\+FOREVER}}
 \end{DoxyParamCaption}
 )}\label{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}
 Reads data block from communication channel. 
@@ -176,7 +176,7 @@ Reads data block from communication channel.
 \hline
 {\em size} & -\/ maximum size of the buffer in bytes. \\
 \hline
-{\em flags} & -\/ \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+P\+I functions} \\
+{\em flags} & -\/ F\+L\+A\+G\+S\+\_\+\+G\+R\+O\+U\+P \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -187,14 +187,14 @@ negative value in case of error zero if nothing is read positive -\/ number of b
 \subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}int Tiny\+::\+Proto\+::read (
 \begin{DoxyParamCaption}
 \item[{{\bf Packet} \&}]{pkt, }
-\item[{uint8\+\_\+t}]{flags = {\ttfamily {\bf T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}}}
+\item[{uint8\+\_\+t}]{flags = {\ttfamily TINY\+\_\+FLAG\+\_\+WAIT\+\_\+FOREVER}}
 \end{DoxyParamCaption}
 )}\label{classTiny_1_1Proto_aedef629f8b8968db7c8693bb45039651}
 Reads packet from communication channel. 
 \begin{DoxyParams}{Parameters}
-{\em pkt} & -\/ \hyperlink{classTiny_1_1Packet}{Packet} object to put data to \\
+{\em pkt} & \hyperlink{classTiny_1_1Packet}{Packet} object to put data to \\
 \hline
-{\em flags} & -\/ \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+P\+I functions} \\
+{\em flags} & F\+L\+A\+G\+S\+\_\+\+G\+R\+O\+U\+P \\
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
@@ -209,7 +209,7 @@ negative value in case of error zero if nothing is read positive -\/ \hyperlink{
 \begin{DoxyParamCaption}
 \item[{char $\ast$}]{buf, }
 \item[{int}]{size, }
-\item[{uint8\+\_\+t}]{flags = {\ttfamily {\bf T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}}}
+\item[{uint8\+\_\+t}]{flags = {\ttfamily TINY\+\_\+FLAG\+\_\+WAIT\+\_\+FOREVER}}
 \end{DoxyParamCaption}
 )}\label{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}
 Sends data block over communication channel. 
@@ -218,7 +218,7 @@ Sends data block over communication channel.
 \hline
 {\em size} & -\/ length of the data in bytes \\
 \hline
-{\em flags} & -\/ flags. \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+P\+I functions} \\
+{\em flags} & -\/ flags. F\+L\+A\+G\+S\+\_\+\+G\+R\+O\+U\+P \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -229,14 +229,14 @@ negative value in case of error zero if nothing is sent positive -\/ should be e
 \subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}int Tiny\+::\+Proto\+::write (
 \begin{DoxyParamCaption}
 \item[{{\bf Packet} \&}]{pkt, }
-\item[{uint8\+\_\+t}]{flags = {\ttfamily {\bf T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+E\+R}}}
+\item[{uint8\+\_\+t}]{flags = {\ttfamily TINY\+\_\+FLAG\+\_\+WAIT\+\_\+FOREVER}}
 \end{DoxyParamCaption}
 )}\label{classTiny_1_1Proto_ade93766700805a81be6a3317d846b276}
 Sends packet over communication channel. 
 \begin{DoxyParams}{Parameters}
 {\em pkt} & -\/ \hyperlink{classTiny_1_1Packet}{Packet} to send \\
 \hline
-{\em flags} & -\/ \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+P\+I functions} \\
+{\em flags} & -\/ F\+L\+A\+G\+S\+\_\+\+G\+R\+O\+U\+P \\
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}

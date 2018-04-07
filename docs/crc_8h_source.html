@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.6.2</span>
+   &#160;<span id="projectnumber">0.6.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -136,7 +136,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#define PPPINITFCS32    0xffffffff   </span><span class="comment">/* Initial FCS value */</span><span class="preprocessor"></span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#define PPPGOODFCS32    0xdebb20e3   </span><span class="comment">/* Good final FCS value */</span><span class="preprocessor"></span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;uint32_t crc32_byte(uint32_t crc, uint8_t data);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;uint32_t crc32(uint32_t crc, uint8_t* data, <span class="keywordtype">int</span> data_length);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;uint32_t crc32(uint32_t crc, uint8_t *buf, <span class="keywordtype">int</span> size);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif</span></div>

@@ -9,7 +9,7 @@
 \item 
 \hyperlink{classTiny_1_1ProtoHd_a1a55191980c259f2c760997d9c07cb48}{Proto\+Hd} (void $\ast$buffer, int buffer\+Size, void($\ast$on\+Receive)(uint8\+\_\+t $\ast$buf, int len))
 \item 
-void \hyperlink{classTiny_1_1ProtoHd_a112ae02531837a852af7ca3c9a32a7eb}{begin} (\hyperlink{tiny__layer2_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__layer2_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
+void \hyperlink{classTiny_1_1ProtoHd_a112ae02531837a852af7ca3c9a32a7eb}{begin} (write\+\_\+block\+\_\+cb\+\_\+t writecb, read\+\_\+block\+\_\+cb\+\_\+t readcb)
 \item 
 void \hyperlink{classTiny_1_1ProtoHd_a0e88ac5b3c67ca67c566742c22180050}{begin\+To\+Serial} ()
 \item 
@@ -66,8 +66,8 @@ Initializes \hyperlink{classTiny_1_1ProtoHd}{Proto\+Hd} object
 \index{begin@{begin}!Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}}
 \subsubsection[{begin}]{\setlength{\rightskip}{0pt plus 5cm}void Tiny\+::\+Proto\+Hd\+::begin (
 \begin{DoxyParamCaption}
-\item[{{\bf write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb, }
-\item[{{\bf read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb}
+\item[{write\+\_\+block\+\_\+cb\+\_\+t}]{writecb, }
+\item[{read\+\_\+block\+\_\+cb\+\_\+t}]{readcb}
 \end{DoxyParamCaption}
 )}\label{classTiny_1_1ProtoHd_a112ae02531837a852af7ca3c9a32a7eb}
 Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1ProtoHd_ac87bf8264895b654025001a0e6014f3f}{end()}. 
