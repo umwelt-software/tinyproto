@@ -43,6 +43,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+#ifdef CONFIG_ENABLE_STATS
 static int tiny_light_clear_stat(STinyLightData *handle)
 {
     if (!handle)
@@ -55,6 +56,7 @@ static int tiny_light_clear_stat(STinyLightData *handle)
     handle->stat.oosyncBytes = 0;
     return TINY_NO_ERROR;
 }
+#endif
 
 /**************************************************************
 *
