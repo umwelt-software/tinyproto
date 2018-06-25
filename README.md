@@ -6,6 +6,9 @@ Tiny Protocol is layer 2 simple protocol. It is intended to be used for the syst
 small amount of resources. It is also can be compiled for desktop Linux system, and it can
 be built it for Windows. All you need is to implement callback for writing and
 reading bytes from communication line.
+With this library you can easy communicate your Arduino with applications
+on PC and other boards. You don't need to think about data synchronization
+between points.
 
 ## History
 
@@ -72,7 +75,7 @@ If you found any problem or have any idea, please, report to Issues section.
 
 ## License
 
-Copyright 2016-2017 (C) Alexey Dynda
+Copyright 2016-2018 (C) Alexey Dynda
 
 This file is part of Tiny Protocol Library.
 

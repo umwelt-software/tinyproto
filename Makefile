@@ -15,7 +15,7 @@ OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
 
-VERSION=0.6.3
+VERSION=0.7.0
 
 ifeq ($(TINYCONF), nano)
     CONFIG_ENABLE_FCS32 ?= n
@@ -34,20 +34,6 @@ else
     CONFIG_ENABLE_STATS ?= y
 endif
 
-# set up compiler and options
-ifeq ($(CROSS_COMPILE),)
-    STRIP ?= strip
-    AR ?= ar
-else
-    CC = $(CROSS_COMPILE)gcc
-    CXX = $(CROSS_COMPILE)g++
-    STRIP = $(CROSS_COMPILE)strip
-    AR = $(CROSS_COMPILE)ar
-endif
-
-export SDK_BASEDIR
-export CROSS_COMPILE
-
 .SUFFIXES: .c .cpp
 
 $(BLD)/%.o: %.c
@@ -58,16 +44,11 @@ $(BLD)/%.o: %.cpp
 	mkdir -p $(dir $@)
 	$(CXX) -std=c++11 $(CCFLAGS) -c $< -o $@
 
-#.cpp.o:
-#	mkdir -p $(BLD)/$(dir $@)
-#	$(CXX) $(CCFLAGS) -c $< -o $@
 # ************* Common defines ********************
 
 INCLUDES += \
-        -I./inc \
-        -I$(SDK_BASEDIR)/usr/include \
-        -I./inc/$(OS)/ \
-        -I$(OS)/include
+        -I./src/proto \
+        -I./tools/serial \
 
 CCFLAGS += -fPIC -g $(INCLUDES) -Wall -Werror
 
@@ -117,13 +98,13 @@ LDFLAGS_TINY = -shared
 TARGET_TINY = libtinyp.a
 
 SRC_TINY = \
-        src/lib/crc.c \
-        src/lib/tiny_layer2.c \
-        src/lib/tiny_light.c \
-        src/lib/tiny_hd.c \
-        src/lib/tiny_list.c \
-        src/lib/tiny_rq_pool.c \
-        src/lib/serial/serial_linux.c
+        src/proto/crc.c \
+        src/proto/tiny_layer2.c \
+        src/proto/tiny_light.c \
+        src/proto/tiny_hd.c \
+        src/proto/tiny_list.c \
+        src/proto/tiny_rq_pool.c \
+        tools/serial/serial_linux.c
 
 OBJ_TINY = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TINY))))
 
@@ -139,50 +120,6 @@ install-lib: library
 	cp -r $(BLD)/libtinyp.a $(DESTDIR)/usr/lib/
 	cp -rf ./include/*.h $(DESTDIR)/usr/include/
 	cp -rf ./include/$(OS)/*.h $(DESTDIR)/usr/include/
-
-#####################################################################################################
-####################### arduino library                                       #######################
-#####################################################################################################
-
-ARDUINO_BASE_LIB=TinyProtocol
-ARDUINO_LIB=TinyProto
-
-ARDUINO_BASE_DIR=./src/arduino
-ARDUINO_DIR=./releases/arduino/$(ARDUINO_LIB)
-ARDUINO_BASE_URL=https://github.com/lexus2k/tinyproto/tree/master/releases/arduino
-
-arduino-pkg:
-	@mkdir -p $(ARDUINO_DIR)
-	@cp -rf -L $(ARDUINO_BASE_DIR)/* $(ARDUINO_DIR)/
-	@mkdir -p $(ARDUINO_DIR)/src/proto
-	@cp -rf -L ./src/lib/* $(ARDUINO_DIR)/src/proto/
-	@cp -rf -L ./tools $(ARDUINO_DIR)/
-	@cp -f -L ./inc/*.h $(ARDUINO_DIR)/src/proto/
-	@cp -f -L ./inc/serial_api.h $(ARDUINO_DIR)/src/proto/serial/
-	@cp -f -L ./inc/os/arduino/*.h $(ARDUINO_DIR)/src/proto/
-	@mv $(ARDUINO_DIR)/library.properties.in $(ARDUINO_DIR)/library.properties
-	@sed -i "s/VERSION/$(VERSION)/" $(ARDUINO_DIR)/library.properties
-	@sed -i "s/LIBRARY/$(ARDUINO_LIB)/" $(ARDUINO_DIR)/library.properties
-	@sed -i "s,ADDRESS,$(ARDUINO_BASE_URL)/$(ARDUINO_LIB),g" $(ARDUINO_DIR)/library.properties
-	@echo "arduino package build ... [DONE]"
-
-####################### ARDUINO LIB TEST ###########################
-
-SRC_TEST_ARDUINO_LIB = \
-        $(ARDUINO_DIR)/src/proto/crc.c \
-        $(ARDUINO_DIR)/src/proto/tiny_layer2.c \
-	$(ARDUINO_DIR)/src/TinyProtocol.cpp \
-	$(ARDUINO_DIR)/src/TinyProtocolHd.cpp \
-#        src/lib/tiny_request_pool.c \
-#        src/lib/tiny_list.c \
-
-OBJ_TEST_ARDUINO_LIB = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TEST_ARDUINO_LIB))))
-
-$(OBJ_TEST_ARDUINO_LIB): arduino-pkg
-
-test-arduino-lib: $(OBJ_TEST_ARDUINO_LIB)
-
-
 
 ####################### all      ###################################
 
@@ -208,4 +145,4 @@ sperf: $(OBJ_SPERF) library
 check: unittest
 	$(BLD)/unit_test
 
-release: arduino-pkg docs
+release: docs
