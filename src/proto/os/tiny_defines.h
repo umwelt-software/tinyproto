@@ -27,7 +27,7 @@
 #include "linux/tiny_defines.h"
 
 #else
-#include "linux/tiny_defines.h"
+#include "mingw32/tiny_defines.h"
 
 #endif
 
