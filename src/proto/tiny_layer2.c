@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2017 (C) Alexey Dynda
+    Copyright 2016-2018 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -954,25 +954,25 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
                 result = TINY_NO_ERROR;
             }
             /* Call read callback if callback is defined */
-            else if ( (result >= 0) && (handle->read_cb) )
+            else if (result >= 0)
             {
                 if (uid)
                 {
-                    handle->read_cb(handle,
-                                    *uid,
-                                    pbuf,
-                                    result);
+                    if (handle->read_cb)
+                    {
+                        handle->read_cb(handle,
+                                        *uid,
+                                        pbuf,
+                                        result);
+                    }
+                    result += sizeof(uint16_t);
                 }
-                else
+                else if (handle->read_cb)
                 {
                     handle->read_cb(handle,
                                     0,
                                     pbuf,
                                     result);
-                }
-                if ( uid )
-                {
-                    result += sizeof(uint16_t);
                 }
             }
 

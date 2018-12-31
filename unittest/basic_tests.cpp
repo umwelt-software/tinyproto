@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2018 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -73,6 +73,11 @@ TEST(BasicTests, TinyLayer2_Send_Receive)
         }
         result = helper2.read( &rxuid, (uint8_t *)rxbuf, sizeof(rxbuf), TINY_FLAG_NO_WAIT);
         CHECK( (result == TINY_NO_ERROR) || (result > 0) );
+        if ( result > 0 )
+        {
+            // strlen + \0 + sizeof(uid)
+            CHECK_EQUAL( (int)strlen((const char*)rxbuf) + 3, result );
+        }
         if (result > 0)
         {
             nreceived++;
