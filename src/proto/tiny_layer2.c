@@ -810,6 +810,7 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
         {
             if (!(flags & TINY_FLAG_WAIT_FOREVER))
             {
+                result = TINY_ERR_AGAIN;
                 break;
             }
             TASK_YIELD();
@@ -936,6 +937,10 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
         if ( handle->rx.blockIndex == 1 )
         {
             result = tiny_read_buffer( handle, (uint8_t *)uid, sizeof(uint16_t), flags );
+            if ( result == TINY_ERR_AGAIN )
+            {
+                result = TINY_NO_ERROR;
+            }
             if ( result == TINY_ERR_DATA_TOO_LARGE )
             {
                 handle->rx.blockIndex++;
@@ -944,8 +949,12 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
         if ( handle->rx.blockIndex == 2 )
         {
             result = tiny_read_buffer( handle, pbuf, len, flags | TINY_FLAG_READ_ALL );
+            if ( result == TINY_ERR_AGAIN )
+            {
+                result = TINY_NO_ERROR;
+            }
             /* Call read callback if callback is defined */
-            if ( (result > 0) && (handle->read_cb) )
+            else if ( (result >= 0) && (handle->read_cb) )
             {
                 if (uid)
                 {
@@ -960,6 +969,10 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
                                     0,
                                     pbuf,
                                     result);
+                }
+                if ( uid )
+                {
+                    result += sizeof(uint16_t);
                 }
             }
 

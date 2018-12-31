@@ -199,7 +199,7 @@ extern int tiny_close(STinyData *handle);
  * @see TINY_FLAG_WAIT_FOREVER
  * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
  * @note - if you need to start send operation in non-blocking mode, call function with TINY_FLAG_LOCK_SEND flag
- *         for the first time. Next calls should be done without TINY_FLAG_LOCK_SEND flag until tiny_send returns
+ *         for the first time. Subsequent calls should be done without TINY_FLAG_LOCK_SEND flag until tiny_send returns
  *         length of send data or error code.
  *
  * @remarks This function is thread safe.
@@ -224,7 +224,8 @@ extern int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, 
  *         TINY_ERR_FAILED         - if something wrong with received data
  *         TINY_BUSY               - if another receive operation is in progress.
  *         TINY_NO_ERROR           - if nothing is received in non-blocking mode
- *         greater 0               - number of received bytes in pbuf buffer.
+ *         greater 0               - number of received bytes in pbuf buffer. If uid is used result includes length of uid
+ *                                   field, but actual payload should be considered as result - sizeof(uint16_t);
  * @remarks This function is not thread safe.
  */
 extern int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags);
@@ -352,7 +353,7 @@ extern int tiny_send_start(STinyData *handle, uint8_t flags);
  * @brief sends user provided data in the body of the frame
  *
  * The function sends user provided data (payload) in the body of the frame.
- * It is possible to send several buffers if the single frame. In this case
+ * It is possible to send several buffers in the single frame. In this case
  * the receiver side will receive all buffers as one data block. Extended read
  * functions allow to read data of the frame to several buffers.
  * If function is in non-blocking mode, it may return immediately with
@@ -484,7 +485,7 @@ extern int tiny_read_start(STinyData * handle, uint8_t flags);
  * @param len - length of the provided buffer in bytes.
  * @param flags - TINY_FLAG_NO_WAIT or TINY_FLAG_WAIT_FOREVER, can be combined with TINY_FLAG_READ_ALL
  * @return length in bytes of data received if executed successfully
- *         TINY_NO_ERROR if non-blocking operation is requested and the channel is busy
+ *         TINY_ERR_AGAIN if non-blocking operation is requested and the channel is busy
  *         TINY_ERR_FAILED if writing to the channel failed
  *         TINY_ERR_INVALID_DATA if invalid handle is passed
  *         TINY_ERR_DATA_TOO_LARGE if all data do not fit in buffer.
@@ -496,7 +497,7 @@ extern int tiny_read_start(STinyData * handle, uint8_t flags);
  * @see TINY_FLAG_NO_WAIT
  * @see TINY_FLAG_WAIT_FOREVER
  * @see TINY_FLAG_READ_ALL
- * @warning any failed read operation (tiny_read_buffer), except TINY_ERR_DATA_TOO_LARGE case,
+ * @warning any failed read operation (tiny_read_buffer), except TINY_ERR_DATA_TOO_LARGE and TINY_ERR_AGAIN case,
  *          must be terminated with tiny_read_terminate.
  * @remarks This function is not thread safe.
  */

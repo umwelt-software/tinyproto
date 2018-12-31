@@ -45,7 +45,7 @@ void Proto::end()
 
 int Proto::write(char* buf, int size, uint8_t flags)
 {
-    return tiny_send(&m_data, 0, (uint8_t*)buf, size, flags); 
+    return tiny_send(&m_data, 0, (uint8_t*)buf, size, flags);
 }
 
 int Proto::read(char *buf, int size, uint8_t flags)
@@ -62,7 +62,7 @@ int Proto::read(Packet &pkt, uint8_t flags)
 {
     int len = tiny_read(&m_data, m_uidEnabled ? &pkt.m_uid : 0, pkt.m_buf, pkt.m_size, flags);
     pkt.m_p = 0;
-    pkt.m_len = len;
+    pkt.m_len = len - (m_uidEnabled ? sizeof(uint16_t) : 0);
     return len;
 }
 

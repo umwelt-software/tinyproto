@@ -61,6 +61,8 @@ extern "C" {
 #define TINY_ERR_BUSY                   (-5)
 /// Out of sync - received some data, which are not part of the frame (tiny_read)
 #define TINY_ERR_OUT_OF_SYNC            (-6)
+/// No data for now, need to retry reading once again
+#define TINY_ERR_AGAIN                  (-7)
 
 /** @} */
 
