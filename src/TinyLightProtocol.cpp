@@ -45,7 +45,7 @@ void ProtoLight::end()
 
 int ProtoLight::write(char* buf, int size)
 {
-    return tiny_light_send(&m_data, (uint8_t*)buf, size); 
+    return tiny_light_send(&m_data, (uint8_t*)buf, size);
 }
 
 int ProtoLight::read(char *buf, int size)
