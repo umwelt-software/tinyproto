@@ -11,7 +11,7 @@ Full packet format\+:
 
 \begin{DoxyItemize}
 \item 7E is packet delimiter (commonly used on layer 2) as defined in H\+D\+L\+C/\+P\+PP framing. packet delimiter is used by the protocol to find first and last byte of the frame being transmitted.
-\item U\+ID mean unique identifier of the frame. For Half Duplex Tiny Protocol (H\+A\+L\+F\+\_\+\+D\+U\+P\+L\+E\+X\+\_\+\+A\+PI) it is widely used in acknowledge frames. This field is optional, you may omit U\+ID parameter in S\+I\+M\+P\+L\+E\+\_\+\+A\+PI and A\+D\+V\+A\+N\+C\+E\+D\+\_\+\+A\+PI functions.
+\item U\+ID mean unique identifier of the frame. For Half Duplex Tiny Protocol (\hyperlink{group__HALF__DUPLEX__API}{Tiny Half Duplex A\+PI functions}) it is widely used in acknowledge frames. This field is optional, you may omit U\+ID parameter in \hyperlink{group__SIMPLE__API}{Tiny simple A\+PI functions} and \hyperlink{group__ADVANCED__API}{Tiny advanced A\+PI functions} functions.
 \item U\+S\+ER D\+A\+TA of any length. This field contains user data with replaced 0x7D and 0x7E bytes by special sequenced as defined in H\+D\+L\+C/\+P\+PP framing. Length of data is now limited on buffer used to receive frames and/or 32767 bytes (Tiny Protocol using 16-\/bit field to store frame length).
 \item F\+CS is standard checksum. Depending on your selection, this is 8-\/bit, 16-\/bit or 32-\/bit field, or it can be absent at all. Refer to R\+F\+C1662 for examples. F\+CS field is also optional and can be disabled. But in this case transport errors are not detected.
 \end{DoxyItemize}\hypertarget{index_arduino_section}{}\section{Arduino related documentation}\label{index_arduino_section}

@@ -1,0 +1,41 @@
+\hypertarget{structSTinyHdInit__}{}\section{S\+Tiny\+Hd\+Init\+\_\+ Struct Reference}
+\label{structSTinyHdInit__}\index{S\+Tiny\+Hd\+Init\+\_\+@{S\+Tiny\+Hd\+Init\+\_\+}}
+
+
+{\ttfamily \#include $<$tiny\+\_\+hd.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}\label{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}} 
+\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}{write\+\_\+func}
+\begin{DoxyCompactList}\small\item\em callback function to write bytes to the physical channel \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}\label{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}} 
+\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}{read\+\_\+func}
+\begin{DoxyCompactList}\small\item\em callback function to read buytes from the physical channel \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}\label{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}} 
+void $\ast$ \hyperlink{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}{pdata}
+\begin{DoxyCompactList}\small\item\em user data for block read/write functions \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdInit___ae2eea5181620dfbb47b60a5073bd5ed2}\label{structSTinyHdInit___ae2eea5181620dfbb47b60a5073bd5ed2}} 
+\hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___ae2eea5181620dfbb47b60a5073bd5ed2}{on\+\_\+frame\+\_\+cb}
+\begin{DoxyCompactList}\small\item\em callback function to process incoming frames \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}\label{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}} 
+void $\ast$ \hyperlink{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}{inbuf}
+\begin{DoxyCompactList}\small\item\em buffer to store input bytes being received. Must be at least maximum packet size over communication channel \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdInit___a0eed47c62a16fa29435d480541989cf6}\label{structSTinyHdInit___a0eed47c62a16fa29435d480541989cf6}} 
+uint16\+\_\+t \hyperlink{structSTinyHdInit___a0eed47c62a16fa29435d480541989cf6}{inbuf\+\_\+size}
+\begin{DoxyCompactList}\small\item\em maximum input buffer size \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdInit___ac7a1ae9314efc1296d78927198f07ac8}\label{structSTinyHdInit___ac7a1ae9314efc1296d78927198f07ac8}} 
+uint16\+\_\+t \hyperlink{structSTinyHdInit___ac7a1ae9314efc1296d78927198f07ac8}{timeout}
+\begin{DoxyCompactList}\small\item\em timeout. Can be set to 0 during initialization. In this case timeout will be set to default \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdInit___a404947e25922fa8400daa924a032897e}\label{structSTinyHdInit___a404947e25922fa8400daa924a032897e}} 
+uint8\+\_\+t \hyperlink{structSTinyHdInit___a404947e25922fa8400daa924a032897e}{multithread\+\_\+mode}
+\begin{DoxyCompactList}\small\item\em multithread mode. At present should be 0 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This structure is used for initialization of Tiny Half Duplex protocol. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/proto/\hyperlink{tiny__hd_8h}{tiny\+\_\+hd.\+h}\end{DoxyCompactItemize}

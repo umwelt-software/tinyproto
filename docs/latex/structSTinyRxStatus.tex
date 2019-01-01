@@ -1,0 +1,41 @@
+\hypertarget{structSTinyRxStatus}{}\section{S\+Tiny\+Rx\+Status Struct Reference}
+\label{structSTinyRxStatus}\index{S\+Tiny\+Rx\+Status@{S\+Tiny\+Rx\+Status}}
+
+
+{\ttfamily \#include $<$tiny\+\_\+layer2.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structSTinyRxStatus_ad9f6055b8e74f10894c48ff2247f51c4}{framelen}
+\begin{DoxyCompactList}\small\item\em Number of bytes in the frame being received. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyRxStatus_aaa956a3e43e12753ef43b76bb51d298e}\label{structSTinyRxStatus_aaa956a3e43e12753ef43b76bb51d298e}} 
+uint8\+\_\+t \hyperlink{structSTinyRxStatus_aaa956a3e43e12753ef43b76bb51d298e}{inprogress}
+\begin{DoxyCompactList}\small\item\em The state of Receive State machine. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyRxStatus_a609d1743d90eff27819207961850ee48}\label{structSTinyRxStatus_a609d1743d90eff27819207961850ee48}} 
+fcs\+\_\+t \hyperlink{structSTinyRxStatus_a609d1743d90eff27819207961850ee48}{fcs}
+\begin{DoxyCompactList}\small\item\em The field contains calculated checksum and not available in T\+I\+N\+Y\+\_\+\+M\+I\+N\+I\+M\+AL configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This structure describes the state of Receive State machine. \begin{DoxyWarning}{Warning}
+This is for internal use only, and should not be accessed directly from the application. 
+\end{DoxyWarning}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structSTinyRxStatus_ad9f6055b8e74f10894c48ff2247f51c4}\label{structSTinyRxStatus_ad9f6055b8e74f10894c48ff2247f51c4}} 
+\index{S\+Tiny\+Rx\+Status@{S\+Tiny\+Rx\+Status}!framelen@{framelen}}
+\index{framelen@{framelen}!S\+Tiny\+Rx\+Status@{S\+Tiny\+Rx\+Status}}
+\subsubsection{\texorpdfstring{framelen}{framelen}}
+{\footnotesize\ttfamily int S\+Tiny\+Rx\+Status\+::framelen}
+
+
+
+Number of bytes in the frame being received. 
+
+This value becomes valid only when T\+I\+N\+Y\+\_\+\+R\+X\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+ND is reached. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/proto/\hyperlink{tiny__layer2_8h}{tiny\+\_\+layer2.\+h}\end{DoxyCompactItemize}

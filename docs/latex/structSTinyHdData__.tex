@@ -1,0 +1,48 @@
+\hypertarget{structSTinyHdData__}{}\section{S\+Tiny\+Hd\+Data\+\_\+ Struct Reference}
+\label{structSTinyHdData__}\index{S\+Tiny\+Hd\+Data\+\_\+@{S\+Tiny\+Hd\+Data\+\_\+}}
+
+
+{\ttfamily \#include $<$tiny\+\_\+hd.\+h$>$}
+
+
+
+Collaboration diagram for S\+Tiny\+Hd\+Data\+\_\+\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=347pt]{structSTinyHdData____coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSTinyHdData___a0df5a323cbbfd49fb138b14bca73f14c}\label{structSTinyHdData___a0df5a323cbbfd49fb138b14bca73f14c}} 
+\hyperlink{structSTinyData}{S\+Tiny\+Data} \hyperlink{structSTinyHdData___a0df5a323cbbfd49fb138b14bca73f14c}{handle}
+\begin{DoxyCompactList}\small\item\em Original \hyperlink{structSTinyData}{S\+Tiny\+Data} structure. It is used to control lower level. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdData___abf8a0eb5006769a92adc186554a3a1c0}\label{structSTinyHdData___abf8a0eb5006769a92adc186554a3a1c0}} 
+\hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdData___abf8a0eb5006769a92adc186554a3a1c0}{on\+\_\+frame\+\_\+cb}
+\begin{DoxyCompactList}\small\item\em Callback to process received frames. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdData___a69a6bb34b580bcfa5e13112cb7652d1d}\label{structSTinyHdData___a69a6bb34b580bcfa5e13112cb7652d1d}} 
+void $\ast$ \hyperlink{structSTinyHdData___a69a6bb34b580bcfa5e13112cb7652d1d}{inbuf}
+\begin{DoxyCompactList}\small\item\em Buffer to store frames being received. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdData___adbad190a4b54eccd4da6f3c3305a54f1}\label{structSTinyHdData___adbad190a4b54eccd4da6f3c3305a54f1}} 
+uint16\+\_\+t \hyperlink{structSTinyHdData___adbad190a4b54eccd4da6f3c3305a54f1}{inbuf\+\_\+size}
+\begin{DoxyCompactList}\small\item\em maximum size of Rx buffer \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdData___a7ca4e5b23cf480d93317245010bcbe73}\label{structSTinyHdData___a7ca4e5b23cf480d93317245010bcbe73}} 
+uint16\+\_\+t \hyperlink{structSTinyHdData___a7ca4e5b23cf480d93317245010bcbe73}{timeout}
+\begin{DoxyCompactList}\small\item\em Timeout for operations with acknowledge. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdData___a7084eac08b744ad0aa2624b854866825}\label{structSTinyHdData___a7084eac08b744ad0aa2624b854866825}} 
+uint16\+\_\+t \hyperlink{structSTinyHdData___a7084eac08b744ad0aa2624b854866825}{uid}
+\begin{DoxyCompactList}\small\item\em field used to store temporary uid \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyHdData___a37dca10adb0dd210f02365b7fa20a598}\label{structSTinyHdData___a37dca10adb0dd210f02365b7fa20a598}} 
+uint8\+\_\+t \hyperlink{structSTinyHdData___a37dca10adb0dd210f02365b7fa20a598}{multithread\+\_\+mode}
+\begin{DoxyCompactList}\small\item\em only single thread mode is supporte now. Should be zero \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This structure contains service data, required for half-\/duplex functioning. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/proto/\hyperlink{tiny__hd_8h}{tiny\+\_\+hd.\+h}\end{DoxyCompactItemize}

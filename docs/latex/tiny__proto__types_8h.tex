@@ -1,0 +1,141 @@
+\hypertarget{tiny__proto__types_8h}{}\section{src/proto/tiny\+\_\+proto\+\_\+types.h File Reference}
+\label{tiny__proto__types_8h}\index{src/proto/tiny\+\_\+proto\+\_\+types.\+h@{src/proto/tiny\+\_\+proto\+\_\+types.\+h}}
+
+
+Tiny protocol Types.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}os/tiny\+\_\+defines.\+h\char`\"{}}\newline
+Include dependency graph for tiny\+\_\+proto\+\_\+types.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=249pt]{tiny__proto__types_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{tiny__proto__types_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSTinyStats}{S\+Tiny\+Stats}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__ERROR__FLAGS_ga16cd043c890ed1fa381b3a20f75a626c}{T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+SS}~(1)
+\begin{DoxyCompactList}\small\item\em Tiny operation successful. Only tiny\+\_\+send\+\_\+start and tiny\+\_\+read\+\_\+start functions return this code. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_ga69c869a686b67bf0b7b8115599515d61}{T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+OR}~(0)
+\begin{DoxyCompactList}\small\item\em No error. For tiny\+\_\+send and tiny\+\_\+read functions, this means, no data sent or received. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_ga84e6ca143550038e1a71cf36078d1926}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED}~(-\/1)
+\begin{DoxyCompactList}\small\item\em Timeout. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_gac9ba8076a1eb8613e8d1f07629ff0cd1}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+UT}~(-\/2)
+\begin{DoxyCompactList}\small\item\em Timeout happened. The function must be called once again. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_ga7bbe7440d11ad304b0af68e011f4eab7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE}~(-\/3)
+\begin{DoxyCompactList}\small\item\em Data too large to fit the user buffer, valid for tiny\+\_\+read function. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_ga541a9e67a84e39595ad647d641c4df2e}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+TA}~(-\/4)
+\begin{DoxyCompactList}\small\item\em Some invalid data passed to Tiny A\+PI function. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_ga9b3e170e1c6ce269f216ef4a1ac61995}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+SY}~(-\/5)
+\begin{DoxyCompactList}\small\item\em A\+PI function detected that operation cannot be performed right now. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_gae1949de45d9c478830dad9c9b996193a}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+O\+U\+T\+\_\+\+O\+F\+\_\+\+S\+Y\+NC}~(-\/6)
+\begin{DoxyCompactList}\small\item\em Out of sync -\/ received some data, which are not part of the frame (tiny\+\_\+read) \end{DoxyCompactList}\item 
+\#define \hyperlink{group__ERROR__FLAGS_gab15347e8e9f90d709d94d9c151d505b7}{T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+A\+G\+A\+IN}~(-\/7)
+\begin{DoxyCompactList}\small\item\em No data for now, need to retry reading once again. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+N\+O\+\_\+\+W\+A\+IT}~(0)
+\begin{DoxyCompactList}\small\item\em This flag makes tiny A\+PI functions perform as non-\/blocking. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__FLAGS__GROUP_gae41123cfeed375e618a4152c9bbd0d6d}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+A\+D\+\_\+\+A\+LL}~(1)
+\begin{DoxyCompactList}\small\item\em This flag makes tiny\+\_\+read function to read whole frame event if it doesn\textquotesingle{}t fit the buffer. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__FLAGS__GROUP_ga593e3353339a36dcd0746057e2864958}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+L\+O\+C\+K\+\_\+\+S\+E\+ND}~(2)
+\begin{DoxyCompactList}\small\item\em Informs advanced A\+PI that caller wants to start transmit new frame to the channel. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER}~(0x80)
+\begin{DoxyCompactList}\small\item\em This flag makes tiny A\+PI functions perform in blocking mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int($\ast$ \hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, const uint8\+\_\+t $\ast$buffer, int size)
+\item 
+typedef int($\ast$ \hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, uint8\+\_\+t $\ast$buffer, int size)
+\item 
+typedef void($\ast$ \hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t}) (void $\ast$handle, uint16\+\_\+t uid, uint8\+\_\+t $\ast$pdata, int size)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Tiny protocol Types. 
+
+This is Tiny protocol implementation for microcontrollers 
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}\label{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}} 
+\index{tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}!on\+\_\+frame\+\_\+cb\+\_\+t@{on\+\_\+frame\+\_\+cb\+\_\+t}}
+\index{on\+\_\+frame\+\_\+cb\+\_\+t@{on\+\_\+frame\+\_\+cb\+\_\+t}!tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}}
+\subsubsection{\texorpdfstring{on\+\_\+frame\+\_\+cb\+\_\+t}{on\_frame\_cb\_t}}
+{\footnotesize\ttfamily typedef void($\ast$ on\+\_\+frame\+\_\+cb\+\_\+t) (void $\ast$handle, uint16\+\_\+t uid, uint8\+\_\+t $\ast$pdata, int size)}
+
+on\+\_\+frame\+\_\+cb\+\_\+t is a callback function, which is called every time new frame is received, or sent. refer to tiny\+\_\+set\+\_\+callbacks 
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ handle of Tiny. \\
+\hline
+{\em uid} & -\/ U\+ID of the received frame or sent frame (if uids are enabled). \\
+\hline
+{\em pdata} & -\/ data received over Tiny Protocol. \\
+\hline
+{\em size} & -\/ size of data received. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}\label{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}} 
+\index{tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}!read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}}
+\index{read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}!tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}}
+\subsubsection{\texorpdfstring{read\+\_\+block\+\_\+cb\+\_\+t}{read\_block\_cb\_t}}
+{\footnotesize\ttfamily typedef int($\ast$ read\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, uint8\+\_\+t $\ast$buffer, int size)}
+
+The function reads data from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pdata} & -\/ pointer to user private data. -\/ absent in Arduino version \\
+\hline
+{\em buffer} & -\/ pointer to a buffer to read data to from the channel. \\
+\hline
+{\em size} & -\/ maximum size of the buffer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+the function must return negative value in case of error or number of bytes actually read or zero. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}\label{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}} 
+\index{tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}!write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}}
+\index{write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}!tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}}
+\subsubsection{\texorpdfstring{write\+\_\+block\+\_\+cb\+\_\+t}{write\_block\_cb\_t}}
+{\footnotesize\ttfamily typedef int($\ast$ write\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, const uint8\+\_\+t $\ast$buffer, int size)}
+
+The function writes data to communication channel port. 
+\begin{DoxyParams}{Parameters}
+{\em pdata} & -\/ pointer to user private data -\/ absent in Arduino version \\
+\hline
+{\em buffer} & -\/ pointer to the data to send to channel. \\
+\hline
+{\em size} & -\/ size of data to write. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+the function must return negative value in case of error or number of bytes written or zero. 
+\end{DoxyReturn}

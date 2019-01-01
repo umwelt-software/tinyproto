@@ -85,7 +85,7 @@ Packet Structure</h1>
  |   7E   |  UID  |  USER DATA  |    FCS     |   7E   |
 </pre><ul>
 <li>7E is packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing. packet delimiter is used by the protocol to find first and last byte of the frame being transmitted.</li>
-<li>UID mean unique identifier of the frame. For Half Duplex Tiny Protocol (HALF_DUPLEX_API) it is widely used in acknowledge frames. This field is optional, you may omit UID parameter in SIMPLE_API and ADVANCED_API functions.</li>
+<li>UID mean unique identifier of the frame. For Half Duplex Tiny Protocol (<a class="el" href="group__HALF__DUPLEX__API.html">Tiny Half Duplex API functions</a>) it is widely used in acknowledge frames. This field is optional, you may omit UID parameter in <a class="el" href="group__SIMPLE__API.html">Tiny simple API functions</a> and <a class="el" href="group__ADVANCED__API.html">Tiny advanced API functions</a> functions.</li>
 <li>USER DATA of any length. This field contains user data with replaced 0x7D and 0x7E bytes by special sequenced as defined in HDLC/PPP framing. Length of data is now limited on buffer used to receive frames and/or 32767 bytes (Tiny Protocol using 16-bit field to store frame length).</li>
 <li>FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field, or it can be absent at all. Refer to RFC1662 for examples. FCS field is also optional and can be disabled. But in this case transport errors are not detected.</li>
 </ul>

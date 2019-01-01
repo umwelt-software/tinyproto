@@ -1,0 +1,229 @@
+\hypertarget{classTiny_1_1Proto}{}\section{Tiny\+:\+:Proto Class Reference}
+\label{classTiny_1_1Proto}\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+
+
+{\ttfamily \#include $<$Tiny\+Protocol.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classTiny_1_1Proto_a6f5f4ebec42dc6e679c25e79284d7705}{begin} (\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
+\item 
+void \hyperlink{classTiny_1_1Proto_a1dcad822337b6155148b1da9222fdd82}{begin\+To\+Serial} ()
+\item 
+void \hyperlink{classTiny_1_1Proto_a707f3112e0ca3651d4b0f3df6c19dd8c}{begin\+To\+Serial1} ()
+\item 
+void \hyperlink{classTiny_1_1Proto_a6d06cd3b1530e4986ce42a9987c522c4}{begin\+To\+Serial2} ()
+\item 
+void \hyperlink{classTiny_1_1Proto_aedbc025e1534105134e4a2499d32207c}{begin\+To\+Serial3} ()
+\item 
+void \hyperlink{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}{end} ()
+\item 
+int \hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write} (char $\ast$buf, int size, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER})
+\item 
+int \hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read} (char $\ast$buf, int size, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER})
+\item 
+int \hyperlink{classTiny_1_1Proto_ade93766700805a81be6a3317d846b276}{write} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER})
+\item 
+int \hyperlink{classTiny_1_1Proto_aedef629f8b8968db7c8693bb45039651}{read} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt, uint8\+\_\+t flags=\hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER})
+\item 
+void \hyperlink{classTiny_1_1Proto_a8992983d7ada115b0aa24db41594947c}{disable\+Crc} ()
+\item 
+bool \hyperlink{classTiny_1_1Proto_abb6cbae9a9944dc9ae0d756554f65a52}{enable\+Check\+Sum} ()
+\item 
+bool \hyperlink{classTiny_1_1Proto_a794afcac2ca15544247c34b059bc1289}{enable\+Crc16} ()
+\item 
+bool \hyperlink{classTiny_1_1Proto_a2ef1c80490d9343b896180ab8b8a6f77}{enable\+Crc32} ()
+\item 
+void \hyperlink{classTiny_1_1Proto_a9fdd64b8296e27f3205cd0d3ea685eac}{enable\+Uid} ()
+\item 
+void \hyperlink{classTiny_1_1Proto_aff9f3c59f58a8ca527ad0254ab806c5c}{disable\+Uid} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classTiny_1_1Proto}{Proto} class incapsulates Protocol functionality. Remember that you may use always C-\/style A\+PI functions instead C++. Please refer to documentation. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classTiny_1_1Proto_a6f5f4ebec42dc6e679c25e79284d7705}\label{classTiny_1_1Proto_a6f5f4ebec42dc6e679c25e79284d7705}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!begin@{begin}}
+\index{begin@{begin}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::begin (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb,  }\item[{\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb }\end{DoxyParamCaption})}
+
+Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}{end()}. 
+\begin{DoxyParams}{Parameters}
+{\em writecb} & -\/ write function to some physical channel \\
+\hline
+{\em readcb} & -\/ read function from some physical channel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a1dcad822337b6155148b1da9222fdd82}\label{classTiny_1_1Proto_a1dcad822337b6155148b1da9222fdd82}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!begin\+To\+Serial@{begin\+To\+Serial}}
+\index{begin\+To\+Serial@{begin\+To\+Serial}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{begin\+To\+Serial()}{beginToSerial()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::begin\+To\+Serial (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Initializes protocol internal variables and redirects communication through Arduino Serial connection (Serial). \begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a707f3112e0ca3651d4b0f3df6c19dd8c}\label{classTiny_1_1Proto_a707f3112e0ca3651d4b0f3df6c19dd8c}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!begin\+To\+Serial1@{begin\+To\+Serial1}}
+\index{begin\+To\+Serial1@{begin\+To\+Serial1}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{begin\+To\+Serial1()}{beginToSerial1()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::begin\+To\+Serial1 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Initializes protocol internal variables and redirects communication through Arduino Serial1 connection (Serial1). \begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a6d06cd3b1530e4986ce42a9987c522c4}\label{classTiny_1_1Proto_a6d06cd3b1530e4986ce42a9987c522c4}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!begin\+To\+Serial2@{begin\+To\+Serial2}}
+\index{begin\+To\+Serial2@{begin\+To\+Serial2}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{begin\+To\+Serial2()}{beginToSerial2()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::begin\+To\+Serial2 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Initializes protocol internal variables and redirects communication through Arduino Serial2 connection (Serial2). \begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_aedbc025e1534105134e4a2499d32207c}\label{classTiny_1_1Proto_aedbc025e1534105134e4a2499d32207c}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!begin\+To\+Serial3@{begin\+To\+Serial3}}
+\index{begin\+To\+Serial3@{begin\+To\+Serial3}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{begin\+To\+Serial3()}{beginToSerial3()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::begin\+To\+Serial3 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Initializes protocol internal variables and redirects communication through Arduino Serial3 connection (Serial3). \begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a8992983d7ada115b0aa24db41594947c}\label{classTiny_1_1Proto_a8992983d7ada115b0aa24db41594947c}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!disable\+Crc@{disable\+Crc}}
+\index{disable\+Crc@{disable\+Crc}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{disable\+Crc()}{disableCrc()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::disable\+Crc (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Disable C\+RC field in the protocol. If C\+RC field is O\+FF, then the frame looks like this\+: 0x7E databytes 0x7E. \mbox{\Hypertarget{classTiny_1_1Proto_aff9f3c59f58a8ca527ad0254ab806c5c}\label{classTiny_1_1Proto_aff9f3c59f58a8ca527ad0254ab806c5c}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!disable\+Uid@{disable\+Uid}}
+\index{disable\+Uid@{disable\+Uid}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{disable\+Uid()}{disableUid()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::disable\+Uid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Disables Uid field in the protocol. If enabled this 16-\/bit field with packet identifier is added before each payload data. Frame with uid\+: 0x7E 16-\/bituid payload 0x7E Frame without uid\+: 0x7E payload 0x7E \mbox{\Hypertarget{classTiny_1_1Proto_abb6cbae9a9944dc9ae0d756554f65a52}\label{classTiny_1_1Proto_abb6cbae9a9944dc9ae0d756554f65a52}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!enable\+Check\+Sum@{enable\+Check\+Sum}}
+\index{enable\+Check\+Sum@{enable\+Check\+Sum}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{enable\+Check\+Sum()}{enableCheckSum()}}
+{\footnotesize\ttfamily bool Tiny\+::\+Proto\+::enable\+Check\+Sum (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Enables C\+RC 8-\/bit field in the protocol. This field contains sum of all data bytes in the packet. 8-\/bit field is supported by Nano version of Tiny library. \begin{DoxyReturn}{Returns}
+true if successful false in case of error. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a794afcac2ca15544247c34b059bc1289}\label{classTiny_1_1Proto_a794afcac2ca15544247c34b059bc1289}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!enable\+Crc16@{enable\+Crc16}}
+\index{enable\+Crc16@{enable\+Crc16}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{enable\+Crc16()}{enableCrc16()}}
+{\footnotesize\ttfamily bool Tiny\+::\+Proto\+::enable\+Crc16 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Enables C\+RC 16-\/bit field in the protocol. This field contains F\+CS 16-\/bit C\+C\+I\+TT like defined in R\+FC 1662. 16-\/bit field is not supported by Nano version of Tiny library. \begin{DoxyReturn}{Returns}
+true if successful false in case of error. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a2ef1c80490d9343b896180ab8b8a6f77}\label{classTiny_1_1Proto_a2ef1c80490d9343b896180ab8b8a6f77}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!enable\+Crc32@{enable\+Crc32}}
+\index{enable\+Crc32@{enable\+Crc32}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{enable\+Crc32()}{enableCrc32()}}
+{\footnotesize\ttfamily bool Tiny\+::\+Proto\+::enable\+Crc32 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Enables C\+RC 32-\/bit field in the protocol. This field contains F\+CS 32-\/bit C\+C\+I\+TT like defined in R\+FC 1662. 32-\/bit field is not supported by Nano version of Tiny library. \begin{DoxyReturn}{Returns}
+true if successful false in case of error. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a9fdd64b8296e27f3205cd0d3ea685eac}\label{classTiny_1_1Proto_a9fdd64b8296e27f3205cd0d3ea685eac}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!enable\+Uid@{enable\+Uid}}
+\index{enable\+Uid@{enable\+Uid}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{enable\+Uid()}{enableUid()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::enable\+Uid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Enables Uid field in the protocol. If enabled this 16-\/bit field with packet identifier is added before each payload data. Frame with uid\+: 0x7E 16-\/bituid payload 0x7E Frame without uid\+: 0x7E payload 0x7E \mbox{\Hypertarget{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}\label{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!end@{end}}
+\index{end@{end}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Resets protocol state. \mbox{\Hypertarget{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}\label{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!read@{read}}
+\index{read@{read}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{read()}{read()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+::read (\begin{DoxyParamCaption}\item[{char $\ast$}]{buf,  }\item[{int}]{size,  }\item[{uint8\+\_\+t}]{flags = {\ttfamily \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER}} }\end{DoxyParamCaption})}
+
+Reads data block from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ buffer to place data read from communication channel \\
+\hline
+{\em size} & -\/ maximum size of the buffer in bytes. \\
+\hline
+{\em flags} & -\/ \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+PI functions} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is read positive -\/ number of bytes read from the channel 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_aedef629f8b8968db7c8693bb45039651}\label{classTiny_1_1Proto_aedef629f8b8968db7c8693bb45039651}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!read@{read}}
+\index{read@{read}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{read()}{read()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+::read (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1Packet}{Packet} \&}]{pkt,  }\item[{uint8\+\_\+t}]{flags = {\ttfamily \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER}} }\end{DoxyParamCaption})}
+
+Reads packet from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & \hyperlink{classTiny_1_1Packet}{Packet} object to put data to \\
+\hline
+{\em flags} & \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+PI functions} \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Packet}{Packet} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is read positive -\/ \hyperlink{classTiny_1_1Packet}{Packet} is successfully received 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}\label{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!write@{write}}
+\index{write@{write}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+::write (\begin{DoxyParamCaption}\item[{char $\ast$}]{buf,  }\item[{int}]{size,  }\item[{uint8\+\_\+t}]{flags = {\ttfamily \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER}} }\end{DoxyParamCaption})}
+
+Sends data block over communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ data to send \\
+\hline
+{\em size} & -\/ length of the data in bytes \\
+\hline
+{\em flags} & -\/ flags. \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+PI functions} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is sent positive -\/ should be equal to size parameter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1Proto_ade93766700805a81be6a3317d846b276}\label{classTiny_1_1Proto_ade93766700805a81be6a3317d846b276}} 
+\index{Tiny\+::\+Proto@{Tiny\+::\+Proto}!write@{write}}
+\index{write@{write}!Tiny\+::\+Proto@{Tiny\+::\+Proto}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+::write (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1Packet}{Packet} \&}]{pkt,  }\item[{uint8\+\_\+t}]{flags = {\ttfamily \hyperlink{group__FLAGS__GROUP_ga3a34267804581c5709d03f52d232b307}{T\+I\+N\+Y\+\_\+\+F\+L\+A\+G\+\_\+\+W\+A\+I\+T\+\_\+\+F\+O\+R\+E\+V\+ER}} }\end{DoxyParamCaption})}
+
+Sends packet over communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & -\/ \hyperlink{classTiny_1_1Packet}{Packet} to send \\
+\hline
+{\em flags} & -\/ \hyperlink{group__FLAGS__GROUP}{Flags for Tiny A\+PI functions} \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Packet}{Packet} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is sent positive -\/ \hyperlink{classTiny_1_1Packet}{Packet} is successfully sent 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\hyperlink{TinyProtocol_8h}{Tiny\+Protocol.\+h}\end{DoxyCompactItemize}

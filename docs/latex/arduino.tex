@@ -1,19 +1,19 @@
 This is Tiny protocol implementation for microcontrollers (Arduino, Stellaris).\hypertarget{arduino_arduino_tiny}{}\section{Simple Tiny Protocol examples}\label{arduino_arduino_tiny}
-Simple Tiny Protocol examples section is applicable only when working with S\+I\+M\+P\+L\+E\+\_\+\+A\+PI and A\+D\+V\+A\+N\+C\+E\+D\+\_\+\+A\+PI. If you want to work with Tiny Half Duplex protocol, please refere to \hyperlink{arduino_arduino_tiny_hd}{Half Duplex Tiny Protocol examples} section.\hypertarget{arduino_arduino_tiny_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_init}
+Simple Tiny Protocol examples section is applicable only when working with \hyperlink{group__SIMPLE__API}{Tiny simple A\+PI functions} and \hyperlink{group__ADVANCED__API}{Tiny advanced A\+PI functions}. If you want to work with Tiny Half Duplex protocol, please refere to \hyperlink{arduino_arduino_tiny_hd}{Half Duplex Tiny Protocol examples} section.\hypertarget{arduino_arduino_tiny_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_init}
 
 \begin{DoxyCode}
-Tiny::Proto proto;
+\hyperlink{classTiny_1_1Proto}{Tiny::Proto} proto;
 
 \textcolor{keywordtype}{void} setup()
 \{
-    proto.beginToSerial();
+    proto.\hyperlink{classTiny_1_1Proto_a1dcad822337b6155148b1da9222fdd82}{beginToSerial}();
 \}
 \end{DoxyCode}
 \hypertarget{arduino_arduino_tiny_send}{}\subsection{Sending/\+Receiving data over protocol}\label{arduino_arduino_tiny_send}
 \hypertarget{arduino_arduino_tiny_send_receive1}{}\subsubsection{Variant 1}\label{arduino_arduino_tiny_send_receive1}
 First variant\+: without using any helpers to work with data 
 \begin{DoxyCode}
-Tiny::Proto proto;
+\hyperlink{classTiny_1_1Proto}{Tiny::Proto} proto;
 
 \textcolor{comment}{/* The buffer must be defined globally */}
 uint8\_t g\_buffer[16];
@@ -30,10 +30,10 @@ uint8\_t g\_buffer[16];
         buffer[1] = 20;
 
         \textcolor{comment}{/* Send 2 bytes to remote side */}
-        proto.write( buffer, 2 );
+        proto.\hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write}( buffer, 2 );
     \}
     \textcolor{keywordtype}{int} length;
-    length = proto.read( g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), TINY\_FLAG\_NO\_WAIT );
+    length = proto.\hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read}( g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{TINY\_FLAG\_NO\_WAIT} );
     \textcolor{keywordflow}{if} ( length > 0 )
     \{
         \textcolor{comment}{/* Parse your data received from remote side here. */}
@@ -43,11 +43,11 @@ uint8\_t g\_buffer[16];
 \hypertarget{arduino_arduino_tiny_send_receive2}{}\subsubsection{Variant 2}\label{arduino_arduino_tiny_send_receive2}
 Second variant\+: with using special helper to pack the data being sent 
 \begin{DoxyCode}
-Tiny::Proto proto;
+\hyperlink{classTiny_1_1Proto}{Tiny::Proto} proto;
 
 \textcolor{comment}{/* The buffer must be defined globally */}
 uint8\_t g\_buffer[16];
-Tiny::Packet packet(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer));
+\hyperlink{classTiny_1_1Packet}{Tiny::Packet} packet(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer));
 
 \textcolor{keywordtype}{void} loop()
 \{
@@ -56,16 +56,16 @@ Tiny::Packet packet(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer));
         \textcolor{comment}{/* define buffer, you want to use */}
         uint8\_t buffer[16];
         \textcolor{comment}{/* Create helper object to simplify packing of data being sent */}
-        Tiny::Packet packet(buffer, \textcolor{keyword}{sizeof}(buffer));
+        \hyperlink{classTiny_1_1Packet}{Tiny::Packet} packet(buffer, \textcolor{keyword}{sizeof}(buffer));
 
         \textcolor{comment}{/* Pack data you want to send here */}
         packet.put( \textcolor{stringliteral}{"message"} );
 
         \textcolor{comment}{/* Send message to remote side */}
-        proto.write( packet );
+        proto.\hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write}( packet );
     \}
     \textcolor{keywordtype}{int} length;
-    length = proto.read( packet, TINY\_FLAG\_NO\_WAIT );
+    length = proto.\hyperlink{classTiny_1_1Proto_acc00ac10509eaa11a83b0b88a2278b3e}{read}( packet, \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{TINY\_FLAG\_NO\_WAIT} );
     \textcolor{keywordflow}{if} ( length > 0 )
     \{
         \textcolor{comment}{/* Parse your data received from remote side here. */}
@@ -77,19 +77,19 @@ Tiny::Packet packet(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer));
 \hypertarget{arduino_arduino_tiny_close}{}\subsection{Stopping communication}\label{arduino_arduino_tiny_close}
 
 \begin{DoxyCode}
-Tiny::Proto proto;
+\hyperlink{classTiny_1_1Proto}{Tiny::Proto} proto;
 
 \textcolor{keywordtype}{void} loop()
 \{
     ...
     \textcolor{keywordflow}{if} ( needToStop )
     \{
-        proto.end();
+        proto.\hyperlink{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}{end}();
     \}
 \}
 \end{DoxyCode}
 \hypertarget{arduino_arduino_tiny_hd}{}\section{Half Duplex Tiny Protocol examples}\label{arduino_arduino_tiny_hd}
-Half Duplex Tiny Protocol examples section is applicable when working with H\+A\+L\+F\+\_\+\+D\+U\+P\+L\+E\+X\+\_\+\+A\+PI, S\+I\+M\+P\+L\+E\+\_\+\+A\+PI and A\+D\+V\+A\+N\+C\+E\+D\+\_\+\+A\+PI.\hypertarget{arduino_arduino_tiny_hd_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_hd_init}
+Half Duplex Tiny Protocol examples section is applicable when working with \hyperlink{group__HALF__DUPLEX__API}{Tiny Half Duplex A\+PI functions}, \hyperlink{group__SIMPLE__API}{Tiny simple A\+PI functions} and \hyperlink{group__ADVANCED__API}{Tiny advanced A\+PI functions}.\hypertarget{arduino_arduino_tiny_hd_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_hd_init}
 
 \begin{DoxyCode}
 uint8\_t g\_buffer[64];
@@ -98,11 +98,11 @@ uint8\_t g\_buffer[64];
 \{
 \}
 
-Tiny::ProtoHd proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
+\hyperlink{classTiny_1_1ProtoHd}{Tiny::ProtoHd} proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
 
 \textcolor{keywordtype}{void} setup()
 \{
-    proto.beginToSerial();
+    proto.\hyperlink{classTiny_1_1Proto_a1dcad822337b6155148b1da9222fdd82}{beginToSerial}();
 \}
 \end{DoxyCode}
 \hypertarget{arduino_arduino_tiny_hd_send_receive}{}\subsection{Sending/\+Receiving data over protocol}\label{arduino_arduino_tiny_hd_send_receive}
@@ -116,7 +116,7 @@ uint8\_t g\_buffer[64];
     \textcolor{comment}{/* Parse your received data from remote side here. */}
 \}
 
-Tiny::ProtoHd proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
+\hyperlink{classTiny_1_1ProtoHd}{Tiny::ProtoHd} proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
 
 \textcolor{keywordtype}{void} loop()
 \{
@@ -130,7 +130,7 @@ Tiny::ProtoHd proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceive
         buffer[1] = 20;
 
         \textcolor{comment}{/* Send 2 bytes to remote side */}
-        proto.write( buffer, 2 );
+        proto.\hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write}( buffer, 2 );
     \}
     proto.run();
     ...
@@ -145,11 +145,11 @@ uint8\_t g\_buffer[64];
 \{
     \textcolor{comment}{/* Parse your received data here. */}
     \textcolor{comment}{/* For example, read sent ealier in example above "message" */}
-    Tiny::Packet packet(buffer, len);
+    \hyperlink{classTiny_1_1Packet}{Tiny::Packet} packet(buffer, len);
     \textcolor{keywordtype}{char} * str = packet.getString();
 \}
 
-Tiny::ProtoHd proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
+\hyperlink{classTiny_1_1ProtoHd}{Tiny::ProtoHd} proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
 
 \textcolor{keywordtype}{void} loop()
 \{
@@ -158,13 +158,13 @@ Tiny::ProtoHd proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceive
         \textcolor{comment}{/* define buffer, you want to use */}
         uint8\_t buffer[16];
         \textcolor{comment}{/* Create helper object to simplify packing of data being sent */}
-        Tiny::Packet packet(buffer, \textcolor{keyword}{sizeof}(buffer));
+        \hyperlink{classTiny_1_1Packet}{Tiny::Packet} packet(buffer, \textcolor{keyword}{sizeof}(buffer));
 
         \textcolor{comment}{/* Pack data you want to send here */}
         packet.put( \textcolor{stringliteral}{"message"} );
 
         \textcolor{comment}{/* Send message to remote side */}
-        proto.write( packet );
+        proto.\hyperlink{classTiny_1_1Proto_a46fbc8b8681431b9b0a9a4b953a8dc33}{write}( packet );
     \}
     proto.run();
     ...
@@ -173,14 +173,14 @@ Tiny::ProtoHd proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceive
 \hypertarget{arduino_arduino_tiny_hd_close}{}\subsection{Stopping communication}\label{arduino_arduino_tiny_hd_close}
 
 \begin{DoxyCode}
-Tiny::ProtoHd proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
+\hyperlink{classTiny_1_1ProtoHd}{Tiny::ProtoHd} proto(g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), onReceiveData);
 
 \textcolor{keywordtype}{void} loop()
 \{
     ...
     \textcolor{keywordflow}{if} ( needToStop )
     \{
-        proto.end();
+        proto.\hyperlink{classTiny_1_1Proto_ae9f52fa1c4f18981672ad7af12633d4e}{end}();
     \}
 \}
 \end{DoxyCode}

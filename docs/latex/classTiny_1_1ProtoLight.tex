@@ -1,0 +1,131 @@
+\hypertarget{classTiny_1_1ProtoLight}{}\section{Tiny\+:\+:Proto\+Light Class Reference}
+\label{classTiny_1_1ProtoLight}\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+
+
+{\ttfamily \#include $<$Tiny\+Light\+Protocol.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classTiny_1_1ProtoLight_ad27dfcef54a8316228469ef0a4267962}{begin} (\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
+\item 
+void \hyperlink{classTiny_1_1ProtoLight_a50bf63fe1891edda48980ca2893485d7}{begin\+To\+Serial} ()
+\item 
+void \hyperlink{classTiny_1_1ProtoLight_a948b2a0e37177b7434581adc64b36497}{end} ()
+\item 
+int \hyperlink{classTiny_1_1ProtoLight_a46a27ee9d0b55c88672c98abf04dbdce}{write} (char $\ast$buf, int size)
+\item 
+int \hyperlink{classTiny_1_1ProtoLight_acf18a8b73ee6c6394270c903ad7882b8}{read} (char $\ast$buf, int size)
+\item 
+int \hyperlink{classTiny_1_1ProtoLight_abf2966531f8ed7dba44079f00eefded2}{write} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt)
+\item 
+int \hyperlink{classTiny_1_1ProtoLight_a96c56b10b4eee28c09b291461c66fa54}{read} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classTiny_1_1ProtoLight}{Proto\+Light} class incapsulates Protocol functionality. Remember that you may use always C-\/style A\+PI functions instead C++. Please refer to documentation. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classTiny_1_1ProtoLight_ad27dfcef54a8316228469ef0a4267962}\label{classTiny_1_1ProtoLight_ad27dfcef54a8316228469ef0a4267962}} 
+\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}!begin@{begin}}
+\index{begin@{begin}!Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+\subsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+Light\+::begin (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb,  }\item[{\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb }\end{DoxyParamCaption})}
+
+Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1ProtoLight_a948b2a0e37177b7434581adc64b36497}{end()}. 
+\begin{DoxyParams}{Parameters}
+{\em writecb} & -\/ write function to some physical channel \\
+\hline
+{\em readcb} & -\/ read function from some physical channel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1ProtoLight_a50bf63fe1891edda48980ca2893485d7}\label{classTiny_1_1ProtoLight_a50bf63fe1891edda48980ca2893485d7}} 
+\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}!begin\+To\+Serial@{begin\+To\+Serial}}
+\index{begin\+To\+Serial@{begin\+To\+Serial}!Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+\subsubsection{\texorpdfstring{begin\+To\+Serial()}{beginToSerial()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+Light\+::begin\+To\+Serial (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initializes protocol internal variables and redirects communication through Arduino Serial connection (Serial). \begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1ProtoLight_a948b2a0e37177b7434581adc64b36497}\label{classTiny_1_1ProtoLight_a948b2a0e37177b7434581adc64b36497}} 
+\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}!end@{end}}
+\index{end@{end}!Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+\subsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+Light\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Resets protocol state. \mbox{\Hypertarget{classTiny_1_1ProtoLight_acf18a8b73ee6c6394270c903ad7882b8}\label{classTiny_1_1ProtoLight_acf18a8b73ee6c6394270c903ad7882b8}} 
+\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}!read@{read}}
+\index{read@{read}!Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+\subsubsection{\texorpdfstring{read()}{read()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+Light\+::read (\begin{DoxyParamCaption}\item[{char $\ast$}]{buf,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+Reads data block from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ buffer to place data read from communication channel \\
+\hline
+{\em size} & -\/ maximum size of the buffer in bytes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is read positive -\/ number of bytes read from the channel 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1ProtoLight_a96c56b10b4eee28c09b291461c66fa54}\label{classTiny_1_1ProtoLight_a96c56b10b4eee28c09b291461c66fa54}} 
+\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}!read@{read}}
+\index{read@{read}!Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+\subsubsection{\texorpdfstring{read()}{read()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+Light\+::read (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1Packet}{Packet} \&}]{pkt }\end{DoxyParamCaption})}
+
+Reads packet from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & -\/ \hyperlink{classTiny_1_1Packet}{Packet} object to put data to \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Packet}{Packet} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is read positive -\/ \hyperlink{classTiny_1_1Packet}{Packet} is successfully received 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1ProtoLight_a46a27ee9d0b55c88672c98abf04dbdce}\label{classTiny_1_1ProtoLight_a46a27ee9d0b55c88672c98abf04dbdce}} 
+\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}!write@{write}}
+\index{write@{write}!Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+Light\+::write (\begin{DoxyParamCaption}\item[{char $\ast$}]{buf,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+Sends data block over communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ data to send \\
+\hline
+{\em size} & -\/ length of the data in bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is sent positive -\/ should be equal to size parameter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1ProtoLight_abf2966531f8ed7dba44079f00eefded2}\label{classTiny_1_1ProtoLight_abf2966531f8ed7dba44079f00eefded2}} 
+\index{Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}!write@{write}}
+\index{write@{write}!Tiny\+::\+Proto\+Light@{Tiny\+::\+Proto\+Light}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+Light\+::write (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1Packet}{Packet} \&}]{pkt }\end{DoxyParamCaption})}
+
+Sends packet over communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & -\/ \hyperlink{classTiny_1_1Packet}{Packet} to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Packet}{Packet} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is sent positive -\/ \hyperlink{classTiny_1_1Packet}{Packet} is successfully sent 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\hyperlink{TinyLightProtocol_8h}{Tiny\+Light\+Protocol.\+h}\end{DoxyCompactItemize}
