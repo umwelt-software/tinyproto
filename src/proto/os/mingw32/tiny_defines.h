@@ -48,7 +48,7 @@
 
 #define COND_SIGNAL(x)    pthread_cond_signal(&x)
 
-#define TASK_YIELD()      sleep(0)
+#define TASK_YIELD()      Sleep(0)
 
 
 static inline uint16_t PLATFORM_TICKS()
