@@ -18,6 +18,7 @@
  */
 
 #include "fake_wire.h"
+#include <stdio.h>
 
 FakeWire::FakeWire()
     :m_buf{0}
@@ -38,12 +39,14 @@ int FakeWire::read(uint8_t *data, int length)
             break;
         }
         data[size] = m_buf[m_readptr];
+//        fprintf(stderr, "%02X ", data[size]);
         if (m_readptr >= (int)sizeof(m_buf) - 1)
             m_readptr = 0;
         else
             m_readptr++;
         size++;
     }
+//    fprintf( stderr, "\n" );
     m_mutex.unlock();
     return size;
 }
@@ -74,10 +77,12 @@ int FakeWire::write(const uint8_t *data, int length)
             /* no space to write */
             break;
         }
+//        fprintf(stderr, "%02X ", data[size]);
         m_buf[m_writeptr] = data[size];
         m_writeptr = l_writeptr;
         size++;
     }
+//    fprintf( stderr, "\n" );
     m_mutex.unlock();
     return size;
 }

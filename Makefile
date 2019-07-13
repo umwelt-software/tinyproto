@@ -77,9 +77,11 @@ SRC_UNIT_TEST = \
 	unittest/helpers/fake_wire.cpp \
 	unittest/helpers/fake_channel.cpp \
 	unittest/helpers/tiny_helper.cpp \
+	unittest/helpers/tiny_hdlc_helper.cpp \
 	unittest/helpers/tiny_hd_helper.cpp \
 	unittest/main.cpp \
 	unittest/basic_tests.cpp \
+	unittest/hdlc_tests.cpp \
 	unittest/hd_tests.cpp
 
 OBJ_UNIT_TEST = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_UNIT_TEST))))
@@ -101,6 +103,7 @@ SRC_TINY = \
         src/proto/crc.c \
         src/proto/tiny_layer2.c \
         src/proto/tiny_light.c \
+        src/proto/tiny_hdlc.c \
         src/proto/tiny_hd.c \
         src/proto/tiny_list.c \
         src/proto/tiny_rq_pool.c \
@@ -126,7 +129,7 @@ install-lib: library
 docs:
 	doxygen doxygen.cfg
 
-all: library docs unittest sperf
+all: library unittest sperf
 
 install: install-lib
 	$(STRIP) $(DESTDIR)/$@

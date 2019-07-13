@@ -24,9 +24,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "helpers/tiny_helper.h"
+#include "helpers/tiny_hdlc_helper.h"
 
 
-TEST_GROUP(BasicTests)
+TEST_GROUP(HdlcTests)
 {
     void setup()
     {
@@ -39,50 +40,50 @@ TEST_GROUP(BasicTests)
     }
 };
 
-#if 0
-TEST(BasicTests, TinyLayer2_Send_Receive)
+
+#if 1
+TEST(HdlcTests, TinyLayer2_Send_Receive)
 {
     FakeWire     line1;
     FakeWire     line2;
     FakeChannel  channel1( &line1, &line2 );
     FakeChannel  channel2( &line2, &line1 );
-    TinyHelper   helper1( &channel1 );
+    TinyHdlcHelper   helper1( &channel1 );
     TinyHelper   helper2( &channel2 );
 
     uint8_t      txbuf[128];
     uint8_t      rxbuf[128];
-//    uint16_t     uid, rxuid;
     uint16_t     nsent = 0;
     uint16_t     nreceived = 0;
     uint8_t      flags = TINY_FLAG_NO_WAIT | TINY_FLAG_LOCK_SEND;
 
     while (nsent < 32)
     {
-//        uid = 1000 * nsent;
         snprintf((char *)txbuf, sizeof(txbuf) - 1, "This is frame Number %u (stream %i)", nsent, 0);
-        int result = helper1.send( NULL /*&uid*/, (uint8_t *)txbuf, strlen((char *)txbuf) + 1, flags);
-        CHECK( (result == TINY_NO_ERROR) || (result == TINY_ERR_TIMEOUT) || (result == ((int)strlen((char *)txbuf) + 1)) );
+        int result = helper1.send( NULL, (uint8_t *)txbuf, strlen((char *)txbuf) + 1, flags);
+        printf("LEN: %d, NLEN: %d \n", result, (int)strlen((char *)txbuf) + 1);
+        CHECK( (result == TINY_NO_ERROR) || (result == ((int)strlen((char *)txbuf) + 1 + 4)) );
         if ( result == TINY_NO_ERROR )
         {
             flags = TINY_FLAG_NO_WAIT;
         }
-        else if ( result == (int)strlen((char *)txbuf) + 1 )
+        else if ( result == (int)strlen((char *)txbuf) + 1 + 4 )
         {
             flags = TINY_FLAG_NO_WAIT | TINY_FLAG_LOCK_SEND;
             nsent++;
         }
-        result = helper2.read( /* &rxuid */ NULL, (uint8_t *)rxbuf, sizeof(rxbuf), TINY_FLAG_NO_WAIT);
+        result = helper2.read( NULL, (uint8_t *)rxbuf, sizeof(rxbuf), TINY_FLAG_NO_WAIT);
+        printf( "result = %d\n", result );
         CHECK( (result == TINY_NO_ERROR) || (result > 0) );
         if ( result > 0 )
         {
             // strlen + \0 + sizeof(uid)
-            CHECK_EQUAL( (int)strlen((const char*)rxbuf) + 3, result );
+            CHECK_EQUAL( (int)strlen((const char*)rxbuf) + 1, result );
         }
         if (result > 0)
         {
             nreceived++;
         }
-        break;
     }
     CHECK_EQUAL( nreceived, nsent );
 }
@@ -90,15 +91,14 @@ TEST(BasicTests, TinyLayer2_Send_Receive)
 #endif
 
 #if 0
-
-TEST(BasicTests, TinyLayer2_Send_Receive_Event_Based)
+TEST(HdlcTests, TinyLayer2_Send_Receive_Event_Based)
 {
     uint16_t     nreceived = 0;
     FakeWire     line1;
     FakeWire     line2;
     FakeChannel  channel1( &line1, &line2 );
     FakeChannel  channel2( &line2, &line1 );
-    TinyHelper   helper1( &channel1 );
+    TinyHdlcHelper   helper1( &channel1 );
     TinyHelper   helper2( &channel2, [&nreceived](uint16_t uid,uint8_t *buf, int len)->void
                           {
                               uint32_t sum_expected = 0;
@@ -114,8 +114,8 @@ TEST(BasicTests, TinyLayer2_Send_Receive_Event_Based)
     uint16_t     nsent = 0;
     uint8_t      flags = TINY_FLAG_NO_WAIT | TINY_FLAG_LOCK_SEND;
 
-    helper1.enableUid();
-    helper2.enableUid();
+//    helper1.enableUid();
+//    helper2.enableUid();
     /* uint16_t is size of uid, which is part of received data */
     while (nsent < sizeof(txbuf) - sizeof(uint16_t))
     {

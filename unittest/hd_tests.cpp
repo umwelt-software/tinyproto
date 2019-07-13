@@ -39,7 +39,7 @@ TEST_GROUP(HdTests)
     }
 };
 
-
+#if 0
 TEST(HdTests, TinyHd_Send)
 {
     uint8_t      txbuf[128];
@@ -60,14 +60,15 @@ TEST(HdTests, TinyHd_Send)
 
     helper1.run(true);
 
-    while (nsent < 4)
+    // sent 4 packets small packets with ACK
+    for (nsent = 0; nsent < 4; nsent++)
     {
         txbuf[0] = 0xAA;
         txbuf[1] = 0xFF;
         int result = helper2.send_wait_ack( txbuf, 2 );
         CHECK( result >= 0 );
-        nsent++;
     }
-    CHECK_EQUAL( nreceived, nsent );
+    CHECK_EQUAL( 4, nreceived );
 }
 
+#endif
