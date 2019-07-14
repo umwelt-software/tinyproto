@@ -14,6 +14,7 @@ CROSS_COMPILE ?=
 OS ?= os/linux
 DESTDIR ?=
 BLD ?= bld
+TINYCONF ?= normal
 
 VERSION=0.7.0
 
@@ -136,7 +137,6 @@ install: install-lib
 
 clean:
 	rm -rf $(BLD)
-	rm -rf docs
 	rm -rf releases
 
 unittest: $(OBJ_UNIT_TEST) library
