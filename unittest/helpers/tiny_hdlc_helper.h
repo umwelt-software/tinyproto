@@ -30,6 +30,7 @@ private:
 public:
     TinyHdlcHelper(FakeChannel         * channel,
                    const std::function<void(uint8_t*,int)> &onRxFrameCb = nullptr,
+                   const std::function<void(uint8_t*,int)> &onTxFrameCb = nullptr,
                    int rx_buf_size = 1024 );
     ~TinyHdlcHelper();
     int send(uint8_t *buf, int len);
@@ -37,10 +38,11 @@ public:
 private:
     static uint32_t s_handleOffset;
     FakeChannel * m_channel;
-    std::function<void(uint8_t*,int)>
-                  m_onRxFrameCb;
+    std::function<void(uint8_t*,int)> m_onRxFrameCb;
+    std::function<void(uint8_t*,int)> m_onTxFrameCb;
 
     static int    onRxFrame(void *handle, void * buf, int len);
+    static int    onTxFrame(void *handle, void * buf, int len);
     static int    read_data(void * appdata, uint8_t * data, int length);
     static int    write_data(void * appdata, const void * data, int length);
 };

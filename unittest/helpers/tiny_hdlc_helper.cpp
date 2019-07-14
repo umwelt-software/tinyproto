@@ -24,16 +24,19 @@ uint32_t TinyHdlcHelper::s_handleOffset;
 
 TinyHdlcHelper::TinyHdlcHelper(FakeChannel * channel,
                                const std::function<void(uint8_t*,int)> &onRxFrameCb,
+                               const std::function<void(uint8_t*,int)> &onTxFrameCb,
                                int rx_buf_size)
     : m_handle{}
     , m_onRxFrameCb(onRxFrameCb)
+    , m_onTxFrameCb(onTxFrameCb)
 {
     s_handleOffset = (uint8_t *)this - (uint8_t *)(&m_handle);
     m_channel = channel;
 
     m_handle.user_data = this;
     m_handle.send_tx = write_data;
-    m_handle.on_frame_data = onRxFrame;
+    m_handle.on_frame_read = onRxFrame;
+    m_handle.on_frame_sent = onTxFrame;
     m_handle.rx_buf = malloc( rx_buf_size );
     m_handle.rx_buf_size = rx_buf_size;
     hdlc_init( &m_handle );
@@ -81,6 +84,16 @@ int TinyHdlcHelper::onRxFrame(void *handle, void * buf, int len)
     if (helper->m_onRxFrameCb)
     {
         helper->m_onRxFrameCb((uint8_t *)buf, len);
+    }
+    return 0;
+}
+
+int TinyHdlcHelper::onTxFrame(void *handle, void * buf, int len)
+{
+    TinyHdlcHelper * helper = reinterpret_cast<TinyHdlcHelper *>( ((uint8_t *)handle) - s_handleOffset );
+    if (helper->m_onTxFrameCb)
+    {
+        helper->m_onTxFrameCb((uint8_t *)buf, len);
     }
     return 0;
 }

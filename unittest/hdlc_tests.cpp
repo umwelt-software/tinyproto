@@ -52,12 +52,20 @@ TEST(HdlcTests, TinyLayer2_Send_Receive)
     FakeWire     line2;
     FakeChannel  channel1( &line1, &line2 );
     FakeChannel  channel2( &line2, &line1 );
-    TinyHdlcHelper   helper1( &channel1 );
-    TinyHdlcHelper   helper2( &channel2, [&nreceived,&bytes_received](uint8_t *buf, int len)->void
+    TinyHdlcHelper   helper1( &channel1,
+                            nullptr,
+                            [&nsent,&bytes_sent](uint8_t *buf, int len)->void
+                            {
+                                bytes_sent += len;
+                                nsent++;
+                            } );
+    TinyHdlcHelper   helper2( &channel2,
+                            [&nreceived,&bytes_received](uint8_t *buf, int len)->void
                             {
                                 bytes_received += len;
                                 nreceived++;
-                            } );
+                            }
+                            );
     uint8_t      txbuf[128];
 
     while (nsent < 32)
@@ -65,8 +73,6 @@ TEST(HdlcTests, TinyLayer2_Send_Receive)
         snprintf((char *)txbuf, sizeof(txbuf) - 1, "This is frame Number %u (stream %i)", nsent, 0);
         int result = helper1.send( (uint8_t *)txbuf, strlen((char *)txbuf) + 1 );
         CHECK( result > 0 );
-        bytes_sent += strlen((char *)txbuf) + 1;
-        nsent++;
         result = helper2.process_rx_bytes();
         if (result < 0) printf("failed:%i\n", result);
         CHECK( result >= 0 );

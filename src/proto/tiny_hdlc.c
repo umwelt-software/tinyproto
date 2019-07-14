@@ -22,11 +22,33 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
     hdlc_info->rx.state = hdlc_read_start;
     hdlc_info->tx.data = NULL;
     hdlc_info->tx.state = hdlc_send_start;
+    if ( hdlc_info->crc_type == HDLC_CRC_DEFAULT )
+    {
+#if defined(CONFIG_ENABLE_FCS16)
+        hdlc_info->crc_type = HDLC_CRC_16;
+#elif defined(CONFIG_ENABLE_FCS32)
+        hdlc_info->crc_type = HDLC_CRC_32;
+#elif defined(CONFIG_ENABLE_FCS8)
+        hdlc_info->crc_type = HDLC_CRC_8;
+#endif
+    }
+    else if ( hdlc_info->crc_type == HDLC_CRC_OFF )
+    {
+        hdlc_info->crc_type = 0;
+    }
     return hdlc_info;
 }
 
 int hdlc_close( hdlc_handle_t handle )
 {
+    if ( handle->tx.data )
+    {
+        if ( handle->on_frame_sent )
+        {
+            handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
+                                   handle->tx.data - handle->tx.origin_data );
+        }
+    }
     return 0;
 }
 
@@ -36,7 +58,23 @@ static int hdlc_send_start( hdlc_handle_t handle )
     {
         return 0;
     }
-    handle->tx.crc = crc16( PPPINITFCS16, handle->tx.data, handle->tx.len );
+    switch (handle->crc_type)
+    {
+#ifdef CONFIG_ENABLE_FCS16
+        case HDLC_CRC_16:
+            handle->tx.crc = crc16( PPPINITFCS16, handle->tx.data, handle->tx.len ); break;
+#endif
+#ifdef CONFIG_ENABLE_FCS32
+        case HDLC_CRC_32:
+            handle->tx.crc = crc32( PPPINITFCS32, handle->tx.data, handle->tx.len ); break;
+#endif
+#ifdef CONFIG_ENABLE_CHECKSUM
+        case HDLC_CRC_8:
+            handle->tx.crc = chksum( INITCHECKSUM, handle->tx.data, handle->tx.len ); break;
+#endif
+        default: break;
+    }
+
     uint8_t buf[1] = { FLAG_SEQUENCE };
     int result = handle->send_tx( handle->user_data, buf, sizeof(buf) );
     if ( result == 1 )
@@ -51,7 +89,6 @@ static int hdlc_send_data( hdlc_handle_t handle )
 {
     if ( handle->tx.len == 0 )
     {
-        handle->tx.data = NULL;
         handle->tx.state = hdlc_send_crc;
         return 0;
     }
@@ -73,7 +110,6 @@ static int hdlc_send_data( hdlc_handle_t handle )
         }
         if ( handle->tx.len == 0 )
         {
-            handle->tx.data = NULL;
             handle->tx.state = hdlc_send_crc;
         }
     }
@@ -92,7 +128,6 @@ static int hdlc_send_data( hdlc_handle_t handle )
             }
             if ( handle->tx.len == 0 )
             {
-                handle->tx.data = NULL;
                 handle->tx.state = hdlc_send_crc;
             }
         }
@@ -103,13 +138,18 @@ static int hdlc_send_data( hdlc_handle_t handle )
 static int hdlc_send_crc( hdlc_handle_t handle )
 {
     int result;
-    uint8_t byte = handle->tx.crc >> (8 * handle->tx.len);
+    if ( handle->tx.len == (uint8_t)handle->crc_type )
+    {
+        handle->tx.state = hdlc_send_end;
+        return 1;
+    }
+    uint8_t byte = handle->tx.crc >> handle->tx.len;
     if ( byte != TINY_ESCAPE_CHAR && byte != FLAG_SEQUENCE )
     {
         result = handle->send_tx( handle->user_data, &byte, sizeof(byte) );
         if ( result == 1 )
         {
-            handle->tx.len++;
+            handle->tx.len += 8;
         }
     }
     else
@@ -121,13 +161,9 @@ static int hdlc_send_crc( hdlc_handle_t handle )
             handle->tx.escape = !handle->tx.escape;
             if ( !handle->tx.escape )
             {
-                handle->tx.len++;
+                handle->tx.len += 8;
             }
         }
-    }
-    if ( handle->tx.len == 2 )
-    {
-        handle->tx.state = hdlc_send_end;
     }
     return result;
 }
@@ -138,9 +174,15 @@ static int hdlc_send_end( hdlc_handle_t handle )
     int result = handle->send_tx( handle->user_data, buf, sizeof(buf) );
     if ( result == 1 )
     {
+        uint8_t *data = handle->tx.data;
         handle->tx.data = NULL;
         handle->tx.state = hdlc_send_start;
         handle->tx.escape = 0;
+        if ( handle->on_frame_sent )
+        {
+            handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
+                                   data - handle->tx.origin_data );
+        }
     }
     return result;
 }
@@ -167,6 +209,7 @@ int hdlc_send( hdlc_handle_t handle, void *data, int len )
     {
         return 0;
     }
+    handle->tx.origin_data = data;
     handle->tx.data = data;
     handle->tx.len = len;
     return 1;
@@ -232,22 +275,47 @@ static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len )
         return 0;
     }
     handle->rx.state = hdlc_read_start;
-    if ( handle->rx.len < 2 )
+    if ( handle->rx.len < (uint8_t)handle->crc_type / 8 )
     {
         // CRC size issue
         return 0;
     }
-    uint16_t calc_crc = crc16( PPPINITFCS16, handle->rx.data, handle->rx.len - 2 );
-    uint16_t read_crc = handle->rx.data[ handle->rx.len - 2 ] |
-                        ((uint16_t)handle->rx.data[ handle->rx.len - 1 ] << 8 );
+    crc_t calc_crc = 0;
+    crc_t read_crc = 0;
+    switch ( handle->crc_type )
+    {
+#ifdef CONFIG_ENABLE_CHECKSUM
+        case HDLC_CRC_8:
+            calc_crc = chksum( INITCHECKSUM, handle->tx.data, handle->tx.len - 1 );
+            read_crc = handle->rx.data[ handle->rx.len - 1 ];
+            break;
+#endif
+#ifdef CONFIG_ENABLE_FCS16
+        case HDLC_CRC_16:
+            calc_crc = crc16( PPPINITFCS16, handle->rx.data, handle->rx.len - 2 );
+            read_crc = handle->rx.data[ handle->rx.len - 2 ] |
+                       ((uint16_t)handle->rx.data[ handle->rx.len - 1 ] << 8 );
+            break;
+#endif
+#ifdef CONFIG_ENABLE_FCS32
+        case HDLC_CRC_32:
+            calc_crc = crc32( PPPINITFCS32, handle->rx.data, handle->rx.len - 4 );
+            read_crc = handle->rx.data[ handle->rx.len - 4 ] |
+                       ((uint32_t)handle->rx.data[ handle->rx.len - 3 ] << 8 ) |
+                       ((uint32_t)handle->rx.data[ handle->rx.len - 2 ] << 16 ) |
+                       ((uint32_t)handle->rx.data[ handle->rx.len - 1 ] << 24 );
+            break;
+#endif
+        default: break;
+    }
     if ( calc_crc != read_crc )
     {
         // CRC calculate issue
         return 0;
     }
-    if ( handle->on_frame_data )
+    if ( handle->on_frame_read )
     {
-        handle->on_frame_data( handle->user_data, handle->rx.data, handle->rx.len - 2 );
+        handle->on_frame_read( handle->user_data, handle->rx.data, handle->rx.len - (uint8_t)handle->crc_type / 8 );
     }
     return 0;
 }
