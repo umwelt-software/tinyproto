@@ -29,18 +29,18 @@ private:
     hdlc_struct_t     m_handle;
 public:
     TinyHdlcHelper(FakeChannel         * channel,
-                   const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb = nullptr );
+                   const std::function<void(uint8_t*,int)> &onRxFrameCb = nullptr,
+                   int rx_buf_size = 1024 );
     ~TinyHdlcHelper();
-    int send(uint16_t *uid, uint8_t *buf, int len, uint8_t flags);
-    int read(uint16_t *uid, uint8_t *buf, int maxLen, uint8_t flags);
-    int on_rx_byte(uint8_t *buf, int len, uint8_t byte);
+    int send(uint8_t *buf, int len);
+    int process_rx_bytes();
 private:
     static uint32_t s_handleOffset;
     FakeChannel * m_channel;
-    std::function<void(uint16_t,uint8_t*,int)>
+    std::function<void(uint8_t*,int)>
                   m_onRxFrameCb;
 
-    static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
+    static int    onRxFrame(void *handle, void * buf, int len);
     static int    read_data(void * appdata, uint8_t * data, int length);
     static int    write_data(void * appdata, const void * data, int length);
 };

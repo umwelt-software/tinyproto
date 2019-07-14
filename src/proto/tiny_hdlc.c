@@ -7,24 +7,26 @@
 #define TINY_ESCAPE_CHAR         0x7D
 #define TINY_ESCAPE_BIT          0x20
 
-int hdlc_on_rx_data( hdlc_handle_t handle, void *data, int len )
-{
-    return 0;
-}
+static int hdlc_read_start( hdlc_handle_t handle, uint8_t *data, int len );
+static int hdlc_read_data( hdlc_handle_t handle, uint8_t *data, int len );
+static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len );
 
 static int hdlc_send_start( hdlc_handle_t handle );
 static int hdlc_send_data( hdlc_handle_t handle );
 static int hdlc_send_crc( hdlc_handle_t handle );
 static int hdlc_send_end( hdlc_handle_t handle );
 
-int hdlc_init( hdlc_handle_t handle,
-               int (*send_tx)(void *user_data, const void *data, int len),
-               void *user_data )
+hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
 {
-    handle->send_tx = send_tx;
-    handle->user_data = user_data;
-    handle->tx.data = NULL;
-    handle->tx.state = hdlc_send_start;
+    hdlc_info->rx.data = (uint8_t *)hdlc_info->rx_buf;
+    hdlc_info->rx.state = hdlc_read_start;
+    hdlc_info->tx.data = NULL;
+    hdlc_info->tx.state = hdlc_send_start;
+    return hdlc_info;
+}
+
+int hdlc_close( hdlc_handle_t handle )
+{
     return 0;
 }
 
@@ -98,7 +100,7 @@ static int hdlc_send_data( hdlc_handle_t handle )
     return result;
 }
 
-int hdlc_send_crc( hdlc_handle_t handle )
+static int hdlc_send_crc( hdlc_handle_t handle )
 {
     int result;
     uint8_t byte = handle->tx.crc >> (8 * handle->tx.len);
@@ -130,7 +132,7 @@ int hdlc_send_crc( hdlc_handle_t handle )
     return result;
 }
 
-int hdlc_send_end( hdlc_handle_t handle )
+static int hdlc_send_end( hdlc_handle_t handle )
 {
     uint8_t buf[1] = { FLAG_SEQUENCE };
     int result = handle->send_tx( handle->user_data, buf, sizeof(buf) );
@@ -170,3 +172,100 @@ int hdlc_send( hdlc_handle_t handle, void *data, int len )
     return 1;
 }
 
+
+static int hdlc_read_start( hdlc_handle_t handle, uint8_t *data, int len )
+{
+    if ( !len )
+    {
+        return 0;
+    }
+    if ( data[0] != FLAG_SEQUENCE )
+    {
+        // TODO: Skip byte, but we received some wrong data
+        return 1;
+    }
+    handle->rx.len = 0;
+    handle->rx.escape = 0;
+    handle->rx.state = hdlc_read_data;
+    return 1;
+}
+
+static int hdlc_read_data( hdlc_handle_t handle, uint8_t *data, int len )
+{
+    if (!len)
+    {
+        return 0;
+    }
+    uint8_t byte = data[0];
+    if ( byte == FLAG_SEQUENCE )
+    {
+        handle->rx.state = hdlc_read_end;
+        return 1;
+    }
+    if ( byte == TINY_ESCAPE_CHAR )
+    {
+        handle->rx.escape = 1;
+        return 1;
+    }
+    if ( handle->rx.escape )
+    {
+        handle->rx.data[ handle->rx.len ] = byte ^ TINY_ESCAPE_BIT;
+        handle->rx.escape = 0;
+    }
+    else
+    {
+        handle->rx.data[ handle->rx.len ] = byte;
+    }
+//    printf("%02X\n", handle->rx.data[ handle->rx.len ]);
+    handle->rx.len++;
+    return 1;
+}
+
+static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len )
+{
+    if ( handle->rx.len == 0)
+    {
+        // Impossible, maybe frame alignment is wrong, go to read data again
+        handle->rx.len = 0;
+        handle->rx.escape = 0;
+        handle->rx.state = hdlc_read_data;
+        return 0;
+    }
+    handle->rx.state = hdlc_read_start;
+    if ( handle->rx.len < 2 )
+    {
+        // CRC size issue
+        return 0;
+    }
+    uint16_t calc_crc = crc16( PPPINITFCS16, handle->rx.data, handle->rx.len - 2 );
+    uint16_t read_crc = handle->rx.data[ handle->rx.len - 2 ] |
+                        ((uint16_t)handle->rx.data[ handle->rx.len - 1 ] << 8 );
+    if ( calc_crc != read_crc )
+    {
+        // CRC calculate issue
+        return 0;
+    }
+    if ( handle->on_frame_data )
+    {
+        handle->on_frame_data( handle->user_data, handle->rx.data, handle->rx.len - 2 );
+    }
+    return 0;
+}
+
+int hdlc_on_rx_data( hdlc_handle_t handle, void *data, int len )
+{
+    int result = 0;
+    for (;;)
+    {
+        int temp_result = handle->rx.state( handle, (uint8_t *)data, len );
+        if ( temp_result <=0 )
+        {
+            result = result ?: temp_result;
+            break;
+        }
+        data=(uint8_t *)data + temp_result;
+        len -= temp_result;
+        result += temp_result;
+    }
+    return result;
+}

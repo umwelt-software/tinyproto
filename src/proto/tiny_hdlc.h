@@ -7,18 +7,21 @@ extern "C"
 {
 #endif
 
-typedef enum
-{
-    TX_STATE_IDLE,
-    TX_STATE_SEND_DATA,
-    TX_STATE_SEND_CRC,
-    TX_STATE_END,
-} tiny_tx_state_t;
-
 typedef struct _hdlc_handle_t
 {
     void *user_data;
     int (*send_tx)(void *user_data, const void *data, int len);
+    int (*on_frame_data)(void *user_data, void *data, int len);
+    void *rx_buf;
+    int rx_buf_size;
+
+    struct
+    {
+        uint8_t *data;
+        int len;
+        int (*state)( struct _hdlc_handle_t *handle, uint8_t *data, int len );
+        uint8_t escape;
+    } rx;
     struct
     {
         uint8_t *data;
@@ -29,9 +32,9 @@ typedef struct _hdlc_handle_t
     } tx;
 } hdlc_struct_t, *hdlc_handle_t;
 
-int hdlc_init( hdlc_handle_t handle,
-               int (*send_tx)(void *user_data, const void *data, int len),
-               void *user_data );
+hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info );
+
+int hdlc_close( hdlc_handle_t handle );
 
 int hdlc_on_rx_data( hdlc_handle_t handle, void *data, int len );
 
