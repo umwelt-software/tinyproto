@@ -68,7 +68,7 @@ int TinyHdlcHelper::process_rx_bytes()
         int res;
         do
         {
-            res = hdlc_on_rx_data( &m_handle, &byte, 1 );
+            res = hdlc_run_rx( &m_handle, &byte, 1 );
         } while (res == 0);
         if (res < 0)
         {

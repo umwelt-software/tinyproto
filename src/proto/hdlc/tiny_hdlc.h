@@ -42,8 +42,8 @@ typedef struct _hdlc_handle_t
      *         0 if hw device is busy, or positive number - number of bytes
      *         sent.
      */
-
     int (*send_tx)(void *user_data, const void *data, int len);
+
     /**
      * User-defined callback, which is called when new packet arrives from hw
      * channel.
@@ -56,7 +56,8 @@ typedef struct _hdlc_handle_t
 
     int (*on_frame_read)(void *user_data, void *data, int len);
 
-    int (*on_frame_sent)(void *user_data, void *data, int len);
+    int (*on_frame_sent)(void *user_data, const void *data, int len);
+
     /**
      * Buffer to be used by hdlc level to receive data to
      */
@@ -88,8 +89,8 @@ typedef struct _hdlc_handle_t
     } rx;
     struct
     {
-        uint8_t *origin_data;
-        uint8_t *data;
+        const uint8_t *origin_data;
+        const uint8_t *data;
         int len;
         crc_t crc;
         uint8_t escape;
@@ -115,9 +116,17 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info );
 int hdlc_close( hdlc_handle_t handle );
 
 /**
+ * Resets hdlc state. Use this function, if hw error happened on tx or rx
+ * line, and this requires hardware change, and cancelling current operation.
+ *
+ * @param handle handle to hdlc instance
+ */
+void hdlc_reset( hdlc_handle_t handle );
+
+/**
  * Processes incoming data. Implementation of reading data from hw is user
- * responsibility. If hdlc_on_rx_data() returns value less than size of data
- * passed to the function, then hdlc_on_rx_data() must be called later second
+ * responsibility. If hdlc_run_rx() returns value less than size of data
+ * passed to the function, then hdlc_run_rx() must be called later second
  * time with the pointer to and size of not processed bytes.
  *
  * @param handle handle to hdlc instance
@@ -125,7 +134,7 @@ int hdlc_close( hdlc_handle_t handle );
  * @param len size of received data in bytes
  * @return number of bytes actually processed.
  */
-int hdlc_on_rx_data( hdlc_handle_t handle, void *data, int len );
+int hdlc_run_rx( hdlc_handle_t handle, void *data, int len );
 
 /**
  * Runs transmission at hdlc level. If there is frame to send, or
@@ -152,7 +161,7 @@ int hdlc_run_tx( hdlc_handle_t handle );
  * @warning buffer with data must be available all the time until
  *          data are actually sent to tx hw channel
  */
-int hdlc_send( hdlc_handle_t handle, void *data, int len );
+int hdlc_send( hdlc_handle_t handle, const void *data, int len );
 
 #ifdef __cplusplus
 }

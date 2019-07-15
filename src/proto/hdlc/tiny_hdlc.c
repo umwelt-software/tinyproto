@@ -18,10 +18,7 @@ static int hdlc_send_end( hdlc_handle_t handle );
 
 hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
 {
-    hdlc_info->rx.data = (uint8_t *)hdlc_info->rx_buf;
-    hdlc_info->rx.state = hdlc_read_start;
-    hdlc_info->tx.data = NULL;
-    hdlc_info->tx.state = hdlc_send_start;
+    hdlc_reset( hdlc_info );
     if ( hdlc_info->crc_type == HDLC_CRC_DEFAULT )
     {
 #if defined(CONFIG_ENABLE_FCS16)
@@ -50,6 +47,13 @@ int hdlc_close( hdlc_handle_t handle )
         }
     }
     return 0;
+}
+
+void hdlc_reset( hdlc_handle_t handle )
+{
+    handle->rx.state = hdlc_read_start;
+    handle->tx.data = NULL;
+    handle->tx.state = hdlc_send_start;
 }
 
 static int hdlc_send_start( hdlc_handle_t handle )
@@ -174,7 +178,7 @@ static int hdlc_send_end( hdlc_handle_t handle )
     int result = handle->send_tx( handle->user_data, buf, sizeof(buf) );
     if ( result == 1 )
     {
-        uint8_t *data = handle->tx.data;
+        const uint8_t *data = handle->tx.data;
         handle->tx.data = NULL;
         handle->tx.state = hdlc_send_start;
         handle->tx.escape = 0;
@@ -203,7 +207,7 @@ int hdlc_run_tx( hdlc_handle_t handle )
     return result;
 }
 
-int hdlc_send( hdlc_handle_t handle, void *data, int len )
+int hdlc_send( hdlc_handle_t handle, const void *data, int len )
 {
     if ( handle->tx.data != NULL )
     {
@@ -229,6 +233,7 @@ static int hdlc_read_start( hdlc_handle_t handle, uint8_t *data, int len )
     }
     handle->rx.len = 0;
     handle->rx.escape = 0;
+    handle->rx.data = (uint8_t *)handle->rx_buf;
     handle->rx.state = hdlc_read_data;
     return 1;
 }
@@ -320,7 +325,7 @@ static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len )
     return 0;
 }
 
-int hdlc_on_rx_data( hdlc_handle_t handle, void *data, int len )
+int hdlc_run_rx( hdlc_handle_t handle, void *data, int len )
 {
     int result = 0;
     for (;;)

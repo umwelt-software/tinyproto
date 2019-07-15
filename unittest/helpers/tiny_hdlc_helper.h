@@ -21,7 +21,7 @@
 #include <functional>
 #include <stdint.h>
 #include "fake_channel.h"
-#include "tiny_hdlc.h"
+#include "hdlc/tiny_hdlc.h"
 
 class TinyHdlcHelper
 {

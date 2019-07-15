@@ -26,6 +26,7 @@
 #ifndef _TINY_LIGHT_H_
 #define _TINY_LIGHT_H_
 
+#include "hdlc/tiny_hdlc.h"
 #include "tiny_proto_types.h"
 
 #ifdef __cplusplus
@@ -44,16 +45,17 @@ extern "C" {
  */
 typedef struct
 {
-    /// pointer to application defined data, passed during protocol initialization - absent in Arduino version
-    void*               pdata;
 #ifdef CONFIG_ENABLE_STATS
     /// @see STinyStats
     STinyStats          stat;
 #endif
     /// pointer to platform related write function
-    write_block_cb_t    write_func;
+//    write_block_cb_t    write_func;
     /// pointer to platform related read function
     read_block_cb_t     read_func;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    hdlc_struct_t       hdlc;
+#endif
 } STinyLightData;
 
 

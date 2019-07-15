@@ -82,7 +82,7 @@ uint32_t crc32_byte(uint32_t crc, uint8_t data)
 }
 
 
-uint32_t crc32(uint32_t crc, uint8_t *buf, int size)
+uint32_t crc32(uint32_t crc, const uint8_t *buf, int size)
 {
 	const uint8_t *p;
 
@@ -149,7 +149,7 @@ uint16_t crc16_byte(uint16_t crc, uint8_t data)
 }
 
 
-uint16_t crc16(uint16_t crc, uint8_t* data, int data_length)
+uint16_t crc16(uint16_t crc, const uint8_t* data, int data_length)
 {
     while(data_length)
     {
@@ -172,7 +172,7 @@ uint16_t chksum_byte(uint16_t sum, uint8_t data)
     return sum + data;
 }
 
-uint16_t chksum(uint16_t sum, uint8_t* data, int data_length)
+uint16_t chksum(uint16_t sum, const uint8_t* data, int data_length)
 {
     while(data_length)
     {

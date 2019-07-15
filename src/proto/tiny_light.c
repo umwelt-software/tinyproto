@@ -73,12 +73,17 @@ int tiny_light_init(void *handle,
     {
         return TINY_ERR_FAILED;
     }
-    ((STinyLightData *)handle)->pdata = pdata;
-    ((STinyLightData *)handle)->write_func = write_func;
+    ((STinyLightData *)handle)->hdlc.user_data = pdata;
+    ((STinyLightData *)handle)->hdlc.send_tx = write_func;
+    ((STinyLightData *)handle)->hdlc.rx_buf = NULL;
+    ((STinyLightData *)handle)->hdlc.rx_buf_size = 0;
+    ((STinyLightData *)handle)->hdlc.crc_type = HDLC_CRC_OFF;
     ((STinyLightData *)handle)->read_func = read_func;
+
 #ifdef CONFIG_ENABLE_STATS
     tiny_light_clear_stat((STinyLightData *)handle);
 #endif
+    hdlc_init( &((STinyLightData *)handle)->hdlc );
     return TINY_NO_ERROR;
 }
 
@@ -90,8 +95,8 @@ int tiny_light_close(void *handle)
     {
         return TINY_ERR_FAILED;
     }
-    ((STinyLightData *)handle)->write_func = 0;
     ((STinyLightData *)handle)->read_func = 0;
+    hdlc_close( &((STinyLightData *)handle)->hdlc );
     return TINY_NO_ERROR;
 }
 
@@ -101,58 +106,25 @@ int tiny_light_close(void *handle)
 *
 ***************************************************************/
 
-//////////////////////////////////////////////////////////////////////////////////////
-
-static int tiny_send_byte(void *handle, uint8_t byte)
-{
-    int result;
-    if ( (byte == FLAG_SEQUENCE) || (byte == TINY_ESCAPE_CHAR) )
-    {
-        uint8_t escape = TINY_ESCAPE_CHAR;
-        byte ^= TINY_ESCAPE_BIT;
-        result = ((STinyLightData *)handle)->write_func(((STinyLightData *)handle)->pdata, &escape, 1);
-        if ( result <= 0 )
-        {
-            return result;
-        }
-    }
-    result = ((STinyLightData *)handle)->write_func(((STinyLightData *)handle)->pdata, &byte, 1);
-    return result;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Returns negative value in case of error
  *         length of sent data
  */
 int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 {
-    int result;
-
-    uint8_t byte = FLAG_SEQUENCE;
-    result = ((STinyLightData *)handle)->write_func(((STinyLightData *)handle)->pdata, &byte, 1);
-    if (result <= 0)
+    if ( hdlc_send( &((STinyLightData *)handle)->hdlc, pbuf, len ) == 0 )
     {
         return TINY_ERR_FAILED;
     }
-    uint8_t length = len;
-    while ( length )
+    while ( ((STinyLightData *)handle)->hdlc.tx.data )
     {
-        result = tiny_send_byte( handle, *pbuf);
-        if (result <= 0)
+        int result = hdlc_run_tx( &((STinyLightData *)handle)->hdlc );
+        if ( result < 0 )
         {
             return TINY_ERR_FAILED;
         }
-        length--;
-        pbuf++;
     }
-    result = ((STinyLightData *)handle)->write_func(((STinyLightData *)handle)->pdata, &byte, 1);
-    if (result <= 0)
-    {
-        return TINY_ERR_FAILED;
-    }
-    return result;
+    return len;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -164,71 +136,29 @@ int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 *
 ***************************************************************/
 
-static int tiny_read_byte(void * handle, uint8_t *byte)
-{
-    int error;
-    error = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->pdata, byte, 1);
-    if ( error <= 0 )
-    {
-        return error;
-    }
-    if (*byte == FLAG_SEQUENCE)
-    {
-        return FLAG_SEQUENCE;
-    }
-    if (*byte != TINY_ESCAPE_CHAR)
-    {
-        return 1;
-    }
-    error = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->pdata, byte, 1);
-    if ( error <= 0 )
-    {
-        return error;
-    }
-    if (*byte == FLAG_SEQUENCE)
-    {
-        return FLAG_SEQUENCE;
-    }
-    *byte ^= TINY_ESCAPE_BIT;
-    return error;
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_light_read(void *handle, uint8_t *pbuf, int len)
 {
-    uint8_t length = 0;
-    int result = TINY_NO_ERROR;
-    if ( len <= 0 )
+    ((STinyLightData *)handle)->hdlc.rx_buf = pbuf;
+    ((STinyLightData *)handle)->hdlc.rx.data = pbuf;
+    ((STinyLightData *)handle)->hdlc.rx_buf_size = len;
+    for(;;)
     {
-        return TINY_ERR_FAILED;
-    }
-    result = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->pdata, pbuf, 1);
-    if ((1 != result) || (*pbuf != FLAG_SEQUENCE))
-    {
-        return TINY_ERR_OUT_OF_SYNC;
-    }
-    while (length < len)
-    {
-        result = tiny_read_byte( handle, pbuf );
-        if (result <= 0)
+        uint8_t byte;
+        int result = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->hdlc.user_data, &byte, 1);
+        if ( result <= 0 )
         {
-            result = TINY_ERR_FAILED;
+            return TINY_ERR_FAILED;
+        }
+        hdlc_run_rx( &((STinyLightData *)handle)->hdlc, &byte, 1 );
+        if (1)
+        {
+            // TODO: Add mechanism of checking that packet is received
             break;
         }
-        if ( FLAG_SEQUENCE == result )
-        {
-            if (length != 0)
-            {
-                result = length;
-                break;
-            }
-            continue;
-        }
-        length++;
-        pbuf++;
     }
-    return result;
+    return len;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

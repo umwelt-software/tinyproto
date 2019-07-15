@@ -104,7 +104,7 @@ SRC_TINY = \
         src/proto/crc.c \
         src/proto/tiny_layer2.c \
         src/proto/tiny_light.c \
-        src/proto/tiny_hdlc.c \
+        src/proto/hdlc/tiny_hdlc.c \
         src/proto/tiny_hd.c \
         src/proto/tiny_list.c \
         src/proto/tiny_rq_pool.c \
@@ -130,7 +130,7 @@ install-lib: library
 docs:
 	doxygen doxygen.cfg
 
-all: library unittest sperf
+all: library sperf
 
 install: install-lib
 	$(STRIP) $(DESTDIR)/$@

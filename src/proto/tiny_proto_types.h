@@ -111,7 +111,7 @@ typedef struct
  * @return the function must return negative value in case of error or number of bytes written
  *         or zero.
  */
-typedef int (*write_block_cb_t)(void *pdata, const uint8_t *buffer, int size);
+typedef int (*write_block_cb_t)(void *pdata, const void *buffer, int size);
 
 /**
  * The function reads data from communication channel.
@@ -122,7 +122,7 @@ typedef int (*write_block_cb_t)(void *pdata, const uint8_t *buffer, int size);
  * @return the function must return negative value in case of error or number of bytes actually read
  *         or zero.
  */
-typedef int (*read_block_cb_t)(void *pdata, uint8_t *buffer, int size);
+typedef int (*read_block_cb_t)(void *pdata, void *buffer, int size);
 
 
 /**
