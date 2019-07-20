@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -18,6 +18,7 @@
  */
 
 #include "tiny_light.h"
+#include <stddef.h>
 
 #ifdef CONFIG_ENABLE_STATS
     #define STATS(x) x
@@ -64,6 +65,10 @@ static int tiny_light_clear_stat(STinyLightData *handle)
 *
 ***************************************************************/
 
+static int write_func_cb(void *user_data, const void *data, int len);
+static int on_frame_read(void *user_data, void *data, int len);
+static int on_frame_sent(void *user_data, const void *data, int len);
+
 int tiny_light_init(void *handle,
                     write_block_cb_t write_func,
                     read_block_cb_t read_func,
@@ -73,12 +78,17 @@ int tiny_light_init(void *handle,
     {
         return TINY_ERR_FAILED;
     }
-    ((STinyLightData *)handle)->hdlc.user_data = pdata;
-    ((STinyLightData *)handle)->hdlc.send_tx = write_func;
+    ((STinyLightData *)handle)->hdlc.user_data = handle;
+    ((STinyLightData *)handle)->hdlc.on_frame_read = on_frame_read;
+    ((STinyLightData *)handle)->hdlc.on_frame_sent = on_frame_sent;
+    ((STinyLightData *)handle)->hdlc.send_tx = write_func_cb;
     ((STinyLightData *)handle)->hdlc.rx_buf = NULL;
     ((STinyLightData *)handle)->hdlc.rx_buf_size = 0;
     ((STinyLightData *)handle)->hdlc.crc_type = HDLC_CRC_OFF;
+
+    ((STinyLightData *)handle)->user_data = pdata;
     ((STinyLightData *)handle)->read_func = read_func;
+    ((STinyLightData *)handle)->write_func = write_func;
 
 #ifdef CONFIG_ENABLE_STATS
     tiny_light_clear_stat((STinyLightData *)handle);
@@ -106,25 +116,36 @@ int tiny_light_close(void *handle)
 *
 ***************************************************************/
 
-/**
- * Returns negative value in case of error
- *         length of sent data
- */
+static int write_func_cb(void *user_data, const void *data, int len)
+{
+    return ((STinyLightData *)user_data)->write_func(
+                    ((STinyLightData *)user_data)->user_data,
+                    data,
+                    len);
+}
+
+static int on_frame_sent(void *user_data, const void *data, int len)
+{
+    ((STinyLightData *)user_data)->_sent++;
+    return len;
+}
+
 int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 {
     if ( hdlc_send( &((STinyLightData *)handle)->hdlc, pbuf, len ) == 0 )
     {
         return TINY_ERR_FAILED;
     }
-    while ( ((STinyLightData *)handle)->hdlc.tx.data )
+    ((STinyLightData *)handle)->_sent = 0;
+    while ( ((STinyLightData *)handle)->_sent == 0 )
     {
         int result = hdlc_run_tx( &((STinyLightData *)handle)->hdlc );
         if ( result < 0 )
         {
-            return TINY_ERR_FAILED;
+            break;
         }
     }
-    return len;
+    return ((STinyLightData *)handle)->_sent ? len: TINY_ERR_FAILED;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -136,29 +157,38 @@ int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 *
 ***************************************************************/
 
-/////////////////////////////////////////////////////////////////////////////////////////
+static int on_frame_read(void *user_data, void *data, int len)
+{
+    ((STinyLightData *)user_data)->_received++;
+    return len;
+}
+
 
 int tiny_light_read(void *handle, uint8_t *pbuf, int len)
 {
     ((STinyLightData *)handle)->hdlc.rx_buf = pbuf;
     ((STinyLightData *)handle)->hdlc.rx.data = pbuf;
     ((STinyLightData *)handle)->hdlc.rx_buf_size = len;
-    for(;;)
+    ((STinyLightData *)handle)->_received = 0;
+    while (((STinyLightData *)handle)->_received == 0)
     {
         uint8_t byte;
-        int result = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->hdlc.user_data, &byte, 1);
-        if ( result <= 0 )
+        int result = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->user_data, &byte, 1);
+        if ( result == 0 )
         {
-            return TINY_ERR_FAILED;
+            if ( ((STinyLightData *)handle)->hdlc.rx.len == 0 )
+            {
+                break;
+            }
+            continue;
         }
-        hdlc_run_rx( &((STinyLightData *)handle)->hdlc, &byte, 1 );
-        if (1)
+        else if ( result < 0 )
         {
-            // TODO: Add mechanism of checking that packet is received
             break;
         }
+        while ( hdlc_run_rx( &((STinyLightData *)handle)->hdlc, &byte, 1 ) == 0 );
     }
-    return len;
+    return ((STinyLightData *)handle)->_received ? ((STinyLightData *)handle)->hdlc.rx.len: TINY_ERR_FAILED;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

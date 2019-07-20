@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -50,11 +50,15 @@ typedef struct
     STinyStats          stat;
 #endif
     /// pointer to platform related write function
-//    write_block_cb_t    write_func;
+    write_block_cb_t    write_func;
     /// pointer to platform related read function
     read_block_cb_t     read_func;
+    /// user-specific data
+    void               *user_data;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     hdlc_struct_t       hdlc;
+    uint8_t             _received;
+    uint8_t             _sent;
 #endif
 } STinyLightData;
 
