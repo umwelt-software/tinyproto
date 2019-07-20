@@ -28,7 +28,7 @@
 #define _TINY_LIGHT_PROTOCOL_H_
 
 #include "TinyPacket.h"
-#include "proto/tiny_light.h"
+#include "proto/light/tiny_light.h"
 
 #ifdef ARDUINO
 #   include <HardwareSerial.h>

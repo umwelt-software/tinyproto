@@ -17,7 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "crc.h"
+#include "proto/crc/crc.h"
 #include "tiny_layer2.h"
 
 #ifdef CONFIG_ENABLE_STATS

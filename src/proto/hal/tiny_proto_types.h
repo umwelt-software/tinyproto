@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "os/tiny_defines.h"
+#include "tiny_defines.h"
 
 /// \cond
 #ifdef CONFIG_ENABLE_FCS32

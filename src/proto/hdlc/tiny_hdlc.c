@@ -1,5 +1,5 @@
 #include "tiny_hdlc.h"
-#include "proto/crc.h"
+#include "proto/crc/crc.h"
 
 #include <stdio.h>
 

@@ -21,7 +21,7 @@
 #include <functional>
 #include <stdint.h>
 #include "fake_channel.h"
-#include "tiny_light.h"
+#include "proto/light/tiny_light.h"
 
 class TinyLightHelper
 {

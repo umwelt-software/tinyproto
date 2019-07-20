@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "tiny_proto_types.h"
+#include "proto/hal/tiny_proto_types.h"
 
 /// \cond
 typedef enum

@@ -18,7 +18,7 @@
 */
 
 #include "serial_api.h"
-#include "tiny_light.h"
+#include "proto/light/tiny_light.h"
 #include <stdio.h>
 #include <time.h>
 

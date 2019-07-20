@@ -26,8 +26,8 @@
 #ifndef _TINY_LIGHT_H_
 #define _TINY_LIGHT_H_
 
-#include "hdlc/tiny_hdlc.h"
-#include "tiny_proto_types.h"
+#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hal/tiny_proto_types.h"
 
 #ifdef __cplusplus
 extern "C" {

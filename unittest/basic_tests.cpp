@@ -89,7 +89,7 @@ TEST(BasicTests, TinyLayer2_Send_Receive)
 
 #endif
 
-#if 0
+#if 1
 
 TEST(BasicTests, TinyLayer2_Send_Receive_Event_Based)
 {

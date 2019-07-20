@@ -20,7 +20,7 @@
 #ifndef _TINY_REQUEST_POOL_H_
 #define _TINY_REQUEST_POOL_H_
 
-#include "os/tiny_defines.h"
+#include "proto/hal/tiny_defines.h"
 #include "tiny_list.h"
 #include "tiny_hd.h"
 

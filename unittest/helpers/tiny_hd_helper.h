@@ -24,8 +24,8 @@
 #include <stdint.h>
 #include <thread>
 #include <atomic>
-#include "tiny_layer2.h"
-#include "tiny_hd.h"
+#include "proto/tiny_layer2.h"
+#include "proto/tiny_hd.h"
 #include "fake_channel.h"
 
 
