@@ -29,7 +29,7 @@
 #define _TINY_PROTOCOL_H_
 
 #include "TinyPacket.h"
-#include "proto/tiny_hd.h"
+#include "proto/half_duplex/tiny_hd.h"
 
 #ifdef ARDUINO
 #   include <HardwareSerial.h>

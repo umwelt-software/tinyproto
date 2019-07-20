@@ -49,7 +49,6 @@ $(BLD)/%.o: %.cpp
 
 INCLUDES += \
 	-I./src \
-        -I./src/proto \
         -I./tools/serial \
 
 CCFLAGS += -fPIC -g $(INCLUDES) -Wall -Werror
@@ -104,13 +103,13 @@ LDFLAGS_TINY = -shared
 TARGET_TINY = libtinyp.a
 
 SRC_TINY = \
-        src/proto/crc.c \
-        src/proto/tiny_layer2.c \
-        src/proto/tiny_light.c \
+        src/proto/crc/crc.c \
+        src/proto/_old/tiny_layer2.c \
+        src/proto/light/tiny_light.c \
         src/proto/hdlc/tiny_hdlc.c \
-        src/proto/tiny_hd.c \
-        src/proto/tiny_list.c \
-        src/proto/tiny_rq_pool.c \
+        src/proto/half_duplex/tiny_hd.c \
+        src/proto/half_duplex/tiny_list.c \
+        src/proto/half_duplex/tiny_rq_pool.c \
         tools/serial/serial_linux.c
 
 OBJ_TINY = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_TINY))))

@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "tiny_layer2.h"
+#include "proto/_old/tiny_layer2.h"
 
 
 /**

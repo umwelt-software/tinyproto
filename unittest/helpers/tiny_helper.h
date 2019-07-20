@@ -23,7 +23,7 @@
 #include <functional>
 #include <stdint.h>
 #include "fake_channel.h"
-#include "proto/tiny_layer2.h"
+#include "proto/_old/tiny_layer2.h"
 
 class TinyHelper
 {
