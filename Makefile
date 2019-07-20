@@ -48,6 +48,7 @@ $(BLD)/%.o: %.cpp
 # ************* Common defines ********************
 
 INCLUDES += \
+	-I./src \
         -I./src/proto \
         -I./tools/serial \
 
@@ -79,10 +80,12 @@ SRC_UNIT_TEST = \
 	unittest/helpers/fake_channel.cpp \
 	unittest/helpers/tiny_helper.cpp \
 	unittest/helpers/tiny_hdlc_helper.cpp \
+	unittest/helpers/tiny_light_helper.cpp \
 	unittest/helpers/tiny_hd_helper.cpp \
 	unittest/main.cpp \
 	unittest/basic_tests.cpp \
 	unittest/hdlc_tests.cpp \
+	unittest/light_tests.cpp \
 	unittest/hd_tests.cpp
 
 OBJ_UNIT_TEST = $(addprefix $(BLD)/, $(addsuffix .o, $(basename $(SRC_UNIT_TEST))))
@@ -137,7 +140,6 @@ install: install-lib
 
 clean:
 	rm -rf $(BLD)
-	rm -rf releases
 
 unittest: $(OBJ_UNIT_TEST) library
 	$(CXX) $(CCFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L. -L$(BLD) -lm -pthread -ltinyp -lCppUTest -lCppUTestExt

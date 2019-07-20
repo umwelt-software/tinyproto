@@ -53,8 +53,8 @@ private:
     uint8_t     * m_buffer;
 
     static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
-    static int    read_data(void * appdata, uint8_t * data, int length);
-    static int    write_data(void * appdata, const uint8_t * data, int length);
+    static int    read_data(void * appdata, void * data, int length);
+    static int    write_data(void * appdata, const void * data, int length);
     static void   receiveThread(TinyHelperHd *p);
 };
 

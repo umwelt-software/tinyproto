@@ -23,10 +23,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "helpers/tiny_hdlc_helper.h"
+#include "helpers/tiny_light_helper.h"
 
 
-TEST_GROUP(HdlcTests)
+TEST_GROUP(LightTests)
 {
     void setup()
     {
@@ -41,43 +41,45 @@ TEST_GROUP(HdlcTests)
 
 
 #if 1
-TEST(HdlcTests, TinyLayer2_Send_Receive)
+TEST(LightTests, Send_Receive)
 {
-    uint16_t     nsent = 0;
-    uint16_t     nreceived = 0;
-    uint32_t     bytes_sent = 0;
-    uint32_t     bytes_received = 0;
     FakeWire     line1;
     FakeWire     line2;
     FakeChannel  channel1( &line1, &line2 );
     FakeChannel  channel2( &line2, &line1 );
-    TinyHdlcHelper   helper1( &channel1,
-                            nullptr,
-                            [&nsent,&bytes_sent](uint8_t *buf, int len)->void
-                            {
-                                bytes_sent += len;
-                                nsent++;
-                            } );
-    TinyHdlcHelper   helper2( &channel2,
-                            [&nreceived,&bytes_received](uint8_t *buf, int len)->void
-                            {
-                                bytes_received += len;
-                                nreceived++;
-                            }
-                            );
-    uint8_t      txbuf[128];
+    TinyLightHelper   helper1( &channel1 );
+    TinyLightHelper   helper2( &channel2 );
+    uint8_t      txbuf[128]{};
+    uint8_t      rxbuf[128]{};
 
-    while (nsent < 32)
+    int nsent = 0;
+    while (nsent < 256)
     {
         snprintf((char *)txbuf, sizeof(txbuf) - 1, "This is frame Number %u (stream %i)", nsent, 0);
-        int result = helper1.send( (uint8_t *)txbuf, strlen((char *)txbuf) + 1 );
-        CHECK( result > 0 );
-        result = helper2.process_rx_bytes();
-        if (result < 0) printf("failed:%i\n", result);
-        CHECK( result >= 0 );
+        int sent = helper1.send( txbuf, strlen((char *)txbuf) + 1 );
+        CHECK_EQUAL( sent, strlen((char *)txbuf) + 1 );
+        int received = helper2.read( rxbuf, sizeof(rxbuf) );
+        CHECK_EQUAL( received, strlen((char *)txbuf) + 1 );
+        nsent++;
     }
-    CHECK_EQUAL( nsent, nreceived );
-    CHECK_EQUAL( bytes_sent, bytes_received );
+}
+
+TEST(LightTests, Small_Frames)
+{
+    FakeWire     line1;
+    FakeWire     line2;
+    FakeChannel  channel1( &line1, &line2 );
+    FakeChannel  channel2( &line2, &line1 );
+    TinyLightHelper   helper1( &channel1 );
+    TinyLightHelper   helper2( &channel2 );
+    uint8_t      txbuf[3]{};
+    uint8_t      rxbuf[3]{};
+    txbuf[0]='T';
+    int sent = helper1.send( txbuf, 1 );
+    CHECK_EQUAL( sent, 1 );
+    int received = helper2.read( rxbuf, sizeof(rxbuf) );
+    CHECK_EQUAL( received, 1 );
+    CHECK_EQUAL( rxbuf[0], 'T' );
 }
 
 #endif

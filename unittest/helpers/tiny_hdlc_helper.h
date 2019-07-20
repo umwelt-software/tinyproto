@@ -42,7 +42,7 @@ private:
     std::function<void(uint8_t*,int)> m_onTxFrameCb;
 
     static int    onRxFrame(void *handle, void * buf, int len);
-    static int    onTxFrame(void *handle, void * buf, int len);
+    static int    onTxFrame(void *handle, const void * buf, int len);
     static int    read_data(void * appdata, uint8_t * data, int length);
     static int    write_data(void * appdata, const void * data, int length);
 };

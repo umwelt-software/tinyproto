@@ -88,7 +88,7 @@ int TinyHdlcHelper::onRxFrame(void *handle, void * buf, int len)
     return 0;
 }
 
-int TinyHdlcHelper::onTxFrame(void *handle, void * buf, int len)
+int TinyHdlcHelper::onTxFrame(void *handle, const void * buf, int len)
 {
     TinyHdlcHelper * helper = reinterpret_cast<TinyHdlcHelper *>( ((uint8_t *)handle) - s_handleOffset );
     if (helper->m_onTxFrameCb)

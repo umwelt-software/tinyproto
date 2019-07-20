@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -16,37 +16,28 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef _TINY_HELPER_H_
-#define _TINY_HELPER_H_
+#pragma once
 
 #include <functional>
 #include <stdint.h>
 #include "fake_channel.h"
-#include "tiny_layer2.h"
+#include "tiny_light.h"
 
-class TinyHelper
+class TinyLightHelper
 {
 private:
-    STinyData     m_handle;
+    STinyLightData     m_handle;
 public:
-    TinyHelper(FakeChannel         * channel,
-               const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb = nullptr );
-    ~TinyHelper();
-    void enableUid();
-    int send(uint16_t *uid, uint8_t *buf, int len, uint8_t flags);
-    int read(uint16_t *uid, uint8_t *buf, int maxLen, uint8_t flags);
-    int on_rx_byte(uint8_t *buf, int len, uint8_t byte);
+    TinyLightHelper(FakeChannel         * channel,
+                   int rx_buf_size = 1024 );
+    ~TinyLightHelper();
+    int send(uint8_t *buf, int len);
+    int read(uint8_t *buf, int len);
 private:
     static uint32_t s_handleOffset;
     FakeChannel * m_channel;
-    std::function<void(uint16_t,uint8_t*,int)>
-                  m_onRxFrameCb;
 
-    static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
     static int    read_data(void * appdata, void * data, int length);
     static int    write_data(void * appdata, const void * data, int length);
 };
 
-
-#endif /* _FAKE_WIRE_H_ */

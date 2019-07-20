@@ -84,17 +84,17 @@ void  TinyHelperHd::onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len
 }
 
 
-int TinyHelperHd::read_data(void * appdata, uint8_t * data, int length)
+int TinyHelperHd::read_data(void * appdata, void * data, int length)
 {
     TinyHelperHd  *helper = reinterpret_cast<TinyHelperHd *>(appdata);
-    return helper->m_channel->read(data, length);
+    return helper->m_channel->read((uint8_t *)data, length);
 }
 
 
-int TinyHelperHd::write_data(void * appdata, const uint8_t * data, int length)
+int TinyHelperHd::write_data(void * appdata, const void * data, int length)
 {
     TinyHelperHd *helper = reinterpret_cast<TinyHelperHd *>(appdata);
-    return helper->m_channel->write(data, length);
+    return helper->m_channel->write((const uint8_t *)data, length);
 }
 
 
