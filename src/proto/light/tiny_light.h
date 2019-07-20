@@ -33,6 +33,11 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup LIGHT_API Tiny light protocol API functions
+ * @{
+ */
+
 /*************************************************************
  *
  *          Tiny defines
@@ -63,10 +68,6 @@ typedef struct
 } STinyLightData;
 
 
-/**
- * @defgroup LIGHT_API Tiny light API functions
- * @{
- */
 
 /**
  * The function initializes internal structures for Tiny channel and return handle

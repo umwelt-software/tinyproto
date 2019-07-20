@@ -1,7 +1,7 @@
-<map id="src/proto/tiny_hd.h" name="src/proto/tiny_hd.h">
-<area shape="rect" id="node3" href="$tiny__layer2_8h.html" title="Tiny protocol API. " alt="" coords="65,80,161,107"/>
-<area shape="rect" id="node4" href="$tiny__proto__types_8h.html" title="Tiny protocol Types. " alt="" coords="117,155,246,181"/>
-<area shape="rect" id="node5" href="$tiny__defines_8h_source.html" title="os/tiny_defines.h" alt="" coords="127,229,249,256"/>
-<area shape="rect" id="node6" href="$arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="113,304,263,331"/>
-<area shape="rect" id="node7" href="$tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="140,379,236,405"/>
+<map id="src/proto/half_duplex/tiny_hd.h" name="src/proto/half_duplex/tiny_hd.h">
+<area shape="rect" id="node3" href="$tiny__hdlc_8h_source.html" title="proto/hdlc/tiny_hdlc.h" alt="" coords="24,102,170,129"/>
+<area shape="rect" id="node4" href="$tiny__proto__types_8h.html" title="Tiny protocol Types. " alt="" coords="194,95,328,136"/>
+<area shape="rect" id="node5" href="$tiny__defines_8h_source.html" title="tiny_defines.h" alt="" coords="210,184,312,211"/>
+<area shape="rect" id="node6" href="$arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="186,259,336,285"/>
+<area shape="rect" id="node7" href="$tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="213,333,309,360"/>
 </map>

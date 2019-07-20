@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['stinyhddata',['STinyHdData',['../tiny__hd_8h.html#af9f81ad129b754a780dfca5dcd7f7cf9',1,'tiny_hd.h']]],
-  ['stinyhdinit',['STinyHdInit',['../tiny__hd_8h.html#a784f1a0f0ae7f06da4bc288fa3f22408',1,'tiny_hd.h']]]
+  ['read_5fblock_5fcb_5ft',['read_block_cb_t',['../tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b',1,'tiny_proto_types.h']]]
 ];

@@ -29,8 +29,8 @@ And then TinyProto Light version was implemented.
    * FCS32 (CCITT-32)
  * Passing UID with each frame (absent in TinyProto Light version)
  * Frame transfer acknowledgement (TinyProto Half Duplex version)
- * Frames of maximum 64K size.
- * Low SRAM consumption (36 bytes for Tiny Protocol engine)
+ * Frames of maximum 32K size (limit depends on OS).
+ * Low SRAM consumption (40 bytes for Tiny Light version)
  * Low Flash consumption (many features can be disabled at compilation time)
  * Tool for communicating with uC devices (with win32 binary)
 

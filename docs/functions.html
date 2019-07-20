@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.6.4</span>
+   &#160;<span id="projectnumber">0.7.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -97,6 +97,10 @@ $(function() {
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>clear()
 : <a class="el" href="classTiny_1_1Packet.html#a9bfdb9244515ef3dbf1056c1e37d0902">Tiny::Packet</a>
+</li>
+<li>crc_type
+: <a class="el" href="struct__hdlc__handle__t.html#a156f67a5da24e537a8c0dcda28b59668">_hdlc_handle_t</a>
+, <a class="el" href="structSTinyHdInit__.html#a520f9fbb19f5ec84f3f86a10d819faf4">STinyHdInit_</a>
 </li>
 </ul>
 
@@ -191,21 +195,12 @@ $(function() {
 </ul>
 
 
-<h3><a id="index_h"></a>- h -</h3><ul>
-<li>handle
-: <a class="el" href="structSTinyHdData__.html#a0df5a323cbbfd49fb138b14bca73f14c">STinyHdData_</a>
-</li>
-</ul>
-
-
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>inbuf
-: <a class="el" href="structSTinyHdData__.html#a69a6bb34b580bcfa5e13112cb7652d1d">STinyHdData_</a>
-, <a class="el" href="structSTinyHdInit__.html#a5996a48606a90ff9938e4037612cf97d">STinyHdInit_</a>
+: <a class="el" href="structSTinyHdInit__.html#a5996a48606a90ff9938e4037612cf97d">STinyHdInit_</a>
 </li>
 <li>inbuf_size
-: <a class="el" href="structSTinyHdData__.html#adbad190a4b54eccd4da6f3c3305a54f1">STinyHdData_</a>
-, <a class="el" href="structSTinyHdInit__.html#a0eed47c62a16fa29435d480541989cf6">STinyHdInit_</a>
+: <a class="el" href="structSTinyHdInit__.html#a0eed47c62a16fa29435d480541989cf6">STinyHdInit_</a>
 </li>
 <li>inprogress
 : <a class="el" href="structSTinyRxStatus.html#aaa956a3e43e12753ef43b76bb51d298e">STinyRxStatus</a>
@@ -230,6 +225,9 @@ $(function() {
 : <a class="el" href="structSTinyHdData__.html#abf8a0eb5006769a92adc186554a3a1c0">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#ae2eea5181620dfbb47b60a5073bd5ed2">STinyHdInit_</a>
 </li>
+<li>on_frame_read
+: <a class="el" href="struct__hdlc__handle__t.html#a751872adfef39b5b1325fa8826bae689">_hdlc_handle_t</a>
+</li>
 <li>oosyncBytes
 : <a class="el" href="structSTinyStats.html#a79119146606964d4e3345a0c019db329">STinyStats</a>
 </li>
@@ -249,7 +247,6 @@ $(function() {
 <li>pdata
 : <a class="el" href="structSTinyData.html#a3ac48d44af9b2912dd980c7377a020be">STinyData</a>
 , <a class="el" href="structSTinyHdInit__.html#a7b6be4e09ea04eaa4372eadce4d51055">STinyHdInit_</a>
-, <a class="el" href="structSTinyLightData.html#a3ef0864de3e9aa8c8cd6ebf2d8dc4c02">STinyLightData</a>
 </li>
 <li>pframe
 : <a class="el" href="structSTinyTxStatus.html#adad1f600118b0c12040d344c073f0f1a">STinyTxStatus</a>
@@ -264,7 +261,7 @@ $(function() {
 : <a class="el" href="classTiny_1_1ProtoHd.html#a1a55191980c259f2c760997d9c07cb48">Tiny::ProtoHd</a>
 </li>
 <li>put()
-: <a class="el" href="classTiny_1_1Packet.html#a52c746f604ee6c0e4e78902b4cf710a9">Tiny::Packet</a>
+: <a class="el" href="classTiny_1_1Packet.html#a6b5880ebffa02df3a380a270809433e1">Tiny::Packet</a>
 </li>
 <li>putUid()
 : <a class="el" href="classTiny_1_1Packet.html#ae8764bf70fd6f09df2cb15c02ce2aa30">Tiny::Packet</a>
@@ -275,13 +272,14 @@ $(function() {
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>read()
 : <a class="el" href="classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e">Tiny::Proto</a>
-, <a class="el" href="classTiny_1_1ProtoLight.html#acf18a8b73ee6c6394270c903ad7882b8">Tiny::ProtoLight</a>
+, <a class="el" href="classTiny_1_1ProtoLight.html#a96c56b10b4eee28c09b291461c66fa54">Tiny::ProtoLight</a>
 </li>
 <li>read_cb
 : <a class="el" href="structSTinyData.html#a31ba50154472c11e0d063b0aeef95f4d">STinyData</a>
 </li>
 <li>read_func
 : <a class="el" href="structSTinyData.html#a9714041284fd99230be0e7efbc8c60cf">STinyData</a>
+, <a class="el" href="structSTinyHdData__.html#a788bb96f41bfd7bdb6ce62e5fd018632">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#a5de352b11ca7915737bc459cde7c566d">STinyHdInit_</a>
 , <a class="el" href="structSTinyLightData.html#af9b045852adb08c137abce21d02f00ea">STinyLightData</a>
 </li>
@@ -291,10 +289,19 @@ $(function() {
 <li>rx
 : <a class="el" href="structSTinyData.html#aa3b43db99a1a6bf3d562f932d5a539db">STinyData</a>
 </li>
+<li>rx_buf
+: <a class="el" href="struct__hdlc__handle__t.html#a4736ab7a858df79cf74bd19e6dbacb13">_hdlc_handle_t</a>
+</li>
+<li>rx_buf_size
+: <a class="el" href="struct__hdlc__handle__t.html#a40baccf093b26c08d9108c8238f95675">_hdlc_handle_t</a>
+</li>
 </ul>
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>send_tx
+: <a class="el" href="struct__hdlc__handle__t.html#ac25841a53be120a8a50b99b73e7e8a8f">_hdlc_handle_t</a>
+</li>
 <li>sentbytes
 : <a class="el" href="structSTinyTxStatus.html#ab5074839815ccf15744e258ce4816c06">STinyTxStatus</a>
 </li>
@@ -330,13 +337,18 @@ $(function() {
 <li>uid_support
 : <a class="el" href="structSTinyData.html#aa004bdc7db38cbbef4df4a4d94ca6a4b">STinyData</a>
 </li>
+<li>user_data
+: <a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">_hdlc_handle_t</a>
+, <a class="el" href="structSTinyHdData__.html#a29d80bd96abfa9640bb5c0824416f836">STinyHdData_</a>
+, <a class="el" href="structSTinyLightData.html#a5208b2627e6bda09c3b839f4d1ad2815">STinyLightData</a>
+</li>
 </ul>
 
 
 <h3><a id="index_w"></a>- w -</h3><ul>
 <li>write()
 : <a class="el" href="classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33">Tiny::Proto</a>
-, <a class="el" href="classTiny_1_1ProtoHd.html#abffb26e95006c4e09e79f27f6ec4cdfe">Tiny::ProtoHd</a>
+, <a class="el" href="classTiny_1_1ProtoHd.html#af53c8817317d3a62535e68ca236a038f">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#abf2966531f8ed7dba44079f00eefded2">Tiny::ProtoLight</a>
 </li>
 <li>write_cb
@@ -344,6 +356,7 @@ $(function() {
 </li>
 <li>write_func
 : <a class="el" href="structSTinyData.html#a26c40b0b7e18776af99745624c460c5a">STinyData</a>
+, <a class="el" href="structSTinyHdData__.html#a38e79c64fc438348421c3dac60349cbe">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#a0bd05a4fc43236ff37d67aec4d2a0952">STinyHdInit_</a>
 , <a class="el" href="structSTinyLightData.html#a0bd1b1a01e1eaa15f22dec1e886c2e3c">STinyLightData</a>
 </li>

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['write',['write',['../classTiny_1_1ProtoLight.html#a46a27ee9d0b55c88672c98abf04dbdce',1,'Tiny::ProtoLight::write(char *buf, int size)'],['../classTiny_1_1ProtoLight.html#abf2966531f8ed7dba44079f00eefded2',1,'Tiny::ProtoLight::write(Packet &amp;pkt)'],['../classTiny_1_1Proto.html#a46fbc8b8681431b9b0a9a4b953a8dc33',1,'Tiny::Proto::write(char *buf, int size, uint8_t flags=TINY_FLAG_WAIT_FOREVER)'],['../classTiny_1_1Proto.html#ade93766700805a81be6a3317d846b276',1,'Tiny::Proto::write(Packet &amp;pkt, uint8_t flags=TINY_FLAG_WAIT_FOREVER)'],['../classTiny_1_1ProtoHd.html#af53c8817317d3a62535e68ca236a038f',1,'Tiny::ProtoHd::write(char *buf, int size)'],['../classTiny_1_1ProtoHd.html#abffb26e95006c4e09e79f27f6ec4cdfe',1,'Tiny::ProtoHd::write(Packet &amp;pkt)']]],
-  ['write_5fblock_5fcb_5ft',['write_block_cb_t',['../tiny__proto__types_8h.html#a7f69e669de5baa69a43ee5cb439a7496',1,'tiny_proto_types.h']]],
-  ['write_5fcb',['write_cb',['../structSTinyData.html#ada334c88e86bfd2c10191f65818c3fb3',1,'STinyData']]],
-  ['write_5ffunc',['write_func',['../structSTinyHdInit__.html#a0bd05a4fc43236ff37d67aec4d2a0952',1,'STinyHdInit_::write_func()'],['../structSTinyData.html#a26c40b0b7e18776af99745624c460c5a',1,'STinyData::write_func()'],['../structSTinyLightData.html#a0bd1b1a01e1eaa15f22dec1e886c2e3c',1,'STinyLightData::write_func()']]]
+  ['uid',['uid',['../structSTinyHdData__.html#a7084eac08b744ad0aa2624b854866825',1,'STinyHdData_::uid()'],['../structtiny__request__.html#aefa85d07e09d6772963532b6cf1ed125',1,'tiny_request_::uid()']]],
+  ['uid_5fsupport',['uid_support',['../structSTinyData.html#aa004bdc7db38cbbef4df4a4d94ca6a4b',1,'STinyData']]],
+  ['user_5fdata',['user_data',['../structSTinyHdData__.html#a29d80bd96abfa9640bb5c0824416f836',1,'STinyHdData_::user_data()'],['../struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8',1,'_hdlc_handle_t::user_data()'],['../structSTinyLightData.html#a5208b2627e6bda09c3b839f4d1ad2815',1,'STinyLightData::user_data()']]]
 ];

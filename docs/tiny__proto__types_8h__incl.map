@@ -1,5 +1,5 @@
-<map id="src/proto/tiny_proto_types.h" name="src/proto/tiny_proto_types.h">
-<area shape="rect" id="node3" href="$tiny__defines_8h_source.html" title="os/tiny_defines.h" alt="" coords="95,95,216,121"/>
-<area shape="rect" id="node4" href="$arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="81,169,230,196"/>
-<area shape="rect" id="node5" href="$tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="107,244,203,271"/>
+<map id="src/proto/hal/tiny_proto_types.h" name="src/proto/hal/tiny_proto_types.h">
+<area shape="rect" id="node3" href="$tiny__defines_8h_source.html" title="tiny_defines.h" alt="" coords="95,95,197,121"/>
+<area shape="rect" id="node4" href="$arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="71,169,221,196"/>
+<area shape="rect" id="node5" href="$tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="98,244,194,271"/>
 </map>

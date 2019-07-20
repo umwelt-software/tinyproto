@@ -8,11 +8,11 @@
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}\label{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}} 
-\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}{write\+\_\+func}
+\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}{write\+\_\+func}
 \begin{DoxyCompactList}\small\item\em callback function to write bytes to the physical channel \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}\label{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}} 
-\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}{read\+\_\+func}
-\begin{DoxyCompactList}\small\item\em callback function to read buytes from the physical channel \end{DoxyCompactList}\item 
+\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}{read\+\_\+func}
+\begin{DoxyCompactList}\small\item\em callback function to read bytes from the physical channel \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}\label{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}} 
 void $\ast$ \hyperlink{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}{pdata}
 \begin{DoxyCompactList}\small\item\em user data for block read/write functions \end{DoxyCompactList}\item 
@@ -30,12 +30,23 @@ uint16\+\_\+t \hyperlink{structSTinyHdInit___ac7a1ae9314efc1296d78927198f07ac8}{
 \begin{DoxyCompactList}\small\item\em timeout. Can be set to 0 during initialization. In this case timeout will be set to default \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyHdInit___a404947e25922fa8400daa924a032897e}\label{structSTinyHdInit___a404947e25922fa8400daa924a032897e}} 
 uint8\+\_\+t \hyperlink{structSTinyHdInit___a404947e25922fa8400daa924a032897e}{multithread\+\_\+mode}
-\begin{DoxyCompactList}\small\item\em multithread mode. At present should be 0 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em multithread mode. At present should be 0 \end{DoxyCompactList}\item 
+hdlc\+\_\+crc\+\_\+t \hyperlink{structSTinyHdInit___a520f9fbb19f5ec84f3f86a10d819faf4}{crc\+\_\+type}
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
 This structure is used for initialization of Tiny Half Duplex protocol. 
 
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structSTinyHdInit___a520f9fbb19f5ec84f3f86a10d819faf4}\label{structSTinyHdInit___a520f9fbb19f5ec84f3f86a10d819faf4}} 
+\index{S\+Tiny\+Hd\+Init\+\_\+@{S\+Tiny\+Hd\+Init\+\_\+}!crc\+\_\+type@{crc\+\_\+type}}
+\index{crc\+\_\+type@{crc\+\_\+type}!S\+Tiny\+Hd\+Init\+\_\+@{S\+Tiny\+Hd\+Init\+\_\+}}
+\subsubsection{\texorpdfstring{crc\+\_\+type}{crc\_type}}
+{\footnotesize\ttfamily hdlc\+\_\+crc\+\_\+t S\+Tiny\+Hd\+Init\+\_\+\+::crc\+\_\+type}
+
+crc field type to use on hdlc level. If H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+\+D\+E\+F\+A\+U\+LT is passed, crc type will be selected automatically (depending on library configuration), but H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+16 has higher priority. 
+
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-src/proto/\hyperlink{tiny__hd_8h}{tiny\+\_\+hd.\+h}\end{DoxyCompactItemize}
+src/proto/half\+\_\+duplex/\hyperlink{tiny__hd_8h}{tiny\+\_\+hd.\+h}\end{DoxyCompactItemize}

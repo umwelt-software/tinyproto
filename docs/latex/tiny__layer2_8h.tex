@@ -1,26 +1,24 @@
-\hypertarget{tiny__layer2_8h}{}\section{src/proto/tiny\+\_\+layer2.h File Reference}
-\label{tiny__layer2_8h}\index{src/proto/tiny\+\_\+layer2.\+h@{src/proto/tiny\+\_\+layer2.\+h}}
+\hypertarget{tiny__layer2_8h}{}\section{src/proto/\+\_\+old/tiny\+\_\+layer2.h File Reference}
+\label{tiny__layer2_8h}\index{src/proto/\+\_\+old/tiny\+\_\+layer2.\+h@{src/proto/\+\_\+old/tiny\+\_\+layer2.\+h}}
 
 
 Tiny protocol A\+PI.  
 
 
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
-{\ttfamily \#include \char`\"{}tiny\+\_\+proto\+\_\+types.\+h\char`\"{}}\newline
-Include dependency graph for tiny\+\_\+layer2.\+h\+:
-\nopagebreak
+{\ttfamily \#include \char`\"{}proto/hal/tiny\+\_\+proto\+\_\+types.\+h\char`\"{}}\newline
+Include dependency graph for tiny\+\_\+layer2.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=249pt]{tiny__layer2_8h__incl}
+\includegraphics[width=242pt]{tiny__layer2_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{tiny__layer2_8h__dep__incl}
+\includegraphics[width=176pt]{tiny__layer2_8h__dep__incl}
 \end{center}
 \end{figure}
 \subsection*{Classes}
@@ -35,7 +33,7 @@ struct \hyperlink{structSTinyData}{S\+Tiny\+Data}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
+int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
 \item 
 int \hyperlink{group__SIMPLE__API_ga48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \item 

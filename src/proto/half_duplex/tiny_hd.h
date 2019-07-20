@@ -42,7 +42,6 @@ extern "C" {
  */
 typedef struct STinyHdData_
 {
-    /// Original STinyData structure. It is used to control lower level
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     hdlc_struct_t       _hdlc;
     uint8_t             _sent;
@@ -57,7 +56,11 @@ typedef struct STinyHdData_
     uint16_t           timeout;
     /// field used to store temporary uid
     uint16_t           uid;
-    /// only single thread mode is supporte now. Should be zero
+    /**
+     * @brief Multithread mode. Should be zero.
+     *
+     * @warning only single thread mode is supported now. Should be zero
+     */
     uint8_t            multithread_mode;
     /// user specific data
     void *             user_data;

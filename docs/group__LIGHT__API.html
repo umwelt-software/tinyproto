@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tiny protocol: Tiny light API functions</title>
+<title>Tiny protocol: Tiny light protocol API functions</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.6.4</span>
+   &#160;<span id="projectnumber">0.7.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -61,15 +61,21 @@ $(function() {
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">Tiny light API functions</div>  </div>
+<div class="title">Tiny light protocol API functions</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyLightData.html">STinyLightData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga221cf790724163d1aee89ad6a6c9a14d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga221cf790724163d1aee89ad6a6c9a14d">tiny_light_init</a> (void *handle, <a class="el" href="tiny__proto__types_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> write_func, <a class="el" href="tiny__proto__types_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> read_func, void *pdata)</td></tr>
+<tr class="memitem:ga221cf790724163d1aee89ad6a6c9a14d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga221cf790724163d1aee89ad6a6c9a14d">tiny_light_init</a> (void *handle, <a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> write_func, <a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> read_func, void *pdata)</td></tr>
 <tr class="separator:ga221cf790724163d1aee89ad6a6c9a14d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6e045b8f4ef551c274fbacaa625e2748"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga6e045b8f4ef551c274fbacaa625e2748">tiny_light_close</a> (void *handle)</td></tr>
 <tr class="separator:ga6e045b8f4ef551c274fbacaa625e2748"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,13 +130,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a>&#160;</td>
           <td class="paramname"><em>write_func</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a>&#160;</td>
           <td class="paramname"><em>read_func</em>, </td>
         </tr>
         <tr>
@@ -155,9 +161,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="tiny__proto__types_8h.html#a7f69e669de5baa69a43ee5cb439a7496">write_block_cb_t</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> </dd>
 <dd>
-<a class="el" href="tiny__proto__types_8h.html#ae3d867e030f59de94508902f2b84a7ec">read_block_cb_t</a> </dd></dl>
+<a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_NO_ERROR or error code. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
@@ -264,8 +270,7 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes. </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe.</dd></dl>
-<p>Returns negative value in case of error length of sent data </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is thread safe. </dd></dl>
 
 </div>
 </div>

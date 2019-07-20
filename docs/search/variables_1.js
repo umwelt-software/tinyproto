@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['element',['element',['../structtiny__request__.html#a02c8fb6d26d0cfb0264423a1cb643159',1,'tiny_request_']]]
+  ['crc_5ftype',['crc_type',['../structSTinyHdInit__.html#a520f9fbb19f5ec84f3f86a10d819faf4',1,'STinyHdInit_::crc_type()'],['../struct__hdlc__handle__t.html#a156f67a5da24e537a8c0dcda28b59668',1,'_hdlc_handle_t::crc_type()']]]
 ];

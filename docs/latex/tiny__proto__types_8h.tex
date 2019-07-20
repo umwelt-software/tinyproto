@@ -1,22 +1,20 @@
-\hypertarget{tiny__proto__types_8h}{}\section{src/proto/tiny\+\_\+proto\+\_\+types.h File Reference}
-\label{tiny__proto__types_8h}\index{src/proto/tiny\+\_\+proto\+\_\+types.\+h@{src/proto/tiny\+\_\+proto\+\_\+types.\+h}}
+\hypertarget{tiny__proto__types_8h}{}\section{src/proto/hal/tiny\+\_\+proto\+\_\+types.h File Reference}
+\label{tiny__proto__types_8h}\index{src/proto/hal/tiny\+\_\+proto\+\_\+types.\+h@{src/proto/hal/tiny\+\_\+proto\+\_\+types.\+h}}
 
 
 Tiny protocol Types.  
 
 
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
-{\ttfamily \#include \char`\"{}os/tiny\+\_\+defines.\+h\char`\"{}}\newline
-Include dependency graph for tiny\+\_\+proto\+\_\+types.\+h\+:
-\nopagebreak
+{\ttfamily \#include \char`\"{}tiny\+\_\+defines.\+h\char`\"{}}\newline
+Include dependency graph for tiny\+\_\+proto\+\_\+types.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=249pt]{tiny__proto__types_8h__incl}
+\includegraphics[width=242pt]{tiny__proto__types_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -60,9 +58,9 @@ struct \hyperlink{structSTinyStats}{S\+Tiny\+Stats}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef int($\ast$ \hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, const uint8\+\_\+t $\ast$buffer, int size)
+typedef int($\ast$ \hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, const void $\ast$buffer, int size)
 \item 
-typedef int($\ast$ \hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, uint8\+\_\+t $\ast$buffer, int size)
+typedef int($\ast$ \hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}) (void $\ast$pdata, void $\ast$buffer, int size)
 \item 
 typedef void($\ast$ \hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t}) (void $\ast$handle, uint16\+\_\+t uid, uint8\+\_\+t $\ast$pdata, int size)
 \end{DoxyCompactItemize}
@@ -97,11 +95,11 @@ None.
 \begin{DoxySeeAlso}{See also}
 \hyperlink{group__ADVANCED__API_gac562103dd1699b82fddf29dccdc0ec7c}{tiny\+\_\+set\+\_\+callbacks} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}\label{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}} 
+\mbox{\Hypertarget{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}\label{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}} 
 \index{tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}!read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}}
 \index{read\+\_\+block\+\_\+cb\+\_\+t@{read\+\_\+block\+\_\+cb\+\_\+t}!tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}}
 \subsubsection{\texorpdfstring{read\+\_\+block\+\_\+cb\+\_\+t}{read\_block\_cb\_t}}
-{\footnotesize\ttfamily typedef int($\ast$ read\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, uint8\+\_\+t $\ast$buffer, int size)}
+{\footnotesize\ttfamily typedef int($\ast$ read\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, void $\ast$buffer, int size)}
 
 The function reads data from communication channel. 
 \begin{DoxyParams}{Parameters}
@@ -113,16 +111,16 @@ The function reads data from communication channel.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 the function must return negative value in case of error or number of bytes actually read or zero. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}\label{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}} 
+\mbox{\Hypertarget{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}\label{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}} 
 \index{tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}!write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}}
 \index{write\+\_\+block\+\_\+cb\+\_\+t@{write\+\_\+block\+\_\+cb\+\_\+t}!tiny\+\_\+proto\+\_\+types.\+h@{tiny\+\_\+proto\+\_\+types.\+h}}
 \subsubsection{\texorpdfstring{write\+\_\+block\+\_\+cb\+\_\+t}{write\_block\_cb\_t}}
-{\footnotesize\ttfamily typedef int($\ast$ write\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, const uint8\+\_\+t $\ast$buffer, int size)}
+{\footnotesize\ttfamily typedef int($\ast$ write\+\_\+block\+\_\+cb\+\_\+t) (void $\ast$pdata, const void $\ast$buffer, int size)}
 
 The function writes data to communication channel port. 
 \begin{DoxyParams}{Parameters}
@@ -134,7 +132,7 @@ The function writes data to communication channel port.
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 the function must return negative value in case of error or number of bytes written or zero. 

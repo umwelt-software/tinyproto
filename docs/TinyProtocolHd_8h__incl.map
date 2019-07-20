@@ -1,9 +1,9 @@
 <map id="src/TinyProtocolHd.h" name="src/TinyProtocolHd.h">
-<area shape="rect" id="node2" href="$TinyPacket_8h.html" title="Tiny protocol Arduino API. " alt="" coords="5,80,104,107"/>
-<area shape="rect" id="node4" href="$tiny__hd_8h.html" title="Tiny Protocol Half Duplex API. " alt="" coords="179,80,287,107"/>
-<area shape="rect" id="node6" href="$tiny__layer2_8h.html" title="Tiny protocol API. " alt="" coords="251,155,347,181"/>
-<area shape="rect" id="node7" href="$tiny__proto__types_8h.html" title="Tiny protocol Types. " alt="" coords="302,229,431,256"/>
-<area shape="rect" id="node8" href="$tiny__defines_8h_source.html" title="os/tiny_defines.h" alt="" coords="313,304,434,331"/>
-<area shape="rect" id="node9" href="$arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="299,379,448,405"/>
-<area shape="rect" id="node10" href="$tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="325,453,421,480"/>
+<area shape="rect" id="node2" href="$TinyPacket_8h.html" title="Tiny protocol Arduino API. " alt="" coords="15,80,113,107"/>
+<area shape="rect" id="node4" href="$tiny__hd_8h.html" title="Tiny Protocol Half Duplex API. " alt="" coords="188,80,367,107"/>
+<area shape="rect" id="node6" href="$tiny__hdlc_8h_source.html" title="proto/hdlc/tiny_hdlc.h" alt="" coords="204,162,351,189"/>
+<area shape="rect" id="node7" href="$tiny__proto__types_8h.html" title="Tiny protocol Types. " alt="" coords="375,155,508,196"/>
+<area shape="rect" id="node8" href="$tiny__defines_8h_source.html" title="tiny_defines.h" alt="" coords="390,244,493,271"/>
+<area shape="rect" id="node9" href="$arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="367,319,516,345"/>
+<area shape="rect" id="node10" href="$tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="393,393,489,420"/>
 </map>

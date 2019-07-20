@@ -32,9 +32,10 @@ Full packet format:
  - 7E is packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing.
    packet delimiter is used by the protocol to find first and last byte of the frame
    being transmitted.
- - UID mean unique identifier of the frame. For Half Duplex Tiny Protocol (\ref HALF_DUPLEX_API) it is widely used
-   in acknowledge frames. This field is optional, you may omit UID parameter in \ref SIMPLE_API
-   and \ref ADVANCED_API functions.
+ - UID mean unique identifier of the frame (in network byte order). For Half Duplex
+   Tiny Protocol (\ref HALF_DUPLEX_API) it is widely used in acknowledge frames.
+   This field is optional, you may omit UID parameter in \ref SIMPLE_API
+   and \ref ADVANCED_API functions. \ref LIGHT_API do not use UID field in the frames.
  - USER DATA of any length. This field contains user data with replaced 0x7D and 0x7E bytes by
    special sequenced as defined in HDLC/PPP framing. Length of data is now limited on buffer
    used to receive frames and/or 32767 bytes (Tiny Protocol using 16-bit field to store frame
@@ -42,6 +43,46 @@ Full packet format:
  - FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field, or it
    can be absent at all. Refer to RFC1662 for examples. FCS field is also optional and can be disabled.
    But in this case transport errors are not detected.
+
+ \section callback User-defined callbacks
+
+\ref HDLC_API needs 3 callback functions, defined by a user (you may use any function names you need). 
+
+HDLC callbacks:
+@code{.cpp}
+int write_func_cb(void *user_data, const void *data, int len);
+int on_frame_read(void *user_data, void *data, int len);
+int on_frame_sent(void *user_data, const void *data, int len);
+@endcode
+
+ - write_func_cb() is called by HDLC implementation every time, it needs to
+   send bytes to TX channel
+ - on_frame_read() is called by HDLC implementation every time, new frame arrives
+   and checksum is correct.
+ - on_frame_sent() is called by HDLC implementation every time, new frame is sent
+   to TX.
+HDLC protocol requires only write_func_cb() to be defined. Other callbacks are optional.
+As for RX processes, your application code is responsible for reading data from RX line,
+then all you need to do, is to pass received bytes to HDLC implementation for processing
+via hdlc_run_rx().
+
+All higher level protocols (\ref LIGHT_API, \ref HALF_DUPLEX_API) needs 4 callback functions,
+defined by a user: read_func_cb() is added.
+The list of callbacks:
+
+@code{.cpp}
+int write_func_cb(void *user_data, const void *data, int len);
+int read_func_cb(void *user_data, void *data, int len);
+int on_frame_read(void *user_data, void *data, int len);
+int on_frame_sent(void *user_data, const void *data, int len);
+@endcode
+
+Unlike HDLC implementation, higher level protocols use different approach. They control both
+TX and RX channels, for example, to transparently send ACK frames, etc. That's why higher level
+protocols need to read_func_cb to be defined:
+
+ - read_func_cb() is called by higher level protocol implementation every time, it needs to
+   read bytes from RX channel.
 
  \section arduino_section Arduino related documentation
 

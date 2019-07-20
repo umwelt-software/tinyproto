@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['arduino_20related_20api_20_28c_2b_2b_29',['Arduino related API (C++)',['../arduino.html',1,'']]],
-  ['arduino_2edox',['arduino.dox',['../arduino_8dox.html',1,'']]]
+  ['_5fhdlc_5fhandle_5ft',['_hdlc_handle_t',['../struct__hdlc__handle__t.html',1,'']]]
 ];

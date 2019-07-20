@@ -7,6 +7,11 @@ extern "C"
 {
 #endif
 
+/**
+ * @defgroup HDLC_API Tiny HDLC protocol API functions
+ * @{
+ */
+
 /// \cond
 #ifdef CONFIG_ENABLE_FCS32
     typedef uint32_t crc_t;
@@ -162,6 +167,10 @@ int hdlc_run_tx( hdlc_handle_t handle );
  *          data are actually sent to tx hw channel
  */
 int hdlc_send( hdlc_handle_t handle, const void *data, int len );
+
+/**
+ * @}
+ */
 
 #ifdef __cplusplus
 }

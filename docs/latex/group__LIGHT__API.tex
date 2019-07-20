@@ -1,9 +1,14 @@
-\hypertarget{group__LIGHT__API}{}\section{Tiny light A\+PI functions}
-\label{group__LIGHT__API}\index{Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}}
+\hypertarget{group__LIGHT__API}{}\section{Tiny light protocol A\+PI functions}
+\label{group__LIGHT__API}\index{Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSTinyLightData}{S\+Tiny\+Light\+Data}
+\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{group__LIGHT__API_ga221cf790724163d1aee89ad6a6c9a14d}{tiny\+\_\+light\+\_\+init} (void $\ast$handle, \hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
+int \hyperlink{group__LIGHT__API_ga221cf790724163d1aee89ad6a6c9a14d}{tiny\+\_\+light\+\_\+init} (void $\ast$handle, \hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
 \item 
 int \hyperlink{group__LIGHT__API_ga6e045b8f4ef551c274fbacaa625e2748}{tiny\+\_\+light\+\_\+close} (void $\ast$handle)
 \item 
@@ -18,8 +23,8 @@ int \hyperlink{group__LIGHT__API_ga0181db79922917957779e1f2d740c407}{tiny\+\_\+l
 
 \subsection{Function Documentation}
 \mbox{\Hypertarget{group__LIGHT__API_ga6e045b8f4ef551c274fbacaa625e2748}\label{group__LIGHT__API_ga6e045b8f4ef551c274fbacaa625e2748}} 
-\index{Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}!tiny\+\_\+light\+\_\+close@{tiny\+\_\+light\+\_\+close}}
-\index{tiny\+\_\+light\+\_\+close@{tiny\+\_\+light\+\_\+close}!Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}}
+\index{Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}!tiny\+\_\+light\+\_\+close@{tiny\+\_\+light\+\_\+close}}
+\index{tiny\+\_\+light\+\_\+close@{tiny\+\_\+light\+\_\+close}!Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+light\+\_\+close()}{tiny\_light\_close()}}
 {\footnotesize\ttfamily int tiny\+\_\+light\+\_\+close (\begin{DoxyParamCaption}\item[{void $\ast$}]{handle }\end{DoxyParamCaption})}
 
@@ -38,10 +43,10 @@ T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+TA, T\+I\+N\+Y
 This function is not thread safe. 
 \end{DoxyRemark}
 \mbox{\Hypertarget{group__LIGHT__API_ga221cf790724163d1aee89ad6a6c9a14d}\label{group__LIGHT__API_ga221cf790724163d1aee89ad6a6c9a14d}} 
-\index{Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}!tiny\+\_\+light\+\_\+init@{tiny\+\_\+light\+\_\+init}}
-\index{tiny\+\_\+light\+\_\+init@{tiny\+\_\+light\+\_\+init}!Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}}
+\index{Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}!tiny\+\_\+light\+\_\+init@{tiny\+\_\+light\+\_\+init}}
+\index{tiny\+\_\+light\+\_\+init@{tiny\+\_\+light\+\_\+init}!Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+light\+\_\+init()}{tiny\_light\_init()}}
-{\footnotesize\ttfamily int tiny\+\_\+light\+\_\+init (\begin{DoxyParamCaption}\item[{void $\ast$}]{handle,  }\item[{\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t}}]{write\+\_\+func,  }\item[{\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t}}]{read\+\_\+func,  }\item[{void $\ast$}]{pdata }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int tiny\+\_\+light\+\_\+init (\begin{DoxyParamCaption}\item[{void $\ast$}]{handle,  }\item[{\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}}]{write\+\_\+func,  }\item[{\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{read\+\_\+func,  }\item[{void $\ast$}]{pdata }\end{DoxyParamCaption})}
 
 The function initializes internal structures for Tiny channel and return handle to be used with all Tiny and I\+PC functions. 
 \begin{DoxyParams}{Parameters}
@@ -55,9 +60,9 @@ The function initializes internal structures for Tiny channel and return handle 
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{tiny__proto__types_8h_a7f69e669de5baa69a43ee5cb439a7496}{write\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} 
 
-\hyperlink{tiny__proto__types_8h_ae3d867e030f59de94508902f2b84a7ec}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+OR or error code. 
@@ -66,8 +71,8 @@ T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+OR or error code.
 This function is not thread safe. 
 \end{DoxyRemark}
 \mbox{\Hypertarget{group__LIGHT__API_ga0181db79922917957779e1f2d740c407}\label{group__LIGHT__API_ga0181db79922917957779e1f2d740c407}} 
-\index{Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}!tiny\+\_\+light\+\_\+read@{tiny\+\_\+light\+\_\+read}}
-\index{tiny\+\_\+light\+\_\+read@{tiny\+\_\+light\+\_\+read}!Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}}
+\index{Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}!tiny\+\_\+light\+\_\+read@{tiny\+\_\+light\+\_\+read}}
+\index{tiny\+\_\+light\+\_\+read@{tiny\+\_\+light\+\_\+read}!Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+light\+\_\+read()}{tiny\_light\_read()}}
 {\footnotesize\ttfamily int tiny\+\_\+light\+\_\+read (\begin{DoxyParamCaption}\item[{void $\ast$}]{handle,  }\item[{uint8\+\_\+t $\ast$}]{pbuf,  }\item[{int}]{len }\end{DoxyParamCaption})}
 
@@ -105,8 +110,8 @@ T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE ca
 This function is not thread safe. 
 \end{DoxyRemark}
 \mbox{\Hypertarget{group__LIGHT__API_ga12391f0d4c06fb6296b84fd4681a87f7}\label{group__LIGHT__API_ga12391f0d4c06fb6296b84fd4681a87f7}} 
-\index{Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}!tiny\+\_\+light\+\_\+send@{tiny\+\_\+light\+\_\+send}}
-\index{tiny\+\_\+light\+\_\+send@{tiny\+\_\+light\+\_\+send}!Tiny light A\+P\+I functions@{Tiny light A\+P\+I functions}}
+\index{Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}!tiny\+\_\+light\+\_\+send@{tiny\+\_\+light\+\_\+send}}
+\index{tiny\+\_\+light\+\_\+send@{tiny\+\_\+light\+\_\+send}!Tiny light protocol A\+P\+I functions@{Tiny light protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+light\+\_\+send()}{tiny\_light\_send()}}
 {\footnotesize\ttfamily int tiny\+\_\+light\+\_\+send (\begin{DoxyParamCaption}\item[{void $\ast$}]{handle,  }\item[{const uint8\+\_\+t $\ast$}]{pbuf,  }\item[{int}]{len }\end{DoxyParamCaption})}
 
@@ -132,6 +137,5 @@ The function sends data to communication channel. The function works in blocking
 T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+I\+N\+V\+A\+L\+I\+D\+\_\+\+D\+A\+TA, T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED or number of sent bytes. 
 \end{DoxyReturn}
 \begin{DoxyRemark}{Remarks}
-This function is thread safe.
+This function is thread safe. 
 \end{DoxyRemark}
-Returns negative value in case of error length of sent data 

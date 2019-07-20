@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['fcs',['fcs',['../structSTinyRxStatus.html#a609d1743d90eff27819207961850ee48',1,'STinyRxStatus::fcs()'],['../structSTinyTxStatus.html#a48dd8a16aab283ac5fc6d8d77f30e8cc',1,'STinyTxStatus::fcs()']]],
-  ['fcs_5fbits',['fcs_bits',['../structSTinyData.html#a3cf4d6009cc472630e20a68d6fa50186',1,'STinyData']]],
-  ['flags_20for_20tiny_20api_20functions',['Flags for Tiny API functions',['../group__FLAGS__GROUP.html',1,'']]],
-  ['framelen',['framelen',['../structSTinyRxStatus.html#ad9f6055b8e74f10894c48ff2247f51c4',1,'STinyRxStatus::framelen()'],['../structSTinyTxStatus.html#a9f6d1382fec34b6c7daf60d95c5a540d',1,'STinyTxStatus::framelen()']]],
-  ['framesbroken',['framesBroken',['../structSTinyStats.html#abe4f4a9455b532e22f29e60789386130',1,'STinyStats']]],
-  ['framesreceived',['framesReceived',['../structSTinyStats.html#a19dfd3a62dbb9d86f6fb77eb1ea6f871',1,'STinyStats']]],
-  ['framessent',['framesSent',['../structSTinyStats.html#a0bc110aa81a7dea0d0d64e359fb06dc3',1,'STinyStats']]]
+  ['element',['element',['../structtiny__request__.html#a02c8fb6d26d0cfb0264423a1cb643159',1,'tiny_request_']]],
+  ['enablechecksum',['enableCheckSum',['../classTiny_1_1Proto.html#abb6cbae9a9944dc9ae0d756554f65a52',1,'Tiny::Proto::enableCheckSum()'],['../classTiny_1_1ProtoHd.html#ace4e6b993532b3eb47d025b8db94192d',1,'Tiny::ProtoHd::enableCheckSum()']]],
+  ['enablecrc16',['enableCrc16',['../classTiny_1_1Proto.html#a794afcac2ca15544247c34b059bc1289',1,'Tiny::Proto::enableCrc16()'],['../classTiny_1_1ProtoHd.html#a0887adedc93b7538dbaef3fc8e0b2819',1,'Tiny::ProtoHd::enableCrc16()']]],
+  ['enablecrc32',['enableCrc32',['../classTiny_1_1Proto.html#a2ef1c80490d9343b896180ab8b8a6f77',1,'Tiny::Proto::enableCrc32()'],['../classTiny_1_1ProtoHd.html#a4110a0112548d5e47d312d190930ad20',1,'Tiny::ProtoHd::enableCrc32()']]],
+  ['enableuid',['enableUid',['../classTiny_1_1Proto.html#a9fdd64b8296e27f3205cd0d3ea685eac',1,'Tiny::Proto']]],
+  ['end',['end',['../classTiny_1_1ProtoLight.html#a948b2a0e37177b7434581adc64b36497',1,'Tiny::ProtoLight::end()'],['../classTiny_1_1Proto.html#ae9f52fa1c4f18981672ad7af12633d4e',1,'Tiny::Proto::end()'],['../classTiny_1_1ProtoHd.html#ac87bf8264895b654025001a0e6014f3f',1,'Tiny::ProtoHd::end()']]]
 ];
