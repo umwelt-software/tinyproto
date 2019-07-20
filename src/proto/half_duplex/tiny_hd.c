@@ -79,8 +79,8 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
     for(retry=0; retry<3; retry++)
     {
         uint8_t *data = (uint8_t *)handle->_hdlc.rx_buf;
-        data[0] = request.uid & 0xFF;
-        data[1] = (request.uid >> 8) & 0xFF;
+        data[0] = (request.uid >> 8) & 0xFF;
+        data[1] = request.uid & 0xFF;
         memcpy( data + sizeof(uint16_t), buf, len);
         result = send_complete( handle, data, len + sizeof(uint16_t));
         if (result <= 0)
@@ -106,7 +106,7 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
 
 static int on_frame_read(void *user_data, void *data, int len)
 {
-    uint16_t uid = ((uint8_t *)data)[0] << 0 | ((uint8_t *)data)[1] << 8;
+    uint16_t uid = ((uint8_t *)data)[1] << 0 | ((uint8_t *)data)[0] << 8;
     STinyHdData * handle = (STinyHdData *)user_data;
     /** response */
     if ( uid & ACK_FRAME_FLAG )
@@ -119,8 +119,8 @@ static int on_frame_read(void *user_data, void *data, int len)
     {
         uid |= ACK_FRAME_FLAG;
         uint8_t *buf = (uint8_t *)handle->_hdlc.rx_buf + handle->_hdlc.rx_buf_size;
-        buf[0] = uid & 0xFF;
-        buf[1] = (uid >> 8) & 0xFF;
+        buf[0] = (uid >> 8) & 0xFF;
+        buf[1] = uid & 0xFF;
         int result = send_complete( handle, buf, sizeof(uid) );
         if ( result <= 0)
         {
