@@ -1,5 +1,5 @@
 #include "tiny_hdlc.h"
-#include "crc.h"
+#include "proto/crc.h"
 
 #include <stdio.h>
 
@@ -112,10 +112,6 @@ static int hdlc_send_data( hdlc_handle_t handle )
             handle->tx.data += result;
             handle->tx.len -= result;
         }
-        if ( handle->tx.len == 0 )
-        {
-            handle->tx.state = hdlc_send_crc;
-        }
     }
     else
     {
@@ -130,11 +126,11 @@ static int hdlc_send_data( hdlc_handle_t handle )
                 handle->tx.data++;
                 handle->tx.len--;
             }
-            if ( handle->tx.len == 0 )
-            {
-                handle->tx.state = hdlc_send_crc;
-            }
         }
+    }
+    if ( handle->tx.len == 0 )
+    {
+        handle->tx.state = hdlc_send_crc;
     }
     return result;
 }
@@ -199,7 +195,7 @@ int hdlc_run_tx( hdlc_handle_t handle )
         int temp_result = handle->tx.state( handle );
         if ( temp_result <=0 )
         {
-            result = result ?: temp_result;
+            result = result ? result: temp_result;
             break;
         }
         result += temp_result;
