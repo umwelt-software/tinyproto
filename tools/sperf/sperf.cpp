@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -40,22 +40,28 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    uint8_t outBuffer[4096];
-    uint8_t inBuffer[4096];
+    uint8_t outBuffer[4096]{};
+    uint8_t inBuffer[4096]{};
+    int sync_frame_len = 0;
     STinyLightData tiny;
     /* Initialize tiny light protocol */
     tiny_light_init(&tiny, SerialSend, SerialReceive, hPort);
     /* Wait for remote side to be ready */
+    strcpy((char *)outBuffer, "SYNC FRAME");
+    sync_frame_len = (int)strlen((char *)outBuffer);
+    printf("Syncing\n");
+    // SYNC STEP is required, because in case of using /dev/ttyUSB0 of Arduino
+    // the boards goes offline state for 2 seconds
     for (;;)
     {
         /* Send single byte to remote device */
-        if ( tiny_light_send( &tiny, outBuffer, 1 ) < 0 )
+        if ( tiny_light_send( &tiny, outBuffer, sync_frame_len ) < 0 )
         {
             continue;
         }
         /* Check if we receive byte back */
         int err = tiny_light_read( &tiny, inBuffer, sizeof(inBuffer) );
-        if ( err == 1 )
+        if ( err == sync_frame_len && inBuffer[0] == 'S' )
         {
             break;
         }
@@ -69,12 +75,22 @@ int main(int argc, char *argv[])
     while ( time(NULL) < (startTs + 15) )
     {
         /* Prepare data to send */
-        sprintf((char *)outBuffer, "%u TEST IS GOING. MIDDLE SIZE PKT", bytesSent);
+        sprintf((char *)outBuffer, "%u TEST IS RUNNING. MIDDLE SIZE PKT", bytesSent);
         int len = strlen((char *)outBuffer) + 1;
         /* Send data to remote side */
         tiny_light_send( &tiny, outBuffer, len );
         /* Wait until the data are sent back to us by remote side */
-        int temp = tiny_light_read( &tiny, inBuffer, sizeof(inBuffer) );
+        int temp;
+        for(;;)
+        {
+            temp = tiny_light_read( &tiny, inBuffer, sizeof(inBuffer) );
+            if (temp == sync_frame_len)
+            {
+                // if this is sync frame just skip it
+                continue;
+            }
+            break;
+        };
         if ( temp == len)
         {
             bytesSent += len;
@@ -89,6 +105,8 @@ int main(int argc, char *argv[])
     tiny_light_close(&tiny);
     CloseSerial(hPort);
 
-    printf("Registered speed: %u baud\n", (bytesSent + bytesReceived) * 8 / 15);
+    // We summarize TX and RX speed, because we're working in half duplex mode
+    // When we receive something, we do not transmit anything.
+    printf("Registered speed: %u baud\n", (bytesSent + bytesReceived) * 8 / 9);
     return 0;
 }

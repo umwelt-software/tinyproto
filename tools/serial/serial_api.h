@@ -107,7 +107,7 @@ extern void CloseSerial(SerialHandle port);
  * @return negative value in case of error.
  *         or number of bytes sent
  */
-extern int SerialSend(SerialHandle hPort, const uint8_t *buf, int len);
+extern int SerialSend(SerialHandle hPort, const void *buf, int len);
 
 /**
  * @brief Receive data from serial connection
@@ -119,7 +119,7 @@ extern int SerialSend(SerialHandle hPort, const uint8_t *buf, int len);
  * @return negative value in case of error.
  *         or number of bytes received
  */
-extern int SerialReceive(SerialHandle hPort, uint8_t *buf, int len);
+extern int SerialReceive(SerialHandle hPort, void *buf, int len);
 
 #ifdef __cplusplus
 }

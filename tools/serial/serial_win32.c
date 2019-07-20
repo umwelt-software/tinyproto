@@ -87,7 +87,7 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     return hPort;
 }
 
-int SerialSend(SerialHandle hPort, const uint8_t *buf, int len)
+int SerialSend(SerialHandle hPort, const void *buf, int len)
 {
     DWORD tBytes;
     if (WriteFile(hPort, buf, len, &tBytes, NULL))
@@ -104,8 +104,7 @@ int SerialSend(SerialHandle hPort, const uint8_t *buf, int len)
     return -1;
 }
 
-
-int SerialReceive(SerialHandle hPort, uint8_t *buf, int len)
+int SerialReceive(SerialHandle hPort, void *buf, int len)
 {
     DWORD rBytes;
     if (ReadFile(hPort,buf,len,&rBytes, NULL))
