@@ -122,7 +122,7 @@ library: $(OBJ_TINY)
 #	$(STRIP) $(BLD)/$(TARGET_TINY)
 #	$(CC) $(CCFLAGS) -fPIC -o $(BLD)/$(TARGET_TINY).so $(OBJ_TINY) $(LIBS_TINY) $(LDFLAGS_TINY)
 
-install-lib: library
+install-lib:
 	cp -r $(BLD)/libtinyp.a $(DESTDIR)/usr/lib/
 	cp -rf ./include/*.h $(DESTDIR)/usr/include/
 	cp -rf ./include/$(OS)/*.h $(DESTDIR)/usr/include/
