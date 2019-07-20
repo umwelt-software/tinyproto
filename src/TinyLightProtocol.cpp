@@ -68,15 +68,15 @@ int ProtoLight::read(Packet &pkt)
 
 #ifdef ARDUINO
 
-static int writeToSerial(void *p, const uint8_t *b, int s)
+static int writeToSerial(void *p, const void *b, int s)
 {
-    int result = Serial.write(b, s);
+    int result = Serial.write((const uint8_t *)b, s);
     return result;
 }
 
-static int readFromSerial(void *p, uint8_t *b, int s)
+static int readFromSerial(void *p, void *b, int s)
 {
-    int length = Serial.readBytes(b, s);
+    int length = Serial.readBytes((uint8_t *)b, s);
     return length;
 }
 

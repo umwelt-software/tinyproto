@@ -68,8 +68,8 @@ public:
      */
     inline void beginToSerial()
     {
-         begin([](void *p, const uint8_t *b, int s)->int { return Serial.write(b, s); },
-               [](void *p, uint8_t *b, int s)->int { return Serial.readBytes(b, s); });
+         begin([](void *p, const void *b, int s)->int { return Serial.write((const uint8_t *)b, s); },
+               [](void *p, void *b, int s)->int { return Serial.readBytes((uint8_t *)b, s); });
     }
 
 #if HAVE_HWSERIAL1
