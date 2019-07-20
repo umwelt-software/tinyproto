@@ -41,10 +41,10 @@ TinyHelperHd::TinyHelperHd(FakeChannel * channel,
     init.inbuf            = m_buffer;
     init.inbuf_size       = rxBufferSize;
     init.timeout          = 2000;
+    init.crc_type         = HDLC_CRC_16;
     init.multithread_mode = multithread_mode;
 
     tiny_hd_init( &m_handle, &init  );
-    tiny_set_fcs_bits( &m_handle.handle, 16);
 }
 
 
@@ -111,16 +111,20 @@ void TinyHelperHd::receiveThread(TinyHelperHd *p)
     }
 }
 
-
-TinyHelperHd::~TinyHelperHd()
+void TinyHelperHd::wait_and_join()
 {
     if (m_thread != nullptr)
     {
-        m_forceStop = true;
         m_thread->join();
         delete m_thread;
         m_thread = nullptr;
     }
+}
+
+TinyHelperHd::~TinyHelperHd()
+{
+    m_forceStop = true;
+    wait_and_join();
     tiny_hd_close( &m_handle );
     delete[] m_buffer;
     m_buffer = nullptr;

@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2018 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,12 +17,10 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TINY_REQUEST_POOL_H_
-#define _TINY_REQUEST_POOL_H_
+#pragma once
 
 #include "proto/hal/tiny_defines.h"
-#include "tiny_list.h"
-#include "tiny_hd.h"
+#include "proto/hal/tiny_list.h"
 
 enum
 {
@@ -50,4 +48,3 @@ void tiny_decline_requests();
 
 void tiny_commit_request(uint16_t uid);
 
-#endif

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -32,7 +32,8 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "proto/_old/tiny_layer2.h"
+#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hal/tiny_proto_types.h"
 
 
 /**
@@ -42,19 +43,24 @@ extern "C" {
 typedef struct STinyHdData_
 {
     /// Original STinyData structure. It is used to control lower level
-    STinyData          handle;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    hdlc_struct_t       _hdlc;
+    uint8_t             _sent;
+#endif
+    /// callback function to write bytes to the physical channel
+    write_block_cb_t   write_func;
+    /// callback function to read bytes from the physical channel
+    read_block_cb_t    read_func;
     /// Callback to process received frames
     on_frame_cb_t      on_frame_cb;
-    /// Buffer to store frames being received
-    void          *    inbuf;
-    /// maximum size of Rx buffer
-    uint16_t           inbuf_size;
     /// Timeout for operations with acknowledge
     uint16_t           timeout;
     /// field used to store temporary uid
     uint16_t           uid;
     /// only single thread mode is supporte now. Should be zero
     uint8_t            multithread_mode;
+    /// user specific data
+    void *             user_data;
 } STinyHdData;
 
 
@@ -65,7 +71,7 @@ typedef struct STinyHdInit_
 {
     /// callback function to write bytes to the physical channel
     write_block_cb_t   write_func;
-    /// callback function to read buytes from the physical channel
+    /// callback function to read bytes from the physical channel
     read_block_cb_t    read_func;
     /// user data for block read/write functions
     void             * pdata;
@@ -79,6 +85,12 @@ typedef struct STinyHdInit_
     uint16_t           timeout;
     /// multithread mode. At present should be 0
     uint8_t            multithread_mode;
+    /**
+     * crc field type to use on hdlc level.
+     * If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration),
+     * but HDLC_CRC_16 has higher priority.
+     */
+    hdlc_crc_t         crc_type;
 } STinyHdInit;
 
 /**
@@ -155,7 +167,7 @@ extern int tiny_hd_run(STinyHdData   * handle);
  */
 extern int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len);
 
-
+#if 0
 static inline STinyData * hd_to_tiny(STinyHdData      * handle)
 {
     return &handle->handle;
@@ -165,6 +177,7 @@ static inline STinyHdData * tiny_to_hd(STinyData * handle)
 {
     return (STinyHdData *)handle;
 }
+#endif
 
 /**
  * @}

@@ -18,9 +18,7 @@
  */
 
 #include "proto/hal/tiny_defines.h"
-#include "tiny_list.h"
 #include "tiny_rq_pool.h"
-#include "tiny_hd.h"
 
 
 static tiny_request * s_pool = 0;

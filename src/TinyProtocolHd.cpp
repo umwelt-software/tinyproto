@@ -48,6 +48,7 @@ void ProtoHd::begin(write_block_cb_t writecb,
     init.inbuf            = m_buffer;
     init.inbuf_size       = m_bufferSize;
     init.timeout          = 1000;
+    init.crc_type         = m_crc;
     init.multithread_mode = 0;
 
     tiny_hd_init( &m_data, &init  );
@@ -75,22 +76,26 @@ int ProtoHd::run()
 
 void ProtoHd::disableCrc()
 {
-    tiny_set_fcs_bits(&m_data.handle, 0);
+    m_crc = HDLC_CRC_OFF;
+    return true;
 }
 
 bool ProtoHd::enableCheckSum()
 {
-    return tiny_set_fcs_bits(&m_data.handle, 8) == TINY_NO_ERROR;
+    m_crc = HDLC_CRC_8;
+    return true;
 }
 
 bool ProtoHd::enableCrc16()
 {
-    return tiny_set_fcs_bits(&m_data.handle, 16) == TINY_NO_ERROR;
+    m_crc = HDLC_CRC_16;
+    return true;
 }
 
 bool ProtoHd::enableCrc32()
 {
-    return tiny_set_fcs_bits(&m_data.handle, 32) == TINY_NO_ERROR;
+    m_crc = HDLC_CRC_32;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////

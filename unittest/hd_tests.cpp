@@ -39,7 +39,7 @@ TEST_GROUP(HdTests)
     }
 };
 
-#if 0
+#if 1
 TEST(HdTests, TinyHd_Send)
 {
     uint8_t      txbuf[128];
@@ -54,6 +54,7 @@ TEST(HdTests, TinyHd_Send)
                           sizeof(txbuf),
                           [&nreceived](uint16_t uid, uint8_t *buf, int len)->void
                           {
+//                              printf("received uid:%04X, len: %d\n", uid, len);
                               nreceived++;
                           });
     TinyHelperHd helper2( &channel2, sizeof(txbuf) );
@@ -65,9 +66,12 @@ TEST(HdTests, TinyHd_Send)
     {
         txbuf[0] = 0xAA;
         txbuf[1] = 0xFF;
+//        printf("sending %d bytes\n", 2);
         int result = helper2.send_wait_ack( txbuf, 2 );
         CHECK( result >= 0 );
     }
+    // sleep for 2 ms befoe last frame arrives
+    usleep(2000);
     CHECK_EQUAL( 4, nreceived );
 }
 

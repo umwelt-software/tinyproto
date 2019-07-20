@@ -17,7 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "proto/hal/tiny_defines.h"
+#include "tiny_defines.h"
 #include "tiny_list.h"
 
 

@@ -78,13 +78,13 @@ int tiny_light_init(void *handle,
     {
         return TINY_ERR_FAILED;
     }
-    ((STinyLightData *)handle)->hdlc.user_data = handle;
-    ((STinyLightData *)handle)->hdlc.on_frame_read = on_frame_read;
-    ((STinyLightData *)handle)->hdlc.on_frame_sent = on_frame_sent;
-    ((STinyLightData *)handle)->hdlc.send_tx = write_func_cb;
-    ((STinyLightData *)handle)->hdlc.rx_buf = NULL;
-    ((STinyLightData *)handle)->hdlc.rx_buf_size = 0;
-    ((STinyLightData *)handle)->hdlc.crc_type = HDLC_CRC_OFF;
+    ((STinyLightData *)handle)->_hdlc.user_data = handle;
+    ((STinyLightData *)handle)->_hdlc.on_frame_read = on_frame_read;
+    ((STinyLightData *)handle)->_hdlc.on_frame_sent = on_frame_sent;
+    ((STinyLightData *)handle)->_hdlc.send_tx = write_func_cb;
+    ((STinyLightData *)handle)->_hdlc.rx_buf = NULL;
+    ((STinyLightData *)handle)->_hdlc.rx_buf_size = 0;
+    ((STinyLightData *)handle)->_hdlc.crc_type = HDLC_CRC_OFF;
 
     ((STinyLightData *)handle)->user_data = pdata;
     ((STinyLightData *)handle)->read_func = read_func;
@@ -93,7 +93,7 @@ int tiny_light_init(void *handle,
 #ifdef CONFIG_ENABLE_STATS
     tiny_light_clear_stat((STinyLightData *)handle);
 #endif
-    hdlc_init( &((STinyLightData *)handle)->hdlc );
+    hdlc_init( &((STinyLightData *)handle)->_hdlc );
     return TINY_NO_ERROR;
 }
 
@@ -106,7 +106,7 @@ int tiny_light_close(void *handle)
         return TINY_ERR_FAILED;
     }
     ((STinyLightData *)handle)->read_func = 0;
-    hdlc_close( &((STinyLightData *)handle)->hdlc );
+    hdlc_close( &((STinyLightData *)handle)->_hdlc );
     return TINY_NO_ERROR;
 }
 
@@ -132,14 +132,14 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 
 int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 {
-    if ( hdlc_send( &((STinyLightData *)handle)->hdlc, pbuf, len ) == 0 )
+    if ( hdlc_send( &((STinyLightData *)handle)->_hdlc, pbuf, len ) == 0 )
     {
         return TINY_ERR_FAILED;
     }
     ((STinyLightData *)handle)->_sent = 0;
     while ( ((STinyLightData *)handle)->_sent == 0 )
     {
-        int result = hdlc_run_tx( &((STinyLightData *)handle)->hdlc );
+        int result = hdlc_run_tx( &((STinyLightData *)handle)->_hdlc );
         if ( result < 0 )
         {
             break;
@@ -166,9 +166,9 @@ static int on_frame_read(void *user_data, void *data, int len)
 
 int tiny_light_read(void *handle, uint8_t *pbuf, int len)
 {
-    ((STinyLightData *)handle)->hdlc.rx_buf = pbuf;
-    ((STinyLightData *)handle)->hdlc.rx.data = pbuf;
-    ((STinyLightData *)handle)->hdlc.rx_buf_size = len;
+    ((STinyLightData *)handle)->_hdlc.rx_buf = pbuf;
+    ((STinyLightData *)handle)->_hdlc.rx.data = pbuf;
+    ((STinyLightData *)handle)->_hdlc.rx_buf_size = len;
     ((STinyLightData *)handle)->_received = 0;
     while (((STinyLightData *)handle)->_received == 0)
     {
@@ -176,7 +176,7 @@ int tiny_light_read(void *handle, uint8_t *pbuf, int len)
         int result = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->user_data, &byte, 1);
         if ( result == 0 )
         {
-            if ( ((STinyLightData *)handle)->hdlc.rx.len == 0 )
+            if ( ((STinyLightData *)handle)->_hdlc.rx.len == 0 )
             {
                 break;
             }
@@ -186,9 +186,9 @@ int tiny_light_read(void *handle, uint8_t *pbuf, int len)
         {
             break;
         }
-        while ( hdlc_run_rx( &((STinyLightData *)handle)->hdlc, &byte, 1 ) == 0 );
+        while ( hdlc_run_rx( &((STinyLightData *)handle)->_hdlc, &byte, 1 ) == 0 );
     }
-    return ((STinyLightData *)handle)->_received ? ((STinyLightData *)handle)->hdlc.rx.len: TINY_ERR_FAILED;
+    return ((STinyLightData *)handle)->_received ? ((STinyLightData *)handle)->_hdlc.rx.len: TINY_ERR_FAILED;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

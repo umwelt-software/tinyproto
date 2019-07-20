@@ -206,6 +206,7 @@ public:
 private:
     /** buffer to receive data to */
     void               *m_buffer;
+    hdlc_crc_t          m_crc = HDLC_CRC_DEFAULT;
     /** max buffer size */
     int                 m_bufferSize;
     /** Callback, when new frame is received */

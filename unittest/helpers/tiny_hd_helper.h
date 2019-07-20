@@ -42,6 +42,7 @@ public:
     int send_wait_ack(uint8_t *buf, int len);
     int run();
     int run(bool forked);
+    void wait_and_join();
 private:
     static uint32_t s_handleOffset;
     FakeChannel * m_channel;

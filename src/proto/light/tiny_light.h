@@ -56,7 +56,7 @@ typedef struct
     /// user-specific data
     void               *user_data;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    hdlc_struct_t       hdlc;
+    hdlc_struct_t       _hdlc;
     uint8_t             _received;
     uint8_t             _sent;
 #endif

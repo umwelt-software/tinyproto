@@ -108,7 +108,7 @@ SRC_TINY = \
         src/proto/light/tiny_light.c \
         src/proto/hdlc/tiny_hdlc.c \
         src/proto/half_duplex/tiny_hd.c \
-        src/proto/half_duplex/tiny_list.c \
+        src/proto/hal/tiny_list.c \
         src/proto/half_duplex/tiny_rq_pool.c \
         tools/serial/serial_linux.c
 

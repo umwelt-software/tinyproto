@@ -17,8 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TINY_LIST_H_
-#define _TINY_LIST_H_
+#pragma once
 
 #include <stdint.h>
 
@@ -42,4 +41,3 @@ void tiny_list_enumerate(list_element *head,
                          uint8_t (*enumerate_func)(list_element *element, uint16_t data),
                          uint16_t      data);
 
-#endif
