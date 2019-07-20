@@ -58,7 +58,11 @@ And then TinyProto Light version was implemented.
 ## Setting up for Arduino
 
  * Download source from https://github.com/lexus2k/tinyproto
- * Put the /tinyproto/releases/arduino/ folder content  to Arduino/libraries/ folder
+ * On Windows, run the gen_arduino_release.bat
+ * On Linux/Mac OS, run the gen_arduino_release.sh
+ * Put the releases/arduino/ folder content to Arduino/libraries/ folder
+ * Restart the Arduino IDE
+ * You will find the examples in the Arduino IDE under File, Examples, tinyproto
 
 ## Running demo example for Arduino
 
