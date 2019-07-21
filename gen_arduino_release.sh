@@ -1,6 +1,6 @@
 #/bin/sh
-OUTPUTPATH=releases/arduino/TinyProto
-OUTPUTZIP=releases/arduino/TinyProto.zip
+OUTPUTPATH=releases/arduino/tinyproto
+OUTPUTZIP=releases/arduino/tinyproto.zip
 
 rm -rf $OUTPUTPATH
 rm -rf $OUTPUTZIP
@@ -23,6 +23,6 @@ cp LICENSE $OUTPUTPATH
 cp keywords.txt $OUTPUTPATH
 
 
-(cd releases/arduino/; zip -r TinyProto.zip TinyProto)
+(cd releases/arduino/; zip -r tinyproto.zip tinyproto)
 
 echo "arduino package build ... [DONE]"
