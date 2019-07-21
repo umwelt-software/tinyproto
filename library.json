@@ -1,0 +1,24 @@
+{
+  "name": "Tiny Protocol",
+  "version": "0.7.0",
+  "description": "Tiny Protocol is layer 2 simple protocol. It is intended to be used for the systems with small amount of resources",
+  "keywords": "protocol communication protocol-library hdlc-like hdlc arduino microcontroller",
+  "authors":
+  {
+    "name":  "Alexey Dynda",
+    "url":   "https://github.com/lexus2k",
+    "maintainer": true
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/lexus2k/tinyproto"
+  },
+  "homepage": "https://github.com/lexus2k/tinyproto",
+  "export": {
+    "exclude": [ "docs/*", "unittest/*", "tools/*" ]
+  },
+  "frameworks": [ "arduino" ],
+  "platforms": "*",
+  "examples": "examples/*/*.ino"
+}

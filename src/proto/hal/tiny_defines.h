@@ -26,6 +26,9 @@
 #elif __linux__
 #include "linux/tiny_defines.h"
 
+#elif defined(__XTENSA__)
+#include "esp32/tiny_defines.h"
+
 #else
 #include "mingw32/tiny_defines.h"
 
