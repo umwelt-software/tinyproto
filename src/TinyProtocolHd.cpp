@@ -40,7 +40,7 @@ void ProtoHd::onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int 
 void ProtoHd::begin(write_block_cb_t writecb,
                     read_block_cb_t readcb)
 {
-    STinyHdInit   init = {0};
+    STinyHdInit   init{};
     init.write_func       = writecb;
     init.read_func        = readcb;
     init.pdata            = this;
@@ -77,7 +77,6 @@ int ProtoHd::run()
 void ProtoHd::disableCrc()
 {
     m_crc = HDLC_CRC_OFF;
-    return true;
 }
 
 bool ProtoHd::enableCheckSum()
