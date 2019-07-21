@@ -92,7 +92,7 @@ public:
                [](void *p, void *b, int s)->int { return Serial.readBytes((uint8_t *)b, s); });
     }
 
-#if HAVE_HWSERIAL1
+#ifdef HAVE_HWSERIAL1
     /**
      * Initializes protocol internal variables and redirects
      * communication through Arduino Serial1 connection (Serial1).
@@ -105,7 +105,7 @@ public:
     }
 #endif
 
-#if HAVE_HWSERIAL2
+#ifdef HAVE_HWSERIAL2
     /**
      * Initializes protocol internal variables and redirects
      * communication through Arduino Serial2 connection (Serial2).
@@ -118,7 +118,7 @@ public:
     }
 #endif
 
-#if HAVE_HWSERIAL3
+#ifdef HAVE_HWSERIAL3
     /**
      * Initializes protocol internal variables and redirects
      * communication through Arduino Serial3 connection (Serial3).
