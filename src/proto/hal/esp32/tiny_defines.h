@@ -20,23 +20,26 @@
 #pragma once
 
 #include "tiny_config.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
 
 /* For fastest version of protocol assign all defines to zero.
  * In this case protocol supports no CRC field, and
  * all api functions become not thread-safe.
  */
 
-#undef  PLATFORM_MUTEX
+#define PLATFORM_MUTEX SemaphoreHandle_t
 
-#define MUTEX_INIT(x)
+#define MUTEX_INIT(x) x = xSemaphoreCreateMutex()
 
-#define MUTEX_LOCK(x)
+#define MUTEX_LOCK(x) xSemaphoreTake( x, portMAX_DELAY )
 
-#define MUTEX_TRY_LOCK(x)    0
+#define MUTEX_TRY_LOCK(x) (xSemaphoreTake( x, 0 ) == pdTRUE)
 
-#define MUTEX_UNLOCK(x)
+#define MUTEX_UNLOCK(x) xSemaphoreGive( x )
 
-#define MUTEX_DESTROY(x)
+#define MUTEX_DESTROY(x) vSemaphoreDelete( x )
 
 #undef  PLATFORM_COND
 
@@ -54,7 +57,7 @@
 
 #if defined(__XTENSA__)
 #include <stdint.h>
-static inline uint32_t millis() { return 0; }
+static inline uint32_t millis() {   return (uint32_t)(esp_timer_get_time()/1000); }
 #endif
 
 
