@@ -251,14 +251,17 @@ static int hdlc_read_data( hdlc_handle_t handle, uint8_t *data, int len )
         handle->rx.escape = 1;
         return 1;
     }
-    if ( handle->rx.escape )
+    if ( handle->rx.len < handle->rx_buf_size )
     {
-        handle->rx.data[ handle->rx.len ] = byte ^ TINY_ESCAPE_BIT;
-        handle->rx.escape = 0;
-    }
-    else
-    {
-        handle->rx.data[ handle->rx.len ] = byte;
+        if ( handle->rx.escape )
+        {
+            handle->rx.data[ handle->rx.len ] = byte ^ TINY_ESCAPE_BIT;
+            handle->rx.escape = 0;
+        }
+        else
+        {
+            handle->rx.data[ handle->rx.len ] = byte;
+        }
     }
 //    printf("%02X\n", handle->rx.data[ handle->rx.len ]);
     handle->rx.len++;
@@ -276,6 +279,11 @@ static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len )
         return 0;
     }
     handle->rx.state = hdlc_read_start;
+    if ( handle->rx.len > handle->rx_buf_size )
+    {
+        // Buffer size issue, too long packet
+        return 0;
+    }
     if ( handle->rx.len < (uint8_t)handle->crc_type / 8 )
     {
         // CRC size issue

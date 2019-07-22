@@ -23,6 +23,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
+#include "freertos/event_groups.h"
 
 /* For fastest version of protocol assign all defines to zero.
  * In this case protocol supports no CRC field, and
@@ -41,17 +42,17 @@
 
 #define MUTEX_DESTROY(x) vSemaphoreDelete( x )
 
-#undef  PLATFORM_COND
+#define PLATFORM_COND EventGroupHandle_t
 
-#define COND_INIT(x)
+#define COND_INIT(x) x = xEventGroupCreate()
 
-#define COND_DESTROY(x)
+#define COND_DESTROY(x) vEventGroupDelete(x)
 
-#define COND_WAIT(cond, mutex)
+#define COND_WAIT(cond, mutex) xEventGroupWaitBits(cond, 0x01, pdTRUE, pdFALSE, portMAX_DELAY)
 
-#define COND_SIGNAL(x)
+#define COND_SIGNAL(x) xEventGroupSetBits(x, 0x01)
 
-#define TASK_YIELD()
+#define TASK_YIELD() vTaskDelay(0)
 
 #define PLATFORM_TICKS()    millis()
 
