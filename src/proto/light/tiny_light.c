@@ -186,7 +186,7 @@ int tiny_light_read(void *handle, uint8_t *pbuf, int len)
         {
             break;
         }
-        while ( hdlc_run_rx( &((STinyLightData *)handle)->_hdlc, &byte, 1 ) == 0 );
+        while ( hdlc_run_rx( &((STinyLightData *)handle)->_hdlc, &byte, 1, NULL ) == 0 );
     }
     return ((STinyLightData *)handle)->_received ? ((STinyLightData *)handle)->_hdlc.rx.len: TINY_ERR_FAILED;
 }

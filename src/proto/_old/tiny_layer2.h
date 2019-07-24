@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "proto/hal/tiny_proto_types.h"
+#include "proto/hal/tiny_types.h"
 
 /// \cond
 typedef enum
@@ -123,12 +123,8 @@ typedef struct
     STinyRxStatus       rx;
     /// @see STinyTxStatus
     STinyTxStatus       tx;
-#ifdef PLATFORM_MUTEX
-    PLATFORM_MUTEX      send_mutex;                // Mutex for send operation
-#endif
-#ifdef PLATFORM_COND
-    PLATFORM_COND       send_condition;            // Condition is called, when send operation is completed
-#endif
+    tiny_mutex_t        send_mutex;                // Mutex for send operation
+    tiny_events_t       send_condition;            // Condition is called, when send operation is completed
     /// The field contains number of bits to use for FCS and not available in TINY_MINIMAL configuration
     uint8_t             fcs_bits;
     /// pointer to callback function

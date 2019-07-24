@@ -33,7 +33,7 @@ extern "C" {
 
 #include <stdint.h>
 #include "proto/hdlc/tiny_hdlc.h"
-#include "proto/hal/tiny_proto_types.h"
+#include "proto/hal/tiny_types.h"
 
 
 /**

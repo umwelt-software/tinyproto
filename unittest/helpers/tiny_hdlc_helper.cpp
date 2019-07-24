@@ -65,14 +65,14 @@ int TinyHdlcHelper::process_rx_bytes()
     uint8_t byte;
     while ( m_channel->read(&byte, 1) == 1 )
     {
-        int res;
+        int res, error;
         do
         {
-            res = hdlc_run_rx( &m_handle, &byte, 1 );
-        } while (res == 0);
-        if (res < 0)
+            res = hdlc_run_rx( &m_handle, &byte, 1, &error );
+        } while (res == 0 && error == 0);
+        if (error < 0)
         {
-            return res;
+            return error;
         }
     }
     return 0;

@@ -1,5 +1,5 @@
 /*
-    Copyright 2016 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,47 +17,19 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TINY_DEFINES_H_
-#define _TINY_DEFINES_H_
+#pragma once
 
 #include "tiny_config.h"
+#include <stdint.h>
 
 /* For fastest version of protocol assign all defines to zero.
  * In this case protocol supports no CRC field, and
  * all api functions become not thread-safe.
  */
 
-#undef  PLATFORM_MUTEX
 
-#define MUTEX_INIT(x)
+typedef uint8_t tiny_mutex_t
+typedef uint8_t tiny_events_t
 
-#define MUTEX_LOCK(x)
-
-#define MUTEX_TRY_LOCK(x)    0
-
-#define MUTEX_UNLOCK(x)
-
-#define MUTEX_DESTROY(x)
-
-#undef  PLATFORM_COND
-
-#define COND_INIT(x)
-
-#define COND_DESTROY(x)
-
-#define COND_WAIT(cond, mutex)
-
-#define COND_SIGNAL(x)
-
-#define TASK_YIELD()
-
-#define PLATFORM_TICKS()    millis()
-
-#ifdef __linux__
-#include <stdint.h>
-static inline uint32_t millis() { return 0; }
-#endif
-
-#endif /* _TINY_DEFINES_H_ */
 
 

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "proto/hal/tiny_defines.h"
+#include "proto/hal/tiny_types.h"
 #include "proto/hal/tiny_list.h"
 
 enum

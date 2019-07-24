@@ -137,9 +137,11 @@ void hdlc_reset( hdlc_handle_t handle );
  * @param handle handle to hdlc instance
  * @param data pointer to incoming data to process
  * @param len size of received data in bytes
- * @return number of bytes actually processed.
+ * @param error pointer to store error code. If no error, 0 is returned.
+ *        this argument can be NULL.
+ * @return number of bytes read to data buffer.
  */
-int hdlc_run_rx( hdlc_handle_t handle, void *data, int len );
+int hdlc_run_rx( hdlc_handle_t handle, void *data, int len, int *error );
 
 /**
  * Runs transmission at hdlc level. If there is frame to send, or

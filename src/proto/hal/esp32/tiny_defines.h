@@ -25,10 +25,8 @@
 #include "freertos/semphr.h"
 #include "freertos/event_groups.h"
 
-/* For fastest version of protocol assign all defines to zero.
- * In this case protocol supports no CRC field, and
- * all api functions become not thread-safe.
- */
+typedef SemaphoreHandle_t tiny_mutex_t;
+typedef EventGroupHandle_t tiny_events_t;
 
 #define PLATFORM_MUTEX SemaphoreHandle_t
 

@@ -109,6 +109,10 @@ SRC_TINY = \
         src/proto/hdlc/tiny_hdlc.c \
         src/proto/half_duplex/tiny_hd.c \
         src/proto/hal/tiny_list.c \
+        src/proto/hal/arduino/hal.c \
+        src/proto/hal/avr/hal.c \
+        src/proto/hal/esp32/hal.c \
+        src/proto/hal/linux/hal.c \
         src/proto/half_duplex/tiny_rq_pool.c \
         tools/serial/serial_linux.c
 

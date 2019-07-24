@@ -17,13 +17,11 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tiny_defines.h"
+#include "tiny_types.h"
 #include "tiny_list.h"
 
 
-#ifdef PLATFORM_MUTEX
-static PLATFORM_MUTEX s_mutex;
-#endif
+static tiny_mutex_t s_mutex;
 
 static uint16_t       s_uid = 0;
 
@@ -32,7 +30,7 @@ static uint16_t       s_uid = 0;
 uint16_t tiny_list_add(list_element **head, list_element *element)
 {
     uint16_t uid;
-    MUTEX_LOCK(s_mutex);
+    tiny_mutex_lock( &s_mutex );
 
     uid = s_uid++;
     element->pnext = *head;
@@ -43,7 +41,7 @@ uint16_t tiny_list_add(list_element **head, list_element *element)
     }
     *head = element;
 
-    MUTEX_UNLOCK(s_mutex);
+    tiny_mutex_unlock( &s_mutex );
     return uid & 0x0FFF;
 }
 
@@ -51,7 +49,7 @@ uint16_t tiny_list_add(list_element **head, list_element *element)
 
 void tiny_list_remove(list_element **head, list_element *element)
 {
-    MUTEX_LOCK(s_mutex);
+    tiny_mutex_lock( &s_mutex );
     if (element == *head)
     {
         *head = element->pnext;
@@ -73,16 +71,16 @@ void tiny_list_remove(list_element **head, list_element *element)
     }
     element->pprev = 0;
     element->pnext = 0;
-    MUTEX_UNLOCK(s_mutex);
+    tiny_mutex_unlock( &s_mutex );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void tiny_list_clear(list_element **head)
 {
-    MUTEX_LOCK(s_mutex);
+    tiny_mutex_lock( &s_mutex );
     *head = 0;
-    MUTEX_UNLOCK(s_mutex);
+    tiny_mutex_unlock( &s_mutex );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,7 +89,7 @@ void tiny_list_enumerate(list_element *head,
                          uint8_t (*enumerate_func)(list_element *element, uint16_t data),
                          uint16_t data)
 {
-    MUTEX_LOCK(s_mutex);
+    tiny_mutex_lock( &s_mutex );
     while (head)
     {
         if (!enumerate_func(head, data))
@@ -100,7 +98,7 @@ void tiny_list_enumerate(list_element *head,
         }
         head = head->pnext;
     }
-    MUTEX_UNLOCK(s_mutex);
+    tiny_mutex_unlock( &s_mutex );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

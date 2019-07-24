@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2018 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -23,15 +23,26 @@
  @file
  @brief Tiny protocol Types
 */
-#ifndef _TINY_PROTO_TYPES_H_
-#define _TINY_PROTO_TYPES_H_
+
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#if defined(__AVR__)
+#include "avr/tiny_defines.h"
+#elif defined(__XTENSA__)
+#include "esp32/tiny_defines.h"
+#elif defined(ARDUINO)
+#include "arduino/tiny_defines.h"
+#elif defined(__linux__)
+#include "linux/tiny_defines.h"
+#else
+#include "mingw32/tiny_defines.h"
+#endif
+
 #include <stdint.h>
-#include "tiny_defines.h"
 
 /// \cond
 #ifdef CONFIG_ENABLE_FCS32
@@ -137,8 +148,33 @@ typedef int (*read_block_cb_t)(void *pdata, void *buffer, int size);
  */
 typedef void (*on_frame_cb_t)(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
+
+void tiny_mutex_create(tiny_mutex_t *mutex);
+
+void tiny_mutex_destroy(tiny_mutex_t *mutex);
+
+void tiny_mutex_lock(tiny_mutex_t *mutex);
+
+uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex);
+
+void tiny_mutex_unlock(tiny_mutex_t *mutex);
+
+void tiny_events_create(tiny_events_t *events);
+
+void tiny_events_destroy(tiny_events_t *events);
+
+uint8_t tiny_events_wait(tiny_events_t *event, uint8_t bits);
+
+void tiny_events_set(tiny_events_t *event, uint8_t bits);
+
+void tiny_events_clear(tiny_events_t *event, uint8_t bits);
+
+void tiny_sleep(uint32_t ms);
+
+uint32_t tiny_millis();
+
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif

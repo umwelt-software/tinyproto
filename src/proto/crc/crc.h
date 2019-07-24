@@ -1,5 +1,5 @@
 /*
-    Copyright 2016,2018 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -20,7 +20,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "proto/hal/tiny_defines.h"
+#include "proto/hal/tiny_types.h"
 
 #ifdef CONFIG_ENABLE_CHECKSUM
 #define INITCHECKSUM    0x0000

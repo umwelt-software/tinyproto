@@ -169,8 +169,8 @@ int tiny_init(STinyData *handle,
     handle->tx.inprogress = TINY_TX_STATE_IDLE;
     handle->tx.pframe = 0;
     handle->tx.locked = 0;
-    MUTEX_INIT(handle->send_mutex);
-    COND_INIT(handle->send_condition);
+    tiny_mutex_create(&handle->send_mutex);
+    tiny_events_create(&handle->send_condition);
 #ifdef CONFIG_ENABLE_STATS
     tiny_clear_stat(handle);
 #endif
@@ -185,12 +185,11 @@ int tiny_close(STinyData *handle)
     {
         return TINY_ERR_INVALID_DATA;
     }
-    if ( MUTEX_TRY_LOCK(handle->send_mutex) == 0 ) {};
-    MUTEX_UNLOCK(handle->send_mutex);
+    if ( tiny_mutex_try_lock(&handle->send_mutex) != 0 ) tiny_mutex_unlock(&handle->send_mutex);
     handle->tx.inprogress = TINY_TX_STATE_IDLE;
     handle->rx.inprogress = TINY_RX_STATE_IDLE;
-    COND_DESTROY(handle->send_condition);
-    MUTEX_DESTROY(handle->send_mutex);
+    tiny_events_destroy(&handle->send_condition);
+    tiny_mutex_destroy(&handle->send_mutex);
     handle->write_func = 0;
     handle->read_func = 0;
     return TINY_NO_ERROR;
@@ -401,7 +400,7 @@ int tiny_send_start(STinyData *handle, uint8_t flags)
         {
             break;
         }
-        TASK_YIELD();
+        tiny_sleep(0);
     } while (flags & TINY_FLAG_WAIT_FOREVER);
     /* Failed to send marker for some reason: maybe device is busy */
     if (result == 0)
@@ -458,7 +457,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
         {
             if ( result == TINY_ERR_BUSY )
             {
-                TASK_YIELD();
+                tiny_sleep(0);
                 result = TINY_NO_ERROR;
             }
             else
@@ -516,7 +515,7 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
         {
             if ( result == TINY_ERR_BUSY )
             {
-                TASK_YIELD();
+                tiny_sleep(0);
                 result = TINY_NO_ERROR;
             }
             else
@@ -780,7 +779,7 @@ int tiny_read_start(STinyData * handle, uint8_t flags)
             result = TINY_ERR_FAILED;
             break;
         }
-        TASK_YIELD();
+        tiny_sleep(0);
     } while (flags & TINY_FLAG_WAIT_FOREVER);
     return result;
 }
@@ -813,7 +812,7 @@ int tiny_read_buffer(STinyData *handle, uint8_t *pbuf, int len, uint8_t flags)
                 result = TINY_ERR_AGAIN;
                 break;
             }
-            TASK_YIELD();
+            tiny_sleep(0);
             continue;
         }
 
@@ -1078,11 +1077,11 @@ int tiny_lock(STinyData *handle, uint8_t flags)
 {
     if (flags & TINY_FLAG_WAIT_FOREVER)
     {
-         MUTEX_LOCK(handle->send_mutex);
+         tiny_mutex_lock(&handle->send_mutex);
          handle->tx.locked = 1;
          return TINY_SUCCESS;
     }
-    if (MUTEX_TRY_LOCK(handle->send_mutex) == 0)
+    if (tiny_mutex_try_lock(&handle->send_mutex) != 0)
     {
          handle->tx.locked = 1;
          return TINY_SUCCESS;
@@ -1097,7 +1096,7 @@ void tiny_unlock(STinyData *handle)
     if (handle->tx.locked)
     {
         handle->tx.locked = 0;
-        MUTEX_UNLOCK(handle->send_mutex);
+        tiny_mutex_unlock(&handle->send_mutex);
     }
 }
 

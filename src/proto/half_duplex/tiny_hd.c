@@ -17,7 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "proto/hal/tiny_defines.h"
+#include "proto/hal/tiny_types.h"
 #include "tiny_rq_pool.h"
 #include "tiny_hd.h"
 
@@ -35,7 +35,7 @@ static int send_complete(STinyHdData *handle, const uint8_t *pbuf, int len);
 
 static int tiny_wait_request_update(STinyHdData *handle, tiny_request * request, uint16_t timeout)
 {
-    uint16_t ticks = PLATFORM_TICKS();
+    uint16_t ticks = tiny_millis();
     do
     {
         if (handle->multithread_mode)
@@ -54,8 +54,8 @@ static int tiny_wait_request_update(STinyHdData *handle, tiny_request * request,
         {
             break;
         }
-        TASK_YIELD();
-    } while ( PLATFORM_TICKS() - ticks < timeout );
+        tiny_sleep(0);
+    } while ( (uint16_t)(tiny_millis() - ticks) < timeout );
     switch ( request->state )
     {
         case TINY_HD_REQUEST_INIT: return TINY_ERR_TIMEOUT;
@@ -228,7 +228,7 @@ int tiny_hd_run(STinyHdData *handle)
             break;
         }
         result += temp;
-        while ( hdlc_run_rx( &handle->_hdlc, &byte, 1 ) == 0 );
+        while ( hdlc_run_rx( &handle->_hdlc, &byte, 1, NULL ) == 0 );
     }
     return result;
 }

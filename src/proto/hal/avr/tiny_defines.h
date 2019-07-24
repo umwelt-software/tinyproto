@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,22 +17,21 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __OS_TINY_CONFIG_H__
-#define __OS_TINY_CONFIG_H__
+#ifndef _TINY_DEFINES_H_
+#define _TINY_DEFINES_H_
 
-#ifdef ARDUINO
-#include "arduino/tiny_defines.h"
+#include "tiny_config.h"
+#include <stdint.h>
 
-#elif __linux__
-#include "linux/tiny_defines.h"
+/* For fastest version of protocol assign all defines to zero.
+ * In this case protocol supports no CRC field, and
+ * all api functions become not thread-safe.
+ */
 
-#elif defined(__XTENSA__)
-#include "esp32/tiny_defines.h"
+typedef uint8_t tiny_mutex_t;
 
-#else
-#include "mingw32/tiny_defines.h"
+typedef uint8_t tiny_events_t;
 
-#endif
+#endif /* _TINY_DEFINES_H_ */
 
-#endif /* __OS_TINY_CONFIG_H__ */
 
