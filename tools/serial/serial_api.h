@@ -37,7 +37,7 @@ extern "C" {
 /**
  * SerialHandle cross-platform type
  */
-typedef void * SerialHandle;
+typedef uintptr_t SerialHandle;
 
 #ifdef _WIN32
 

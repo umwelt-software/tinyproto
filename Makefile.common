@@ -1,0 +1,70 @@
+default: all
+DESTDIR ?=
+BLD ?= bld
+CONFIG_ENABLE_FCS32 ?= y
+CONFIG_ENABLE_FCS16 ?= y
+CONFIG_ENABLE_CHECKSUM ?= y
+
+VERSION=0.7.0
+
+CPPFLAGS += -I./src
+
+CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections \
+        -fno-exceptions
+
+ifeq ($(CONFIG_ENABLE_FCS32),y)
+    CPPFLAGS += -DCONFIG_ENABLE_FCS32
+endif
+
+ifeq ($(CONFIG_ENABLE_FCS16),y)
+    CPPFLAGS += -DCONFIG_ENABLE_FCS16
+endif
+
+ifeq ($(CONFIG_ENABLE_CHECKSUM),y)
+    CPPFLAGS += -DCONFIG_ENABLE_CHECKSUM
+endif
+
+ifeq ($(CONFIG_ENABLE_STATS),y)
+    CPPFLAGS += -DCONFIG_ENABLE_STATS
+endif
+
+.PHONY: clean library all install docs release
+
+####################### Compiling library #########################
+
+TARGET_LIB = libtinyprotocol.a
+
+OBJ_LIB = \
+        src/proto/crc/crc.o \
+        src/proto/_old/tiny_layer2.o \
+        src/proto/light/tiny_light.o \
+        src/proto/hdlc/tiny_hdlc.o \
+        src/proto/half_duplex/tiny_hd.o \
+        src/proto/hal/tiny_list.o \
+        src/proto/hal/arduino/hal.o \
+        src/proto/hal/avr/hal.o \
+        src/proto/hal/esp32/hal.o \
+        src/proto/hal/linux/hal.o \
+        src/proto/half_duplex/tiny_rq_pool.o \
+        tools/serial/serial_linux.o
+
+library: $(OBJ_LIB)
+	mkdir -p $(BLD)
+	$(AR) rcs $(BLD)/$(TARGET_LIB) $^
+
+install:
+	cp -r $(BLD)/$(TARGET_LIB) $(DESTDIR)/usr/lib/
+	cp -rf ./include/*.h $(DESTDIR)/usr/include/
+
+docs:
+	doxygen doxygen.cfg
+
+all: library
+
+clean:
+	rm -rf $(BLD)
+	rm -rf $(OBJ_LIB)
+
+#clean:
+#	rm -rf $(BLD)
+

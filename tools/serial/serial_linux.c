@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -38,13 +38,13 @@
 
 static int handleToFile(SerialHandle handle)
 {
-    return *((int *)&handle);
+    return (int)handle;
 }
 
 static SerialHandle fileToHandle(int fd)
 {
     SerialHandle handle = 0;
-    *((int *)&handle) = fd;
+    handle = (SerialHandle)fd;
     return handle;
 }
 

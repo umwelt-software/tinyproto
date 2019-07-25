@@ -19,7 +19,11 @@
 
 #if defined(__AVR__)
 
+// TODO: <util/atomic.h>
+
 #include "proto/hal/tiny_types.h"
+#include <avr/interrupt.h>
+#include <util/delay.h>
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
 {
@@ -38,7 +42,7 @@ void tiny_mutex_lock(tiny_mutex_t *mutex)
         cli();
         locked = !*mutex;
         *mutex = 1;
-        sti();
+        sei();
     }
     while (!locked);
 }
@@ -49,7 +53,7 @@ uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
     cli();
     locked = !*mutex;
     *mutex = 1;
-    sti();
+    sei();
     return locked;
 }
 
@@ -57,7 +61,7 @@ void tiny_mutex_unlock(tiny_mutex_t *mutex)
 {
     cli();
     *mutex = 0;
-    sti();
+    sei();
 }
 
 void tiny_events_create(tiny_events_t *events)
@@ -77,7 +81,7 @@ uint8_t tiny_events_wait_and_clear(tiny_events_t *events, uint8_t bits)
         cli();
         locked = *events;
         *events &= ~bits;
-        sti();
+        sei();
     }
     while (!(locked & bits));
     return locked;
@@ -90,7 +94,7 @@ uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits)
     {
         cli();
         locked = *events;
-        sti();
+        sei();
     }
     while (!(locked & bits));
     return locked;
@@ -100,14 +104,14 @@ void tiny_events_set(tiny_events_t *events, uint8_t bits)
 {
     cli();
     *events |= bits;
-    sti();
+    sei();
 }
 
 void tiny_events_clear(tiny_events_t *events, uint8_t bits)
 {
     cli();
     *events &= ~bits;
-    sti();
+    sei();
 }
 
 void tiny_sleep(uint32_t ms)

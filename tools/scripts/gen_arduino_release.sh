@@ -1,4 +1,7 @@
-#/bin/sh
+#!/bin/sh
+
+cd ../..
+
 OUTPUTPATH=releases/arduino/tinyproto
 OUTPUTZIP=releases/arduino/tinyproto.zip
 

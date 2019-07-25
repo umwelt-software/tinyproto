@@ -28,8 +28,9 @@
  */
 
 
-typedef uint8_t tiny_mutex_t
-typedef uint8_t tiny_events_t
+typedef uint8_t tiny_mutex_t;
+
+typedef uint8_t tiny_events_t;
 
 
 

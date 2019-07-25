@@ -1,0 +1,26 @@
+.PHONY: sperf clean_sperf
+
+CONFIG_ENABLE_FCS32 ?= y
+CONFIG_ENABLE_FCS16 ?= y
+CONFIG_ENABLE_CHECKSUM ?= y
+CONFIG_ENABLE_STATS ?=y
+# ************* Common defines ********************
+CPPFLAGS += -I./tools/serial
+CPPFLAGS += -fPIC
+CFLAGS += -g
+LDFLAGS += -L. -lm -shared
+
+include Makefile.common
+include Makefile.cpputest
+
+OBJ_SPERF = tools/sperf/sperf.o
+
+all: sperf
+
+sperf: $(OBJ_SPERF) library
+	$(CC) $(CPPFLAGS) -o $(BLD)/sperf $(OBJ_SPERF) -L$(BLD) -lm -pthread -ltinyprotocol
+
+clean: clean_sperf
+
+clean_sperf:
+	rm -rf $(OBJ_SPERF)

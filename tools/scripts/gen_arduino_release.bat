@@ -1,5 +1,6 @@
 @echo off
 
+chdir ..\..
 rmdir /S /Q releases
 mkdir releases\arduino\TinyProto\src
 

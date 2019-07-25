@@ -22,6 +22,16 @@
 #include <stdio.h>
 #include <time.h>
 
+static int serial_send(void *p, const void *buf, int len)
+{
+    return SerialSend((uintptr_t)p, buf, len);
+}
+
+static int serial_receive(void *p, void *buf, int len)
+{
+    return SerialReceive((uintptr_t)p, buf, len);
+}
+
 int main(int argc, char *argv[])
 {
     if ( argc < 2)
@@ -45,7 +55,7 @@ int main(int argc, char *argv[])
     int sync_frame_len = 0;
     STinyLightData tiny;
     /* Initialize tiny light protocol */
-    tiny_light_init(&tiny, SerialSend, SerialReceive, hPort);
+    tiny_light_init(&tiny, serial_send, serial_receive, (void *)hPort);
     /* Wait for remote side to be ready */
     strcpy((char *)outBuffer, "SYNC FRAME");
     sync_frame_len = (int)strlen((char *)outBuffer);
