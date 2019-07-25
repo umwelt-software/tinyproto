@@ -1,7 +1,5 @@
 .PHONY: unit_test check clean_unittest
 
-all: unittest
-
 OBJ_UNIT_TEST = \
         unittest/helpers/fake_wire.o \
         unittest/helpers/fake_channel.o \

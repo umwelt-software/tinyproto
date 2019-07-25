@@ -33,6 +33,7 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
     {
         hdlc_info->crc_type = 0;
     }
+    tiny_mutex_create( &hdlc_info->mutex );
     return hdlc_info;
 }
 
@@ -46,22 +47,29 @@ int hdlc_close( hdlc_handle_t handle )
                                    handle->tx.data - handle->tx.origin_data );
         }
     }
+    tiny_mutex_destroy( &handle->mutex );
     return 0;
 }
 
 void hdlc_reset( hdlc_handle_t handle )
 {
+    tiny_mutex_lock( &handle->mutex );
     handle->rx.state = hdlc_read_start;
     handle->tx.data = NULL;
     handle->tx.state = hdlc_send_start;
+    tiny_mutex_unlock( &handle->mutex );
 }
 
 static int hdlc_send_start( hdlc_handle_t handle )
 {
+    tiny_mutex_lock( &handle->mutex );
     if ( handle->tx.data == NULL )
     {
+        tiny_mutex_unlock( &handle->mutex );
         return 0;
     }
+    // No need to lock mutex forever until tx.data contains some value
+    tiny_mutex_unlock( &handle->mutex );
     switch (handle->crc_type)
     {
 #ifdef CONFIG_ENABLE_FCS16
@@ -175,9 +183,11 @@ static int hdlc_send_end( hdlc_handle_t handle )
     if ( result == 1 )
     {
         const uint8_t *data = handle->tx.data;
+        tiny_mutex_lock( &handle->mutex );
         handle->tx.data = NULL;
         handle->tx.state = hdlc_send_start;
         handle->tx.escape = 0;
+        tiny_mutex_unlock( &handle->mutex );
         if ( handle->on_frame_sent )
         {
             handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
@@ -205,13 +215,16 @@ int hdlc_run_tx( hdlc_handle_t handle )
 
 int hdlc_send( hdlc_handle_t handle, const void *data, int len )
 {
+    tiny_mutex_lock( &handle->mutex );
     if ( handle->tx.data != NULL )
     {
+        tiny_mutex_unlock( &handle->mutex );
         return 0;
     }
     handle->tx.origin_data = data;
     handle->tx.data = data;
     handle->tx.len = len;
+    tiny_mutex_unlock( &handle->mutex );
     return 1;
 }
 
