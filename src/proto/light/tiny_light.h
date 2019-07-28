@@ -134,6 +134,18 @@ extern int tiny_light_send(void *handle, const uint8_t *pbuf, int len);
 extern int tiny_light_read(void *handle, uint8_t *pbuf, int len);
 
 /**
+ * @brief returns lower level hdlc handle.
+ *
+ * Returns lower level hdlc handle to use with low level function.
+ * If you use high level light API, please be careful with low-level hdlc functions in
+ * case you mix the calls.
+ *
+ * @param handle - pointer to Tiny Light data.
+ * @return hdlc handle or NULL
+ */
+extern hdlc_handle_t tiny_light_get_hdlc(void *handle);
+
+/**
  * @}
  */
 

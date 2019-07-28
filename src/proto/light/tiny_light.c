@@ -193,3 +193,7 @@ int tiny_light_read(void *handle, uint8_t *pbuf, int len)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+hdlc_handle_t tiny_light_get_hdlc(void *handle)
+{
+    return &((STinyLightData *)handle)->_hdlc;
+}
