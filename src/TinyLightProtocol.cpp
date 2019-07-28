@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -35,6 +35,7 @@ namespace Tiny
 void ProtoLight::begin(write_block_cb_t writecb,
                   read_block_cb_t readcb)
 {
+    m_data._hdlc.crc_type = m_crc;
     tiny_light_init(&m_data, writecb, readcb, this);
 }
 
@@ -64,6 +65,41 @@ int ProtoLight::read(Packet &pkt)
     pkt.m_p = 0;
     pkt.m_len = len;
     return len;
+}
+
+void ProtoLight::disableCrc()
+{
+    m_crc = HDLC_CRC_OFF;
+}
+
+bool ProtoLight::enableCheckSum()
+{
+#if defined(CONFIG_ENABLE_FCS8)
+    m_crc = HDLC_CRC_8;
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool ProtoLight::enableCrc16()
+{
+#if defined(CONFIG_ENABLE_FCS16)
+    m_crc = HDLC_CRC_16;
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool ProtoLight::enableCrc32()
+{
+#if defined(CONFIG_ENABLE_FCS32)
+    m_crc = HDLC_CRC_32;
+    return true;
+#else
+    return false;
+#endif
 }
 
 #ifdef ARDUINO

@@ -13,7 +13,8 @@ LDFLAGS += -L. -lm -shared
 include Makefile.common
 include Makefile.cpputest
 
-OBJ_SPERF = tools/sperf/sperf.o
+OBJ_SPERF = tools/sperf/sperf.o \
+        tools/serial/serial_linux.o
 
 all: sperf
 

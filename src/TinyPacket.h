@@ -1,5 +1,5 @@
 /*
-    Copyright 2016,2018 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -50,7 +50,7 @@ public:
      * @param size - size of the buffer to hold packet data
      * @note passed buffer must exist all lifecycle of the Packet object.
      */
-    Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_uid =0; m_p=0; }
+    Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_p=0; }
 
     /**
      * Clears Packet state. Buffer and its size are preserved.
@@ -106,15 +106,6 @@ public:
     inline void put    (const Packet &pkt){ memcpy(&m_buf[m_len], pkt.m_buf, pkt.m_len); m_len += pkt.m_len; }
 
     /**
-     * Puts uid to the packet.
-     * @warning uid is sent only if this functionality is enabled in the Proto.
-     * @see Proto::enableUid
-     * @see Proto::disableUid
-     * @param uid - 16-bit number to place to the packet.
-     */
-    inline void putUid (uint16_t uid)  { m_uid = uid; }
-
-    /**
      * Reads next byte from the packet.
      * @return byte from the packet.
      */
@@ -151,15 +142,6 @@ public:
     inline char* getString   ()        { char *p = (char *)&m_buf[m_p]; m_p += strlen((char*)m_buf) + 1; return p; }
 
     /**
-     * Returns 16-bit identificator of the packet.
-     * @warning uid is valid only if uid functionality is enabled in the Proto
-     * @see Proto::enableUid
-     * @see Proto::disableUid
-     * @return 16-bit uid.
-     */
-    inline uint16_t getUid   () const  { return m_uid; }
-
-    /**
      * Returns size of payload data in the received packet.
      * @return size of payload data.
      */
@@ -194,7 +176,6 @@ private:
     friend class        ProtoLight;
 
     uint8_t*            m_buf;
-    uint16_t            m_uid;
     uint8_t             m_size;
     uint8_t             m_len;
     uint8_t             m_p;
