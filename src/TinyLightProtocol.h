@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -113,8 +113,45 @@ public:
      */
     int  read           (Packet &pkt);
 
+    /**
+     * Disable CRC field in the protocol.
+     * If CRC field is OFF, then the frame looks like this:
+     * 0x7E databytes 0x7E.
+     */
+    void disableCrc     ();
+
+    /**
+     * Enables CRC 8-bit field in the protocol. This field
+     * contains sum of all data bytes in the packet.
+     * 8-bit field is supported by Nano version of Tiny library.
+     * @return true if successful
+     *         false in case of error.
+     */
+    bool enableCheckSum ();
+
+    /**
+     * Enables CRC 16-bit field in the protocol. This field
+     * contains FCS 16-bit CCITT like defined in RFC 1662.
+     * 16-bit field is not supported by Nano version of Tiny library.
+     * @return true if successful
+     *         false in case of error.
+     */
+    bool enableCrc16    ();
+
+    /**
+     * Enables CRC 32-bit field in the protocol. This field
+     * contains FCS 32-bit CCITT like defined in RFC 1662.
+     * 32-bit field is not supported by Nano version of
+     * Tiny library.
+     * @return true if successful
+     *         false in case of error.
+     */
+    bool enableCrc32    ();
+
 private:
     STinyLightData       m_data;
+
+    hdlc_crc_t           m_crc = HDLC_CRC_DEFAULT;
 };
 
 
