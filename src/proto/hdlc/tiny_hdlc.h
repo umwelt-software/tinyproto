@@ -104,7 +104,7 @@ typedef struct _hdlc_handle_t
     {
         uint8_t *data;
         int len;
-        int (*state)( struct _hdlc_handle_t *handle, uint8_t *data, int len );
+        int (*state)( struct _hdlc_handle_t *handle, const uint8_t *data, int len );
         uint8_t escape;
     } rx;
     struct
@@ -154,9 +154,9 @@ void hdlc_reset( hdlc_handle_t handle );
  * @param len size of received data in bytes
  * @param error pointer to store error code. If no error, 0 is returned.
  *        this argument can be NULL.
- * @return number of bytes read to data buffer.
+ * @return number of processed bytes from specified data buffer.
  */
-int hdlc_run_rx( hdlc_handle_t handle, void *data, int len, int *error );
+int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
 
 /**
  * Runs transmission at hdlc level. If there is frame to send, or

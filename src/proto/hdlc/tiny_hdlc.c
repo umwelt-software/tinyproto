@@ -7,9 +7,9 @@
 #define TINY_ESCAPE_CHAR         0x7D
 #define TINY_ESCAPE_BIT          0x20
 
-static int hdlc_read_start( hdlc_handle_t handle, uint8_t *data, int len );
-static int hdlc_read_data( hdlc_handle_t handle, uint8_t *data, int len );
-static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len );
+static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len );
+static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len );
+static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len );
 
 static int hdlc_send_start( hdlc_handle_t handle );
 static int hdlc_send_data( hdlc_handle_t handle );
@@ -229,7 +229,7 @@ int hdlc_send( hdlc_handle_t handle, const void *data, int len )
 }
 
 
-static int hdlc_read_start( hdlc_handle_t handle, uint8_t *data, int len )
+static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len )
 {
     if ( !len )
     {
@@ -247,7 +247,7 @@ static int hdlc_read_start( hdlc_handle_t handle, uint8_t *data, int len )
     return 1;
 }
 
-static int hdlc_read_data( hdlc_handle_t handle, uint8_t *data, int len )
+static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
 {
     if (!len)
     {
@@ -281,7 +281,7 @@ static int hdlc_read_data( hdlc_handle_t handle, uint8_t *data, int len )
     return 1;
 }
 
-static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len )
+static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
 {
     if ( handle->rx.len == 0)
     {
@@ -342,12 +342,12 @@ static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len )
     return 0;
 }
 
-int hdlc_run_rx( hdlc_handle_t handle, void *data, int len, int *error )
+int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
 {
     int result = 0;
     for (;;)
     {
-        int temp_result = handle->rx.state( handle, (uint8_t *)data, len );
+        int temp_result = handle->rx.state( handle, (const uint8_t *)data, len );
         if ( temp_result <=0 )
         {
             if ( error )
