@@ -17,7 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined(__AVR__) && defined(ARDUINO)
+#if !defined(__AVR__) && !defined(__XTENSA__) && defined(ARDUINO)
 
 #include "proto/hal/tiny_types.h"
 
