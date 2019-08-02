@@ -4,7 +4,7 @@
 #include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
-Tiny::Proto  proto;
+Tiny::ProtoLight  proto;
 
 
 
@@ -34,17 +34,16 @@ void loop()
 {
     /* Check if some data are waiting for reading in UART */
     int len;
-    do {
-        len = proto.read(g_inBuf, sizeof(g_inBuf), TINY_FLAG_NO_WAIT);
+    do
+    {
+        len = proto.read(g_inBuf, sizeof(g_inBuf));
     } while (len == TINY_ERR_OUT_OF_SYNC);
     if (len > 0)
     {
         /* Ok, we received something from other side - len bytes */
         /* Process data here. And send response back if you need. */
         g_outBuf[0]='O'; g_outBuf[1]='K';
-        proto.write(g_outBuf, 2, TINY_FLAG_WAIT_FOREVER);
+        proto.write(g_outBuf, 2);
     }
-    /* Do what you want here. The protocol will not block this code
-       since it is non-blocking.
-     */
+    /* Do what you want here. The protocol will not block this code */
 }

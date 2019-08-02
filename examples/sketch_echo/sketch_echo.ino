@@ -14,17 +14,17 @@
 #include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
-Tiny::Proto  proto;
+Tiny::ProtoLight  proto;
 
 void setup() {
     /* No timeout, since we want non-blocking UART operations. */
     Serial.setTimeout(0);
     /* Initialize serial protocol for test purposes */
     Serial.begin(9600);
-    /* Redirect all protocol communication to Serial0 UART */
-    proto.beginToSerial();
     /* We do not want to use crc */
     proto.disableCrc();
+    /* Redirect all protocol communication to Serial0 UART */
+    proto.beginToSerial();
 }
 
 /* Specify buffer for packets to send and receive */
@@ -37,11 +37,11 @@ void loop()
 {
     /* Check if some data are waiting for reading in UART */
     /* If there is no delay in loop() cycle, there is no need to check for OUT_OF_SYNC error */
-    int len = proto.read(g_packet, TINY_FLAG_WAIT_FOREVER);
+    int len = proto.read( g_packet );
     /* Check if we received something with no error */
     if (len > 0)
     {
         /* Send received packet back to UART (echo) */
-        proto.write(g_packet, TINY_FLAG_WAIT_FOREVER);
+        proto.write( g_packet );
     }
 }

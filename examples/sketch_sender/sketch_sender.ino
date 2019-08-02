@@ -4,7 +4,7 @@
 #include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
-Tiny::Proto  proto;
+Tiny::ProtoLight  proto;
 
 void setup() {
     /* No timeout, since we want non-blocking UART operations */
@@ -27,20 +27,20 @@ void loop()
     g_outBuf[0] = 'D'; g_outBuf[1] = 'A'; g_outBuf[2] = 'T'; g_outBuf[3] = 'A';
 
     /* Send packet over UART to other side */
-    proto.write(g_outBuf, 4, TINY_FLAG_WAIT_FOREVER);
+    proto.write(g_outBuf, 4);
 
     unsigned long start = millis();
     /* read answer from remote side */
     int len;
     do
     {
-        len = proto.read(g_inBuf, sizeof(g_inBuf), TINY_FLAG_NO_WAIT);
+        len = proto.read(g_inBuf, sizeof(g_inBuf));
         /* Wait 1000ms for any answer from remote side */
         if (millis() - start >= 1000)
         {
             break;
         }
-    } while (len < 0);
+    } while (len <= 0);
     if (len > 0)
     {
         /* Process response from remote side here (len bytes) */
