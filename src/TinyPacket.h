@@ -171,7 +171,7 @@ public:
     Packet &operator=        (char chr){ put(chr); return *this; }
 
 private:
-    friend class        Proto;
+    friend class        IHdlc;
     friend class        ProtoHd;
     friend class        ProtoLight;
 

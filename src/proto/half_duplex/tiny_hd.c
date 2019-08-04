@@ -147,7 +147,7 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 static int send_complete(STinyHdData *handle, const uint8_t *pbuf, int len)
 {
     // put buffer for sending
-    if ( hdlc_send( &handle->_hdlc, pbuf, len ) == 0 )
+    if ( hdlc_put( &handle->_hdlc, pbuf, len ) < 0 )
     {
         return TINY_ERR_FAILED;
     }

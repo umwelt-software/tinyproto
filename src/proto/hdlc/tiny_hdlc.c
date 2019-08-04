@@ -213,7 +213,23 @@ int hdlc_run_tx( hdlc_handle_t handle )
     return result;
 }
 
-int hdlc_send( hdlc_handle_t handle, const void *data, int len )
+int hdlc_run_tx_until_sent( hdlc_handle_t handle )
+{
+    int result = 0;
+    do
+    {
+        int temp_result = handle->tx.state( handle );
+        if ( temp_result < 0 )
+        {
+            result = result ? result: temp_result;
+            break;
+        }
+        result += temp_result;
+    } while ( handle->tx.state != hdlc_send_start );
+    return result;
+}
+
+int hdlc_put( hdlc_handle_t handle, const void *data, int len )
 {
     tiny_mutex_lock( &handle->mutex );
     if ( handle->tx.data != NULL )
@@ -360,5 +376,36 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
         len -= temp_result;
         result += temp_result;
     }
+    return result;
+}
+
+void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size)
+{
+    handle->rx_buf = data;
+    handle->rx_buf_size = size;
+    handle->rx.data = (uint8_t *)handle->rx_buf;
+}
+
+int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, int *error )
+{
+    int result = 0;
+    do
+    {
+        uint8_t data;
+        int temp_result = readcb( handle->user_data, &data, sizeof(data) );
+        if ( temp_result > 0 )
+        {
+            temp_result = handle->rx.state( handle, &data, temp_result );
+        }
+        if ( temp_result < 0 )
+        {
+            if ( error )
+            {
+                *error = temp_result;
+            }
+            break;
+        }
+        result += temp_result;
+    } while ( handle->rx.state != hdlc_read_start );
     return result;
 }

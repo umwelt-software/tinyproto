@@ -50,7 +50,7 @@ typedef struct _hdlc_handle_t
      *         0 if hw device is busy, or positive number - number of bytes
      *         sent.
      */
-    int (*send_tx)(void *user_data, const void *data, int len);
+    write_block_cb_t send_tx;
 
     /**
      * User-defined callback, which is called when new packet arrives from hw
@@ -158,12 +158,14 @@ void hdlc_reset( hdlc_handle_t handle );
  */
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
 
+int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, int *error );
+
 /**
  * Runs transmission at hdlc level. If there is frame to send, or
  * send is in progress, this function will call send_tx() callback
  * multiple times. If send_tx() callback reports 0, that means that
- * hw device is busy, then hdlc_run_tx() will return immediately and
- * hdlc_run_tx() must be called later next time.
+ * there is nothing to send of hw device is busy.
+ * @warning this function must be called from one thread only.
  *
  * @param handle handle to hdlc instance
  * @return negative value in case of error
@@ -173,32 +175,44 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
 int hdlc_run_tx( hdlc_handle_t handle );
 
 /**
- * Puts next frame for sending. This function is thread-safe on many platforms.
- * You may call it from parallel threads.
+ * Runs transmission at hdlc level. If there is frame to send, or
+ * send is in progress, this function will call send_tx() callback
+ * multiple times. This function will return immediately if nothing
+ * to send. If send_tx() callback reports 0, the function will retry
+ * sending infinitely until frame is sent or error is received.
+ *
+ * @warning this function must be called from one thread only, if you
+ *          have severals threads, sending data.
  *
  * @param handle handle to hdlc instance
- * @param data pointer to new data to send
- * @param len size of data to send in bytes
- * @return 0 if output queue is busy
- *         1 if pointer to data is passed to output queue
- * @warning buffer with data must be available all the time until
- *          data are actually sent to tx hw channel
+ * @return negative value in case of error
+ *         0 if hw is busy, or no data is waiting for sending
+ *         positive number of bytes passed to hw channel.
  */
-int hdlc_send( hdlc_handle_t handle, const void *data, int len );
+int hdlc_run_tx_until_sent( hdlc_handle_t handle );
 
 /**
- * Puts next frame for sending. This function is thread-safe on many platforms.
+ * Puts next frame for sending. This function is thread-safe.
  * You may call it from parallel threads.
  *
  * @param handle handle to hdlc instance
  * @param data pointer to new data to send
  * @param len size of data to send in bytes
- * @return 0 if output queue is busy
- *         1 if pointer to data is passed to output queue
+ * @return -1 if output queue is busy
+ *         0 if pointer to data is passed to output queue
  * @warning buffer with data must be available all the time until
  *          data are actually sent to tx hw channel
  */
-//int hdlc_put
+int hdlc_put( hdlc_handle_t handle, const void *data, int len );
+
+/**
+ * Sets new RX buffer for hdlc protocol. This function is not thread-safe.
+ *
+ * @param handle handle to hdlc instance
+ * @param data pointer to rx buffer
+ * @param size size of rx buffer in bytes
+ */
+void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size);
 
 /**
  * @}

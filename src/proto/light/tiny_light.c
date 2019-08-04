@@ -134,7 +134,7 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 
 int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 {
-    if ( hdlc_send( &((STinyLightData *)handle)->_hdlc, pbuf, len ) == 0 )
+    if ( hdlc_put( &((STinyLightData *)handle)->_hdlc, pbuf, len ) < 0 )
     {
         return TINY_ERR_FAILED;
     }
@@ -168,9 +168,7 @@ static int on_frame_read(void *user_data, void *data, int len)
 
 int tiny_light_read(void *handle, uint8_t *pbuf, int len)
 {
-    ((STinyLightData *)handle)->_hdlc.rx_buf = pbuf;
-    ((STinyLightData *)handle)->_hdlc.rx.data = pbuf;
-    ((STinyLightData *)handle)->_hdlc.rx_buf_size = len;
+    hdlc_set_rx_buffer( &((STinyLightData *)handle)->_hdlc, pbuf, len);
     ((STinyLightData *)handle)->_received = 0;
     while (((STinyLightData *)handle)->_received == 0)
     {
