@@ -101,7 +101,7 @@ public:
      *         zero if nothing is sent
      *         positive - Packet is successfully sent
      */
-    int  write          (Packet &pkt);
+    int  write          (IPacket &pkt);
 
     /**
      * Reads packet from communication channel.
@@ -111,7 +111,7 @@ public:
      *         zero if nothing is read
      *         positive - Packet is successfully received
      */
-    int  read           (Packet &pkt);
+    int  read           (IPacket &pkt);
 
     /**
      * Disable CRC field in the protocol.

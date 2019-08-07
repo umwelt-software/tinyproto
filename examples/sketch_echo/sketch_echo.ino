@@ -27,11 +27,8 @@ void setup() {
     proto.beginToSerial();
 }
 
-/* Specify buffer for packets to send and receive */
-char g_buf[16];
-
 /* Create special class, which simplifies the work with buffer */
-Tiny::Packet g_packet(g_buf, sizeof(g_buf));
+Tiny::Packet<16> g_packet;
 
 void loop()
 {

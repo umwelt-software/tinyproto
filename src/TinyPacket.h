@@ -41,7 +41,7 @@ namespace Tiny {
  * Describes packet entity and provides API methods to
  * manipulate the packet.
  */
-class Packet
+class IPacket
 {
 public:
     /**
@@ -50,7 +50,7 @@ public:
      * @param size - size of the buffer to hold packet data
      * @note passed buffer must exist all lifecycle of the Packet object.
      */
-    Packet(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_p=0; }
+    IPacket(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_p=0; }
 
     /**
      * Clears Packet state. Buffer and its size are preserved.
@@ -103,7 +103,7 @@ public:
      * Adds data from packet to the new packet being built.
      * @param pkt - reference to the Packet to add.
      */
-    inline void put    (const Packet &pkt){ memcpy(&m_buf[m_len], pkt.m_buf, pkt.m_len); m_len += pkt.m_len; }
+    inline void put    (const IPacket &pkt){ memcpy(&m_buf[m_len], pkt.m_buf, pkt.m_len); m_len += pkt.m_len; }
 
     /**
      * Reads next byte from the packet.
@@ -115,7 +115,7 @@ public:
      * Reads next character from the packet.
      * @return character from the packet.
      */
-    inline char getChar      ()        { return (char)Packet::getByte(); }
+    inline char getChar      ()        { return (char)IPacket::getByte(); }
 
     /**
      * Reads next unsigned 16-bit integer from the packet.
@@ -168,7 +168,7 @@ public:
      * Assign operator = puts next char to the packet. Several
      * assign operators put one by one several chars.
      */
-    Packet &operator=        (char chr){ put(chr); return *this; }
+    IPacket &operator=        (char chr){ put(chr); return *this; }
 
 private:
     friend class        IHdlc;
@@ -179,6 +179,15 @@ private:
     uint8_t             m_size;
     uint8_t             m_len;
     uint8_t             m_p;
+};
+
+template <size_t S>
+class Packet: public IPacket
+{
+    Packet(): IPacket(m_data, S) {}
+
+private:
+    char m_data[S];
 };
 
 

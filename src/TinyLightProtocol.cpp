@@ -54,12 +54,12 @@ int ProtoLight::read(char *buf, int size)
     return tiny_light_read(&m_data, (uint8_t*)buf, size);
 }
 
-int ProtoLight::write(Packet &pkt)
+int ProtoLight::write(IPacket &pkt)
 {
     return tiny_light_send(&m_data, pkt.m_buf, pkt.m_len) > 0;
 }
 
-int ProtoLight::read(Packet &pkt)
+int ProtoLight::read(IPacket &pkt)
 {
     int len = tiny_light_read(&m_data, pkt.m_buf, pkt.m_size);
     pkt.m_p = 0;

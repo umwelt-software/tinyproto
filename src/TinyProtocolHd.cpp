@@ -64,7 +64,7 @@ int ProtoHd::write(char* buf, int size)
     return tiny_send_wait_ack(&m_data, buf, size);
 }
 
-int ProtoHd::write(Packet &pkt)
+int ProtoHd::write(IPacket &pkt)
 {
     return tiny_send_wait_ack(&m_data, pkt.m_buf, pkt.m_len);
 }

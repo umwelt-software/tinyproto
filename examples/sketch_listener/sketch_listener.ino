@@ -26,10 +26,6 @@ void setup() {
 char g_inBuf[32];
 char g_outBuf[32];
 
-// Tiny::Packet outPacket(g_outBuf, sizeof(g_outBuf));
-// Tiny::Packet inPacket(g_inBuf, sizeof(g_inBuf));
-
-
 void loop()
 {
     /* Check if some data are waiting for reading in UART */

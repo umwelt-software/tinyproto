@@ -12,6 +12,8 @@ CPPFLAGS += -I./src
 CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections \
         -fno-exceptions
 
+CXXFLAGS += -std=c++11
+
 ifeq ($(CONFIG_ENABLE_FCS32),y)
     CPPFLAGS += -DCONFIG_ENABLE_FCS32
 endif

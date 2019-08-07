@@ -156,7 +156,7 @@ public:
      *         zero if nothing is sent
      *         positive - Packet is successfully sent
      */
-    int  write          (Packet &pkt);
+    int  write          (IPacket &pkt);
 
     /**
      * Checks communcation channel for incoming messages.

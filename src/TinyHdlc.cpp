@@ -76,12 +76,12 @@ int IHdlc::read(char *buf, int size)
     return hdlc_run_rx_until_read( m_hdlc, m_readcb, nullptr );
 }
 
-int IHdlc::write(Packet &pkt)
+int IHdlc::write(IPacket &pkt)
 {
     return write( (const char *)pkt.m_buf, pkt.m_len );
 }
 
-int IHdlc::read(Packet &pkt)
+int IHdlc::read(IPacket &pkt)
 {
     int len = read( (char *)pkt.m_buf, pkt.m_size );
     pkt.m_p = 0;
