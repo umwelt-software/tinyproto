@@ -85,6 +85,7 @@ int tiny_light_init(void *handle,
     ((STinyLightData *)handle)->_hdlc.rx_buf = NULL;
     ((STinyLightData *)handle)->_hdlc.rx_buf_size = 0;
     ((STinyLightData *)handle)->_hdlc.crc_type = HDLC_CRC_OFF;
+
     ((STinyLightData *)handle)->_received = 1;
     ((STinyLightData *)handle)->_sent = 1;
 

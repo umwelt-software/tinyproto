@@ -38,9 +38,11 @@
 namespace Tiny {
 
 /**
- *  Hdlc class incapsulates Hdlc low level functionality.
+ *  IHdlc class incapsulates Hdlc low level functionality.
  *  Remember that you may use always C-style API functions
  *  instead C++. Please refer to documentation.
+ *  IHdlc is a class with basic functionality, user by higher
+ *  levels implementations.
  */
 class IHdlc
 {
@@ -163,6 +165,17 @@ protected:
     hdlc_crc_t           m_crc = HDLC_CRC_DEFAULT;
 };
 
+/**
+ * Hdlc class is standalone IHdlc implementation.
+ */
+class Hdlc: public IHdlc
+{
+public:
+    Hdlc(): IHdlc(&m_hdlc_data), m_hdlc_data{} {}
+
+private:
+    hdlc_struct_t        m_hdlc_data;
+};
 
 } // Tiny namespace
 
