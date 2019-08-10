@@ -106,7 +106,7 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     }
 
     options.c_cc[VMIN] = 0;
-    options.c_cc[VTIME] = 20;
+    options.c_cc[VTIME] = 1;
 
     // Set the new options for the port...
     if (tcsetattr(fd, TCSAFLUSH, &options) == -1)
