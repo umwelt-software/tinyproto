@@ -16,7 +16,7 @@ include Makefile.cpputest
 OBJ_SPERF = tools/sperf/sperf.o \
         tools/serial/serial_linux.o
 
-OBJ_HD_LOOPBACK = tools/sperf/hd_loopback.o \
+OBJ_HD_LOOPBACK = tools/loopback/hd_loopback.o \
 	tools/serial/serial_linux.o
 
 all: sperf hd_loopback
