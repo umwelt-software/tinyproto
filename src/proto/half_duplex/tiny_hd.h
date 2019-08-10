@@ -84,7 +84,11 @@ typedef struct STinyHdInit_
     on_frame_cb_t      on_frame_cb;
     /// Callback to get notification of sent frames
     on_frame_cb_t      on_sent_cb;
-    /// buffer to store input bytes being received. Must be at least maximum packet size over communication channel
+    /**
+     * buffer to store input bytes being received.
+     * Must be at least maximum packet size over communication channel.
+     * In some cases inbuf can be reused for sending data.
+     */
     void             * inbuf;
     /// maximum input buffer size
     uint16_t           inbuf_size;

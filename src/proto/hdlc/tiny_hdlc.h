@@ -99,7 +99,7 @@ typedef struct _hdlc_handle_t
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     /** Parameters in DOXYGEN_SHOULD_SKIP_THIS section should not be modified by a user */
-    tiny_mutex_t mutex;
+    tiny_events_t events;
     struct
     {
         uint8_t *data;

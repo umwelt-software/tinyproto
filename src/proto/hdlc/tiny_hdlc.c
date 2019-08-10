@@ -3,11 +3,15 @@
 
 #include <stddef.h>
 
-//#include <stdio.h>
-
 #define FLAG_SEQUENCE            0x7E
 #define TINY_ESCAPE_CHAR         0x7D
 #define TINY_ESCAPE_BIT          0x20
+
+enum
+{
+    TX_ACCEPT_BIT = 0x01,
+    TX_DATA_READY_BIT = 0x02,
+};
 
 static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len );
 static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len );
@@ -20,7 +24,6 @@ static int hdlc_send_end( hdlc_handle_t handle );
 
 hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
 {
-    hdlc_reset( hdlc_info );
     if ( hdlc_info->crc_type == HDLC_CRC_DEFAULT )
     {
 #if defined(CONFIG_ENABLE_FCS16)
@@ -35,7 +38,10 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
     {
         hdlc_info->crc_type = 0;
     }
-    tiny_mutex_create( &hdlc_info->mutex );
+    tiny_events_create( &hdlc_info->events );
+    tiny_events_set( &hdlc_info->events, TX_ACCEPT_BIT );
+    // Must be last
+    hdlc_reset( hdlc_info );
     return hdlc_info;
 }
 
@@ -49,29 +55,26 @@ int hdlc_close( hdlc_handle_t handle )
                                    handle->tx.data - handle->tx.origin_data );
         }
     }
-    tiny_mutex_destroy( &handle->mutex );
+    tiny_events_destroy( &handle->events );
     return 0;
 }
 
 void hdlc_reset( hdlc_handle_t handle )
 {
-    tiny_mutex_lock( &handle->mutex );
     handle->rx.state = hdlc_read_start;
     handle->tx.data = NULL;
     handle->tx.state = hdlc_send_start;
-    tiny_mutex_unlock( &handle->mutex );
+    tiny_events_clear( &handle->events, EVENT_BIS_ALL );
+    tiny_events_set( &handle->events, TX_ACCEPT_BIT );
 }
 
 static int hdlc_send_start( hdlc_handle_t handle )
 {
-    tiny_mutex_lock( &handle->mutex );
-    if ( handle->tx.data == NULL )
+    int bits = tiny_events_wait( &handle->events, TX_DATA_READY_BIT, 0, 0 );
+    if ( bits == 0 )
     {
-        tiny_mutex_unlock( &handle->mutex );
         return 0;
     }
-    // No need to lock mutex forever until tx.data contains some value
-    tiny_mutex_unlock( &handle->mutex );
     switch (handle->crc_type)
     {
 #ifdef CONFIG_ENABLE_FCS16
@@ -184,17 +187,15 @@ static int hdlc_send_end( hdlc_handle_t handle )
     int result = handle->send_tx( handle->user_data, buf, sizeof(buf) );
     if ( result == 1 )
     {
-        const uint8_t *data = handle->tx.data;
-        tiny_mutex_lock( &handle->mutex );
-        handle->tx.data = NULL;
+        tiny_events_clear( &handle->events, TX_DATA_READY_BIT );
         handle->tx.state = hdlc_send_start;
         handle->tx.escape = 0;
-        tiny_mutex_unlock( &handle->mutex );
         if ( handle->on_frame_sent )
         {
             handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
-                                   data - handle->tx.origin_data );
+                                   handle->tx.data - handle->tx.origin_data );
         }
+        tiny_events_set( &handle->events, TX_ACCEPT_BIT );
     }
     return result;
 }
@@ -231,18 +232,21 @@ int hdlc_run_tx_until_sent( hdlc_handle_t handle )
     return result;
 }
 
+int hdlc_send( hdlc_handle_t handle, const void *data, int len )
+{
+    return 0;
+}
+
 int hdlc_put( hdlc_handle_t handle, const void *data, int len )
 {
-    tiny_mutex_lock( &handle->mutex );
-    if ( handle->tx.data != NULL )
+    if ( tiny_events_wait( &handle->events, TX_ACCEPT_BIT, 1, 0 ) == 0 )
     {
-        tiny_mutex_unlock( &handle->mutex );
         return 0;
     }
     handle->tx.origin_data = data;
     handle->tx.data = data;
     handle->tx.len = len;
-    tiny_mutex_unlock( &handle->mutex );
+    tiny_events_set( &handle->events, TX_DATA_READY_BIT );
     return 1;
 }
 
