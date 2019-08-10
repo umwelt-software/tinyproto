@@ -19,6 +19,10 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "proto/hal/tiny_types.h"
 #include "proto/hal/tiny_list.h"
 
@@ -47,4 +51,8 @@ void tiny_remove_request(tiny_request *request);
 void tiny_decline_requests();
 
 void tiny_commit_request(uint16_t uid);
+
+#ifdef __cplusplus
+}
+#endif
 

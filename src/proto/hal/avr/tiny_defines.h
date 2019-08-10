@@ -17,8 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TINY_DEFINES_H_
-#define _TINY_DEFINES_H_
+#pragma once
 
 #include "tiny_config.h"
 #include <stdint.h>
@@ -32,6 +31,5 @@ typedef uint8_t tiny_mutex_t;
 
 typedef uint8_t tiny_events_t;
 
-#endif /* _TINY_DEFINES_H_ */
 
 

@@ -1,4 +1,4 @@
-.PHONY: sperf clean_sperf
+.PHONY: sperf clean_sperf hd_loopback clean_hd_loopback
 
 CONFIG_ENABLE_FCS32 ?= y
 CONFIG_ENABLE_FCS16 ?= y
@@ -16,12 +16,21 @@ include Makefile.cpputest
 OBJ_SPERF = tools/sperf/sperf.o \
         tools/serial/serial_linux.o
 
-all: sperf
+OBJ_HD_LOOPBACK = tools/loopback/hd_loopback.o \
+	tools/serial/serial_linux.o
+
+all: sperf hd_loopback
 
 sperf: $(OBJ_SPERF) library
 	$(CC) $(CPPFLAGS) -o $(BLD)/sperf $(OBJ_SPERF) -L$(BLD) -lm -pthread -ltinyprotocol
 
-clean: clean_sperf
+hd_loopback: $(OBJ_HD_LOOPBACK) library
+	$(CC) $(CPPFLAGS) -o $(BLD)/hd_loopback $(OBJ_HD_LOOPBACK) -L$(BLD) -lm -pthread -ltinyprotocol
+
+clean: clean_sperf clean_hd_loopback
 
 clean_sperf:
 	rm -rf $(OBJ_SPERF)
+
+clean_hd_loopback:
+	rm -rf $(OBJ_HD_LOOPBACK)

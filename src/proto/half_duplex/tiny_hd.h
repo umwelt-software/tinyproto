@@ -52,6 +52,8 @@ typedef struct STinyHdData_
     read_block_cb_t    read_func;
     /// Callback to process received frames
     on_frame_cb_t      on_frame_cb;
+    /// Callback to get notification of sent frames
+    on_frame_cb_t      on_sent_cb;
     /// Timeout for operations with acknowledge
     uint16_t           timeout;
     /// field used to store temporary uid
@@ -80,6 +82,8 @@ typedef struct STinyHdInit_
     void             * pdata;
     /// callback function to process incoming frames
     on_frame_cb_t      on_frame_cb;
+    /// Callback to get notification of sent frames
+    on_frame_cb_t      on_sent_cb;
     /// buffer to store input bytes being received. Must be at least maximum packet size over communication channel
     void             * inbuf;
     /// maximum input buffer size

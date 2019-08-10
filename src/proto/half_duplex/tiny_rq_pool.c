@@ -56,7 +56,7 @@ void tiny_decline_requests()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-uint8_t commit_function(list_element *element, uint16_t data)
+static uint8_t commit_function(list_element *element, uint16_t data)
 {
     if (data == ((tiny_request *)element)->uid)
     {

@@ -106,7 +106,7 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     }
 
     options.c_cc[VMIN] = 0;
-    options.c_cc[VTIME] = 20;
+    options.c_cc[VTIME] = 1;
 
     // Set the new options for the port...
     if (tcsetattr(fd, TCSAFLUSH, &options) == -1)
@@ -147,7 +147,10 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
 #if DEBUG_SERIAL == 1
         struct timespec s;
         clock_gettime( CLOCK_MONOTONIC, &s );
-        for (int i=0; i<ret; i++) printf("%08llu: TX: %c\n", s.tv_nsec / 1000000ULL + s.tv_sec * 1000ULL, ((const char *)buf)[i]);
+        for (int i=0; i<ret; i++) printf("%08llu: TX: 0x%02X '%c'\n",
+                                         s.tv_nsec / 1000000ULL + s.tv_sec * 1000ULL,
+                                         (uint8_t)(((const char *)buf)[i]),
+                                         ((const char *)buf)[i]);
 #endif
 //        tcflush(handleToFile(hPort), TCOFLUSH);
     }
@@ -167,7 +170,10 @@ int SerialReceive(SerialHandle hPort, void *buf, int len)
 #if DEBUG_SERIAL == 1
         struct timespec s;
         clock_gettime( CLOCK_MONOTONIC, &s );
-        for (int i=0; i<ret; i++) printf("%08llu: RX: %c\n", s.tv_nsec / 1000000ULL + s.tv_sec * 1000ULL, ((char *)buf)[i]);
+        for (int i=0; i<ret; i++) printf("%08llu: RX: 0x%02X '%c'\n",
+                                         s.tv_nsec / 1000000ULL + s.tv_sec * 1000ULL,
+                                         (uint8_t)(((char *)buf)[i]),
+                                         ((char *)buf)[i]);
 #endif
     }
     return ret;

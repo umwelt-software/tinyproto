@@ -78,6 +78,7 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
     request.uid |= DATA_FRAME_FLAG;
     for(retry=0; retry<3; retry++)
     {
+        // WARNING!!! reuse of rx buffer
         uint8_t *data = (uint8_t *)handle->_hdlc.rx_buf;
         data[0] = (request.uid >> 8) & 0xFF;
         data[1] = request.uid & 0xFF;
@@ -99,14 +100,23 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
     {
         return TINY_ERR_FAILED;
     }
-    return result;
+    if ( result == TINY_SUCCESS )
+    {
+        if (handle->on_sent_cb)
+        {
+            handle->on_sent_cb(handle->user_data, request.uid & 0x0FFF, buf, len);
+        }
+        result = len;
+    }
+    return result == TINY_SUCCESS ? len: result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 static int on_frame_read(void *user_data, void *data, int len)
 {
-    uint16_t uid = ((uint8_t *)data)[1] << 0 | ((uint8_t *)data)[0] << 8;
+    uint16_t uid = (((uint16_t)((uint8_t *)data)[1]) << 0) |
+                   (((uint16_t)((uint8_t *)data)[0]) << 8);
     STinyHdData * handle = (STinyHdData *)user_data;
     /** response */
     if ( uid & ACK_FRAME_FLAG )
@@ -194,6 +204,7 @@ int tiny_hd_init(STinyHdData      * handle,
     handle->read_func = init->read_func;
     handle->write_func = init->write_func;
     handle->on_frame_cb = init->on_frame_cb;
+    handle->on_sent_cb = init->on_sent_cb;
     handle->multithread_mode = init->multithread_mode;
     handle->timeout = init->timeout ? init->timeout : 1000;
     return TINY_SUCCESS;

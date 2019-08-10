@@ -35,6 +35,8 @@
 #   include <string.h>
 #endif
 
+#include <stdio.h>
+
 namespace Tiny {
 
 /**
@@ -176,9 +178,9 @@ private:
     friend class        ProtoLight;
 
     uint8_t*            m_buf;
-    uint8_t             m_size;
-    uint8_t             m_len;
-    uint8_t             m_p;
+    int                 m_size;
+    int                 m_len;
+    int                 m_p;
 };
 
 template <size_t S>
