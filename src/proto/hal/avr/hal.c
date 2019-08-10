@@ -19,6 +19,9 @@
 
 #if defined(__AVR__)
 
+#if defined(ARDUINO)
+#include <Arduino.h>
+#endif
 // TODO: <util/atomic.h>
 
 #include "proto/hal/tiny_types.h"
@@ -116,6 +119,7 @@ void tiny_events_clear(tiny_events_t *events, uint8_t bits)
 
 void tiny_sleep(uint32_t ms)
 {
+    if (!ms) return;
 #if defined(ARDUINO)
     return delay( ms );
 #else
