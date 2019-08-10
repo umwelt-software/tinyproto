@@ -28,36 +28,4 @@
 typedef SemaphoreHandle_t tiny_mutex_t;
 typedef EventGroupHandle_t tiny_events_t;
 
-#define PLATFORM_MUTEX SemaphoreHandle_t
-
-#define MUTEX_INIT(x) x = xSemaphoreCreateMutex()
-
-#define MUTEX_LOCK(x) xSemaphoreTake( x, portMAX_DELAY )
-
-#define MUTEX_TRY_LOCK(x) (xSemaphoreTake( x, 0 ) == pdTRUE)
-
-#define MUTEX_UNLOCK(x) xSemaphoreGive( x )
-
-#define MUTEX_DESTROY(x) vSemaphoreDelete( x )
-
-#define PLATFORM_COND EventGroupHandle_t
-
-#define COND_INIT(x) x = xEventGroupCreate()
-
-#define COND_DESTROY(x) vEventGroupDelete(x)
-
-#define COND_WAIT(cond, mutex) xEventGroupWaitBits(cond, 0x01, pdTRUE, pdFALSE, portMAX_DELAY)
-
-#define COND_SIGNAL(x) xEventGroupSetBits(x, 0x01)
-
-#define TASK_YIELD() vTaskDelay(0)
-
-#define PLATFORM_TICKS()    millis()
-
-#if defined(__XTENSA__)
-#include <stdint.h>
-static inline uint32_t millis() {   return (uint32_t)(esp_timer_get_time()/1000); }
-#endif
-
-
 
