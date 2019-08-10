@@ -148,6 +148,7 @@ typedef int (*read_block_cb_t)(void *pdata, void *buffer, int size);
  */
 typedef void (*on_frame_cb_t)(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
+#define EVENT_BIS_ALL  0xFF
 
 void tiny_mutex_create(tiny_mutex_t *mutex);
 
@@ -163,7 +164,8 @@ void tiny_events_create(tiny_events_t *events);
 
 void tiny_events_destroy(tiny_events_t *events);
 
-uint8_t tiny_events_wait(tiny_events_t *event, uint8_t bits);
+uint8_t tiny_events_wait(tiny_events_t *event, uint8_t bits,
+                         uint8_t clear, uint32_t timeout);
 
 void tiny_events_set(tiny_events_t *event, uint8_t bits);
 

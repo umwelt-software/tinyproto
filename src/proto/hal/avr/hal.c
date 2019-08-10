@@ -76,27 +76,21 @@ void tiny_events_destroy(tiny_events_t *events)
 {
 }
 
-uint8_t tiny_events_wait_and_clear(tiny_events_t *events, uint8_t bits)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
+                         uint8_t clear, uint32_t timeout)
 {
     uint8_t locked;
+    uint32_t ts = tiny_millis();
     do
     {
+        if ((uint32_t)(tiny_millis() - ts) >= timeout)
+        {
+            locked = 0;
+            break;
+        }
         cli();
         locked = *events;
-        *events &= ~bits;
-        sei();
-    }
-    while (!(locked & bits));
-    return locked;
-}
-
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits)
-{
-    uint8_t locked;
-    do
-    {
-        cli();
-        locked = *events;
+        if ( clear && (locked & bits) ) *events &= ~bits;
         sei();
     }
     while (!(locked & bits));

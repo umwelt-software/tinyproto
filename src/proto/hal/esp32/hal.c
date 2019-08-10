@@ -56,14 +56,12 @@ void tiny_events_destroy(tiny_events_t *events)
     vEventGroupDelete( *events );
 }
 
-uint8_t tiny_events_wait_and_clear(tiny_events_t *events, uint8_t bits)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
+                         uint8_t clear, uint32_t timeout)
 {
-    return xEventGroupWaitBits(*events, bits, pdTRUE, pdFALSE, portMAX_DELAY);
-}
-
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits)
-{
-    return xEventGroupWaitBits(*events, bits, pdFALSE, pdFALSE, portMAX_DELAY);
+    return xEventGroupWaitBits(*events, bits,
+                               clear ? pdTRUE: pdFALSE,
+                               pdFALSE, timeout/portTICK_PERIOD_MS);
 }
 
 void tiny_events_set(tiny_events_t *events, uint8_t bits)

@@ -50,12 +50,13 @@ void tiny_events_destroy(tiny_events_t *events)
 {
 }
 
-uint8_t tiny_events_wait_and_clear(tiny_events_t *events, uint8_t bits)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
+                         uint8_t clear, uint32_t timeout)
 {
     return bits;
 }
 
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits)
+uint8_t tiny_events_timed_wait(tiny_events_t *event, uint8_t bits, uint32_t ms)
 {
     return bits;
 }

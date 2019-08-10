@@ -29,6 +29,7 @@ typedef pthread_mutex_t tiny_mutex_t;
 typedef struct
 {
     uint8_t bits;
+    uint16_t waiters;
     pthread_mutex_t mutex;
     pthread_cond_t cond;
 } tiny_events_t;

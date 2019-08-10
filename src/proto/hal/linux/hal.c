@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <time.h>
+#include <errno.h>
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
 {
@@ -54,8 +55,13 @@ void tiny_mutex_unlock(tiny_mutex_t *mutex)
 void tiny_events_create(tiny_events_t *events)
 {
     events->bits = 0;
+    events->waiters = 0;
+
     pthread_mutex_init(&events->mutex, NULL);
-    pthread_cond_init(&events->cond, NULL);
+    pthread_condattr_t condattr;
+    pthread_condattr_init(&condattr);
+    pthread_condattr_setclock(&condattr, CLOCK_MONOTONIC);
+    pthread_cond_init(&events->cond, &condattr);
 }
 
 void tiny_events_destroy(tiny_events_t *events)
@@ -64,29 +70,43 @@ void tiny_events_destroy(tiny_events_t *events)
     pthread_mutex_destroy(&events->mutex);
 }
 
-uint8_t tiny_events_wait_and_clear(tiny_events_t *events, uint8_t bits)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
+                         uint8_t clear, uint32_t timeout)
 {
-    uint8_t locked;
-    pthread_mutex_lock( &events->mutex );
-    while ( (events->bits & bits) != 0 )
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    ts.tv_sec += timeout / 1000;
+    ts.tv_nsec += (timeout % 1000) * 1000000ULL;
+    if ( ts.tv_nsec >= 1000000000ULL )
     {
-        pthread_cond_wait(&events->cond, &events->mutex);
+        ts.tv_nsec -= 1000000000ULL;
+        ts.tv_sec++;
     }
-    locked = events->bits;
-    events->bits &= ~bits;
-    pthread_mutex_unlock( &events->mutex );
-    return locked;
-}
-
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits)
-{
-    uint8_t locked;
     pthread_mutex_lock( &events->mutex );
-    while ( (events->bits & bits) != 0 )
+    events->waiters++;
+    int res = 0;
+    while ( (events->bits & bits) == 0 )
     {
-        pthread_cond_wait(&events->cond, &events->mutex);
+        if (timeout == 0xFFFFFFFF)
+        {
+            pthread_cond_wait(&events->cond, &events->mutex);
+        }
+        else
+        {
+            res = pthread_cond_timedwait(&events->cond, &events->mutex, &ts );
+            if ( res == ETIMEDOUT )
+            {
+                break;
+            }
+        }
     }
-    locked = events->bits;
+    uint8_t locked = 0;
+    if ( res != ETIMEDOUT )
+    {
+        locked = events->bits;
+        if ( clear ) events->bits &= ~bits;
+    }
+    events->waiters--;
     pthread_mutex_unlock( &events->mutex );
     return locked;
 }
