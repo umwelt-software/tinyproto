@@ -47,7 +47,7 @@ void ProtoHd::begin(write_block_cb_t writecb,
     init.on_frame_cb      = onReceiveInternal;
     init.inbuf            = m_buffer;
     init.inbuf_size       = m_bufferSize;
-    init.timeout          = 1000;
+    init.timeout          = 100;
     init.crc_type         = m_crc;
     init.multithread_mode = 0;
 
