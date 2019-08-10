@@ -1,7 +1,7 @@
 #include "tiny_hdlc.h"
 #include "proto/crc/crc.h"
 
-#include <stdio.h>
+//#include <stdio.h>
 
 #define FLAG_SEQUENCE            0x7E
 #define TINY_ESCAPE_CHAR         0x7D
@@ -308,7 +308,7 @@ static int hdlc_read_end( hdlc_handle_t handle, uint8_t *data, int len )
     {
 #ifdef CONFIG_ENABLE_CHECKSUM
         case HDLC_CRC_8:
-            calc_crc = chksum( INITCHECKSUM, handle->tx.data, handle->tx.len - 1 );
+            calc_crc = chksum( INITCHECKSUM, handle->rx.data, handle->rx.len - 1 ) & 0x00FF;
             read_crc = handle->rx.data[ handle->rx.len - 1 ];
             break;
 #endif
