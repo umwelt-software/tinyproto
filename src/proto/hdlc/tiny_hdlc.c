@@ -1,6 +1,8 @@
 #include "tiny_hdlc.h"
 #include "proto/crc/crc.h"
 
+#include <stddef.h>
+
 //#include <stdio.h>
 
 #define FLAG_SEQUENCE            0x7E
