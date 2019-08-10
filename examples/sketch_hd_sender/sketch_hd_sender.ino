@@ -21,7 +21,7 @@ void setup() {
     /* No timeout, since we want non-blocking UART operations */
     Serial.setTimeout(0);
     /* Initialize serial protocol for test purposes */
-    Serial.begin(9600);
+    Serial.begin(115200);
     /* We do want to use simple checkSum */
     proto.enableCheckSum();
     /* Redirect all protocol communication to Serial0 UART */
@@ -36,6 +36,7 @@ void loop()
     /* Send packet over UART to other side */
     proto.write(outBuf, 4);
 
+    /* We send HELLO packet every 1 second */
     unsigned long start = millis();
     while (millis() - start < 1000)
     {

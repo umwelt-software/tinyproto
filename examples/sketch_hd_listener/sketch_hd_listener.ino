@@ -23,7 +23,7 @@ void setup() {
     /* No timeout, since we want non-blocking UART operations */
     Serial.setTimeout(0);
     /* Initialize serial protocol for test purposes */
-    Serial.begin(9600);
+    Serial.begin(115200);
     /* We do want to use simple checkSum */
     proto.enableCheckSum();
     /* Redirect all protocol communication to Serial0 UART */

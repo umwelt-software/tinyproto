@@ -12,7 +12,7 @@ void setup() {
     /* No timeout, since we want non-blocking UART operations */
     Serial.setTimeout(0);
     /* Initialize serial port */
-    Serial.begin(9600);
+    Serial.begin(115200);
     /* Enable checksum to detect UART errors. Nano supports only 8-bit checksum. */
     proto.enableCheckSum();
     /* Redirect all protocol communication to Serial0 UART */
