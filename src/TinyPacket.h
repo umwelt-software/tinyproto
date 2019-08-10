@@ -186,6 +186,7 @@ private:
 template <size_t S>
 class Packet: public IPacket
 {
+public:
     Packet(): IPacket(m_data, S) {}
 
 private:

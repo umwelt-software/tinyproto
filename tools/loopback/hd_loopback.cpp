@@ -135,8 +135,7 @@ static int run_hd(SerialHandle port)
     {
         if (s_generatorEnabled)
         {
-            uint8_t outBuffer[4096]{};
-            Tiny::Packet packet((char *)outBuffer, sizeof(outBuffer));
+            Tiny::Packet<4096> packet;
             packet.put("Generated frame");
             if ( tiny_send_wait_ack(&tiny, packet.data(), packet.size()) <= 0 )
             {
