@@ -106,7 +106,8 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
 
 static int on_frame_read(void *user_data, void *data, int len)
 {
-    uint16_t uid = ((uint8_t *)data)[1] << 0 | ((uint8_t *)data)[0] << 8;
+    uint16_t uid = (((uint16_t)((uint8_t *)data)[1]) << 0) |
+                   (((uint16_t)((uint8_t *)data)[0]) << 8);
     STinyHdData * handle = (STinyHdData *)user_data;
     /** response */
     if ( uid & ACK_FRAME_FLAG )
