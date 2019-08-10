@@ -124,7 +124,6 @@ typedef struct
     /// @see STinyTxStatus
     STinyTxStatus       tx;
     tiny_mutex_t        send_mutex;                // Mutex for send operation
-    tiny_events_t       send_condition;            // Condition is called, when send operation is completed
     /// The field contains number of bits to use for FCS and not available in TINY_MINIMAL configuration
     uint8_t             fcs_bits;
     /// pointer to callback function

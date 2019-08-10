@@ -170,7 +170,6 @@ int tiny_init(STinyData *handle,
     handle->tx.pframe = 0;
     handle->tx.locked = 0;
     tiny_mutex_create(&handle->send_mutex);
-    tiny_events_create(&handle->send_condition);
 #ifdef CONFIG_ENABLE_STATS
     tiny_clear_stat(handle);
 #endif
@@ -188,7 +187,6 @@ int tiny_close(STinyData *handle)
     if ( tiny_mutex_try_lock(&handle->send_mutex) != 0 ) tiny_mutex_unlock(&handle->send_mutex);
     handle->tx.inprogress = TINY_TX_STATE_IDLE;
     handle->rx.inprogress = TINY_RX_STATE_IDLE;
-    tiny_events_destroy(&handle->send_condition);
     tiny_mutex_destroy(&handle->send_mutex);
     handle->write_func = 0;
     handle->read_func = 0;
