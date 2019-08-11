@@ -66,17 +66,14 @@ Second variant: with using special helper to pack the data being sent
 Tiny::Proto proto;
 
 /* The buffer must be defined globally */
-uint8_t g_buffer[16];
-Tiny::Packet packet(g_buffer, sizeof(g_buffer));
+Tiny::Packet<16> packet;
 
 void loop()
 {
     if (needToSend)
     {
-        /* define buffer, you want to use */
-        uint8_t buffer[16];
         /* Create helper object to simplify packing of data being sent */
-        Tiny::Packet packet(buffer, sizeof(buffer));
+        Tiny::Packet<16> packet;
 
         /* Pack data you want to send here */
         packet.put( "message" );
@@ -178,7 +175,7 @@ void onReceiveData(uint8_t *buffer, int len)
 {
     /* Parse your received data here. */
     /* For example, read sent ealier in example above "message" */
-    Tiny::Packet packet(buffer, len);
+    Tiny::IPacket packet(buffer, len);
     char * str = packet.getString();
 }
 
@@ -188,10 +185,8 @@ void loop()
 {
     if (needToSend)
     {
-        /* define buffer, you want to use */
-        uint8_t buffer[16];
         /* Create helper object to simplify packing of data being sent */
-        Tiny::Packet packet(buffer, sizeof(buffer));
+        Tiny::Packet<16> packet;
 
         /* Pack data you want to send here */
         packet.put( "message" );
