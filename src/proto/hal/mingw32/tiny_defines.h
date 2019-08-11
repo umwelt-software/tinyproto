@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <time.h>
-#include <Windows.h>
+#include <windows.h>
 
 
 //#define TASK_YIELD()      Sleep(0)

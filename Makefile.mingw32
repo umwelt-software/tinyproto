@@ -1,0 +1,7 @@
+CC=x86_64-w64-mingw32-gcc
+CXX=x86_64-w64-mingw32-gcc
+
+CPPFLAGS += -mwindows
+
+include Makefile.linux
+
