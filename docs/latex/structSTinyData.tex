@@ -22,21 +22,24 @@ void $\ast$ \hyperlink{structSTinyData_a3ac48d44af9b2912dd980c7377a020be}{pdata}
 \hyperlink{structSTinyStats}{S\+Tiny\+Stats} \hyperlink{structSTinyData_a16ba8c9e60d6aee3fcd4909f85561f3d}{stat}
 \item 
 \mbox{\Hypertarget{structSTinyData_a26c40b0b7e18776af99745624c460c5a}\label{structSTinyData_a26c40b0b7e18776af99745624c460c5a}} 
-\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_a26c40b0b7e18776af99745624c460c5a}{write\+\_\+func}
+\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_a26c40b0b7e18776af99745624c460c5a}{write\+\_\+func}
 \begin{DoxyCompactList}\small\item\em pointer to platform related write function \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyData_a9714041284fd99230be0e7efbc8c60cf}\label{structSTinyData_a9714041284fd99230be0e7efbc8c60cf}} 
-\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_a9714041284fd99230be0e7efbc8c60cf}{read\+\_\+func}
+\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_a9714041284fd99230be0e7efbc8c60cf}{read\+\_\+func}
 \begin{DoxyCompactList}\small\item\em pointer to platform related read function \end{DoxyCompactList}\item 
 \hyperlink{structSTinyRxStatus}{S\+Tiny\+Rx\+Status} \hyperlink{structSTinyData_aa3b43db99a1a6bf3d562f932d5a539db}{rx}
 \item 
 \hyperlink{structSTinyTxStatus}{S\+Tiny\+Tx\+Status} \hyperlink{structSTinyData_aa099adb35f3494332747eb18851fbb23}{tx}
 \item 
+\mbox{\Hypertarget{structSTinyData_af52a9fbfc297f67f22b37088a990dd50}\label{structSTinyData_af52a9fbfc297f67f22b37088a990dd50}} 
+tiny\+\_\+mutex\+\_\+t {\bfseries send\+\_\+mutex}
+\item 
 \mbox{\Hypertarget{structSTinyData_a3cf4d6009cc472630e20a68d6fa50186}\label{structSTinyData_a3cf4d6009cc472630e20a68d6fa50186}} 
 uint8\+\_\+t \hyperlink{structSTinyData_a3cf4d6009cc472630e20a68d6fa50186}{fcs\+\_\+bits}
 \begin{DoxyCompactList}\small\item\em The field contains number of bits to use for F\+CS and not available in T\+I\+N\+Y\+\_\+\+M\+I\+N\+I\+M\+AL configuration. \end{DoxyCompactList}\item 
-\hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_a31ba50154472c11e0d063b0aeef95f4d}{read\+\_\+cb}
+\hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_a31ba50154472c11e0d063b0aeef95f4d}{read\+\_\+cb}
 \begin{DoxyCompactList}\small\item\em pointer to callback function \end{DoxyCompactList}\item 
-\hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_ada334c88e86bfd2c10191f65818c3fb3}{write\+\_\+cb}
+\hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyData_ada334c88e86bfd2c10191f65818c3fb3}{write\+\_\+cb}
 \begin{DoxyCompactList}\small\item\em pointer to callback function to get data being sent \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyData_aa004bdc7db38cbbef4df4a4d94ca6a4b}\label{structSTinyData_aa004bdc7db38cbbef4df4a4d94ca6a4b}} 
 uint8\+\_\+t \hyperlink{structSTinyData_aa004bdc7db38cbbef4df4a4d94ca6a4b}{uid\+\_\+support}
@@ -54,7 +57,7 @@ This is for internal use only, and should not be accessed directly from the appl
 \index{S\+Tiny\+Data@{S\+Tiny\+Data}!read\+\_\+cb@{read\+\_\+cb}}
 \index{read\+\_\+cb@{read\+\_\+cb}!S\+Tiny\+Data@{S\+Tiny\+Data}}
 \subsubsection{\texorpdfstring{read\+\_\+cb}{read\_cb}}
-{\footnotesize\ttfamily \hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} S\+Tiny\+Data\+::read\+\_\+cb}
+{\footnotesize\ttfamily \hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} S\+Tiny\+Data\+::read\+\_\+cb}
 
 
 
@@ -91,7 +94,7 @@ This callback is called when it is not null and when new frame is successfully r
 \index{S\+Tiny\+Data@{S\+Tiny\+Data}!write\+\_\+cb@{write\+\_\+cb}}
 \index{write\+\_\+cb@{write\+\_\+cb}!S\+Tiny\+Data@{S\+Tiny\+Data}}
 \subsubsection{\texorpdfstring{write\+\_\+cb}{write\_cb}}
-{\footnotesize\ttfamily \hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} S\+Tiny\+Data\+::write\+\_\+cb}
+{\footnotesize\ttfamily \hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} S\+Tiny\+Data\+::write\+\_\+cb}
 
 
 

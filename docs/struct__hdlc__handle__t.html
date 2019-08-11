@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.0</span>
+   &#160;<span id="projectnumber">0.7.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -72,19 +72,20 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac25841a53be120a8a50b99b73e7e8a8f"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#ac25841a53be120a8a50b99b73e7e8a8f">send_tx</a> )(void *<a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">user_data</a>, const void *data, int len)</td></tr>
-<tr class="separator:ac25841a53be120a8a50b99b73e7e8a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b3432eda3d865c6edd355ff9e8d588c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a1b3432eda3d865c6edd355ff9e8d588c">send_tx</a></td></tr>
+<tr class="separator:a1b3432eda3d865c6edd355ff9e8d588c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a751872adfef39b5b1325fa8826bae689"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a751872adfef39b5b1325fa8826bae689">on_frame_read</a> )(void *<a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">user_data</a>, void *data, int len)</td></tr>
 <tr class="separator:a751872adfef39b5b1325fa8826bae689"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9aba360df83395af01ff448bca03e259"><td class="memItemLeft" align="right" valign="top"><a id="a9aba360df83395af01ff448bca03e259"></a>
-int(*&#160;</td><td class="memItemRight" valign="bottom"><b>on_frame_sent</b> )(void *<a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">user_data</a>, const void *data, int len)</td></tr>
+<tr class="memitem:a9aba360df83395af01ff448bca03e259"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a9aba360df83395af01ff448bca03e259">on_frame_sent</a> )(void *<a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">user_data</a>, const void *data, int len)</td></tr>
 <tr class="separator:a9aba360df83395af01ff448bca03e259"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4736ab7a858df79cf74bd19e6dbacb13"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a4736ab7a858df79cf74bd19e6dbacb13">rx_buf</a></td></tr>
 <tr class="separator:a4736ab7a858df79cf74bd19e6dbacb13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40baccf093b26c08d9108c8238f95675"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a40baccf093b26c08d9108c8238f95675">rx_buf_size</a></td></tr>
 <tr class="separator:a40baccf093b26c08d9108c8238f95675"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a156f67a5da24e537a8c0dcda28b59668"><td class="memItemLeft" align="right" valign="top">hdlc_crc_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a156f67a5da24e537a8c0dcda28b59668">crc_type</a></td></tr>
+<tr class="memitem:a156f67a5da24e537a8c0dcda28b59668"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a156f67a5da24e537a8c0dcda28b59668">crc_type</a></td></tr>
 <tr class="separator:a156f67a5da24e537a8c0dcda28b59668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa70c56a76a3c4c5d9ccdee3b019bbce7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#aa70c56a76a3c4c5d9ccdee3b019bbce7">multithread_mode</a></td></tr>
+<tr class="separator:aa70c56a76a3c4c5d9ccdee3b019bbce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41563ee7b01240a582d2f9ce9a632da8"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">user_data</a></td></tr>
 <tr class="separator:a41563ee7b01240a582d2f9ce9a632da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -98,11 +99,26 @@ int(*&#160;</td><td class="memItemRight" valign="bottom"><b>on_frame_sent</b> )(
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">hdlc_crc_t _hdlc_handle_t::crc_type</td>
+          <td class="memname"><a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a> _hdlc_handle_t::crc_type</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>crc field type to use on hdlc level. If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration), but HDLC_CRC_16 has higher priority. </p>
+
+</div>
+</div>
+<a id="aa70c56a76a3c4c5d9ccdee3b019bbce7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa70c56a76a3c4c5d9ccdee3b019bbce7">&#9670;&nbsp;</a></span>multithread_mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool _hdlc_handle_t::multithread_mode</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set this to true, if you want to implements TX data transmission in separate thread from the threads, which call <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a>. </p>
 
 </div>
 </div>
@@ -117,10 +133,32 @@ int(*&#160;</td><td class="memItemRight" valign="bottom"><b>on_frame_sent</b> )(
         </tr>
       </table>
 </div><div class="memdoc">
-<p>User-defined callback, which is called when new packet arrives from hw channel. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>User-defined callback, which is called when new packet arrives from hw channel. The context of this callback is context, where <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a> is called from. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">user_data</td><td>user-defined data  data pointer to received data </td></tr>
     <tr><td class="paramname">len</td><td>size of received data in bytes </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>user callback must return negative value in case of error or 0 value if packet is successfully processed. </dd></dl>
+
+</div>
+</div>
+<a id="a9aba360df83395af01ff448bca03e259"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aba360df83395af01ff448bca03e259">&#9670;&nbsp;</a></span>on_frame_sent</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int(* _hdlc_handle_t::on_frame_sent) (void *<a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">user_data</a>, const void *data, int len)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>User-defined callback, which is called when the packet is sent to TX channel. The context of this callback is context, where <a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx()</a> is called from. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">user_data</td><td>user-defined data  data pointer to sent data </td></tr>
+    <tr><td class="paramname">len</td><td>size of sent data in bytes </td></tr>
   </table>
   </dd>
 </dl>
@@ -158,14 +196,14 @@ int(*&#160;</td><td class="memItemRight" valign="bottom"><b>on_frame_sent</b> )(
 
 </div>
 </div>
-<a id="ac25841a53be120a8a50b99b73e7e8a8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac25841a53be120a8a50b99b73e7e8a8f">&#9670;&nbsp;</a></span>send_tx</h2>
+<a id="a1b3432eda3d865c6edd355ff9e8d588c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b3432eda3d865c6edd355ff9e8d588c">&#9670;&nbsp;</a></span>send_tx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int(* _hdlc_handle_t::send_tx) (void *<a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">user_data</a>, const void *data, int len)</td>
+          <td class="memname"><a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> _hdlc_handle_t::send_tx</td>
         </tr>
       </table>
 </div><div class="memdoc">

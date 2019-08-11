@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.0</span>
+   &#160;<span id="projectnumber">0.7.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -73,11 +73,11 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a0bd05a4fc43236ff37d67aec4d2a0952"><td class="memItemLeft" align="right" valign="top"><a id="a0bd05a4fc43236ff37d67aec4d2a0952"></a>
-<a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a0bd05a4fc43236ff37d67aec4d2a0952">write_func</a></td></tr>
+<a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a0bd05a4fc43236ff37d67aec4d2a0952">write_func</a></td></tr>
 <tr class="memdesc:a0bd05a4fc43236ff37d67aec4d2a0952"><td class="mdescLeft">&#160;</td><td class="mdescRight">callback function to write bytes to the physical channel <br /></td></tr>
 <tr class="separator:a0bd05a4fc43236ff37d67aec4d2a0952"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5de352b11ca7915737bc459cde7c566d"><td class="memItemLeft" align="right" valign="top"><a id="a5de352b11ca7915737bc459cde7c566d"></a>
-<a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a5de352b11ca7915737bc459cde7c566d">read_func</a></td></tr>
+<a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a5de352b11ca7915737bc459cde7c566d">read_func</a></td></tr>
 <tr class="memdesc:a5de352b11ca7915737bc459cde7c566d"><td class="mdescLeft">&#160;</td><td class="mdescRight">callback function to read bytes from the physical channel <br /></td></tr>
 <tr class="separator:a5de352b11ca7915737bc459cde7c566d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b6be4e09ea04eaa4372eadce4d51055"><td class="memItemLeft" align="right" valign="top"><a id="a7b6be4e09ea04eaa4372eadce4d51055"></a>
@@ -85,12 +85,14 @@ void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st
 <tr class="memdesc:a7b6be4e09ea04eaa4372eadce4d51055"><td class="mdescLeft">&#160;</td><td class="mdescRight">user data for block read/write functions <br /></td></tr>
 <tr class="separator:a7b6be4e09ea04eaa4372eadce4d51055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2eea5181620dfbb47b60a5073bd5ed2"><td class="memItemLeft" align="right" valign="top"><a id="ae2eea5181620dfbb47b60a5073bd5ed2"></a>
-<a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#ae2eea5181620dfbb47b60a5073bd5ed2">on_frame_cb</a></td></tr>
+<a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#ae2eea5181620dfbb47b60a5073bd5ed2">on_frame_cb</a></td></tr>
 <tr class="memdesc:ae2eea5181620dfbb47b60a5073bd5ed2"><td class="mdescLeft">&#160;</td><td class="mdescRight">callback function to process incoming frames <br /></td></tr>
 <tr class="separator:ae2eea5181620dfbb47b60a5073bd5ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5996a48606a90ff9938e4037612cf97d"><td class="memItemLeft" align="right" valign="top"><a id="a5996a48606a90ff9938e4037612cf97d"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a5996a48606a90ff9938e4037612cf97d">inbuf</a></td></tr>
-<tr class="memdesc:a5996a48606a90ff9938e4037612cf97d"><td class="mdescLeft">&#160;</td><td class="mdescRight">buffer to store input bytes being received. Must be at least maximum packet size over communication channel <br /></td></tr>
+<tr class="memitem:aa1d724d6a284de5f995273e0e3e70318"><td class="memItemLeft" align="right" valign="top"><a id="aa1d724d6a284de5f995273e0e3e70318"></a>
+<a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#aa1d724d6a284de5f995273e0e3e70318">on_sent_cb</a></td></tr>
+<tr class="memdesc:aa1d724d6a284de5f995273e0e3e70318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to get notification of sent frames. <br /></td></tr>
+<tr class="separator:aa1d724d6a284de5f995273e0e3e70318"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5996a48606a90ff9938e4037612cf97d"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a5996a48606a90ff9938e4037612cf97d">inbuf</a></td></tr>
 <tr class="separator:a5996a48606a90ff9938e4037612cf97d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eed47c62a16fa29435d480541989cf6"><td class="memItemLeft" align="right" valign="top"><a id="a0eed47c62a16fa29435d480541989cf6"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a0eed47c62a16fa29435d480541989cf6">inbuf_size</a></td></tr>
@@ -104,7 +106,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a404947e25922fa8400daa924a032897e">multithread_mode</a></td></tr>
 <tr class="memdesc:a404947e25922fa8400daa924a032897e"><td class="mdescLeft">&#160;</td><td class="mdescRight">multithread mode. At present should be 0 <br /></td></tr>
 <tr class="separator:a404947e25922fa8400daa924a032897e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a520f9fbb19f5ec84f3f86a10d819faf4"><td class="memItemLeft" align="right" valign="top">hdlc_crc_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a520f9fbb19f5ec84f3f86a10d819faf4">crc_type</a></td></tr>
+<tr class="memitem:a520f9fbb19f5ec84f3f86a10d819faf4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSTinyHdInit__.html#a520f9fbb19f5ec84f3f86a10d819faf4">crc_type</a></td></tr>
 <tr class="separator:a520f9fbb19f5ec84f3f86a10d819faf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -117,11 +119,26 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">hdlc_crc_t STinyHdInit_::crc_type</td>
+          <td class="memname"><a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a> STinyHdInit_::crc_type</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>crc field type to use on hdlc level. If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration), but HDLC_CRC_16 has higher priority. </p>
+
+</div>
+</div>
+<a id="a5996a48606a90ff9938e4037612cf97d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5996a48606a90ff9938e4037612cf97d">&#9670;&nbsp;</a></span>inbuf</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* STinyHdInit_::inbuf</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>buffer to store input bytes being received. Must be at least maximum packet size over communication channel. In some cases inbuf can be reused for sending data. </p>
 
 </div>
 </div>

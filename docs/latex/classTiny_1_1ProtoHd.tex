@@ -9,7 +9,7 @@
 \item 
 \hyperlink{classTiny_1_1ProtoHd_a1a55191980c259f2c760997d9c07cb48}{Proto\+Hd} (void $\ast$buffer, int buffer\+Size, void($\ast$on\+Receive)(uint8\+\_\+t $\ast$buf, int len))
 \item 
-void \hyperlink{classTiny_1_1ProtoHd_a112ae02531837a852af7ca3c9a32a7eb}{begin} (\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
+void \hyperlink{classTiny_1_1ProtoHd_a112ae02531837a852af7ca3c9a32a7eb}{begin} (\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
 \item 
 void \hyperlink{classTiny_1_1ProtoHd_a0e88ac5b3c67ca67c566742c22180050}{begin\+To\+Serial} ()
 \item 
@@ -23,7 +23,7 @@ void \hyperlink{classTiny_1_1ProtoHd_ac87bf8264895b654025001a0e6014f3f}{end} ()
 \item 
 int \hyperlink{classTiny_1_1ProtoHd_af53c8817317d3a62535e68ca236a038f}{write} (char $\ast$buf, int size)
 \item 
-int \hyperlink{classTiny_1_1ProtoHd_abffb26e95006c4e09e79f27f6ec4cdfe}{write} (\hyperlink{classTiny_1_1Packet}{Packet} \&pkt)
+int \hyperlink{classTiny_1_1ProtoHd_a1f4e0864f08191bfc66dce68b339250f}{write} (\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&pkt)
 \item 
 int \hyperlink{classTiny_1_1ProtoHd_af07b1f5d0df3021e00a4b4f04af4150b}{run} ()
 \item 
@@ -63,7 +63,7 @@ Initializes \hyperlink{classTiny_1_1ProtoHd}{Proto\+Hd} object
 \index{Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}!begin@{begin}}
 \index{begin@{begin}!Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}}
 \subsubsection{\texorpdfstring{begin()}{begin()}}
-{\footnotesize\ttfamily void Tiny\+::\+Proto\+Hd\+::begin (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb,  }\item[{\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Tiny\+::\+Proto\+Hd\+::begin (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb,  }\item[{\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb }\end{DoxyParamCaption})}
 
 Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1ProtoHd_ac87bf8264895b654025001a0e6014f3f}{end()}. 
 \begin{DoxyParams}{Parameters}
@@ -178,11 +178,11 @@ Sends data block over communication channel.
 \begin{DoxyReturn}{Returns}
 negative value in case of error zero if nothing is sent positive -\/ should be equal to size parameter 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classTiny_1_1ProtoHd_abffb26e95006c4e09e79f27f6ec4cdfe}\label{classTiny_1_1ProtoHd_abffb26e95006c4e09e79f27f6ec4cdfe}} 
+\mbox{\Hypertarget{classTiny_1_1ProtoHd_a1f4e0864f08191bfc66dce68b339250f}\label{classTiny_1_1ProtoHd_a1f4e0864f08191bfc66dce68b339250f}} 
 \index{Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}!write@{write}}
 \index{write@{write}!Tiny\+::\+Proto\+Hd@{Tiny\+::\+Proto\+Hd}}
 \subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily int Tiny\+::\+Proto\+Hd\+::write (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1Packet}{Packet} \&}]{pkt }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int Tiny\+::\+Proto\+Hd\+::write (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&}]{pkt }\end{DoxyParamCaption})}
 
 Sends packet over communication channel. 
 \begin{DoxyParams}{Parameters}

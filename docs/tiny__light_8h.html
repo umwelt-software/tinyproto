@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.0</span>
+   &#160;<span id="projectnumber">0.7.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -75,17 +75,16 @@ $(function() {
 <p>Tiny Light protocol API.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;proto/hdlc/tiny_hdlc.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="tiny__proto__types_8h_source.html">proto/hal/tiny_proto_types.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tiny__types_8h_source.html">proto/hal/tiny_types.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for tiny_light.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="tiny__light_8h__incl.png" border="0" usemap="#src_2proto_2light_2tiny__light_8h" alt=""/></div>
 <map name="src_2proto_2light_2tiny__light_8h" id="src_2proto_2light_2tiny__light_8h">
-<area shape="rect" id="node2" href="tiny__hdlc_8h_source.html" title="proto/hdlc/tiny_hdlc.h" alt="" coords="5,102,152,129"/>
-<area shape="rect" id="node4" href="tiny__proto__types_8h.html" title="Tiny protocol Types. " alt="" coords="176,95,309,136"/>
-<area shape="rect" id="node5" href="tiny__defines_8h_source.html" title="tiny_defines.h" alt="" coords="191,184,294,211"/>
-<area shape="rect" id="node6" href="arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="168,259,317,285"/>
-<area shape="rect" id="node7" href="tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="195,333,291,360"/>
+<area shape="rect" id="node2" href="tiny__hdlc_8h_source.html" title="proto/hdlc/tiny_hdlc.h" alt="" coords="169,95,316,121"/>
+<area shape="rect" id="node3" href="tiny__types_8h.html" title="Tiny protocol Types. " alt="" coords="59,169,205,196"/>
+<area shape="rect" id="node4" href="arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="5,244,155,271"/>
+<area shape="rect" id="node5" href="arduino_2tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="32,319,128,345"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -94,6 +93,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="center"><img src="tiny__light_8h__dep__incl.png" border="0" usemap="#src_2proto_2light_2tiny__light_8hdep" alt=""/></div>
 <map name="src_2proto_2light_2tiny__light_8hdep" id="src_2proto_2light_2tiny__light_8hdep">
 <area shape="rect" id="node2" href="TinyLightProtocol_8h.html" title="Tiny light protocol Arduino API. " alt="" coords="5,95,161,121"/>
+<area shape="rect" id="node3" href="TinyProtocol_8h.html" title="Tiny protocol Arduino API. " alt="" coords="19,169,147,196"/>
 </map>
 </div>
 </div>
@@ -106,7 +106,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga221cf790724163d1aee89ad6a6c9a14d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga221cf790724163d1aee89ad6a6c9a14d">tiny_light_init</a> (void *handle, <a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> write_func, <a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> read_func, void *pdata)</td></tr>
+<tr class="memitem:ga221cf790724163d1aee89ad6a6c9a14d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga221cf790724163d1aee89ad6a6c9a14d">tiny_light_init</a> (void *handle, <a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> write_func, <a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> read_func, void *pdata)</td></tr>
 <tr class="separator:ga221cf790724163d1aee89ad6a6c9a14d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6e045b8f4ef551c274fbacaa625e2748"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga6e045b8f4ef551c274fbacaa625e2748">tiny_light_close</a> (void *handle)</td></tr>
 <tr class="separator:ga6e045b8f4ef551c274fbacaa625e2748"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -116,6 +116,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga0181db79922917957779e1f2d740c407"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga0181db79922917957779e1f2d740c407">tiny_light_read</a> (void *handle, uint8_t *pbuf, int len)</td></tr>
 <tr class="memdesc:ga0181db79922917957779e1f2d740c407"><td class="mdescLeft">&#160;</td><td class="mdescRight">reads frame from the channel in blocking mode.  <a href="group__LIGHT__API.html#ga0181db79922917957779e1f2d740c407">More...</a><br /></td></tr>
 <tr class="separator:ga0181db79922917957779e1f2d740c407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabf582877977ecd57299d8675a1279e36"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#gabf582877977ecd57299d8675a1279e36">tiny_light_get_hdlc</a> (void *handle)</td></tr>
+<tr class="memdesc:gabf582877977ecd57299d8675a1279e36"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns lower level hdlc handle.  <a href="group__LIGHT__API.html#gabf582877977ecd57299d8675a1279e36">More...</a><br /></td></tr>
+<tr class="separator:gabf582877977ecd57299d8675a1279e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Tiny Light protocol API. </p>

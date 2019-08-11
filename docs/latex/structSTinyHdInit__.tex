@@ -8,20 +8,22 @@
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}\label{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}} 
-\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}{write\+\_\+func}
+\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a0bd05a4fc43236ff37d67aec4d2a0952}{write\+\_\+func}
 \begin{DoxyCompactList}\small\item\em callback function to write bytes to the physical channel \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}\label{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}} 
-\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}{read\+\_\+func}
+\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___a5de352b11ca7915737bc459cde7c566d}{read\+\_\+func}
 \begin{DoxyCompactList}\small\item\em callback function to read bytes from the physical channel \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}\label{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}} 
 void $\ast$ \hyperlink{structSTinyHdInit___a7b6be4e09ea04eaa4372eadce4d51055}{pdata}
 \begin{DoxyCompactList}\small\item\em user data for block read/write functions \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structSTinyHdInit___ae2eea5181620dfbb47b60a5073bd5ed2}\label{structSTinyHdInit___ae2eea5181620dfbb47b60a5073bd5ed2}} 
-\hyperlink{tiny__proto__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___ae2eea5181620dfbb47b60a5073bd5ed2}{on\+\_\+frame\+\_\+cb}
+\hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___ae2eea5181620dfbb47b60a5073bd5ed2}{on\+\_\+frame\+\_\+cb}
 \begin{DoxyCompactList}\small\item\em callback function to process incoming frames \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}\label{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}} 
+\mbox{\Hypertarget{structSTinyHdInit___aa1d724d6a284de5f995273e0e3e70318}\label{structSTinyHdInit___aa1d724d6a284de5f995273e0e3e70318}} 
+\hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyHdInit___aa1d724d6a284de5f995273e0e3e70318}{on\+\_\+sent\+\_\+cb}
+\begin{DoxyCompactList}\small\item\em Callback to get notification of sent frames. \end{DoxyCompactList}\item 
 void $\ast$ \hyperlink{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}{inbuf}
-\begin{DoxyCompactList}\small\item\em buffer to store input bytes being received. Must be at least maximum packet size over communication channel \end{DoxyCompactList}\item 
+\item 
 \mbox{\Hypertarget{structSTinyHdInit___a0eed47c62a16fa29435d480541989cf6}\label{structSTinyHdInit___a0eed47c62a16fa29435d480541989cf6}} 
 uint16\+\_\+t \hyperlink{structSTinyHdInit___a0eed47c62a16fa29435d480541989cf6}{inbuf\+\_\+size}
 \begin{DoxyCompactList}\small\item\em maximum input buffer size \end{DoxyCompactList}\item 
@@ -31,7 +33,7 @@ uint16\+\_\+t \hyperlink{structSTinyHdInit___ac7a1ae9314efc1296d78927198f07ac8}{
 \mbox{\Hypertarget{structSTinyHdInit___a404947e25922fa8400daa924a032897e}\label{structSTinyHdInit___a404947e25922fa8400daa924a032897e}} 
 uint8\+\_\+t \hyperlink{structSTinyHdInit___a404947e25922fa8400daa924a032897e}{multithread\+\_\+mode}
 \begin{DoxyCompactList}\small\item\em multithread mode. At present should be 0 \end{DoxyCompactList}\item 
-hdlc\+\_\+crc\+\_\+t \hyperlink{structSTinyHdInit___a520f9fbb19f5ec84f3f86a10d819faf4}{crc\+\_\+type}
+\hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+crc\+\_\+t} \hyperlink{structSTinyHdInit___a520f9fbb19f5ec84f3f86a10d819faf4}{crc\+\_\+type}
 \end{DoxyCompactItemize}
 
 
@@ -43,9 +45,15 @@ This structure is used for initialization of Tiny Half Duplex protocol.
 \index{S\+Tiny\+Hd\+Init\+\_\+@{S\+Tiny\+Hd\+Init\+\_\+}!crc\+\_\+type@{crc\+\_\+type}}
 \index{crc\+\_\+type@{crc\+\_\+type}!S\+Tiny\+Hd\+Init\+\_\+@{S\+Tiny\+Hd\+Init\+\_\+}}
 \subsubsection{\texorpdfstring{crc\+\_\+type}{crc\_type}}
-{\footnotesize\ttfamily hdlc\+\_\+crc\+\_\+t S\+Tiny\+Hd\+Init\+\_\+\+::crc\+\_\+type}
+{\footnotesize\ttfamily \hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+crc\+\_\+t} S\+Tiny\+Hd\+Init\+\_\+\+::crc\+\_\+type}
 
-crc field type to use on hdlc level. If H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+\+D\+E\+F\+A\+U\+LT is passed, crc type will be selected automatically (depending on library configuration), but H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+16 has higher priority. 
+crc field type to use on hdlc level. If H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+\+D\+E\+F\+A\+U\+LT is passed, crc type will be selected automatically (depending on library configuration), but H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+16 has higher priority. \mbox{\Hypertarget{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}\label{structSTinyHdInit___a5996a48606a90ff9938e4037612cf97d}} 
+\index{S\+Tiny\+Hd\+Init\+\_\+@{S\+Tiny\+Hd\+Init\+\_\+}!inbuf@{inbuf}}
+\index{inbuf@{inbuf}!S\+Tiny\+Hd\+Init\+\_\+@{S\+Tiny\+Hd\+Init\+\_\+}}
+\subsubsection{\texorpdfstring{inbuf}{inbuf}}
+{\footnotesize\ttfamily void$\ast$ S\+Tiny\+Hd\+Init\+\_\+\+::inbuf}
+
+buffer to store input bytes being received. Must be at least maximum packet size over communication channel. In some cases inbuf can be reused for sending data. 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

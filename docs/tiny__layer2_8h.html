@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.0</span>
+   &#160;<span id="projectnumber">0.7.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -75,24 +75,15 @@ $(function() {
 <p>Tiny protocol API.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="tiny__proto__types_8h_source.html">proto/hal/tiny_proto_types.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tiny__types_8h_source.html">proto/hal/tiny_types.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for tiny_layer2.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="tiny__layer2_8h__incl.png" border="0" usemap="#src_2proto_2__old_2tiny__layer2_8h" alt=""/></div>
 <map name="src_2proto_2__old_2tiny__layer2_8h" id="src_2proto_2__old_2tiny__layer2_8h">
-<area shape="rect" id="node3" href="tiny__proto__types_8h.html" title="Tiny protocol Types. " alt="" coords="75,95,209,136"/>
-<area shape="rect" id="node4" href="tiny__defines_8h_source.html" title="tiny_defines.h" alt="" coords="95,184,197,211"/>
-<area shape="rect" id="node5" href="arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="71,259,221,285"/>
-<area shape="rect" id="node6" href="tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="98,333,194,360"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="tiny__layer2_8h__dep__incl.png" border="0" usemap="#src_2proto_2__old_2tiny__layer2_8hdep" alt=""/></div>
-<map name="src_2proto_2__old_2tiny__layer2_8hdep" id="src_2proto_2__old_2tiny__layer2_8hdep">
-<area shape="rect" id="node2" href="TinyProtocol_8h.html" title="Tiny protocol Arduino API. " alt="" coords="5,95,133,121"/>
+<area shape="rect" id="node3" href="tiny__types_8h.html" title="Tiny protocol Types. " alt="" coords="51,95,198,121"/>
+<area shape="rect" id="node4" href="arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="102,169,251,196"/>
+<area shape="rect" id="node5" href="arduino_2tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="129,244,225,271"/>
 </map>
 </div>
 </div>
@@ -109,7 +100,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gab9bfaed3c75551c8b7f3f8b25e766546"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#gab9bfaed3c75551c8b7f3f8b25e766546">tiny_init</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> write_func, <a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> read_func, void *pdata)</td></tr>
+<tr class="memitem:gab9bfaed3c75551c8b7f3f8b25e766546"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#gab9bfaed3c75551c8b7f3f8b25e766546">tiny_init</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> write_func, <a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> read_func, void *pdata)</td></tr>
 <tr class="separator:gab9bfaed3c75551c8b7f3f8b25e766546"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga48cf9ffab9eeb9665e61ae69e28938b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SIMPLE__API.html#ga48cf9ffab9eeb9665e61ae69e28938b8">tiny_close</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="separator:ga48cf9ffab9eeb9665e61ae69e28938b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,10 +150,10 @@ Functions</h2></td></tr>
 <tr class="memitem:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd">tiny_unlock</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="memdesc:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">unlock Tiny state machine for send operations  <a href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd">More...</a><br /></td></tr>
 <tr class="separator:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> read_cb, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> send_cb)</td></tr>
+<tr class="memitem:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> read_cb, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> send_cb)</td></tr>
 <tr class="memdesc:gac562103dd1699b82fddf29dccdc0ec7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">set callbacks for processing frames The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received.  <a href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">More...</a><br /></td></tr>
 <tr class="separator:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabe38a1f81966f6901eb2f6969b568298"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">tiny_get_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *read_cb, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *send_cb)</td></tr>
+<tr class="memitem:gabe38a1f81966f6901eb2f6969b568298"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">tiny_get_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *read_cb, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *send_cb)</td></tr>
 <tr class="memdesc:gabe38a1f81966f6901eb2f6969b568298"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns callbacks assigned for frame processing The function returns set callbacks.  <a href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">More...</a><br /></td></tr>
 <tr class="separator:gabe38a1f81966f6901eb2f6969b568298"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5f61774b2027a91f772f31d943acdd3f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f">tiny_get_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="structSTinyStats.html">STinyStats</a> *stat)</td></tr>

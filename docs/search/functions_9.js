@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['read',['read',['../classTiny_1_1ProtoLight.html#acf18a8b73ee6c6394270c903ad7882b8',1,'Tiny::ProtoLight::read(char *buf, int size)'],['../classTiny_1_1ProtoLight.html#a96c56b10b4eee28c09b291461c66fa54',1,'Tiny::ProtoLight::read(Packet &amp;pkt)'],['../classTiny_1_1Proto.html#acc00ac10509eaa11a83b0b88a2278b3e',1,'Tiny::Proto::read(char *buf, int size, uint8_t flags=TINY_FLAG_WAIT_FOREVER)'],['../classTiny_1_1Proto.html#aedef629f8b8968db7c8693bb45039651',1,'Tiny::Proto::read(Packet &amp;pkt, uint8_t flags=TINY_FLAG_WAIT_FOREVER)']]],
-  ['run',['run',['../classTiny_1_1ProtoHd.html#af07b1f5d0df3021e00a4b4f04af4150b',1,'Tiny::ProtoHd']]]
+  ['protohd',['ProtoHd',['../classTiny_1_1ProtoHd.html#a1a55191980c259f2c760997d9c07cb48',1,'Tiny::ProtoHd']]],
+  ['put',['put',['../classTiny_1_1IPacket.html#a9d5ba62a453b9cd364c0e214c245f11d',1,'Tiny::IPacket::put(uint8_t byte)'],['../classTiny_1_1IPacket.html#a9dd0344bbed4500af63a3f700d31945b',1,'Tiny::IPacket::put(char chr)'],['../classTiny_1_1IPacket.html#a4dd6118251a5557691e4ed358a3b2ddc',1,'Tiny::IPacket::put(uint16_t data)'],['../classTiny_1_1IPacket.html#a5ec37c88a536d710fb1561cd62f52c91',1,'Tiny::IPacket::put(uint32_t data)'],['../classTiny_1_1IPacket.html#abf21aef6652da2e975c8be13e6a643e9',1,'Tiny::IPacket::put(int16_t data)'],['../classTiny_1_1IPacket.html#a46eaf3eb0232288dfb36ce7cc01b12e5',1,'Tiny::IPacket::put(const char *str)'],['../classTiny_1_1IPacket.html#a5ebc1e6507e7255a8babddbae82dcb2a',1,'Tiny::IPacket::put(const IPacket &amp;pkt)']]]
 ];

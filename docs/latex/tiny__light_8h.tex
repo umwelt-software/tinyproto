@@ -6,15 +6,17 @@ Tiny Light protocol A\+PI.
 
 
 {\ttfamily \#include \char`\"{}proto/hdlc/tiny\+\_\+hdlc.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}proto/hal/tiny\+\_\+proto\+\_\+types.\+h\char`\"{}}\newline
-Include dependency graph for tiny\+\_\+light.\+h\+:\nopagebreak
+{\ttfamily \#include \char`\"{}proto/hal/tiny\+\_\+types.\+h\char`\"{}}\newline
+Include dependency graph for tiny\+\_\+light.\+h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=314pt]{tiny__light_8h__incl}
+\includegraphics[width=342pt]{tiny__light_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -29,14 +31,16 @@ struct \hyperlink{structSTinyLightData}{S\+Tiny\+Light\+Data}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{group__LIGHT__API_ga221cf790724163d1aee89ad6a6c9a14d}{tiny\+\_\+light\+\_\+init} (void $\ast$handle, \hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
+int \hyperlink{group__LIGHT__API_ga221cf790724163d1aee89ad6a6c9a14d}{tiny\+\_\+light\+\_\+init} (void $\ast$handle, \hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
 \item 
 int \hyperlink{group__LIGHT__API_ga6e045b8f4ef551c274fbacaa625e2748}{tiny\+\_\+light\+\_\+close} (void $\ast$handle)
 \item 
 int \hyperlink{group__LIGHT__API_ga12391f0d4c06fb6296b84fd4681a87f7}{tiny\+\_\+light\+\_\+send} (void $\ast$handle, const uint8\+\_\+t $\ast$pbuf, int len)
 \begin{DoxyCompactList}\small\item\em sends frame with user payload to communication channel in blocking mode \end{DoxyCompactList}\item 
 int \hyperlink{group__LIGHT__API_ga0181db79922917957779e1f2d740c407}{tiny\+\_\+light\+\_\+read} (void $\ast$handle, uint8\+\_\+t $\ast$pbuf, int len)
-\begin{DoxyCompactList}\small\item\em reads frame from the channel in blocking mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em reads frame from the channel in blocking mode. \end{DoxyCompactList}\item 
+\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} \hyperlink{group__LIGHT__API_gabf582877977ecd57299d8675a1279e36}{tiny\+\_\+light\+\_\+get\+\_\+hdlc} (void $\ast$handle)
+\begin{DoxyCompactList}\small\item\em returns lower level hdlc handle. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}

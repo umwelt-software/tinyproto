@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.0</span>
+   &#160;<span id="projectnumber">0.7.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -85,13 +85,13 @@ typedef struct <a class="el" href="struct__hdlc__handle__t.html">_hdlc_handle_t<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:gabb73b32d08d8e79eefe9385634a74bf7"><td class="memItemLeft" align="right" valign="top"><a id="gabb73b32d08d8e79eefe9385634a74bf7"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>hdlc_crc_t</b> { <br />
-&#160;&#160;<b>HDLC_CRC_DEFAULT</b> = 0, 
-<b>HDLC_CRC_8</b> = 8, 
-<b>HDLC_CRC_16</b> = 16, 
-<b>HDLC_CRC_32</b> = 32, 
+<tr class="memitem:gabb73b32d08d8e79eefe9385634a74bf7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a> { <br />
+&#160;&#160;<a class="el" href="group__HDLC__API.html#ggabb73b32d08d8e79eefe9385634a74bf7a5f34a095f94c39357e31badd2feb9426">HDLC_CRC_DEFAULT</a> = 0, 
+<a class="el" href="group__HDLC__API.html#ggabb73b32d08d8e79eefe9385634a74bf7a01bc9e3bb4df100ae74bd65e33223a10">HDLC_CRC_8</a> = 8, 
+<a class="el" href="group__HDLC__API.html#ggabb73b32d08d8e79eefe9385634a74bf7a7ee7be32ac5752572334f3c6bc6fa5a1">HDLC_CRC_16</a> = 16, 
+<a class="el" href="group__HDLC__API.html#ggabb73b32d08d8e79eefe9385634a74bf7a77c7dfdc97801651d98b6c4eb79882d3">HDLC_CRC_32</a> = 32, 
 <br />
-&#160;&#160;<b>HDLC_CRC_OFF</b> = 0xFF
+&#160;&#160;<a class="el" href="group__HDLC__API.html#ggabb73b32d08d8e79eefe9385634a74bf7a6ed874f871614e9de6358d678256a140">HDLC_CRC_OFF</a> = 0xFF
 <br />
  }</td></tr>
 <tr class="separator:gabb73b32d08d8e79eefe9385634a74bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -104,12 +104,17 @@ Functions</h2></td></tr>
 <tr class="separator:ga21d727583f0f4534c8e4688eafcec66f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga532836280097de1c8881df8336f21075"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga532836280097de1c8881df8336f21075">hdlc_reset</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle)</td></tr>
 <tr class="separator:ga532836280097de1c8881df8336f21075"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2d6e77ad3ac6ee53499afaa68cb69f72"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga2d6e77ad3ac6ee53499afaa68cb69f72">hdlc_run_rx</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, void *data, int len)</td></tr>
-<tr class="separator:ga2d6e77ad3ac6ee53499afaa68cb69f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga911a3f1cb32dd6cadd00223e0097642c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, const void *data, int len, int *error)</td></tr>
+<tr class="separator:ga911a3f1cb32dd6cadd00223e0097642c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga196e57dcf71cd8910f756181f1f86871"><td class="memItemLeft" align="right" valign="top"><a id="ga196e57dcf71cd8910f756181f1f86871"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>hdlc_run_rx_until_read</b> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, <a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> readcb, int *error)</td></tr>
+<tr class="separator:ga196e57dcf71cd8910f756181f1f86871"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae31d921043b4f175603114c206b6b829"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle)</td></tr>
 <tr class="separator:gae31d921043b4f175603114c206b6b829"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7bb27a8d4f2c975689cce856e16b4ae8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga7bb27a8d4f2c975689cce856e16b4ae8">hdlc_send</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, const void *data, int len)</td></tr>
-<tr class="separator:ga7bb27a8d4f2c975689cce856e16b4ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8b5cc456927145cebd82b2b560a6fa10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, const void *data, int len, uint32_t timeout)</td></tr>
+<tr class="separator:ga8b5cc456927145cebd82b2b560a6fa10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga73156f5cc3e59c3abb880d124de78f91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga73156f5cc3e59c3abb880d124de78f91">hdlc_set_rx_buffer</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, void *data, int size)</td></tr>
+<tr class="separator:ga73156f5cc3e59c3abb880d124de78f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Typedef Documentation</h2>
@@ -125,6 +130,34 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Structure describes configuration of lowest HDLC level Initialize this structure by 0 before passing to <a class="el" href="group__HDLC__API.html#gaa41c388433273a76460ddfbaff0f8f5d">hdlc_init()</a> function. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="gabb73b32d08d8e79eefe9385634a74bf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabb73b32d08d8e79eefe9385634a74bf7">&#9670;&nbsp;</a></span>hdlc_crc_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>HDLC CRC options, available </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggabb73b32d08d8e79eefe9385634a74bf7a5f34a095f94c39357e31badd2feb9426"></a>HDLC_CRC_DEFAULT&#160;</td><td class="fielddoc"><p>If default is specified HDLC will auto select CRC option. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggabb73b32d08d8e79eefe9385634a74bf7a01bc9e3bb4df100ae74bd65e33223a10"></a>HDLC_CRC_8&#160;</td><td class="fielddoc"><p>Simple sum of all bytes in user payload. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggabb73b32d08d8e79eefe9385634a74bf7a7ee7be32ac5752572334f3c6bc6fa5a1"></a>HDLC_CRC_16&#160;</td><td class="fielddoc"><p>CCITT-16. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggabb73b32d08d8e79eefe9385634a74bf7a77c7dfdc97801651d98b6c4eb79882d3"></a>HDLC_CRC_32&#160;</td><td class="fielddoc"><p>CCITT-32. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggabb73b32d08d8e79eefe9385634a74bf7a6ed874f871614e9de6358d678256a140"></a>HDLC_CRC_OFF&#160;</td><td class="fielddoc"><p>Disable CRC field. </p>
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -206,8 +239,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga2d6e77ad3ac6ee53499afaa68cb69f72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2d6e77ad3ac6ee53499afaa68cb69f72">&#9670;&nbsp;</a></span>hdlc_run_rx()</h2>
+<a id="ga911a3f1cb32dd6cadd00223e0097642c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga911a3f1cb32dd6cadd00223e0097642c">&#9670;&nbsp;</a></span>hdlc_run_rx()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,14 +254,20 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void *&#160;</td>
+          <td class="paramtype">const void *&#160;</td>
           <td class="paramname"><em>data</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>error</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -237,16 +276,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Processes incoming data. Implementation of reading data from hw is user responsibility. If <a class="el" href="group__HDLC__API.html#ga2d6e77ad3ac6ee53499afaa68cb69f72">hdlc_run_rx()</a> returns value less than size of data passed to the function, then <a class="el" href="group__HDLC__API.html#ga2d6e77ad3ac6ee53499afaa68cb69f72">hdlc_run_rx()</a> must be called later second time with the pointer to and size of not processed bytes.</p>
+<p>Processes incoming data. Implementation of reading data from hw is user responsibility. If <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a> returns value less than size of data passed to the function, then <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a> must be called later second time with the pointer to and size of not processed bytes.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handle</td><td>handle to hdlc instance </td></tr>
     <tr><td class="paramname">data</td><td>pointer to incoming data to process </td></tr>
     <tr><td class="paramname">len</td><td>size of received data in bytes </td></tr>
+    <tr><td class="paramname">error</td><td>pointer to store error code. If no error, 0 is returned. this argument can be NULL. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>number of bytes actually processed. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>number of processed bytes from specified data buffer. </dd></dl>
 
 </div>
 </div>
@@ -265,7 +305,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Runs transmission at hdlc level. If there is frame to send, or send is in progress, this function will call send_tx() callback multiple times. If send_tx() callback reports 0, that means that hw device is busy, then <a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx()</a> will return immediately and <a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx()</a> must be called later next time.</p>
+<p>Runs transmission at hdlc level. If there is frame to send, or send is in progress, this function will call send_tx() callback multiple times. If send_tx() callback reports 0, that means that there is nothing to send of hw device is busy. </p><dl class="section warning"><dt>Warning</dt><dd>this function must be called from one thread only.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handle</td><td>handle to hdlc instance </td></tr>
@@ -276,8 +316,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga7bb27a8d4f2c975689cce856e16b4ae8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga7bb27a8d4f2c975689cce856e16b4ae8">&#9670;&nbsp;</a></span>hdlc_send()</h2>
+<a id="ga8b5cc456927145cebd82b2b560a6fa10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8b5cc456927145cebd82b2b560a6fa10">&#9670;&nbsp;</a></span>hdlc_send()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,7 +338,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>timeout</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -307,17 +353,64 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Puts next frame for sending.</p>
+<p>Puts next frame for sending. This function is thread-safe. You may call it from parallel threads.</p>
+<p>If multithread_mode is specificed for hdlc protocol, then <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will wait for specified timeout until some tx thread, implemented by application, completes sending of the frame.</p>
+<p>If multithread_mode is disabled for hdlc protocol, then <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will start frame sending immediately by itself if TX line is not busy. In this case <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> will block until frame is sent or timeout.</p>
+<p>If timeout is specified as 0, <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will not wait or perform send operation, but only pass dtaa pointer to hdlc state machine.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handle</td><td>handle to hdlc instance </td></tr>
     <tr><td class="paramname">data</td><td>pointer to new data to send </td></tr>
     <tr><td class="paramname">len</td><td>size of data to send in bytes </td></tr>
+    <tr><td class="paramname">timeout</td><td>time in milliseconds to wait for data to be sent </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0 if output queue is busy 1 if pointer to data is passed to output queue </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>buffer with data must be available all the time until data are actually sent to tx hw channel </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_FAILED if generic error happens TINY_ERR_TIMEOUT if TX queue is busy for specified timeout period TINY_SUCCESS if data is successfully sent </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>buffer with data must be available all the time until data are actually sent to tx hw channel. That is if you use zero timeout, you need to use callback to understand, when buffer is not longer needed at hdlc level. </dd></dl>
+
+</div>
+</div>
+<a id="ga73156f5cc3e59c3abb880d124de78f91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga73156f5cc3e59c3abb880d124de78f91">&#9670;&nbsp;</a></span>hdlc_set_rx_buffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hdlc_set_rx_buffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets new RX buffer for hdlc protocol. This function is not thread-safe.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>handle to hdlc instance </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to rx buffer </td></tr>
+    <tr><td class="paramname">size</td><td>size of rx buffer in bytes </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

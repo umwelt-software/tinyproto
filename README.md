@@ -1,5 +1,17 @@
 # Tiny Protocol
 
+[tocstart]: # (toc start)
+
+  * [Introduction](#introduction)
+  * [Key Features](#key-features)
+  * [Supported platforms](#supported-platforms)
+  * [Setting up](#setting-up)
+  * [Using hd_loopback tool](#using-hd-loopback-tool)
+  * [Running sperf](#running-sperf)
+  * [License](#license)
+
+[tocend]: # (toc end)
+
 ## Introduction
 
 Tiny Protocol is layer 2 simple protocol. It is intended to be used for the systems with
@@ -10,68 +22,70 @@ With this library you can easy communicate your Arduino with applications
 on PC and other boards. You don't need to think about data synchronization
 between points.
 
-## History
+## Key Features
 
-To implement communication with synchronization between two microcontrollers, I needed some
-protocol. Passing raw bytes over communication channel has big disadvantages: absence of 
-synchronization, no error correction, that means if some device is connected to another 
-one at any time point, there is a big chance to get some garbage on communication line.
-Thus, the first version of TinyProto appeared. It supports error checking and framing for
-the data being sent. But very soon I realized, that in many cases the communication channels
-are stable enough, but having error detection requires a lot of place for code in uC flash.
-And then TinyProto Light version was implemented.
+This protocol allows to organize communication either between PC and EVK board or
+between two microcontrollers. Passing raw bytes over communication channel has big
+disadvantages:
+ * absence of synchronization. If devices start at different time, then some device can start
+   reading from the middle of the frame data,
+ * no error correction. If hardware channel is noise, there is a big chance to get some garbage
+   on communication line.
+These issues can be solved with tinyproto protocol. It supports error checking and framing for
+the data being sent.
 
-## Features
-
+Main features:
  * Error detection (absent in TinyProto Light version)
    * Simple 8-bit checksum
    * FCS16 (CCITT-16)
    * FCS32 (CCITT-32)
- * Passing UID with each frame (absent in TinyProto Light version)
  * Frame transfer acknowledgement (TinyProto Half Duplex version)
  * Frames of maximum 32K size (limit depends on OS).
- * Low SRAM consumption (40 bytes for Tiny Light version)
+ * Low SRAM consumption
  * Low Flash consumption (many features can be disabled at compilation time)
- * Tool for communicating with uC devices (with win32 binary)
+ * Serial performance tool (sperf)
+ * Loopback tool for debug purposes
 
 ## Supported platforms
 
  * Any platform, where C/C++ compiler is available (C99, C++11)
 
-## TinyProto available implementations
+## Setting up
 
- * TinyProtocol Light (refer to [tiny_light.h](inc/tiny_light.h))
-   * Data framing
-   * No error detection
-   * Only blocking operations
-   * No send confirmation
- * TinyProtocol (refer to [tiny_layer2.h](inc/tiny_layer2.h))
-   * Simple (no uids, blocking operations) and Full version
-   * Passing uid with the frame (optional)
-   * Error correction support (checksum, FCS16, FCS32)
-   * Blocking and non-blocking APIs
-   * No send confirmation
- * TinyProtocol Half Duplex (refer to [tiny_hd.h](inc/tiny_hd.h))
-   * Based on top of TinyProtocol
-   * Additionally to TinyProtocol supports frame acknowledgements
-
-## Setting up for Arduino
-
- * Option 1 (with docs and tools)
+ * Arduino Option 1 (with docs and tools)
    * Download source from https://github.com/lexus2k/tinyproto
    * Put the downloaded library content to Arduino/libraries/tinyproto folder
    * Restart the Arduino IDE
-   * You will find the examples in the Arduino IDE under File, Examples, tinyproto
+   * You will find the examples in the Arduino IDE under File->Examples->tinyproto
 
- * Option 2 (only library without docs)
-   * Download source from https://github.com/lexus2k/tinyproto
-   * On Windows, run the gen_arduino_release.bat
-   * On Linux/Mac OS, run the gen_arduino_release.sh
-   * Put the releases/arduino/ folder content to Arduino/libraries/ folder
+ * Arduino Option 2 (only library without docs)
+   * Go to Arduino Library manager
+   * Find and install tinyproto library
    * Restart the Arduino IDE
-   * You will find the examples in the Arduino IDE under File, Examples, tinyproto
+   * You will find the examples in the Arduino IDE under File->Examples->tinyproto
 
-## Running demo example for Arduino
+ * ESP32 IDF
+   * Download sources from https://github.com/lexus2k/tinyproto and put to components
+     folder of your project
+   * Run `make` for your project
+
+ * Linux
+   * Download sources from https://github.com/lexus2k/tinyproto
+   * Run `make` command from tinyproto folder, and it will build library and tools for you
+
+ * Plain AVR
+   * Download sources from https://github.com/lexus2k/tinyproto
+   * Install avr gcc compilers
+   * Run `make ARCH=avr`
+
+## Using hd_loopback tool
+
+ * Connect your Arduino board to PC
+ * Run your sketch or sketch_hd_sender
+ * Compile hd_loopback tool
+ * Run hd_loopback tool: `./bld/hd_loopback -p /dev/ttyUSB0 -c 8 -g`
+
+## Running sperf
 
  * Connect your Arduino board to PC
  * Burn and run tinylight_loopback sketch on Arduino board
@@ -79,14 +93,13 @@ And then TinyProto Light version was implemented.
 
 sperf sends frames to Arduino board, and tinylight_loopback sketch sends all frames back to PC.
 
-
 For more information about this library, please, visit https://github.com/lexus2k/tinyproto.
 Doxygen documentation can be found at [github.io site](http://lexus2k.github.io/tinyproto).
 If you found any problem or have any idea, please, report to Issues section.
 
 ## License
 
-Copyright 2016-2018 (C) Alexey Dynda
+Copyright 2016-2019 (C) Alexey Dynda
 
 This file is part of Tiny Protocol Library.
 

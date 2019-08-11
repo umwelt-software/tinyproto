@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.0</span>
+   &#160;<span id="projectnumber">0.7.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -104,10 +104,10 @@ Functions</h2></td></tr>
 <tr class="memitem:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd">tiny_unlock</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle)</td></tr>
 <tr class="memdesc:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">unlock Tiny state machine for send operations  <a href="#gae4bfad55a4ef5814a5af50f044f6d7cd">More...</a><br /></td></tr>
 <tr class="separator:gae4bfad55a4ef5814a5af50f044f6d7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> read_cb, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> send_cb)</td></tr>
+<tr class="memitem:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_set_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> read_cb, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> send_cb)</td></tr>
 <tr class="memdesc:gac562103dd1699b82fddf29dccdc0ec7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">set callbacks for processing frames The function sets callback procs for specified Tiny channel. callbacks will receive all data being sent or received.  <a href="#gac562103dd1699b82fddf29dccdc0ec7c">More...</a><br /></td></tr>
 <tr class="separator:gac562103dd1699b82fddf29dccdc0ec7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabe38a1f81966f6901eb2f6969b568298"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">tiny_get_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *read_cb, <a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *send_cb)</td></tr>
+<tr class="memitem:gabe38a1f81966f6901eb2f6969b568298"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">tiny_get_callbacks</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *read_cb, <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *send_cb)</td></tr>
 <tr class="memdesc:gabe38a1f81966f6901eb2f6969b568298"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns callbacks assigned for frame processing The function returns set callbacks.  <a href="#gabe38a1f81966f6901eb2f6969b568298">More...</a><br /></td></tr>
 <tr class="separator:gabe38a1f81966f6901eb2f6969b568298"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5f61774b2027a91f772f31d943acdd3f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f">tiny_get_stat</a> (<a class="el" href="structSTinyData.html">STinyData</a> *handle, <a class="el" href="structSTinyStats.html">STinyStats</a> *stat)</td></tr>
@@ -140,7 +140,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd></dl>
+TINY_NO_ERROR </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
@@ -199,13 +199,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *&#160;</td>
           <td class="paramname"><em>read_cb</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> *&#160;</td>
           <td class="paramname"><em>send_cb</em>&#160;</td>
         </tr>
         <tr>
@@ -264,7 +264,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd></dl>
+TINY_NO_ERROR </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
@@ -362,7 +362,7 @@ Functions</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd>This function may be used in interrupt handlers. This depends on on_frame_cb_t handler set for receive operations, which is implemented by applications. </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>to not perform blocking send operations in receive handler if you're using tiny_on_rx_byte in interrupt handler. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a> </dd>
 <dd>
 <a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c" title="set callbacks for processing frames The function sets callback procs for specified Tiny channel...">tiny_set_callbacks</a>. </dd></dl>
 
@@ -481,7 +481,7 @@ The read data can be considered as valid, only when last buffer is successfully 
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd>
+TINY_NO_ERROR </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a" title="Out of sync - received some data, which are not part of the frame (tiny_read) ">TINY_ERR_OUT_OF_SYNC</a> </dd>
 <dd>
@@ -627,7 +627,7 @@ The read data can be considered as valid, only when last buffer is successfully 
 <dl class="section return"><dt>Returns</dt><dd>TINY_SUCCESS if send frame is completed successfully. TINY_NO_ERROR if non-blocking operation is requested and the channel is busy TINY_ERR_FAILED if writing to the channel failed TINY_ERR_INVALID_DATA if invalid handle is passed</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga16cd043c890ed1fa381b3a20f75a626c" title="Tiny operation successful. Only tiny_send_start and tiny_read_start functions return this code...">TINY_SUCCESS</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga69c869a686b67bf0b7b8115599515d61" title="No error. For tiny_send and tiny_read functions, this means, no data sent or received. ">TINY_NO_ERROR</a> </dd>
+TINY_NO_ERROR </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e" title="Some invalid data passed to Tiny API function. ">TINY_ERR_INVALID_DATA</a> </dd>
 <dd>
@@ -740,13 +740,13 @@ The read data can be considered as valid, only when last buffer is successfully 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td>
           <td class="paramname"><em>read_cb</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td>
           <td class="paramname"><em>send_cb</em>&#160;</td>
         </tr>
         <tr>

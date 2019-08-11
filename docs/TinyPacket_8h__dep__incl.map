@@ -1,5 +1,6 @@
 <map id="src/TinyPacket.h" name="src/TinyPacket.h">
-<area shape="rect" id="node2" href="$TinyLightProtocol_8h.html" title="Tiny light protocol Arduino API. " alt="" coords="5,80,161,107"/>
-<area shape="rect" id="node3" href="$TinyProtocol_8h.html" title="Tiny protocol Arduino API. " alt="" coords="186,80,314,107"/>
-<area shape="rect" id="node4" href="$TinyProtocolHd_8h.html" title="Tiny protocol Arduino API. " alt="" coords="339,80,484,107"/>
+<area shape="rect" id="node2" href="$TinyHdlc_8h.html" title="Tiny light protocol Arduino API. " alt="" coords="5,80,112,107"/>
+<area shape="rect" id="node3" href="$TinyLightProtocol_8h.html" title="Tiny light protocol Arduino API. " alt="" coords="137,80,293,107"/>
+<area shape="rect" id="node4" href="$TinyProtocol_8h.html" title="Tiny protocol Arduino API. " alt="" coords="267,155,395,181"/>
+<area shape="rect" id="node5" href="$TinyProtocolHd_8h.html" title="Tiny protocol Arduino API. " alt="" coords="369,80,514,107"/>
 </map>

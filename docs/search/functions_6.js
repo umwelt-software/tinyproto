@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['maxsize',['maxSize',['../classTiny_1_1Packet.html#a9985ff3b48f81628a7428b1197ca9f8f',1,'Tiny::Packet']]]
+  ['ipacket',['IPacket',['../classTiny_1_1IPacket.html#af44b18c4c8481475d40d8b87a6cb38ff',1,'Tiny::IPacket']]]
 ];

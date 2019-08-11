@@ -29,7 +29,7 @@ H\+D\+LC callbacks\+:
 \begin{DoxyItemize}
 \item write\+\_\+func\+\_\+cb() is called by H\+D\+LC implementation every time, it needs to send bytes to TX channel
 \item on\+\_\+frame\+\_\+read() is called by H\+D\+LC implementation every time, new frame arrives and checksum is correct.
-\item on\+\_\+frame\+\_\+sent() is called by H\+D\+LC implementation every time, new frame is sent to TX. H\+D\+LC protocol requires only write\+\_\+func\+\_\+cb() to be defined. Other callbacks are optional. As for RX processes, your application code is responsible for reading data from RX line, then all you need to do, is to pass received bytes to H\+D\+LC implementation for processing via \hyperlink{group__HDLC__API_ga2d6e77ad3ac6ee53499afaa68cb69f72}{hdlc\+\_\+run\+\_\+rx()}.
+\item on\+\_\+frame\+\_\+sent() is called by H\+D\+LC implementation every time, new frame is sent to TX. H\+D\+LC protocol requires only write\+\_\+func\+\_\+cb() to be defined. Other callbacks are optional. As for RX processes, your application code is responsible for reading data from RX line, then all you need to do, is to pass received bytes to H\+D\+LC implementation for processing via \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx()}.
 \end{DoxyItemize}
 
 All higher level protocols (\hyperlink{group__LIGHT__API}{Tiny light protocol A\+PI functions}, \hyperlink{group__HALF__DUPLEX__API}{Tiny Half Duplex A\+PI functions}) needs 4 callback functions, defined by a user\+: read\+\_\+func\+\_\+cb() is added. The list of callbacks\+:

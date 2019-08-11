@@ -3,7 +3,7 @@
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
+int \hyperlink{group__SIMPLE__API_gab9bfaed3c75551c8b7f3f8b25e766546}{tiny\+\_\+init} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle, \hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} write\+\_\+func, \hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} read\+\_\+func, void $\ast$pdata)
 \item 
 int \hyperlink{group__SIMPLE__API_ga48cf9ffab9eeb9665e61ae69e28938b8}{tiny\+\_\+close} (\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$handle)
 \item 
@@ -45,7 +45,7 @@ This function is not thread safe.
 \index{Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}!tiny\+\_\+init@{tiny\+\_\+init}}
 \index{tiny\+\_\+init@{tiny\+\_\+init}!Tiny simple A\+P\+I functions@{Tiny simple A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+init()}{tiny\_init()}}
-{\footnotesize\ttfamily int tiny\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$}]{handle,  }\item[{\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}}]{write\+\_\+func,  }\item[{\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{read\+\_\+func,  }\item[{void $\ast$}]{pdata }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int tiny\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{structSTinyData}{S\+Tiny\+Data} $\ast$}]{handle,  }\item[{\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}}]{write\+\_\+func,  }\item[{\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{read\+\_\+func,  }\item[{void $\ast$}]{pdata }\end{DoxyParamCaption})}
 
 The function initializes internal structures for Tiny channel and return handle to be used with all Tiny and I\+PC functions. 
 \begin{DoxyParams}{Parameters}
@@ -59,9 +59,9 @@ The function initializes internal structures for Tiny channel and return handle 
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{tiny__proto__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} 
 
-\hyperlink{tiny__proto__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} 
+\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} 
 \end{DoxySeeAlso}
 \begin{DoxyReturn}{Returns}
 T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+OR or error code. 

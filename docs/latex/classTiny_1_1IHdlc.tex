@@ -1,0 +1,219 @@
+\hypertarget{classTiny_1_1IHdlc}{}\section{Tiny\+:\+:I\+Hdlc Class Reference}
+\label{classTiny_1_1IHdlc}\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+
+
+{\ttfamily \#include $<$Tiny\+Hdlc.\+h$>$}
+
+
+
+Inheritance diagram for Tiny\+:\+:I\+Hdlc\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=145pt]{classTiny_1_1IHdlc__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Tiny\+:\+:I\+Hdlc\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=162pt]{classTiny_1_1IHdlc__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a15f85be7877d53d87f0cd74b65caf34f}\label{classTiny_1_1IHdlc_a15f85be7877d53d87f0cd74b65caf34f}} 
+{\bfseries I\+Hdlc} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle)
+\item 
+void \hyperlink{classTiny_1_1IHdlc_aa14687d45f4762e1a87b8a4afc871a4b}{begin} (\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
+\item 
+void \hyperlink{classTiny_1_1IHdlc_a549747579cf72e8809b2939104d42667}{begin\+To\+Serial} ()
+\item 
+void \hyperlink{classTiny_1_1IHdlc_aba569c97764fdd95e6f140ef51ea83f8}{end} ()
+\item 
+int \hyperlink{classTiny_1_1IHdlc_ab02dd87b4465ffb73fd409dffbe394d2}{write} (const char $\ast$buf, int size)
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_ae92a1f290170a66c134ed1590b8b6443}\label{classTiny_1_1IHdlc_ae92a1f290170a66c134ed1590b8b6443}} 
+virtual int {\bfseries on\+Rx\+Frame} (char $\ast$buf, int size)
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a9528b5ff0d144dec04a4cb9697375e57}\label{classTiny_1_1IHdlc_a9528b5ff0d144dec04a4cb9697375e57}} 
+int {\bfseries run\+Tx} ()
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_ab533b1df48de51f8fa3ddf618c3496c9}\label{classTiny_1_1IHdlc_ab533b1df48de51f8fa3ddf618c3496c9}} 
+int {\bfseries run\+Rx} ()
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a131c6ca93f267fff7c2f8b59449e562a}\label{classTiny_1_1IHdlc_a131c6ca93f267fff7c2f8b59449e562a}} 
+int {\bfseries run\+Rx} (const char $\ast$buf, int size)
+\item 
+int \hyperlink{classTiny_1_1IHdlc_a54c9d5e5be794fa119d526578392825a}{read} (char $\ast$buf, int size)
+\item 
+int \hyperlink{classTiny_1_1IHdlc_aca84fd7cf4d6b88e31064fc8bc43ddcb}{write} (\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&pkt)
+\item 
+int \hyperlink{classTiny_1_1IHdlc_a275940cd1c426e41b5201f011aa05723}{read} (\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&pkt)
+\item 
+void \hyperlink{classTiny_1_1IHdlc_aa96fa5be8ae3ee108258a4f0a6c14cba}{disable\+Crc} ()
+\item 
+bool \hyperlink{classTiny_1_1IHdlc_abb55ff8f38be7541b9b2bb4832c7ecda}{enable\+Check\+Sum} ()
+\item 
+bool \hyperlink{classTiny_1_1IHdlc_acedafa846397ca07002d2c6374d6d85e}{enable\+Crc16} ()
+\item 
+bool \hyperlink{classTiny_1_1IHdlc_a857e7423c3ac10f15fac95e23e2a3eee}{enable\+Crc32} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a4550680a75695031b9c5f914fdf343bb}\label{classTiny_1_1IHdlc_a4550680a75695031b9c5f914fdf343bb}} 
+\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} {\bfseries m\+\_\+hdlc} = nullptr
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a3b19d83868a66a269fcb130d54c3b522}\label{classTiny_1_1IHdlc_a3b19d83868a66a269fcb130d54c3b522}} 
+\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} {\bfseries m\+\_\+readcb} = nullptr
+\item 
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a92c9a1998fccaee756d1a2872312d22f}\label{classTiny_1_1IHdlc_a92c9a1998fccaee756d1a2872312d22f}} 
+\hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+crc\+\_\+t} {\bfseries m\+\_\+crc} = \hyperlink{group__HDLC__API_ggabb73b32d08d8e79eefe9385634a74bf7a5f34a095f94c39357e31badd2feb9426}{H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+\+D\+E\+F\+A\+U\+LT}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classTiny_1_1IHdlc}{I\+Hdlc} class incapsulates \hyperlink{classTiny_1_1Hdlc}{Hdlc} low level functionality. Remember that you may use always C-\/style A\+PI functions instead C++. Please refer to documentation. \hyperlink{classTiny_1_1IHdlc}{I\+Hdlc} is a class with basic functionality, user by higher levels implementations. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_aa14687d45f4762e1a87b8a4afc871a4b}\label{classTiny_1_1IHdlc_aa14687d45f4762e1a87b8a4afc871a4b}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!begin@{begin}}
+\index{begin@{begin}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Hdlc\+::begin (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb,  }\item[{\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb }\end{DoxyParamCaption})}
+
+Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1IHdlc_aba569c97764fdd95e6f140ef51ea83f8}{end()}. 
+\begin{DoxyParams}{Parameters}
+{\em writecb} & -\/ write function to some physical channel \\
+\hline
+{\em readcb} & -\/ read function from some physical channel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a549747579cf72e8809b2939104d42667}\label{classTiny_1_1IHdlc_a549747579cf72e8809b2939104d42667}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!begin\+To\+Serial@{begin\+To\+Serial}}
+\index{begin\+To\+Serial@{begin\+To\+Serial}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{begin\+To\+Serial()}{beginToSerial()}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Hdlc\+::begin\+To\+Serial (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initializes protocol internal variables and redirects communication through Arduino Serial connection (Serial). \begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_aa96fa5be8ae3ee108258a4f0a6c14cba}\label{classTiny_1_1IHdlc_aa96fa5be8ae3ee108258a4f0a6c14cba}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!disable\+Crc@{disable\+Crc}}
+\index{disable\+Crc@{disable\+Crc}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{disable\+Crc()}{disableCrc()}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Hdlc\+::disable\+Crc (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Disable C\+RC field in the protocol. If C\+RC field is O\+FF, then the frame looks like this\+: 0x7E databytes 0x7E. \mbox{\Hypertarget{classTiny_1_1IHdlc_abb55ff8f38be7541b9b2bb4832c7ecda}\label{classTiny_1_1IHdlc_abb55ff8f38be7541b9b2bb4832c7ecda}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!enable\+Check\+Sum@{enable\+Check\+Sum}}
+\index{enable\+Check\+Sum@{enable\+Check\+Sum}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{enable\+Check\+Sum()}{enableCheckSum()}}
+{\footnotesize\ttfamily bool Tiny\+::\+I\+Hdlc\+::enable\+Check\+Sum (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Enables C\+RC 8-\/bit field in the protocol. This field contains sum of all data bytes in the packet. 8-\/bit field is supported by Nano version of Tiny library. \begin{DoxyReturn}{Returns}
+true if successful false in case of error. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_acedafa846397ca07002d2c6374d6d85e}\label{classTiny_1_1IHdlc_acedafa846397ca07002d2c6374d6d85e}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!enable\+Crc16@{enable\+Crc16}}
+\index{enable\+Crc16@{enable\+Crc16}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{enable\+Crc16()}{enableCrc16()}}
+{\footnotesize\ttfamily bool Tiny\+::\+I\+Hdlc\+::enable\+Crc16 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Enables C\+RC 16-\/bit field in the protocol. This field contains F\+CS 16-\/bit C\+C\+I\+TT like defined in R\+FC 1662. 16-\/bit field is not supported by Nano version of Tiny library. \begin{DoxyReturn}{Returns}
+true if successful false in case of error. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a857e7423c3ac10f15fac95e23e2a3eee}\label{classTiny_1_1IHdlc_a857e7423c3ac10f15fac95e23e2a3eee}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!enable\+Crc32@{enable\+Crc32}}
+\index{enable\+Crc32@{enable\+Crc32}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{enable\+Crc32()}{enableCrc32()}}
+{\footnotesize\ttfamily bool Tiny\+::\+I\+Hdlc\+::enable\+Crc32 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Enables C\+RC 32-\/bit field in the protocol. This field contains F\+CS 32-\/bit C\+C\+I\+TT like defined in R\+FC 1662. 32-\/bit field is not supported by Nano version of Tiny library. \begin{DoxyReturn}{Returns}
+true if successful false in case of error. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_aba569c97764fdd95e6f140ef51ea83f8}\label{classTiny_1_1IHdlc_aba569c97764fdd95e6f140ef51ea83f8}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!end@{end}}
+\index{end@{end}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Hdlc\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Resets protocol state. \mbox{\Hypertarget{classTiny_1_1IHdlc_a54c9d5e5be794fa119d526578392825a}\label{classTiny_1_1IHdlc_a54c9d5e5be794fa119d526578392825a}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!read@{read}}
+\index{read@{read}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{read()}{read()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+I\+Hdlc\+::read (\begin{DoxyParamCaption}\item[{char $\ast$}]{buf,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+Reads data block from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ buffer to place data read from communication channel \\
+\hline
+{\em size} & -\/ maximum size of the buffer in bytes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is read positive -\/ number of bytes read from the channel 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_a275940cd1c426e41b5201f011aa05723}\label{classTiny_1_1IHdlc_a275940cd1c426e41b5201f011aa05723}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!read@{read}}
+\index{read@{read}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{read()}{read()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+I\+Hdlc\+::read (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&}]{pkt }\end{DoxyParamCaption})}
+
+Reads packet from communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & -\/ \hyperlink{classTiny_1_1Packet}{Packet} object to put data to \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Packet}{Packet} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is read positive -\/ \hyperlink{classTiny_1_1Packet}{Packet} is successfully received 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_ab02dd87b4465ffb73fd409dffbe394d2}\label{classTiny_1_1IHdlc_ab02dd87b4465ffb73fd409dffbe394d2}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!write@{write}}
+\index{write@{write}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+I\+Hdlc\+::write (\begin{DoxyParamCaption}\item[{const char $\ast$}]{buf,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+Sends data block over communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ data to send \\
+\hline
+{\em size} & -\/ length of the data in bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is sent positive -\/ should be equal to size parameter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IHdlc_aca84fd7cf4d6b88e31064fc8bc43ddcb}\label{classTiny_1_1IHdlc_aca84fd7cf4d6b88e31064fc8bc43ddcb}} 
+\index{Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}!write@{write}}
+\index{write@{write}!Tiny\+::\+I\+Hdlc@{Tiny\+::\+I\+Hdlc}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+I\+Hdlc\+::write (\begin{DoxyParamCaption}\item[{\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&}]{pkt }\end{DoxyParamCaption})}
+
+Sends packet over communication channel. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & -\/ \hyperlink{classTiny_1_1Packet}{Packet} to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classTiny_1_1Packet}{Packet} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+negative value in case of error zero if nothing is sent positive -\/ \hyperlink{classTiny_1_1Packet}{Packet} is successfully sent 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\hyperlink{TinyHdlc_8h}{Tiny\+Hdlc.\+h}\end{DoxyCompactItemize}

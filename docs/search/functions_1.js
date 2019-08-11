@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['clear',['clear',['../classTiny_1_1Packet.html#a9bfdb9244515ef3dbf1056c1e37d0902',1,'Tiny::Packet']]]
+  ['clear',['clear',['../classTiny_1_1IPacket.html#a6cc28c5235de6a9ce68bea546a4db17c',1,'Tiny::IPacket']]]
 ];

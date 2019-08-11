@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.0</span>
+   &#160;<span id="projectnumber">0.7.2</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -76,7 +76,7 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad27dfcef54a8316228469ef0a4267962"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#ad27dfcef54a8316228469ef0a4267962">begin</a> (<a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> writecb, <a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> readcb)</td></tr>
+<tr class="memitem:ad27dfcef54a8316228469ef0a4267962"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#ad27dfcef54a8316228469ef0a4267962">begin</a> (<a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> writecb, <a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> readcb)</td></tr>
 <tr class="separator:ad27dfcef54a8316228469ef0a4267962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50bf63fe1891edda48980ca2893485d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#a50bf63fe1891edda48980ca2893485d7">beginToSerial</a> ()</td></tr>
 <tr class="separator:a50bf63fe1891edda48980ca2893485d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -86,10 +86,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a46a27ee9d0b55c88672c98abf04dbdce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf18a8b73ee6c6394270c903ad7882b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#acf18a8b73ee6c6394270c903ad7882b8">read</a> (char *buf, int size)</td></tr>
 <tr class="separator:acf18a8b73ee6c6394270c903ad7882b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf2966531f8ed7dba44079f00eefded2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#abf2966531f8ed7dba44079f00eefded2">write</a> (<a class="el" href="classTiny_1_1Packet.html">Packet</a> &amp;pkt)</td></tr>
-<tr class="separator:abf2966531f8ed7dba44079f00eefded2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96c56b10b4eee28c09b291461c66fa54"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#a96c56b10b4eee28c09b291461c66fa54">read</a> (<a class="el" href="classTiny_1_1Packet.html">Packet</a> &amp;pkt)</td></tr>
-<tr class="separator:a96c56b10b4eee28c09b291461c66fa54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad980940fd5eca35204a70a5cfe5ccccd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#ad980940fd5eca35204a70a5cfe5ccccd">write</a> (<a class="el" href="classTiny_1_1IPacket.html">IPacket</a> &amp;pkt)</td></tr>
+<tr class="separator:ad980940fd5eca35204a70a5cfe5ccccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa040cbf16f9c074959fb410db6858b9b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#aa040cbf16f9c074959fb410db6858b9b">read</a> (<a class="el" href="classTiny_1_1IPacket.html">IPacket</a> &amp;pkt)</td></tr>
+<tr class="separator:aa040cbf16f9c074959fb410db6858b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af93e0591ca33137ad79ffb054953001c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#af93e0591ca33137ad79ffb054953001c">disableCrc</a> ()</td></tr>
+<tr class="separator:af93e0591ca33137ad79ffb054953001c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7b4ef5a43c187f0d1915efe7450bc40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#ad7b4ef5a43c187f0d1915efe7450bc40">enableCheckSum</a> ()</td></tr>
+<tr class="separator:ad7b4ef5a43c187f0d1915efe7450bc40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a110b654e476691518790edcc5bf1bd80"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#a110b654e476691518790edcc5bf1bd80">enableCrc16</a> ()</td></tr>
+<tr class="separator:a110b654e476691518790edcc5bf1bd80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ae8a3ace46234a65f83c564dc56fd26"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#a8ae8a3ace46234a65f83c564dc56fd26">enableCrc32</a> ()</td></tr>
+<tr class="separator:a8ae8a3ace46234a65f83c564dc56fd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classTiny_1_1ProtoLight.html">ProtoLight</a> class incapsulates Protocol functionality. Remember that you may use always C-style API functions instead C++. Please refer to documentation. </p>
@@ -103,13 +111,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Tiny::ProtoLight::begin </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a>&#160;</td>
           <td class="paramname"><em>writecb</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tiny__proto__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a>&#160;</td>
           <td class="paramname"><em>readcb</em>&#160;</td>
         </tr>
         <tr>
@@ -145,6 +153,78 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Initializes protocol internal variables and redirects communication through Arduino Serial connection (Serial). </p><dl class="section return"><dt>Returns</dt><dd>None </dd></dl>
+
+</div>
+</div>
+<a id="af93e0591ca33137ad79ffb054953001c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af93e0591ca33137ad79ffb054953001c">&#9670;&nbsp;</a></span>disableCrc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tiny::ProtoLight::disableCrc </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Disable CRC field in the protocol. If CRC field is OFF, then the frame looks like this: 0x7E databytes 0x7E. </p>
+
+</div>
+</div>
+<a id="ad7b4ef5a43c187f0d1915efe7450bc40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7b4ef5a43c187f0d1915efe7450bc40">&#9670;&nbsp;</a></span>enableCheckSum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Tiny::ProtoLight::enableCheckSum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enables CRC 8-bit field in the protocol. This field contains sum of all data bytes in the packet. 8-bit field is supported by Nano version of Tiny library. </p><dl class="section return"><dt>Returns</dt><dd>true if successful false in case of error. </dd></dl>
+
+</div>
+</div>
+<a id="a110b654e476691518790edcc5bf1bd80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a110b654e476691518790edcc5bf1bd80">&#9670;&nbsp;</a></span>enableCrc16()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Tiny::ProtoLight::enableCrc16 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enables CRC 16-bit field in the protocol. This field contains FCS 16-bit CCITT like defined in RFC 1662. 16-bit field is not supported by Nano version of Tiny library. </p><dl class="section return"><dt>Returns</dt><dd>true if successful false in case of error. </dd></dl>
+
+</div>
+</div>
+<a id="a8ae8a3ace46234a65f83c564dc56fd26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ae8a3ace46234a65f83c564dc56fd26">&#9670;&nbsp;</a></span>enableCrc32()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Tiny::ProtoLight::enableCrc32 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enables CRC 32-bit field in the protocol. This field contains FCS 32-bit CCITT like defined in RFC 1662. 32-bit field is not supported by Nano version of Tiny library. </p><dl class="section return"><dt>Returns</dt><dd>true if successful false in case of error. </dd></dl>
 
 </div>
 </div>
@@ -202,8 +282,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a96c56b10b4eee28c09b291461c66fa54"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96c56b10b4eee28c09b291461c66fa54">&#9670;&nbsp;</a></span>read() <span class="overload">[2/2]</span></h2>
+<a id="aa040cbf16f9c074959fb410db6858b9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa040cbf16f9c074959fb410db6858b9b">&#9670;&nbsp;</a></span>read() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -211,7 +291,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">int Tiny::ProtoLight::read </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classTiny_1_1Packet.html">Packet</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classTiny_1_1IPacket.html">IPacket</a> &amp;&#160;</td>
           <td class="paramname"><em>pkt</em></td><td>)</td>
           <td></td>
         </tr>
@@ -264,8 +344,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abf2966531f8ed7dba44079f00eefded2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf2966531f8ed7dba44079f00eefded2">&#9670;&nbsp;</a></span>write() <span class="overload">[2/2]</span></h2>
+<a id="ad980940fd5eca35204a70a5cfe5ccccd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad980940fd5eca35204a70a5cfe5ccccd">&#9670;&nbsp;</a></span>write() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,7 +353,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">int Tiny::ProtoLight::write </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classTiny_1_1Packet.html">Packet</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classTiny_1_1IPacket.html">IPacket</a> &amp;&#160;</td>
           <td class="paramname"><em>pkt</em></td><td>)</td>
           <td></td>
         </tr>

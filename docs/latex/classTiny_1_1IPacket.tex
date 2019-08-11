@@ -1,0 +1,277 @@
+\hypertarget{classTiny_1_1IPacket}{}\section{Tiny\+:\+:I\+Packet Class Reference}
+\label{classTiny_1_1IPacket}\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+
+
+{\ttfamily \#include $<$Tiny\+Packet.\+h$>$}
+
+
+
+Inheritance diagram for Tiny\+:\+:I\+Packet\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=177pt]{classTiny_1_1IPacket__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classTiny_1_1IPacket_af44b18c4c8481475d40d8b87a6cb38ff}{I\+Packet} (char $\ast$buf, size\+\_\+t \hyperlink{classTiny_1_1IPacket_a76b6389f0d47b67c8428c58c2b09df51}{size})
+\item 
+void \hyperlink{classTiny_1_1IPacket_a6cc28c5235de6a9ce68bea546a4db17c}{clear} ()
+\item 
+void \hyperlink{classTiny_1_1IPacket_a9d5ba62a453b9cd364c0e214c245f11d}{put} (uint8\+\_\+t byte)
+\item 
+void \hyperlink{classTiny_1_1IPacket_a9dd0344bbed4500af63a3f700d31945b}{put} (char chr)
+\item 
+void \hyperlink{classTiny_1_1IPacket_a4dd6118251a5557691e4ed358a3b2ddc}{put} (uint16\+\_\+t \hyperlink{classTiny_1_1IPacket_aedf2ba31c5a29e3829458bd9f03a7051}{data})
+\item 
+void \hyperlink{classTiny_1_1IPacket_a5ec37c88a536d710fb1561cd62f52c91}{put} (uint32\+\_\+t \hyperlink{classTiny_1_1IPacket_aedf2ba31c5a29e3829458bd9f03a7051}{data})
+\item 
+void \hyperlink{classTiny_1_1IPacket_abf21aef6652da2e975c8be13e6a643e9}{put} (int16\+\_\+t \hyperlink{classTiny_1_1IPacket_aedf2ba31c5a29e3829458bd9f03a7051}{data})
+\item 
+void \hyperlink{classTiny_1_1IPacket_a46eaf3eb0232288dfb36ce7cc01b12e5}{put} (const char $\ast$str)
+\item 
+void \hyperlink{classTiny_1_1IPacket_a5ebc1e6507e7255a8babddbae82dcb2a}{put} (const \hyperlink{classTiny_1_1IPacket}{I\+Packet} \&pkt)
+\item 
+uint8\+\_\+t \hyperlink{classTiny_1_1IPacket_ac3088a86a37df4d08d0f6ca961abf006}{get\+Byte} ()
+\item 
+char \hyperlink{classTiny_1_1IPacket_a0fea05a806c533be32c68bb3899bd596}{get\+Char} ()
+\item 
+uint16\+\_\+t \hyperlink{classTiny_1_1IPacket_a345d5d5791d5929c9a5f9bb2763f99a5}{get\+Uint16} ()
+\item 
+int16\+\_\+t \hyperlink{classTiny_1_1IPacket_a9fd3b560b1f34e5d4c3e4a856bddc293}{get\+Int16} ()
+\item 
+uint32\+\_\+t \hyperlink{classTiny_1_1IPacket_a0a0d3758ca0f61e3eee9d20a7142de8d}{get\+Uint32} ()
+\item 
+char $\ast$ \hyperlink{classTiny_1_1IPacket_ac6e6a22ce9a652954491a8d4db081d79}{get\+String} ()
+\item 
+size\+\_\+t \hyperlink{classTiny_1_1IPacket_a76b6389f0d47b67c8428c58c2b09df51}{size} () const
+\item 
+size\+\_\+t \hyperlink{classTiny_1_1IPacket_a0a448d8efe2b6db3ee826f23b184b395}{max\+Size} () const
+\item 
+char $\ast$ \hyperlink{classTiny_1_1IPacket_aedf2ba31c5a29e3829458bd9f03a7051}{data} ()
+\item 
+uint8\+\_\+t \& \hyperlink{classTiny_1_1IPacket_aa1d796806e21d1c72a1fc12d2f6db592}{operator\mbox{[}$\,$\mbox{]}} (size\+\_\+t idx)
+\item 
+\hyperlink{classTiny_1_1IPacket}{I\+Packet} \& \hyperlink{classTiny_1_1IPacket_a215a30775140c2977b7064c91eada17e}{operator=} (char chr)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTiny_1_1IPacket_acbcf3346413014c93a372add37dc3afc}\label{classTiny_1_1IPacket_acbcf3346413014c93a372add37dc3afc}} 
+class {\bfseries I\+Hdlc}
+\item 
+\mbox{\Hypertarget{classTiny_1_1IPacket_a7f90e063a34c3417ed1ea25e64608857}\label{classTiny_1_1IPacket_a7f90e063a34c3417ed1ea25e64608857}} 
+class {\bfseries Proto\+Hd}
+\item 
+\mbox{\Hypertarget{classTiny_1_1IPacket_a1d317236f2a79fa559d5a9112e555882}\label{classTiny_1_1IPacket_a1d317236f2a79fa559d5a9112e555882}} 
+class {\bfseries Proto\+Light}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Describes packet entity and provides A\+PI methods to manipulate the packet. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTiny_1_1IPacket_af44b18c4c8481475d40d8b87a6cb38ff}\label{classTiny_1_1IPacket_af44b18c4c8481475d40d8b87a6cb38ff}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!I\+Packet@{I\+Packet}}
+\index{I\+Packet@{I\+Packet}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{I\+Packet()}{IPacket()}}
+{\footnotesize\ttfamily Tiny\+::\+I\+Packet\+::\+I\+Packet (\begin{DoxyParamCaption}\item[{char $\ast$}]{buf,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Creates packet object. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & -\/ pointer to the buffer to store packet data \\
+\hline
+{\em size} & -\/ size of the buffer to hold packet data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+passed buffer must exist all lifecycle of the \hyperlink{classTiny_1_1Packet}{Packet} object. 
+\end{DoxyNote}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a6cc28c5235de6a9ce68bea546a4db17c}\label{classTiny_1_1IPacket_a6cc28c5235de6a9ce68bea546a4db17c}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!clear@{clear}}
+\index{clear@{clear}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Clears \hyperlink{classTiny_1_1Packet}{Packet} state. Buffer and its size are preserved. \mbox{\Hypertarget{classTiny_1_1IPacket_aedf2ba31c5a29e3829458bd9f03a7051}\label{classTiny_1_1IPacket_aedf2ba31c5a29e3829458bd9f03a7051}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!data@{data}}
+\index{data@{data}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily char$\ast$ Tiny\+::\+I\+Packet\+::data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns size of payload data in the received packet. \begin{DoxyReturn}{Returns}
+size of payload data. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_ac3088a86a37df4d08d0f6ca961abf006}\label{classTiny_1_1IPacket_ac3088a86a37df4d08d0f6ca961abf006}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!get\+Byte@{get\+Byte}}
+\index{get\+Byte@{get\+Byte}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{get\+Byte()}{getByte()}}
+{\footnotesize\ttfamily uint8\+\_\+t Tiny\+::\+I\+Packet\+::get\+Byte (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Reads next byte from the packet. \begin{DoxyReturn}{Returns}
+byte from the packet. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a0fea05a806c533be32c68bb3899bd596}\label{classTiny_1_1IPacket_a0fea05a806c533be32c68bb3899bd596}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!get\+Char@{get\+Char}}
+\index{get\+Char@{get\+Char}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{get\+Char()}{getChar()}}
+{\footnotesize\ttfamily char Tiny\+::\+I\+Packet\+::get\+Char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Reads next character from the packet. \begin{DoxyReturn}{Returns}
+character from the packet. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a9fd3b560b1f34e5d4c3e4a856bddc293}\label{classTiny_1_1IPacket_a9fd3b560b1f34e5d4c3e4a856bddc293}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!get\+Int16@{get\+Int16}}
+\index{get\+Int16@{get\+Int16}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{get\+Int16()}{getInt16()}}
+{\footnotesize\ttfamily int16\+\_\+t Tiny\+::\+I\+Packet\+::get\+Int16 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Reads next signed 16-\/bit integer from the packet. \begin{DoxyReturn}{Returns}
+signed 16-\/bit integer. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_ac6e6a22ce9a652954491a8d4db081d79}\label{classTiny_1_1IPacket_ac6e6a22ce9a652954491a8d4db081d79}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!get\+String@{get\+String}}
+\index{get\+String@{get\+String}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{get\+String()}{getString()}}
+{\footnotesize\ttfamily char$\ast$ Tiny\+::\+I\+Packet\+::get\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Reads zero-\/terminated string from the packet. \begin{DoxyReturn}{Returns}
+zero-\/terminated string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a345d5d5791d5929c9a5f9bb2763f99a5}\label{classTiny_1_1IPacket_a345d5d5791d5929c9a5f9bb2763f99a5}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!get\+Uint16@{get\+Uint16}}
+\index{get\+Uint16@{get\+Uint16}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{get\+Uint16()}{getUint16()}}
+{\footnotesize\ttfamily uint16\+\_\+t Tiny\+::\+I\+Packet\+::get\+Uint16 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Reads next unsigned 16-\/bit integer from the packet. \begin{DoxyReturn}{Returns}
+unsigned 16-\/bit integer. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a0a0d3758ca0f61e3eee9d20a7142de8d}\label{classTiny_1_1IPacket_a0a0d3758ca0f61e3eee9d20a7142de8d}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!get\+Uint32@{get\+Uint32}}
+\index{get\+Uint32@{get\+Uint32}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{get\+Uint32()}{getUint32()}}
+{\footnotesize\ttfamily uint32\+\_\+t Tiny\+::\+I\+Packet\+::get\+Uint32 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Reads next unsigned 32-\/bit integer from the packet. \begin{DoxyReturn}{Returns}
+unsigned 32-\/bit integer. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a0a448d8efe2b6db3ee826f23b184b395}\label{classTiny_1_1IPacket_a0a448d8efe2b6db3ee826f23b184b395}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!max\+Size@{max\+Size}}
+\index{max\+Size@{max\+Size}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{max\+Size()}{maxSize()}}
+{\footnotesize\ttfamily size\+\_\+t Tiny\+::\+I\+Packet\+::max\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns maximum size of packet buffer. \begin{DoxyReturn}{Returns}
+max size of packet buffer. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a215a30775140c2977b7064c91eada17e}\label{classTiny_1_1IPacket_a215a30775140c2977b7064c91eada17e}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!operator=@{operator=}}
+\index{operator=@{operator=}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \hyperlink{classTiny_1_1IPacket}{I\+Packet}\& Tiny\+::\+I\+Packet\+::operator= (\begin{DoxyParamCaption}\item[{char}]{chr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Assign operator = puts next char to the packet. Several assign operators put one by one several chars. \mbox{\Hypertarget{classTiny_1_1IPacket_aa1d796806e21d1c72a1fc12d2f6db592}\label{classTiny_1_1IPacket_aa1d796806e21d1c72a1fc12d2f6db592}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{operator[]()}{operator[]()}}
+{\footnotesize\ttfamily uint8\+\_\+t\& Tiny\+::\+I\+Packet\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{idx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+You may refer to \hyperlink{classTiny_1_1Packet}{Packet} payload data directly by using operator \mbox{[}\mbox{]} \mbox{\Hypertarget{classTiny_1_1IPacket_a9d5ba62a453b9cd364c0e214c245f11d}\label{classTiny_1_1IPacket_a9d5ba62a453b9cd364c0e214c245f11d}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{put()}{put()}\hspace{0.1cm}{\footnotesize\ttfamily [1/7]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::put (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{byte }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Puts next byte to the packet. For example, after calling this method twice\+: put(5), put(10), -\/ the \hyperlink{classTiny_1_1Packet}{Packet} will contain 5,10. 
+\begin{DoxyParams}{Parameters}
+{\em byte} & -\/ data byte to put. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a9dd0344bbed4500af63a3f700d31945b}\label{classTiny_1_1IPacket_a9dd0344bbed4500af63a3f700d31945b}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{put()}{put()}\hspace{0.1cm}{\footnotesize\ttfamily [2/7]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::put (\begin{DoxyParamCaption}\item[{char}]{chr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Puts next char to the packet. For example, after calling this method twice\+: put(\textquotesingle{}a\textquotesingle{}), put(\textquotesingle{}c\textquotesingle{}), -\/ the \hyperlink{classTiny_1_1Packet}{Packet} will contain \textquotesingle{}ac\textquotesingle{}. 
+\begin{DoxyParams}{Parameters}
+{\em chr} & -\/ character to put. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a4dd6118251a5557691e4ed358a3b2ddc}\label{classTiny_1_1IPacket_a4dd6118251a5557691e4ed358a3b2ddc}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{put()}{put()}\hspace{0.1cm}{\footnotesize\ttfamily [3/7]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::put (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Puts next 16-\/bit unsigned integer to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ data to put. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a5ec37c88a536d710fb1561cd62f52c91}\label{classTiny_1_1IPacket_a5ec37c88a536d710fb1561cd62f52c91}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{put()}{put()}\hspace{0.1cm}{\footnotesize\ttfamily [4/7]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::put (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Puts next 32-\/bit unsigned integer to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ data to put. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IPacket_abf21aef6652da2e975c8be13e6a643e9}\label{classTiny_1_1IPacket_abf21aef6652da2e975c8be13e6a643e9}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{put()}{put()}\hspace{0.1cm}{\footnotesize\ttfamily [5/7]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::put (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Puts next 16-\/bit signed integer to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em data} & -\/ data to put. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a46eaf3eb0232288dfb36ce7cc01b12e5}\label{classTiny_1_1IPacket_a46eaf3eb0232288dfb36ce7cc01b12e5}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{put()}{put()}\hspace{0.1cm}{\footnotesize\ttfamily [6/7]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::put (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Puts next null-\/terminated string to the packet. 
+\begin{DoxyParams}{Parameters}
+{\em str} & -\/ string to put. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a5ebc1e6507e7255a8babddbae82dcb2a}\label{classTiny_1_1IPacket_a5ebc1e6507e7255a8babddbae82dcb2a}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!put@{put}}
+\index{put@{put}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{put()}{put()}\hspace{0.1cm}{\footnotesize\ttfamily [7/7]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Packet\+::put (\begin{DoxyParamCaption}\item[{const \hyperlink{classTiny_1_1IPacket}{I\+Packet} \&}]{pkt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds data from packet to the new packet being built. 
+\begin{DoxyParams}{Parameters}
+{\em pkt} & -\/ reference to the \hyperlink{classTiny_1_1Packet}{Packet} to add. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IPacket_a76b6389f0d47b67c8428c58c2b09df51}\label{classTiny_1_1IPacket_a76b6389f0d47b67c8428c58c2b09df51}} 
+\index{Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}!size@{size}}
+\index{size@{size}!Tiny\+::\+I\+Packet@{Tiny\+::\+I\+Packet}}
+\subsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily size\+\_\+t Tiny\+::\+I\+Packet\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns size of payload data in the received packet. \begin{DoxyReturn}{Returns}
+size of payload data. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\hyperlink{TinyPacket_8h}{Tiny\+Packet.\+h}\end{DoxyCompactItemize}
