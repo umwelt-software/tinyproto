@@ -31,10 +31,11 @@ void setup() {
 void loop()
 {
     /* Prepare data you want to send here */
-    char outBuf[6] = "HELLO";
+    Tiny::Packet<6> packet;
+    packet.put( "HELLO" );
 
     /* Send packet over UART to other side */
-    proto.write(outBuf, 4);
+    proto.write(packet);
 
     /* We send HELLO packet every 1 second */
     unsigned long start = millis();

@@ -55,7 +55,7 @@ static int tiny_light_clear_stat(STinyLightData *handle)
     handle->stat.framesReceived = 0;
     handle->stat.framesSent = 0;
     handle->stat.oosyncBytes = 0;
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 #endif
 
@@ -97,7 +97,7 @@ int tiny_light_init(void *handle,
     tiny_light_clear_stat((STinyLightData *)handle);
 #endif
     hdlc_init( &((STinyLightData *)handle)->_hdlc );
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ int tiny_light_close(void *handle)
     }
     ((STinyLightData *)handle)->read_func = 0;
     hdlc_close( &((STinyLightData *)handle)->_hdlc );
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 /**************************************************************
@@ -135,20 +135,8 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 
 int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 {
-    if ( hdlc_put( &((STinyLightData *)handle)->_hdlc, pbuf, len ) < 0 )
-    {
-        return TINY_ERR_FAILED;
-    }
-    ((STinyLightData *)handle)->_sent = 0;
-    while ( ((STinyLightData *)handle)->_sent == 0 )
-    {
-        int result = hdlc_run_tx( &((STinyLightData *)handle)->_hdlc );
-        if ( result < 0 )
-        {
-            break;
-        }
-    }
-    return ((STinyLightData *)handle)->_sent ? len: TINY_ERR_FAILED;
+    int result = hdlc_send( &((STinyLightData *)handle)->_hdlc, pbuf, len, 1000 );
+    return result >= 0 ? len: result;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

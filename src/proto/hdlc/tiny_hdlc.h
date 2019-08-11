@@ -2,6 +2,7 @@
 
 #include "proto/hal/tiny_types.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -94,11 +95,18 @@ typedef struct _hdlc_handle_t
      */
     hdlc_crc_t crc_type;
 
+    /**
+     * Set this to true, if you want to implements TX data transmission in separate
+     * thread from the threads, which call hdlc_send().
+     */
+    bool multithread_mode;
+
     /** User data, which will be passed to user-defined callback as first argument */
     void *user_data;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     /** Parameters in DOXYGEN_SHOULD_SKIP_THIS section should not be modified by a user */
+    tiny_mutex_t send_mutex;
     tiny_events_t events;
     struct
     {
@@ -175,35 +183,36 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, int *e
 int hdlc_run_tx( hdlc_handle_t handle );
 
 /**
- * Runs transmission at hdlc level. If there is frame to send, or
- * send is in progress, this function will call send_tx() callback
- * multiple times. This function will return immediately if nothing
- * to send. If send_tx() callback reports 0, the function will retry
- * sending infinitely until frame is sent or error is received.
- *
- * @warning this function must be called from one thread only, if you
- *          have severals threads, sending data.
- *
- * @param handle handle to hdlc instance
- * @return negative value in case of error
- *         0 if hw is busy, or no data is waiting for sending
- *         positive number of bytes passed to hw channel.
- */
-int hdlc_run_tx_until_sent( hdlc_handle_t handle );
-
-/**
  * Puts next frame for sending. This function is thread-safe.
  * You may call it from parallel threads.
+ *
+ * If multithread_mode is specificed for hdlc protocol, then
+ * hdlc_send() function will wait for specified timeout until
+ * some tx thread, implemented by application, completes sending
+ * of the frame.
+ *
+ * If multithread_mode is disabled for hdlc protocol, then
+ * hdlc_send() function will start frame sending immediately by
+ * itself if TX line is not busy. In this case hdlc_send() will
+ * block until frame is sent or timeout.
+ *
+ * If timeout is specified as 0, hdlc_send() function will not
+ * wait or perform send operation, but only pass dtaa pointer to
+ * hdlc state machine.
  *
  * @param handle handle to hdlc instance
  * @param data pointer to new data to send
  * @param len size of data to send in bytes
- * @return -1 if output queue is busy
- *         0 if pointer to data is passed to output queue
+ * @param timeout time in milliseconds to wait for data to be sent
+ * @return TINY_ERR_FAILED if generic error happens
+ *         TINY_ERR_TIMEOUT if TX queue is busy for specified timeout period
+ *         TINY_SUCCESS if data is successfully sent
  * @warning buffer with data must be available all the time until
- *          data are actually sent to tx hw channel
+ *          data are actually sent to tx hw channel. That is if you use
+ *          zero timeout, you need to use callback to understand, when buffer
+ *          is not longer needed at hdlc level.
  */
-int hdlc_put( hdlc_handle_t handle, const void *data, int len );
+int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout );
 
 /**
  * Sets new RX buffer for hdlc protocol. This function is not thread-safe.

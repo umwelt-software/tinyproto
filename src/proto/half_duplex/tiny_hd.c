@@ -29,7 +29,6 @@
 static int write_func_cb(void *user_data, const void *data, int len);
 static int on_frame_read(void *user_data, void *data, int len);
 static int on_frame_sent(void *user_data, const void *data, int len);
-static int send_complete(STinyHdData *handle, const uint8_t *pbuf, int len);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -83,8 +82,8 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
         data[0] = (request.uid >> 8) & 0xFF;
         data[1] = request.uid & 0xFF;
         memcpy( data + sizeof(uint16_t), buf, len);
-        result = send_complete( handle, data, len + sizeof(uint16_t));
-        if (result <= 0)
+        result = hdlc_send( &handle->_hdlc , data, len + sizeof(uint16_t), handle->timeout);
+        if (result < 0)
         {
             tiny_remove_request(&request);
             return result;
@@ -131,8 +130,8 @@ static int on_frame_read(void *user_data, void *data, int len)
         uint8_t *buf = (uint8_t *)handle->_hdlc.rx_buf + handle->_hdlc.rx_buf_size;
         buf[0] = (uid >> 8) & 0xFF;
         buf[1] = uid & 0xFF;
-        int result = send_complete( handle, buf, sizeof(uid) );
-        if ( result <= 0)
+        int result = hdlc_send( &handle->_hdlc, buf, sizeof(uid), handle->timeout );
+        if ( result < 0)
         {
             return result; // return error if failed to send ACK
         }
@@ -152,30 +151,6 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 {
     ((STinyHdData *)user_data)->_sent++;
     return len;
-}
-
-static int send_complete(STinyHdData *handle, const uint8_t *pbuf, int len)
-{
-    // put buffer for sending
-    if ( hdlc_put( &handle->_hdlc, pbuf, len ) < 0 )
-    {
-        return TINY_ERR_FAILED;
-    }
-    handle->_sent = 0;
-    while ( handle->_sent == 0 )
-    {
-        int result = hdlc_run_tx( &handle->_hdlc );
-        if ( result < 0 )
-        {
-            break;
-        }
-    }
-#if 0
-    printf("TX ID:%p ", handle);
-    for (int i=0; i<len; i++) printf("%02X ", pbuf[i]);
-    printf("\n");
-#endif
-    return handle->_sent ? len: TINY_ERR_FAILED;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -57,9 +57,7 @@ extern "C" {
  * @{
  */
 /// Tiny operation successful. Only tiny_send_start and tiny_read_start functions return this code
-#define TINY_SUCCESS                    (1)
-/// No error. For tiny_send and tiny_read functions, this means, no data sent or received
-#define TINY_NO_ERROR                   (0)
+#define TINY_SUCCESS                    (0)
 /// Timeout
 #define TINY_ERR_FAILED                 (-1)
 /// Timeout happened. The function must be called once again.

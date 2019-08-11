@@ -44,18 +44,7 @@ TinyHdlcHelper::TinyHdlcHelper(FakeChannel * channel,
 
 int TinyHdlcHelper::send(uint8_t *buf, int len)
 {
-    int result = hdlc_put( &m_handle, (uint8_t *)buf, len);
-    if ( result < 0 )
-    {
-        return result;
-    }
-    int temp_result;
-    result = 0;
-    do
-    {
-        temp_result = hdlc_run_tx( &m_handle );
-        result += temp_result;
-    } while ( temp_result > 0 );
+    int result = hdlc_send( &m_handle, (uint8_t *)buf, len, 1000);
     return result;
 }
 

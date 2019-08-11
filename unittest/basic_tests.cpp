@@ -61,8 +61,8 @@ TEST(BasicTests, TinyLayer2_Send_Receive)
 //        uid = 1000 * nsent;
         snprintf((char *)txbuf, sizeof(txbuf) - 1, "This is frame Number %u (stream %i)", nsent, 0);
         int result = helper1.send( NULL /*&uid*/, (uint8_t *)txbuf, strlen((char *)txbuf) + 1, flags);
-        CHECK( (result == TINY_NO_ERROR) || (result == TINY_ERR_TIMEOUT) || (result == ((int)strlen((char *)txbuf) + 1)) );
-        if ( result == TINY_NO_ERROR )
+        CHECK( (result == TINY_SUCCESS) || (result == TINY_ERR_TIMEOUT) || (result == ((int)strlen((char *)txbuf) + 1)) );
+        if ( result == TINY_SUCCESS )
         {
             flags = TINY_FLAG_NO_WAIT;
         }
@@ -72,7 +72,7 @@ TEST(BasicTests, TinyLayer2_Send_Receive)
             nsent++;
         }
         result = helper2.read( /* &rxuid */ NULL, (uint8_t *)rxbuf, sizeof(rxbuf), TINY_FLAG_NO_WAIT);
-        CHECK( (result == TINY_NO_ERROR) || (result > 0) );
+        CHECK( (result == TINY_SUCCESS) || (result > 0) );
         if ( result > 0 )
         {
             // strlen + \0 + sizeof(uid)
@@ -121,8 +121,8 @@ TEST(BasicTests, TinyLayer2_Send_Receive_Event_Based)
     {
         for(uint16_t i=0; i<nsent; i++) txbuf[i] = ( i+nsent ) % 256;
         int result = helper1.send( &nsent, (uint8_t *)txbuf, nsent, flags);
-        CHECK( (result == TINY_NO_ERROR) || (result == TINY_ERR_TIMEOUT) || (result == nsent) || (result == TINY_SUCCESS) );
-        if ( result == TINY_NO_ERROR )
+        CHECK( (result == TINY_SUCCESS) || (result == TINY_ERR_TIMEOUT) || (result == nsent) || (result == 1) );
+        if ( result == TINY_SUCCESS )
         {
             flags = TINY_FLAG_NO_WAIT;
         }

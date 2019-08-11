@@ -66,8 +66,7 @@ int IHdlc::runRx()
 
 int IHdlc::write(const char* buf, int size)
 {
-    hdlc_put( m_hdlc, (const char *)buf, size );
-    return hdlc_run_tx_until_sent( m_hdlc );
+    return hdlc_send( m_hdlc, (const char *)buf, size, 1000 );
 }
 
 int IHdlc::read(char *buf, int size)

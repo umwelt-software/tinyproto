@@ -173,7 +173,7 @@ int tiny_init(STinyData *handle,
 #ifdef CONFIG_ENABLE_STATS
     tiny_clear_stat(handle);
 #endif
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -190,14 +190,14 @@ int tiny_close(STinyData *handle)
     tiny_mutex_destroy(&handle->send_mutex);
     handle->write_func = 0;
     handle->read_func = 0;
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 int tiny_set_fcs_bits(STinyData *handle, uint8_t bits)
 {
-    int result = TINY_NO_ERROR;
+    int result = TINY_SUCCESS;
     switch (bits)
     {
 #ifdef CONFIG_ENABLE_FCS16
@@ -252,7 +252,7 @@ static int __send_frame_flag_state(STinyData *handle)
     }
     if (result == 0)
     {
-        return TINY_NO_ERROR;
+        return TINY_SUCCESS;
     }
     if (handle->tx.inprogress == TINY_TX_STATE_IDLE)
     {
@@ -302,9 +302,9 @@ static int __send_byte_state(STinyData *handle, uint8_t byte)
     handle->tx.prevbyte = byte;
     if ( TINY_ESCAPE_CHAR == byte )
     {
-        return TINY_NO_ERROR;
+        return TINY_SUCCESS;
     }
-    return TINY_SUCCESS;
+    return 1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -331,15 +331,15 @@ static int __send_frame_data_state(STinyData *handle)
         /* sending crc */
         handle->tx.inprogress = handle->fcs_bits ? TINY_TX_STATE_SEND_CRC : TINY_TX_STATE_END;
         handle->tx.bits = (uint8_t)-8;
-        return TINY_SUCCESS;
+        return 1;
     }
     byte = handle->tx.pframe[handle->tx.sentbytes];
     result = __send_byte_state(handle, byte);
-    if ( result == TINY_SUCCESS )
+    if ( result == 1 )
     {
         __update_fcs_field(handle->fcs_bits, &handle->tx.fcs, byte);
         handle->tx.sentbytes++;
-        result = TINY_NO_ERROR;
+        result = TINY_SUCCESS;
     }
     return result;
 }
@@ -380,7 +380,7 @@ int tiny_send_start(STinyData *handle, uint8_t flags)
     }
 
     result = tiny_lock( handle, flags );
-    if (result != TINY_SUCCESS)
+    if (result != 1)
     {
         return result;
     }
@@ -421,7 +421,7 @@ int tiny_send_start(STinyData *handle, uint8_t flags)
 
 int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
 {
-    int result = TINY_NO_ERROR;
+    int result = TINY_SUCCESS;
 
     if (!handle)
     {
@@ -437,7 +437,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
     while (1)
     {
         result = __send_frame_data_state(handle);
-        if ( result == TINY_SUCCESS )
+        if ( result == 1 )
         {
             handle->tx.pframe = 0;
             handle->tx.blockIndex++;
@@ -447,7 +447,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
             break;
         }
         /* Repeat cycle if byte is sent successfully */
-        if (result == TINY_NO_ERROR)
+        if (result == TINY_SUCCESS)
         {
             continue;
         }
@@ -456,7 +456,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
             if ( result == TINY_ERR_BUSY )
             {
                 tiny_sleep(0);
-                result = TINY_NO_ERROR;
+                result = TINY_SUCCESS;
             }
             else
             {
@@ -479,7 +479,7 @@ int tiny_send_buffer(STinyData *handle, uint8_t * pbuf, int len, uint8_t flags)
  */
 int tiny_send_end(STinyData *handle, uint8_t flags)
 {
-    int result = TINY_NO_ERROR;
+    int result = TINY_SUCCESS;
 
     if (!handle)
     {
@@ -499,7 +499,7 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
         {
             STATS(handle->stat.framesSent++);
             tiny_unlock(handle);
-            result = TINY_SUCCESS;
+            result = 1;
             break;
         }
         /* Repeat if byte is sent successfully */
@@ -514,7 +514,7 @@ int tiny_send_end(STinyData *handle, uint8_t flags)
             if ( result == TINY_ERR_BUSY )
             {
                 tiny_sleep(0);
-                result = TINY_NO_ERROR;
+                result = TINY_SUCCESS;
             }
             else
             {
@@ -553,13 +553,13 @@ void tiny_send_terminate(STinyData *handle)
  */
 int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t flags)
 {
-    int result = TINY_NO_ERROR;
+    int result = TINY_SUCCESS;
     if ( flags & (TINY_FLAG_LOCK_SEND|TINY_FLAG_WAIT_FOREVER) )
     {
         result = tiny_send_start(handle, flags);
-        if (result == TINY_SUCCESS)
+        if (result == 1)
         {
-            result = TINY_NO_ERROR;
+            result = TINY_SUCCESS;
             handle->tx.blockIndex++;
             if (!uid)
             {
@@ -583,7 +583,7 @@ int tiny_send(STinyData *handle, uint16_t *uid, uint8_t * pbuf, int len, uint8_t
     if ( handle->tx.blockIndex == 3 )
     {
         result = tiny_send_end(handle, flags);
-        if (result == TINY_SUCCESS)
+        if (result == 1)
         {
             if (len != 0)
             {
@@ -639,7 +639,7 @@ int tiny_on_rx_byte(STinyData * handle, uint8_t *pbuf, int len, uint8_t byte)
         handle->rx.bits = 0;
         handle->rx.inprogress = TINY_RX_STATE_READ_DATA;
         __init_fcs_field(handle->fcs_bits, &handle->rx.fcs);
-        return TINY_SUCCESS;
+        return 1;
     }
     /* If next byte after 0x7E is 0x7E, tiny data have wrong frame alignment.
        Start to read new frame and register error. */
@@ -693,7 +693,7 @@ int tiny_on_rx_byte(STinyData * handle, uint8_t *pbuf, int len, uint8_t byte)
         }
         STATS(handle->stat.bytesReceived += handle->rx.framelen);
         STATS(handle->stat.framesReceived++);
-        return TINY_SUCCESS;
+        return 1;
     }
     /* If escape char is received - wait for second char */
     if (byte == TINY_ESCAPE_CHAR)
@@ -701,7 +701,7 @@ int tiny_on_rx_byte(STinyData * handle, uint8_t *pbuf, int len, uint8_t byte)
         /* Remember last byte received */
         handle->rx.prevbyte = byte;
         /* Read next byte */
-        return TINY_NO_ERROR;
+        return TINY_SUCCESS;
     }
     /* If previous byte is 0x7D, we should decode the byte after */
     if (TINY_ESCAPE_CHAR == handle->rx.prevbyte)
@@ -731,14 +731,14 @@ int tiny_on_rx_byte(STinyData * handle, uint8_t *pbuf, int len, uint8_t byte)
             break;
     }
     __update_fcs_field(handle->fcs_bits, &handle->rx.fcs, byte);
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
 int tiny_read_start(STinyData * handle, uint8_t flags)
 {
-    int                 result = TINY_NO_ERROR;
+    int                 result = TINY_SUCCESS;
     uint8_t             byte;
 
     if (!handle)
@@ -769,7 +769,7 @@ int tiny_read_start(STinyData * handle, uint8_t flags)
             /* Ok, we're at the beginning of new frame. Init state machine. */
             handle->rx.prevbyte = byte;
             __init_fcs_field(handle->fcs_bits, &handle->rx.fcs);
-            result = TINY_SUCCESS;
+            result = 1;
             break;
         }
         else if (result<0)
@@ -917,16 +917,16 @@ void tiny_read_terminate(STinyData *handle)
 
 int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t flags)
 {
-    int result = TINY_NO_ERROR;
+    int result = TINY_SUCCESS;
     if (handle->rx.inprogress == TINY_TX_STATE_IDLE)
     {
         result = tiny_read_start( handle, flags );
-        if (result == TINY_SUCCESS )
+        if (result == 1 )
         {
             handle->rx.inprogress = TINY_RX_STATE_START;
             handle->rx.blockIndex = 1;
             if (!uid) handle->rx.blockIndex++;
-            result = TINY_NO_ERROR;
+            result = TINY_SUCCESS;
         }
     }
     if (handle->rx.inprogress != TINY_TX_STATE_IDLE)
@@ -936,7 +936,7 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
             result = tiny_read_buffer( handle, (uint8_t *)uid, sizeof(uint16_t), flags );
             if ( result == TINY_ERR_AGAIN )
             {
-                result = TINY_NO_ERROR;
+                result = TINY_SUCCESS;
             }
             if ( result == TINY_ERR_DATA_TOO_LARGE )
             {
@@ -948,7 +948,7 @@ int tiny_read(STinyData *handle, uint16_t *uid, uint8_t *pbuf, int len, uint8_t 
             result = tiny_read_buffer( handle, pbuf, len, flags | TINY_FLAG_READ_ALL );
             if ( result == TINY_ERR_AGAIN )
             {
-                result = TINY_NO_ERROR;
+                result = TINY_SUCCESS;
             }
             /* Call read callback if callback is defined */
             else if (result >= 0)
@@ -1003,7 +1003,7 @@ int tiny_get_stat(STinyData *handle, STinyStats *stat)
     if (!handle)
         return TINY_ERR_INVALID_DATA;
     *stat = handle->stat;
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1018,7 +1018,7 @@ int tiny_clear_stat(STinyData *handle)
     handle->stat.framesReceived = 0;
     handle->stat.framesSent = 0;
     handle->stat.oosyncBytes = 0;
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 #endif /* CONFIG_ENABLE_STATS */
@@ -1043,7 +1043,7 @@ int tiny_set_callbacks(STinyData *handle,
         handle->write_cb = send_cb;
     }
     tiny_unlock( handle );
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1066,7 +1066,7 @@ int tiny_get_callbacks(STinyData *handle,
         *send_cb = handle->write_cb;
     }
     tiny_unlock( handle );
-    return TINY_NO_ERROR;
+    return TINY_SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1077,12 +1077,12 @@ int tiny_lock(STinyData *handle, uint8_t flags)
     {
          tiny_mutex_lock(&handle->send_mutex);
          handle->tx.locked = 1;
-         return TINY_SUCCESS;
+         return 1;
     }
     if (tiny_mutex_try_lock(&handle->send_mutex) != 0)
     {
          handle->tx.locked = 1;
-         return TINY_SUCCESS;
+         return 1;
     }
     return TINY_ERR_FAILED;
 }

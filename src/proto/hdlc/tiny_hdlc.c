@@ -11,6 +11,8 @@ enum
 {
     TX_ACCEPT_BIT = 0x01,
     TX_DATA_READY_BIT = 0x02,
+    TX_DATA_SENT_BIT = 0x04,
+    RX_DATA_READY_BIT = 0x08,
 };
 
 static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len );
@@ -38,6 +40,7 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
     {
         hdlc_info->crc_type = 0;
     }
+    tiny_mutex_create( &hdlc_info->send_mutex );
     tiny_events_create( &hdlc_info->events );
     tiny_events_set( &hdlc_info->events, TX_ACCEPT_BIT );
     // Must be last
@@ -56,6 +59,7 @@ int hdlc_close( hdlc_handle_t handle )
         }
     }
     tiny_events_destroy( &handle->events );
+    tiny_mutex_destroy( &handle->send_mutex );
     return 0;
 }
 
@@ -195,6 +199,7 @@ static int hdlc_send_end( hdlc_handle_t handle )
             handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
                                    handle->tx.data - handle->tx.origin_data );
         }
+        tiny_events_set( &handle->events, TX_DATA_SENT_BIT );
         tiny_events_set( &handle->events, TX_ACCEPT_BIT );
     }
     return result;
@@ -216,40 +221,62 @@ int hdlc_run_tx( hdlc_handle_t handle )
     return result;
 }
 
-int hdlc_run_tx_until_sent( hdlc_handle_t handle )
+static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
 {
+    uint32_t ts = tiny_millis();
     int result = 0;
-    do
+    for(;;)
     {
-        int temp_result = handle->tx.state( handle );
-        if ( temp_result < 0 )
+        result = handle->tx.state( handle );
+        if ( result < 0 )
+            break;
+        uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, 1, 0 );
+        if  ( bits != 0 )
         {
-            result = result ? result: temp_result;
+            result = TINY_SUCCESS;
             break;
         }
-        result += temp_result;
-    } while ( handle->tx.state != hdlc_send_start );
+        if ( (uint32_t)(tiny_millis() - ts) >= timeout && timeout != 0xFFFFFFFF )
+        {
+            result = TINY_ERR_TIMEOUT;
+            break;
+        }
+    };
     return result;
 }
 
-int hdlc_send( hdlc_handle_t handle, const void *data, int len )
+static int hdlc_put( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
 {
-    return 0;
-}
-
-int hdlc_put( hdlc_handle_t handle, const void *data, int len )
-{
-    if ( tiny_events_wait( &handle->events, TX_ACCEPT_BIT, 1, 0 ) == 0 )
+    if ( tiny_events_wait( &handle->events, TX_ACCEPT_BIT, 1, timeout ) == 0 )
     {
-        return 0;
+        return TINY_ERR_TIMEOUT;
     }
     handle->tx.origin_data = data;
     handle->tx.data = data;
     handle->tx.len = len;
     tiny_events_set( &handle->events, TX_DATA_READY_BIT );
-    return 1;
+    return TINY_SUCCESS;
 }
 
+int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
+{
+    tiny_mutex_lock( &handle->send_mutex );
+    int result = hdlc_put( handle, data, len, timeout );
+    if ( result >= 0 && timeout)
+    {
+        if ( handle->multithread_mode )
+        {
+            uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, 1, timeout );
+            result = bits == 0 ? TINY_ERR_FAILED: TINY_SUCCESS;
+        }
+        else
+        {
+            result = hdlc_run_tx_until_sent( handle, timeout );
+        }
+    }
+    tiny_mutex_unlock( &handle->send_mutex );
+    return result;
+}
 
 static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len )
 {
@@ -357,9 +384,11 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
         // CRC calculate issue
         return 0;
     }
+    handle->rx.len -= (uint8_t)handle->crc_type / 8;
+    tiny_events_set( &handle->events, RX_DATA_READY_BIT );
     if ( handle->on_frame_read )
     {
-        handle->on_frame_read( handle->user_data, handle->rx.data, handle->rx.len - (uint8_t)handle->crc_type / 8 );
+        handle->on_frame_read( handle->user_data, handle->rx.data, handle->rx.len );
     }
     return 0;
 }
@@ -376,6 +405,8 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
             {
                 *error = temp_result;
             }
+            // Just clear this bit, since the caller doesn't want to wait for any frame
+            tiny_events_clear( &handle->events, RX_DATA_READY_BIT );
             break;
         }
         data=(uint8_t *)data + temp_result;
@@ -395,23 +426,28 @@ void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size)
 int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, int *error )
 {
     int result = 0;
-    do
+    for(;;)
     {
         uint8_t data;
-        int temp_result = readcb( handle->user_data, &data, sizeof(data) );
-        if ( temp_result > 0 )
+        result = readcb( handle->user_data, &data, sizeof(data) );
+        if ( result > 0 )
         {
-            temp_result = handle->rx.state( handle, &data, temp_result );
+            result = handle->rx.state( handle, &data, result );
         }
-        if ( temp_result < 0 )
+        if ( result < 0 )
         {
             if ( error )
             {
-                *error = temp_result;
+                *error = result;
             }
             break;
         }
-        result += temp_result;
-    } while ( handle->rx.state != hdlc_read_start );
+        uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, 1, 0 );
+        if ( bits )
+        {
+            result = handle->rx.len;
+            break;
+        }
+    };
     return result;
 }
