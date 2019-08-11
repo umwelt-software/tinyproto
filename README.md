@@ -6,7 +6,7 @@
   * [Key Features](#key-features)
   * [Supported platforms](#supported-platforms)
   * [Setting up](#setting-up)
-  * [Using hd_loopback tool](#using-hd-loopback-tool)
+  * [Using hd_loopback tool](#using-hd_loopback-tool)
   * [Running sperf](#running-sperf)
   * [License](#license)
 
