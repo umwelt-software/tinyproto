@@ -26,10 +26,10 @@
 
 void CloseSerial(SerialHandle port)
 {
-    PurgeComm(port, PURGE_RXABORT | PURGE_TXABORT | PURGE_RXCLEAR | PURGE_TXCLEAR);
-    if(port != INVALID_HANDLE_VALUE)
+    PurgeComm((HANDLE)port, PURGE_RXABORT | PURGE_TXABORT | PURGE_RXCLEAR | PURGE_TXCLEAR);
+    if(port != INVALID_SERIAL)
     {
-        CloseHandle(port);
+        CloseHandle((HANDLE)port);
     }
 }
 
@@ -37,14 +37,14 @@ static int SerialSettings(SerialHandle hPort, uint32_t baud)
 {
     DCB PortDCB;
     PortDCB.DCBlength = sizeof (DCB);
-    GetCommState (hPort, &PortDCB);
+    GetCommState ((void *)hPort, &PortDCB);
 
     PortDCB.BaudRate = baud;
     PortDCB.fBinary = TRUE;
     PortDCB.ByteSize = 8;
     PortDCB.Parity = NOPARITY;
     PortDCB.StopBits = ONESTOPBIT;
-    if (!SetCommState (hPort, &PortDCB))
+    if (!SetCommState ((void *)hPort, &PortDCB))
     {
         CloseSerial(hPort);
         printf("Unable to configure the serial port\n");
@@ -56,13 +56,13 @@ static int SerialSettings(SerialHandle hPort, uint32_t baud)
 static int SerialTimeouts(SerialHandle hPort)
 {
     COMMTIMEOUTS CommTimeouts;
-    GetCommTimeouts (hPort, &CommTimeouts);
+    GetCommTimeouts ((HANDLE)hPort, &CommTimeouts);
     CommTimeouts.ReadIntervalTimeout = 100;
     CommTimeouts.ReadTotalTimeoutMultiplier = 0;
     CommTimeouts.ReadTotalTimeoutConstant = 1000;
     CommTimeouts.WriteTotalTimeoutMultiplier = 0;
     CommTimeouts.WriteTotalTimeoutConstant = 1000;
-    if (!SetCommTimeouts (hPort, &CommTimeouts))
+    if (!SetCommTimeouts ((HANDLE)hPort, &CommTimeouts))
     {
         CloseSerial(hPort);
         return 0;
@@ -75,22 +75,22 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     HANDLE hPort=CreateFile(name,GENERIC_READ|GENERIC_WRITE,0,NULL,OPEN_EXISTING,0,NULL);
     if ( hPort != INVALID_HANDLE_VALUE )
     {
-        if ( !SerialSettings(hPort, baud) ||
-             !SerialTimeouts(hPort) ||
+        if ( !SerialSettings((SerialHandle)hPort, baud) ||
+             !SerialTimeouts((SerialHandle)hPort) ||
              !SetCommMask(hPort, EV_RXCHAR) )
         {
-            CloseSerial(hPort);
+            CloseSerial((SerialHandle)hPort);
             hPort = INVALID_HANDLE_VALUE;
-            return hPort;
+            return (uintptr_t)hPort;
         }
     }
-    return hPort;
+    return (uintptr_t)hPort;
 }
 
 int SerialSend(SerialHandle hPort, const void *buf, int len)
 {
     DWORD tBytes;
-    if (WriteFile(hPort, buf, len, &tBytes, NULL))
+    if (WriteFile((void *)hPort, buf, len, &tBytes, NULL))
     {
 //        printf("Write:  ");
 //        printf("%c\n", buf[0]);
@@ -98,8 +98,8 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
     }
     else
     {
-        printf("error %d\n", GetLastError());
-        PurgeComm(hPort, PURGE_TXABORT );
+        printf("error %lu\n", GetLastError());
+        PurgeComm((void *)hPort, PURGE_TXABORT );
     }
     return -1;
 }
@@ -107,15 +107,15 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
 int SerialReceive(SerialHandle hPort, void *buf, int len)
 {
     DWORD rBytes;
-    if (ReadFile(hPort,buf,len,&rBytes, NULL))
+    if (ReadFile((void *)hPort,buf,len,&rBytes, NULL))
     {
 //        printf("B %c\n",buf[0]);
         return rBytes;
     }
     else
     {
-        printf("error %d\n", GetLastError());
-        PurgeComm(hPort, PURGE_RXABORT );
+        printf("error %lu\n", GetLastError());
+        PurgeComm((void *)hPort, PURGE_RXABORT );
     }
     return -1;
 }

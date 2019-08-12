@@ -25,6 +25,15 @@
 #include <time.h>
 #include <windows.h>
 
+typedef pthread_mutex_t tiny_mutex_t;
+
+typedef struct
+{
+    uint8_t bits;
+    uint16_t waiters;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
+} tiny_events_t;
 
 //#define TASK_YIELD()      Sleep(0)
 
@@ -35,4 +44,42 @@
 }
 */
 
+#if 0
 
+#include <pthread.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <time.h>
+#include <Windows.h>
+
+#define PLATFORM_MUTEX    pthread_mutex_t
+
+#define MUTEX_INIT(x)     pthread_mutex_init(&x, NULL)
+
+#define MUTEX_LOCK(x)     pthread_mutex_lock(&x)
+
+#define MUTEX_TRY_LOCK(x) pthread_mutex_trylock(&x)
+
+#define MUTEX_UNLOCK(x)   pthread_mutex_unlock(&x)
+
+#define MUTEX_DESTROY(x)  pthread_mutex_destroy(&x)
+
+#define PLATFORM_COND     pthread_cond_t
+
+#define COND_INIT(x)      pthread_cond_init(&x, NULL)
+
+#define COND_DESTROY(x)   pthread_cond_destroy(&x)
+
+#define COND_WAIT(cond, mutex)   pthread_cond_wait(&cond, &mutex)
+
+#define COND_SIGNAL(x)    pthread_cond_signal(&x)
+
+#define TASK_YIELD()      sleep(0)
+
+
+static inline uint16_t PLATFORM_TICKS()
+{
+    return GetTickCount();
+}
+
+#endif

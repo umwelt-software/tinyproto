@@ -38,8 +38,10 @@ extern "C" {
 #include "arduino/tiny_defines.h"
 #elif defined(__linux__)
 #include "linux/tiny_defines.h"
-#else
+#elif defined(__MINGW32__)
 #include "mingw32/tiny_defines.h"
+#else
+#error "Platform not supported"
 #endif
 
 #include <stdint.h>

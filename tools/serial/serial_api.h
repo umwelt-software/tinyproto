@@ -44,7 +44,7 @@ typedef uintptr_t SerialHandle;
 #include <windows.h>
 
 /** Invalid serial handle definition */
-#define INVALID_SERIAL  INVALID_HANDLE_VALUE
+#define INVALID_SERIAL  (uintptr_t)INVALID_HANDLE_VALUE
 /** 115200 baud */
 #define SERIAL_115200   CBR_115200
 /** 38400 baud */
@@ -59,7 +59,7 @@ typedef uintptr_t SerialHandle;
 #include <string.h>
 
 /** Invalid serial handle definition */
-#define INVALID_SERIAL  (SerialHandle)-1
+#define INVALID_SERIAL  ((SerialHandle)-1)
 /** 115200 baud */
 #define SERIAL_115200   B115200
 /** 38400 baud */

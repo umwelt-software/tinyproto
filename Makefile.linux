@@ -6,26 +6,32 @@ CONFIG_ENABLE_CHECKSUM ?= y
 CONFIG_ENABLE_STATS ?=y
 # ************* Common defines ********************
 CPPFLAGS += -I./tools/serial
-CPPFLAGS += -fPIC
+CPPFLAGS += -fPIC -pthread
 CFLAGS += -g
 LDFLAGS += -L. -lm -shared
+
+TOOLS_LDFLAGS += -L$(BLD) -lm -pthread -ltinyprotocol
+TOOLS_EXT ?=
+
 
 include Makefile.common
 include Makefile.cpputest
 
 OBJ_SPERF = tools/sperf/sperf.o \
-        tools/serial/serial_linux.o
+        tools/serial/serial_linux.o \
+        tools/serial/serial_win32.o
 
 OBJ_HD_LOOPBACK = tools/loopback/hd_loopback.o \
-	tools/serial/serial_linux.o
+	tools/serial/serial_linux.o \
+	tools/serial/serial_win32.o
 
 all: sperf hd_loopback
 
 sperf: $(OBJ_SPERF) library
-	$(CC) $(CPPFLAGS) -o $(BLD)/sperf $(OBJ_SPERF) -L$(BLD) -lm -pthread -ltinyprotocol
+	$(CC) $(CPPFLAGS) -o $(BLD)/sperf$(TOOLS_EXT) $(OBJ_SPERF) $(TOOLS_LDFLAGS)
 
 hd_loopback: $(OBJ_HD_LOOPBACK) library
-	$(CC) $(CPPFLAGS) -o $(BLD)/hd_loopback $(OBJ_HD_LOOPBACK) -L$(BLD) -lm -pthread -ltinyprotocol
+	$(CC) $(CPPFLAGS) -o $(BLD)/hd_loopback$(TOOLS_EXT) $(OBJ_HD_LOOPBACK) $(TOOLS_LDFLAGS)
 
 clean: clean_sperf clean_hd_loopback
 

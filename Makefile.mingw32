@@ -1,7 +1,10 @@
 CC=x86_64-w64-mingw32-gcc
 CXX=x86_64-w64-mingw32-gcc
 
-CPPFLAGS += -mwindows
+CPPFLAGS += -mwindows -m64
+#LDFLAGS += -Bstatic --whole-archive -static -lpthread
+TOOLS_EXT = .exe
+TOOLS_LDFLAGS = -static -lpthread
 
 include Makefile.linux
 

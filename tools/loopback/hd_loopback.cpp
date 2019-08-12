@@ -149,6 +149,7 @@ static int run_hd(SerialHandle port)
 
 int main(int argc, char *argv[])
 {
+//    printf("HELLO\n");
     if ( parse_args(argc, argv) < 0 )
     {
         print_help();
