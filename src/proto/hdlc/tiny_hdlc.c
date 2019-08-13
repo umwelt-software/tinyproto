@@ -3,6 +3,17 @@
 
 #include <stddef.h>
 
+#ifndef TINY_HDLC_DEBUG
+#define TINY_HDLC_DEBUG 0
+#endif
+
+#if TINY_HDLC_DEBUG
+#include <stdio.h>
+#define LOG(...)  fprintf(stderr, ...)
+#else
+#define LOG(...)
+#endif
+
 #define FLAG_SEQUENCE            0x7E
 #define TINY_ESCAPE_CHAR         0x7D
 #define TINY_ESCAPE_BIT          0x20
@@ -326,7 +337,7 @@ static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
             handle->rx.data[ handle->rx.len ] = byte;
         }
     }
-//    printf("%02X\n", handle->rx.data[ handle->rx.len ]);
+//    LOG("%02X\n", handle->rx.data[ handle->rx.len ]);
     handle->rx.len++;
     return 1;
 }
@@ -383,14 +394,22 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
     if ( calc_crc != read_crc )
     {
         // CRC calculate issue
+        #if TINY_HDLC_DEBUG
+        LOG(stderr, "[HDLC:%p] RX: WRONG CRC (calc:%08X != %08X)\n", handle, calc_crc, read_crc);
+        for (int i=0; i< handle->rx.len; i++) fprintf(stderr, " %c ", (char)handle->rx.data[i]);
+        LOG(stderr,"\n");
+        for (int i=0; i< handle->rx.len; i++) LOG(stderr, " %02X ", handle->rx.data[i]);
+        LOG(stderr,"\n-----------\n");
+        #endif
         return 1;
     }
+    LOG(stderr, "[HDLC:%p] RX: GOOD\n", handle);
     handle->rx.len -= (uint8_t)handle->crc_type / 8;
-    tiny_events_set( &handle->events, RX_DATA_READY_BIT );
     if ( handle->on_frame_read )
     {
         handle->on_frame_read( handle->user_data, handle->rx.data, handle->rx.len );
     }
+    tiny_events_set( &handle->events, RX_DATA_READY_BIT );
     return 1;
 }
 

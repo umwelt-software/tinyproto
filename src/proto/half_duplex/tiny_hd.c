@@ -29,7 +29,7 @@
 
 #if TINY_HD_DEBUG
 #include <stdio.h>
-#define LOG  printf
+#define LOG(...)  fprintf(stderr, ...)
 #else
 #define LOG(...)
 #endif
@@ -88,13 +88,15 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
     for(retry=0; retry<3; retry++)
     {
         // WARNING!!! reuse of rx buffer
-        uint8_t *data = (uint8_t *)handle->_hdlc.rx_buf;
+        uint8_t *data = (uint8_t *)handle->_hdlc.rx_buf + handle->_hdlc.rx_buf_size / 2;
         data[0] = (request.uid >> 8) & 0xFF;
         data[1] = request.uid & 0xFF;
         memcpy( data + sizeof(uint16_t), buf, len);
+        LOG(stderr, "[%p] >>>> %04X (DATA)\n", handle, request.uid);
         result = hdlc_send( &handle->_hdlc , data, len + sizeof(uint16_t), handle->timeout);
         if (result < 0)
         {
+            LOG(stderr, "[%p] >>>> %04X (DATA FAILED)\n", handle, request.uid);
             tiny_remove_request(&request);
             return result;
         }
@@ -131,23 +133,26 @@ static int on_frame_read(void *user_data, void *data, int len)
     uint16_t uid = (((uint16_t)((uint8_t *)data)[1]) << 0) |
                    (((uint16_t)((uint8_t *)data)[0]) << 8);
     STinyHdData * handle = (STinyHdData *)user_data;
-//    printf("IN[%p]: %02X\n", user_data, uid);
     /** response */
     if ( uid & ACK_FRAME_FLAG )
     {
+        LOG(stderr, "[%p] <<<< %04X (I,ACK)\n", user_data, uid);
         /* this is response. Mark frame as successfully delivered and exit */
         tiny_commit_request( uid & ~(ACK_FRAME_FLAG) );
         return len;
     }
     if ( uid & DATA_FRAME_FLAG )
     {
+        LOG(stderr, "[%p] <<<< %04X (DATA)\n", user_data, uid);
         uid |= ACK_FRAME_FLAG;
         uint8_t *buf = (uint8_t *)handle->_hdlc.rx_buf + handle->_hdlc.rx_buf_size;
         buf[0] = (uid >> 8) & 0xFF;
         buf[1] = uid & 0xFF;
+        LOG(stderr, "[%p] >>>> %04X (O,ACK)\n", user_data, uid);
         int result = hdlc_send( &handle->_hdlc, buf, sizeof(uid), handle->timeout );
         if ( result < 0)
         {
+            LOG(stderr, "[%p] >>>> %04X (O,ACK FAILED)\n", user_data, uid);
             return result; // return error if failed to send ACK
         }
     }
@@ -219,7 +224,7 @@ static int write_func_cb(void *user_data, const void *data, int len)
 
 int tiny_hd_run(STinyHdData *handle)
 {
-    return hdlc_run_rx_until_read( &handle->_hdlc, handle->read_func, handle->user_data, 0 );
+    return hdlc_run_rx_until_read( &handle->_hdlc, handle->read_func, handle->user_data, 100 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
