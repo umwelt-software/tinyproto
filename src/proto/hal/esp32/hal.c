@@ -61,7 +61,7 @@ uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
 {
     return xEventGroupWaitBits(*events, bits,
                                clear ? pdTRUE: pdFALSE,
-                               pdFALSE, timeout/portTICK_PERIOD_MS);
+                               pdFALSE, timeout/portTICK_PERIOD_MS) & bits;
 }
 
 void tiny_events_set(tiny_events_t *events, uint8_t bits)

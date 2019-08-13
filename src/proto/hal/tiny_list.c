@@ -19,11 +19,21 @@
 
 #include "tiny_types.h"
 #include "tiny_list.h"
-
+#include <stdbool.h>
 
 static tiny_mutex_t s_mutex;
 
 static uint16_t       s_uid = 0;
+
+void tiny_list_init(void)
+{
+    static bool initialized = false;
+    if (!initialized)
+    {
+        initialized = true;
+        tiny_mutex_create( &s_mutex );
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
