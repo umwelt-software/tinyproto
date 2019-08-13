@@ -22,7 +22,17 @@
 #include "tiny_hd.h"
 
 #include <string.h>
-//#include <stdio.h>
+
+#ifndef TINY_HD_DEBUG
+#define TINY_HD_DEBUG 0
+#endif
+
+#if TINY_HD_DEBUG
+#include <stdio.h>
+#define LOG  printf
+#else
+#define LOG(...)
+#endif
 
 #define ACK_FRAME_FLAG 0x8000
 #define DATA_FRAME_FLAG 0x4000
@@ -54,16 +64,15 @@ static int tiny_wait_request_update(STinyHdData *handle, tiny_request * request,
         {
             break;
         }
-        tiny_sleep(0);
     } while ( (uint16_t)(tiny_millis() - ticks) < timeout );
+    int result = TINY_ERR_FAILED;
     switch ( request->state )
     {
-        case TINY_HD_REQUEST_INIT: return TINY_ERR_TIMEOUT;
-        case TINY_HD_REQUEST_SUCCESSFUL: return TINY_SUCCESS;
-        default:
-            break;
+        case TINY_HD_REQUEST_INIT: result = TINY_ERR_TIMEOUT; break;
+        case TINY_HD_REQUEST_SUCCESSFUL: result =  TINY_SUCCESS; break;
+        default: break;
     }
-    return TINY_ERR_FAILED;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -50,16 +50,54 @@ TEST(HdTests, TinyHd_Send)
     uint16_t     nreceived = 0;
     uint16_t     nsent = 0;
 
+    // Do not use multithread mode
     TinyHelperHd helper1( &channel1,
                           sizeof(txbuf),
                           [&nreceived](uint16_t uid, uint8_t *buf, int len)->void
                           {
 //                              printf("received uid:%04X, len: %d\n", uid, len);
                               nreceived++;
-                          });
-    TinyHelperHd helper2( &channel2, sizeof(txbuf) );
+                          }, false);
+    TinyHelperHd helper2( &channel2, sizeof(txbuf), nullptr, false );
 
     helper1.run(true);
+
+    // sent 4 packets small packets with ACK
+    for (nsent = 0; nsent < 500; nsent++)
+    {
+        txbuf[0] = 0xAA;
+        txbuf[1] = 0xFF;
+//        printf("sending %d bytes\n", 2);
+        int result = helper2.send_wait_ack( txbuf, 2 );
+        CHECK( result >= 0 );
+    }
+    // sleep for 10 ms befoe last frame arrives
+    usleep(10000);
+    CHECK_EQUAL( 500, nreceived );
+}
+
+TEST(HdTests, TinyHd_Multithread)
+{
+    uint8_t      txbuf[128];
+    FakeWire     line1;
+    FakeWire     line2;
+    FakeChannel  channel1( &line1, &line2 );
+    FakeChannel  channel2( &line2, &line1 );
+    uint16_t     nreceived = 0;
+    uint16_t     nsent = 0;
+
+    // Do not use multithread mode
+    TinyHelperHd helper1( &channel1,
+                          sizeof(txbuf),
+                          [&nreceived](uint16_t uid, uint8_t *buf, int len)->void
+                          {
+//                              printf("received uid:%04X, len: %d\n", uid, len);
+                              nreceived++;
+                          }, true);
+    TinyHelperHd helper2( &channel2, sizeof(txbuf), nullptr, true );
+
+    helper1.run(true);
+    helper2.run(true);
 
     // sent 4 packets small packets with ACK
     for (nsent = 0; nsent < 500; nsent++)

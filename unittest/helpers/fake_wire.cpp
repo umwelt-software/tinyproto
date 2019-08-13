@@ -46,7 +46,7 @@ int FakeWire::read(uint8_t *data, int length)
             m_readptr++;
         size++;
     }
-//    fprintf( stderr, "\n" );
+//    if ( size ) fprintf( stderr, "\n" );
     m_mutex.unlock();
     return size;
 }
@@ -82,7 +82,7 @@ int FakeWire::write(const uint8_t *data, int length)
         m_writeptr = l_writeptr;
         size++;
     }
-//    fprintf( stderr, "\n" );
+//    if ( size ) fprintf( stderr, "\n" );
     m_mutex.unlock();
     return size;
 }

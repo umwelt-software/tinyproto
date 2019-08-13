@@ -103,7 +103,7 @@ void TinyHelperHd::receiveThread(TinyHelperHd *p)
     while (p->m_forceStop == false)
     {
         int result = p->run();
-        if (result <0)
+        if ( result < 0 && result != TINY_ERR_TIMEOUT )
         {
             break;
         }
