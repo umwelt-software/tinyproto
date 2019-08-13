@@ -137,7 +137,7 @@ static int run_hd(SerialHandle port)
         {
             Tiny::Packet<4096> packet;
             packet.put("Generated frame");
-            if ( tiny_send_wait_ack(&tiny, packet.data(), packet.size()) <= 0 )
+            if ( tiny_send_wait_ack(&tiny, packet.data(), packet.size()) < 0 )
             {
                 fprintf( stderr, "Failed to send packet\n" );
             }

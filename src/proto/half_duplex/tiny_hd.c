@@ -22,6 +22,7 @@
 #include "tiny_hd.h"
 
 #include <string.h>
+//#include <stdio.h>
 
 #define ACK_FRAME_FLAG 0x8000
 #define DATA_FRAME_FLAG 0x4000
@@ -44,7 +45,7 @@ static int tiny_wait_request_update(STinyHdData *handle, tiny_request * request,
         else
         {
             int result = tiny_hd_run( handle );
-            if ( result < 0 )
+            if ( result < 0 && result != TINY_ERR_TIMEOUT )
             {
                 return result;
             }
@@ -69,7 +70,7 @@ static int tiny_wait_request_update(STinyHdData *handle, tiny_request * request,
 
 int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
 {
-    int result = -1;
+    int result = TINY_ERR_FAILED;
     tiny_request request;
     uint8_t retry;
     if ( len > handle->_hdlc.rx_buf_size ) return TINY_ERR_FAILED;
@@ -107,7 +108,7 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
         }
         result = len;
     }
-    return result == TINY_SUCCESS ? len: result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,6 +118,7 @@ static int on_frame_read(void *user_data, void *data, int len)
     uint16_t uid = (((uint16_t)((uint8_t *)data)[1]) << 0) |
                    (((uint16_t)((uint8_t *)data)[0]) << 8);
     STinyHdData * handle = (STinyHdData *)user_data;
+//    printf("IN[%p]: %02X\n", user_data, uid);
     /** response */
     if ( uid & ACK_FRAME_FLAG )
     {
@@ -154,7 +156,7 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
+void tiny_list_init(void);
 
 int tiny_hd_init(STinyHdData      * handle,
                  STinyHdInit      * init)
@@ -165,6 +167,7 @@ int tiny_hd_init(STinyHdData      * handle,
     {
         return TINY_ERR_FAILED;
     }
+    tiny_list_init();
     handle->_hdlc.send_tx = write_func_cb;
     handle->_hdlc.on_frame_read = on_frame_read;
     handle->_hdlc.on_frame_sent = on_frame_sent;
@@ -203,20 +206,9 @@ static int write_func_cb(void *user_data, const void *data, int len)
 
 int tiny_hd_run(STinyHdData *handle)
 {
-    uint8_t byte;
     int result = 0;
-    for(;;)
-    {
-        int temp = handle->read_func(handle->user_data, &byte, 1);
-        if ( temp <= 0 )
-        {
-            if ( temp < 0 ) result = temp;
-            break;
-        }
-        result += temp;
-        while ( hdlc_run_rx( &handle->_hdlc, &byte, 1, NULL ) == 0 );
-    }
-    return result;
+    int len = hdlc_run_rx_until_read( &handle->_hdlc, handle->read_func, handle->user_data, &result, handle->timeout );
+    return result < 0 ? result: len;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
