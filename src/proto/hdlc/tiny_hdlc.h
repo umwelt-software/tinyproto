@@ -166,7 +166,7 @@ void hdlc_reset( hdlc_handle_t handle );
  */
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
 
-int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, int *error );
+int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, int *error, uint16_t timeout );
 
 /**
  * Runs transmission at hdlc level. If there is frame to send, or

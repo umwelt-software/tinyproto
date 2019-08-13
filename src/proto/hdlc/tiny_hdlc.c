@@ -306,7 +306,8 @@ static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
     if ( byte == FLAG_SEQUENCE )
     {
         handle->rx.state = hdlc_read_end;
-        return 1;
+        // Leave this byte for CRC check
+        return 0;
     }
     if ( byte == TINY_ESCAPE_CHAR )
     {
@@ -338,18 +339,18 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
         handle->rx.len = 0;
         handle->rx.escape = 0;
         handle->rx.state = hdlc_read_data;
-        return 0;
+        return 1;
     }
     handle->rx.state = hdlc_read_start;
     if ( handle->rx.len > handle->rx_buf_size )
     {
         // Buffer size issue, too long packet
-        return 0;
+        return 1;
     }
     if ( handle->rx.len < (uint8_t)handle->crc_type / 8 )
     {
         // CRC size issue
-        return 0;
+        return 1;
     }
     crc_t calc_crc = 0;
     crc_t read_crc = 0;
@@ -382,7 +383,7 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
     if ( calc_crc != read_crc )
     {
         // CRC calculate issue
-        return 0;
+        return 1;
     }
     handle->rx.len -= (uint8_t)handle->crc_type / 8;
     tiny_events_set( &handle->events, RX_DATA_READY_BIT );
@@ -390,7 +391,7 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
     {
         handle->on_frame_read( handle->user_data, handle->rx.data, handle->rx.len );
     }
-    return 0;
+    return 1;
 }
 
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
@@ -423,16 +424,21 @@ void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size)
     handle->rx.data = (uint8_t *)handle->rx_buf;
 }
 
-int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, int *error )
+int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, int *error, uint16_t timeout )
 {
+    uint16_t ts = tiny_millis();
     int result = 0;
     for(;;)
     {
         uint8_t data;
-        result = readcb( handle->user_data, &data, sizeof(data) );
+        result = readcb( user_data, &data, sizeof(data) );
         if ( result > 0 )
         {
-            result = handle->rx.state( handle, &data, result );
+            do
+            {
+                int temp = handle->rx.state( handle, &data, result );
+                if ( temp > 0 ) result -= temp;
+            } while (result > 0);
         }
         if ( result < 0 )
         {
@@ -446,6 +452,11 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, int *e
         if ( bits )
         {
             result = handle->rx.len;
+            break;
+        }
+        if ( (uint16_t)(tiny_millis() - ts) >= timeout )
+        {
+            result = TINY_ERR_TIMEOUT;
             break;
         }
     };
