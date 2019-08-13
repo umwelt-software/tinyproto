@@ -104,12 +104,12 @@ static int parse_args(int argc, char *argv[])
 
 static void onReceiveFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
 {
-    fprintf(stderr, "Frame received UID=%04X, payload len=%d\n", uid, size);
+    fprintf(stderr, "<<< Frame received UID=%04X, payload len=%d\n", uid, size);
 }
 
 static void onSendFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
 {
-    fprintf(stderr, "Frame sent UID=%04X, payload len=%d\n", uid, size);
+    fprintf(stderr, ">>> Frame sent UID=%04X, payload len=%d\n", uid, size);
 }
 
 static int run_hd(SerialHandle port)
