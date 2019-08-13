@@ -108,6 +108,10 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
         }
         result = len;
     }
+    if (result == TINY_ERR_TIMEOUT)
+    {
+//        printf("TIMEOUT\n");
+    }
     return result;
 }
 
@@ -206,9 +210,7 @@ static int write_func_cb(void *user_data, const void *data, int len)
 
 int tiny_hd_run(STinyHdData *handle)
 {
-    int result = 0;
-    int len = hdlc_run_rx_until_read( &handle->_hdlc, handle->read_func, handle->user_data, &result, handle->timeout );
-    return result < 0 ? result: len;
+    return hdlc_run_rx_until_read( &handle->_hdlc, handle->read_func, handle->user_data, 0 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

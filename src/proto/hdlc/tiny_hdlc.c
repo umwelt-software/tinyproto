@@ -424,7 +424,7 @@ void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size)
     handle->rx.data = (uint8_t *)handle->rx_buf;
 }
 
-int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, int *error, uint16_t timeout )
+int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout )
 {
     uint16_t ts = tiny_millis();
     int result = 0;
@@ -442,13 +442,11 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
         }
         if ( result < 0 )
         {
-            if ( error )
-            {
-                *error = result;
-            }
             break;
         }
-        uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, 1, 0 );
+        uint8_t bits = handle->multithread_mode ?
+                       tiny_events_wait( &handle->events, RX_DATA_READY_BIT, 1, 0 ):
+                       tiny_events_wait( &handle->events, RX_DATA_READY_BIT, 1, 0 );
         if ( bits )
         {
             result = handle->rx.len;

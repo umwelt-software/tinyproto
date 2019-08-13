@@ -62,7 +62,7 @@ TEST(HdTests, TinyHd_Send)
     helper1.run(true);
 
     // sent 4 packets small packets with ACK
-    for (nsent = 0; nsent < 4; nsent++)
+    for (nsent = 0; nsent < 500; nsent++)
     {
         txbuf[0] = 0xAA;
         txbuf[1] = 0xFF;
@@ -70,9 +70,9 @@ TEST(HdTests, TinyHd_Send)
         int result = helper2.send_wait_ack( txbuf, 2 );
         CHECK( result >= 0 );
     }
-    // sleep for 2 ms befoe last frame arrives
-    usleep(2000);
-    CHECK_EQUAL( 4, nreceived );
+    // sleep for 10 ms befoe last frame arrives
+    usleep(10000);
+    CHECK_EQUAL( 500, nreceived );
 }
 
 #endif

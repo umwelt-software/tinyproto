@@ -72,7 +72,7 @@ int IHdlc::write(const char* buf, int size)
 int IHdlc::read(char *buf, int size)
 {
     hdlc_set_rx_buffer( m_hdlc, buf, size );
-    return hdlc_run_rx_until_read( m_hdlc, m_readcb, this, nullptr, 1000 );
+    return hdlc_run_rx_until_read( m_hdlc, m_readcb, this, 1000 );
 }
 
 int IHdlc::write(IPacket &pkt)
