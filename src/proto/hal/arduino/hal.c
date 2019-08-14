@@ -21,8 +21,44 @@
 
 #include "proto/hal/tiny_types.h"
 
+#if defined(__TARGET_CPU_CORTEX_M0)
+
+inline static int _iDisGetPrimask(void)
+{
+    int result;
+    __asm__ __volatile__ ("MRS %0, primask" : "=r" (result) );
+    __asm__ __volatile__ ("cpsid i" : : : "memory");
+    return result;
+}
+
+inline static int _iSetPrimask(int priMask)
+{
+    __asm__ __volatile__ ("MSR primask, %0" : : "r" (priMask) : "memory");
+    return 0;
+}
+
+#define ATOMIC_BLOCK \
+     for(int mask = _iDisGetPrimask(), flag = 1;\
+         flag;\
+         flag = _iSetPrimask(mask))
+
+//#define ATOMIC_OP(asm_op, a, v) do { \
+//        uint32_t reg0; \
+//        __asm__ __volatile__("cpsid i\n" \
+//                             "ldr %0, [%1]\n" \
+//                             #asm_op" %0, %0, %2\n" \
+//                             "str %0, [%1]\n" \
+//                             "cpsie i\n" \
+//                             : "=&b" (reg0) \
+//                             : "b" (a), "r" (v) : "cc" ); \
+//       } while (0)
+#else
+#define ATOMIC_BLOCK
+#endif
+
 void tiny_mutex_create(tiny_mutex_t *mutex)
 {
+    *mutex = 0;
 }
 
 void tiny_mutex_destroy(tiny_mutex_t *mutex)
@@ -31,19 +67,39 @@ void tiny_mutex_destroy(tiny_mutex_t *mutex)
 
 void tiny_mutex_lock(tiny_mutex_t *mutex)
 {
+    uint8_t locked;
+    do
+    {
+        ATOMIC_BLOCK
+        {
+            locked = !*mutex;
+            *mutex = 1;
+        }
+    } while (!locked);
 }
 
 uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
 {
-    return 1;
+    uint8_t locked = 0;
+    ATOMIC_BLOCK
+    {
+        locked = !*mutex;
+        *mutex = 1;
+    }
+    return locked;
 }
 
 void tiny_mutex_unlock(tiny_mutex_t *mutex)
 {
+    ATOMIC_BLOCK
+    {
+        *mutex = 0;
+    }
 }
 
 void tiny_events_create(tiny_events_t *events)
 {
+    *events = 0;
 }
 
 void tiny_events_destroy(tiny_events_t *events)
@@ -53,20 +109,39 @@ void tiny_events_destroy(tiny_events_t *events)
 uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
                          uint8_t clear, uint32_t timeout)
 {
-    return bits;
-}
-
-uint8_t tiny_events_timed_wait(tiny_events_t *event, uint8_t bits, uint32_t ms)
-{
-    return bits;
+    uint8_t locked;
+    uint32_t ts = tiny_millis();
+    do
+    {
+        ATOMIC_BLOCK
+        {
+            locked = *events;
+            if ( clear && (locked & bits) ) *events &= ~bits;
+        }
+        if (!(locked & bits) && (uint32_t)(tiny_millis() - ts) >= timeout)
+        {
+            locked = 0;
+            break;
+        }
+     }
+    while (!(locked & bits));
+    return locked;
 }
 
 void tiny_events_set(tiny_events_t *events, uint8_t bits)
 {
+    ATOMIC_BLOCK
+    {
+        *events |= bits;
+    }
 }
 
 void tiny_events_clear(tiny_events_t *events, uint8_t bits)
 {
+    ATOMIC_BLOCK
+    {
+        *events &= ~bits;
+    }
 }
 
 void tiny_sleep(uint32_t ms)
@@ -80,3 +155,4 @@ uint32_t tiny_millis()
 }
 
 #endif
+
