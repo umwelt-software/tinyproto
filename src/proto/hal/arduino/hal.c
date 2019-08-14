@@ -42,18 +42,21 @@ inline static int _iSetPrimask(int priMask)
          flag;\
          flag = _iSetPrimask(mask))
 
-//#define ATOMIC_OP(asm_op, a, v) do { \
-//        uint32_t reg0; \
-//        __asm__ __volatile__("cpsid i\n" \
-//                             "ldr %0, [%1]\n" \
-//                             #asm_op" %0, %0, %2\n" \
-//                             "str %0, [%1]\n" \
-//                             "cpsie i\n" \
-//                             : "=&b" (reg0) \
-//                             : "b" (a), "r" (v) : "cc" ); \
+//#define ATOMIC_OP(asm_op, a, v) do {
+//        uint32_t reg0;
+//        __asm__ __volatile__("cpsid i\n"
+//                             "ldr %0, [%1]\n"
+//                             #asm_op" %0, %0, %2\n"
+//                             "str %0, [%1]\n"
+//                             "cpsie i\n"
+//                             : "=&b" (reg0)
+//                             : "b" (a), "r" (v) : "cc" );
 //       } while (0)
+
 #else
+
 #define ATOMIC_BLOCK
+
 #endif
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
