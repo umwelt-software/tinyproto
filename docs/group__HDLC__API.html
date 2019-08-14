@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.7.2</span>
+   &#160;<span id="projectnumber">0.8.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -106,9 +106,9 @@ Functions</h2></td></tr>
 <tr class="separator:ga532836280097de1c8881df8336f21075"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga911a3f1cb32dd6cadd00223e0097642c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, const void *data, int len, int *error)</td></tr>
 <tr class="separator:ga911a3f1cb32dd6cadd00223e0097642c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga196e57dcf71cd8910f756181f1f86871"><td class="memItemLeft" align="right" valign="top"><a id="ga196e57dcf71cd8910f756181f1f86871"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>hdlc_run_rx_until_read</b> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, <a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> readcb, int *error)</td></tr>
-<tr class="separator:ga196e57dcf71cd8910f756181f1f86871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf20d86bb10361096f507838394c624c7"><td class="memItemLeft" align="right" valign="top"><a id="gaf20d86bb10361096f507838394c624c7"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>hdlc_run_rx_until_read</b> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, <a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> readcb, void *user_data, uint16_t timeout)</td></tr>
+<tr class="separator:gaf20d86bb10361096f507838394c624c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae31d921043b4f175603114c206b6b829"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle)</td></tr>
 <tr class="separator:gae31d921043b4f175603114c206b6b829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8b5cc456927145cebd82b2b560a6fa10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send</a> (<a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> handle, const void *data, int len, uint32_t timeout)</td></tr>
