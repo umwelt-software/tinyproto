@@ -4,6 +4,7 @@ OBJ_UNIT_TEST = \
         unittest/helpers/fake_wire.o \
         unittest/helpers/fake_channel.o \
         unittest/helpers/tiny_helper.o \
+        unittest/helpers/tiny_base_helper.o \
         unittest/helpers/tiny_hdlc_helper.o \
         unittest/helpers/tiny_light_helper.o \
         unittest/helpers/tiny_hd_helper.o \

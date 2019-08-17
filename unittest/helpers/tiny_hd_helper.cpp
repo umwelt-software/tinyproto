@@ -19,23 +19,16 @@
 
 #include "tiny_hd_helper.h"
 
-
-uint32_t TinyHelperHd::s_handleOffset;
-
 TinyHelperHd::TinyHelperHd(FakeChannel * channel,
                            int rxBufferSize,
                            const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb,
                            bool  multithread_mode)
-    :m_onRxFrameCb(onRxFrameCb)
-    ,m_forceStop(false)
+    :IBaseHelper(channel, rxBufferSize)
+    ,m_onRxFrameCb(onRxFrameCb)
 {
-    s_handleOffset = (uint8_t *)this - (uint8_t *)(&m_handle);
-    m_buffer = new uint8_t[rxBufferSize];
-    m_channel = channel;
-    m_thread = nullptr;
     STinyHdInit   init = {0};
-    init.write_func       = TinyHelperHd::write_data;
-    init.read_func        = TinyHelperHd::read_data;
+    init.write_func       = write_data;
+    init.read_func        = read_data;
     init.pdata            = this;
     init.on_frame_cb      = onRxFrame;
     init.inbuf            = m_buffer;
@@ -47,86 +40,28 @@ TinyHelperHd::TinyHelperHd(FakeChannel * channel,
     tiny_hd_init( &m_handle, &init  );
 }
 
-
 int TinyHelperHd::send_wait_ack(uint8_t *buf, int len)
 {
     return tiny_send_wait_ack(&m_handle, buf, len);
 }
-
 
 int TinyHelperHd::run()
 {
     return tiny_hd_run(&m_handle);
 }
 
-
-int TinyHelperHd::run(bool forked)
-{
-    if (forked)
-    {
-        m_thread = new std::thread(receiveThread,this);
-        return 0;
-    }
-    else
-    {
-        return run();
-    }
-}
-
-
 void  TinyHelperHd::onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)
 {
-    TinyHelperHd * helper = reinterpret_cast<TinyHelperHd *>( ((uint8_t *)handle) - s_handleOffset );
+    TinyHelperHd * helper = reinterpret_cast<TinyHelperHd *>(handle);
     if (helper->m_onRxFrameCb)
     {
         helper->m_onRxFrameCb(uid, buf, len);
     }
 }
 
-
-int TinyHelperHd::read_data(void * appdata, void * data, int length)
-{
-    TinyHelperHd  *helper = reinterpret_cast<TinyHelperHd *>(appdata);
-    return helper->m_channel->read((uint8_t *)data, length);
-}
-
-
-int TinyHelperHd::write_data(void * appdata, const void * data, int length)
-{
-    TinyHelperHd *helper = reinterpret_cast<TinyHelperHd *>(appdata);
-    return helper->m_channel->write((const uint8_t *)data, length);
-}
-
-
-void TinyHelperHd::receiveThread(TinyHelperHd *p)
-{
-    while (p->m_forceStop == false)
-    {
-        int result = p->run();
-        if ( result < 0 && result != TINY_ERR_TIMEOUT )
-        {
-            break;
-        }
-        usleep(10);
-    }
-}
-
-void TinyHelperHd::wait_and_join()
-{
-    if (m_thread != nullptr)
-    {
-        m_thread->join();
-        delete m_thread;
-        m_thread = nullptr;
-    }
-}
-
 TinyHelperHd::~TinyHelperHd()
 {
-    m_forceStop = true;
-    wait_and_join();
+    stop();
     tiny_hd_close( &m_handle );
-    delete[] m_buffer;
-    m_buffer = nullptr;
 }
 

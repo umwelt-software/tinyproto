@@ -20,6 +20,7 @@
 #ifndef _TINY_HD_HELPER_H_
 #define _TINY_HD_HELPER_H_
 
+#include "tiny_base_helper.h"
 #include <functional>
 #include <stdint.h>
 #include <thread>
@@ -29,10 +30,8 @@
 #include "fake_channel.h"
 
 
-class TinyHelperHd
+class TinyHelperHd: public IBaseHelper<TinyHelperHd>
 {
-private:
-    STinyHdData   m_handle;
 public:
     TinyHelperHd(FakeChannel * channel,
                  int rxBufferSize,
@@ -40,23 +39,14 @@ public:
                  bool  multithread_mode = false);
     ~TinyHelperHd();
     int send_wait_ack(uint8_t *buf, int len);
-    int run();
-    int run(bool forked);
-    void wait_and_join();
+    int run() override;
+    using IBaseHelper<TinyHelperHd>::run;
 private:
-    static uint32_t s_handleOffset;
-    FakeChannel * m_channel;
+    STinyHdData   m_handle;
     std::function<void(uint16_t,uint8_t*,int)>
                   m_onRxFrameCb;
-    std::thread * m_thread;
-    std::atomic<bool>
-                  m_forceStop;
-    uint8_t     * m_buffer;
 
     static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
-    static int    read_data(void * appdata, void * data, int length);
-    static int    write_data(void * appdata, const void * data, int length);
-    static void   receiveThread(TinyHelperHd *p);
 };
 
 #endif /* _FAKE_WIRE_H_ */

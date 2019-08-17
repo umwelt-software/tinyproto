@@ -72,7 +72,7 @@ TEST(HdlcTests, TinyLayer2_Send_Receive)
         snprintf((char *)txbuf, sizeof(txbuf) - 1, "This is frame Number %u (stream %i)", nsent, 0);
         int result = helper1.send( (uint8_t *)txbuf, strlen((char *)txbuf) + 1 );
         CHECK( result >= 0 );
-        result = helper2.process_rx_bytes();
+        result = helper2.run();
         if (result < 0) printf("failed:%i\n", result);
         CHECK( result >= 0 );
     }

@@ -18,12 +18,13 @@
 */
 #pragma once
 
+#include "tiny_base_helper.h"
 #include <functional>
 #include <stdint.h>
 #include "fake_channel.h"
 #include "proto/hdlc/tiny_hdlc.h"
 
-class TinyHdlcHelper
+class TinyHdlcHelper: public IBaseHelper<TinyHdlcHelper>
 {
 private:
     hdlc_struct_t     m_handle;
@@ -34,16 +35,12 @@ public:
                    int rx_buf_size = 1024 );
     ~TinyHdlcHelper();
     int send(uint8_t *buf, int len);
-    int process_rx_bytes();
+    int run() override;
 private:
-    static uint32_t s_handleOffset;
-    FakeChannel * m_channel;
     std::function<void(uint8_t*,int)> m_onRxFrameCb;
     std::function<void(uint8_t*,int)> m_onTxFrameCb;
 
     static int    onRxFrame(void *handle, void * buf, int len);
     static int    onTxFrame(void *handle, const void * buf, int len);
-    static int    read_data(void * appdata, uint8_t * data, int length);
-    static int    write_data(void * appdata, const void * data, int length);
 };
 
