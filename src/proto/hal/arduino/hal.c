@@ -21,7 +21,7 @@
 
 #include "proto/hal/tiny_types.h"
 
-#if defined(__TARGET_CPU_CORTEX_M0)
+#if defined(__TARGET_CPU_CORTEX_M0) || defined(__TARGET_CPU_CORTEX_M0_) || defined(__ARM_ARCH_6M__)
 
 inline static int _iDisGetPrimask(void)
 {
@@ -42,17 +42,37 @@ inline static int _iSetPrimask(int priMask)
          flag;\
          flag = _iSetPrimask(mask))
 
-//#define ATOMIC_OP(asm_op, a, v) do {
-//        uint32_t reg0;
-//        __asm__ __volatile__("cpsid i\n"
-//                             "ldr %0, [%1]\n"
-//                             #asm_op" %0, %0, %2\n"
-//                             "str %0, [%1]\n"
-//                             "cpsie i\n"
-//                             : "=&b" (reg0)
-//                             : "b" (a), "r" (v) : "cc" );
-//       } while (0)
+#elif defined(__TARGET_CPU_CORTEX_M3) || defined(__TARGET_CPU_CORTEX_M4) || \
+      defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__)
 
+static volatile uint8_t _lock = 0;
+
+int _get_lock(void)
+{
+    while (!__sync_bool_compare_and_swap(&_lock, 0, 1));
+/*
+    int status = 0;
+    do
+    {
+        while (__LDREXW(&_lock) != 0);
+        status = __STREXW(1, &_lock);
+    } while (status!=0);
+    __DMB(); */
+    return 0;
+}
+
+int _free_lock(int status)
+{
+    __sync_bool_compare_and_swap(&_lock, 1, 0);
+/*    __DMB();
+    _lock = 0;*/
+    return 0;
+}
+
+#define ATOMIC_BLOCK \
+     for(int mask = _get_lock(), flag = 1;\
+         flag;\
+         flag = _free_lock(mask))
 #else
 
 #define ATOMIC_BLOCK
