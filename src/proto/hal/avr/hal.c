@@ -28,88 +28,24 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-void tiny_mutex_create(tiny_mutex_t *mutex)
-{
-    *mutex = 0;
-}
-
-void tiny_mutex_destroy(tiny_mutex_t *mutex)
-{
-}
-
-void tiny_mutex_lock(tiny_mutex_t *mutex)
-{
-    uint8_t locked;
-    do
-    {
-        cli();
-        locked = !*mutex;
-        *mutex = 1;
-        sei();
-    }
-    while (!locked);
-}
-
-uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
-{
-    uint8_t locked;
-    cli();
-    locked = !*mutex;
-    *mutex = 1;
-    sei();
-    return locked;
-}
-
-void tiny_mutex_unlock(tiny_mutex_t *mutex)
+inline static int _iDisGetPrimask(void)
 {
     cli();
-    *mutex = 0;
+    return 0;
+}
+
+inline static int _iSetPrimask(int priMask)
+{
     sei();
+    return 0;
 }
 
-void tiny_events_create(tiny_events_t *events)
-{
-    *events = 0;
-}
+#define ATOMIC_BLOCK \
+     for(int mask = _iDisGetPrimask(), flag = 1;\
+         flag;\
+         flag = _iSetPrimask(mask))
 
-void tiny_events_destroy(tiny_events_t *events)
-{
-}
-
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
-                         uint8_t clear, uint32_t timeout)
-{
-    uint8_t locked;
-    uint32_t ts = tiny_millis();
-    do
-    {
-        cli();
-        locked = *events;
-        if ( clear && (locked & bits) ) *events &= ~bits;
-        sei();
-        if (!(locked & bits) && (uint32_t)(tiny_millis() - ts) >= timeout)
-        {
-            locked = 0;
-            break;
-        }
-    }
-    while (!(locked & bits));
-    return locked;
-}
-
-void tiny_events_set(tiny_events_t *events, uint8_t bits)
-{
-    cli();
-    *events |= bits;
-    sei();
-}
-
-void tiny_events_clear(tiny_events_t *events, uint8_t bits)
-{
-    cli();
-    *events &= ~bits;
-    sei();
-}
+#include "../hal_single_core.inl"
 
 void tiny_sleep(uint32_t ms)
 {
@@ -134,3 +70,4 @@ uint32_t tiny_millis()
 }
 
 #endif
+
