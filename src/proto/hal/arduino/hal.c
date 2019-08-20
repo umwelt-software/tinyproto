@@ -49,7 +49,7 @@ static volatile uint8_t _lock = 0;
 
 int _get_lock(void)
 {
-    while (!__sync_bool_compare_and_swap(&_lock, 0, 1));
+    while (__sync_lock_test_and_set(&_lock, 1));
 /*
     int status = 0;
     do
@@ -63,7 +63,7 @@ int _get_lock(void)
 
 int _free_lock(int status)
 {
-    __sync_bool_compare_and_swap(&_lock, 1, 0);
+    __sync_lock_release(&_lock);
 /*    __DMB();
     _lock = 0;*/
     return 0;
