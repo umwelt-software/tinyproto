@@ -66,6 +66,33 @@ public:
      * @return None
      */
     void beginToSerial();
+
+#ifdef HAVE_HWSERIAL1
+    /**
+     * Initializes protocol internal variables and redirects
+     * communication through Arduino Serial1 connection (Serial1).
+     * @return None
+     */
+    inline void beginToSerial1()
+    {
+         begin([](void *p, const void *b, int s)->int { return Serial1.write((const uint8_t *)b, s); },
+               [](void *p, void *b, int s)->int { return Serial1.readBytes((uint8_t *)b, s); });
+    }
+#endif
+
+#ifdef HAVE_HWSERIAL2
+    /**
+     * Initializes protocol internal variables and redirects
+     * communication through Arduino Serial2 connection (Serial2).
+     * @return None
+     */
+    inline void beginToSerial2()
+    {
+         begin([](void *p, const void *b, int s)->int { return Serial2.write((const uint8_t *)b, s); },
+               [](void *p, void *b, int s)->int { return Serial2.readBytes((uint8_t *)b, s); });
+    }
+#endif
+
 #endif
 
     /**
