@@ -17,8 +17,6 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if defined(__AVR__)
-
 #if defined(ARDUINO)
 #include <Arduino.h>
 #endif
@@ -45,7 +43,7 @@ inline static int _iSetPrimask(int priMask)
          flag;\
          flag = _iSetPrimask(mask))
 
-#include "../hal_single_core.inl"
+#include "hal_single_core.inl"
 
 void tiny_sleep(uint32_t ms)
 {
@@ -68,6 +66,4 @@ uint32_t tiny_millis()
     return 0;
 #endif
 }
-
-#endif
 

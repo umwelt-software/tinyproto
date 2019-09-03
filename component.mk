@@ -4,7 +4,6 @@ COMPONENT_ADD_INCLUDEDIRS := ./src
 COMPONENT_SRCDIRS := ./src \
                      ./src/proto \
                      ./src/proto/hal \
-                     ./src/proto/hal/esp32 \
                      ./src/proto/_old \
                      ./src/proto/hdlc \
                      ./src/proto/half_duplex \

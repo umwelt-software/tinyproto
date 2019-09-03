@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2019 (C) Alexey Dynda
+    Copyright 2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,19 +17,34 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "proto/hal/tiny_types.h"
 
-#include "tiny_config.h"
-#include <stdint.h>
+inline static int _iDisGetPrimask(void)
+{
+    return 0;
+}
 
-/* For fastest version of protocol assign all defines to zero.
- * In this case protocol supports no CRC field, and
- * all api functions become not thread-safe.
- */
+inline static int _iSetPrimask(int priMask)
+{
+    return 0;
+}
 
-typedef uint8_t tiny_mutex_t;
+#define ATOMIC_BLOCK \
+     for(int mask = _iDisGetPrimask(), flag = 1;\
+         flag;\
+         flag = _iSetPrimask(mask))
 
-typedef uint8_t tiny_events_t;
+#include "hal_single_core.inl"
 
+void tiny_sleep(uint32_t ms)
+{
+    // No support for sleep
+    return 0;
+}
 
+uint32_t tiny_millis()
+{
+    // No support for milliseconds
+    return 0;
+}
 

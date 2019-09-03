@@ -15,22 +15,22 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 
-#pragma once
+#include "tiny_types.h"
 
-#include "tiny_config.h"
-#include <stdint.h>
-
-/* For fastest version of protocol assign all defines to zero.
- * In this case protocol supports no CRC field, and
- * all api functions become not thread-safe.
- */
-
-
-typedef uint8_t tiny_mutex_t;
-
-typedef uint8_t tiny_events_t;
-
-
+#if defined(__AVR__)
+#include "impl/avr_hal.inl"
+#elif defined(__XTENSA__)
+#include "impl/esp32_hal.inl"
+#elif defined(ARDUINO)
+#include "impl/arduino_hal.inl"
+#elif defined(__linux__)
+#include "impl/linux_hal.inl"
+#elif defined(__MINGW32__)
+#include "impl/mingw32_hal.inl"
+#else
+#warning "Platform not supported. Multithread support is disabled"
+#include "impl/no_platform_hal.inl"
+#endif
 

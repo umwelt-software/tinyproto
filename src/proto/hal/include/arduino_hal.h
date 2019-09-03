@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -19,13 +19,28 @@
 
 #pragma once
 
-#include "tiny_config.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
-#include "freertos/event_groups.h"
+#include <stdint.h>
 
-typedef SemaphoreHandle_t tiny_mutex_t;
-typedef EventGroupHandle_t tiny_events_t;
+/* For fastest version of protocol assign all defines to zero.
+ * In this case protocol supports no CRC field, and
+ * all api functions become not thread-safe.
+ */
+
+#ifndef CONFIG_ENABLE_CHECKSUM
+#   define CONFIG_ENABLE_CHECKSUM
+#endif
+
+#ifndef CONFIG_ENABLE_FCS16
+#   define CONFIG_ENABLE_FCS16
+#endif
+
+#ifndef CONFIG_ENABLE_FCS32
+#   define CONFIG_ENABLE_FCS32
+#endif
+
+typedef uint8_t tiny_mutex_t;
+
+typedef uint8_t tiny_events_t;
+
 
 

@@ -17,8 +17,6 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if defined(__XTENSA__)
-
 #include "proto/hal/tiny_types.h"
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
@@ -83,5 +81,3 @@ uint32_t tiny_millis()
 {
     return (uint32_t)(esp_timer_get_time()/1000);
 }
-
-#endif

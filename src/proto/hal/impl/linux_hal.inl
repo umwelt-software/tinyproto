@@ -17,8 +17,6 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if defined(__MINGW32__)
-
 #include "proto/hal/tiny_types.h"
 
 #include <pthread.h>
@@ -133,7 +131,7 @@ void tiny_sleep( uint32_t millis )
 
 uint32_t tiny_millis()
 {
-    return GetTickCount();
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (ts.tv_sec * 1000) + ts.tv_nsec / 1000000;
 }
-
-#endif

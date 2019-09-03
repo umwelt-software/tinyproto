@@ -1,5 +1,5 @@
 /*
-    Copyright 2016 (C) Alexey Dynda
+    Copyright 2016-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -15,24 +15,32 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #pragma once
 
-#include "tiny_config.h"
-#include <pthread.h>
-#include <unistd.h>
 #include <stdint.h>
-#include <time.h>
 
-typedef pthread_mutex_t tiny_mutex_t;
+/* For fastest version of protocol assign all defines to zero.
+ * In this case protocol supports no CRC field, and
+ * all api functions become not thread-safe.
+ */
 
-typedef struct
-{
-    uint8_t bits;
-    uint16_t waiters;
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
-} tiny_events_t;
+#ifndef CONFIG_ENABLE_CHECKSUM
+#   define CONFIG_ENABLE_CHECKSUM
+#endif
+
+#ifndef CONFIG_ENABLE_FCS16
+#   define CONFIG_ENABLE_FCS16
+#endif
+
+//#ifndef CONFIG_ENABLE_FCS32
+//#   define CONFIG_ENABLE_FCS32
+//#endif
+
+typedef uint8_t tiny_mutex_t;
+
+typedef uint8_t tiny_events_t;
+
 
 

@@ -43,11 +43,7 @@ OBJ_LIB += \
         src/proto/hdlc/tiny_hdlc.o \
         src/proto/half_duplex/tiny_hd.o \
         src/proto/hal/tiny_list.o \
-        src/proto/hal/arduino/hal.o \
-        src/proto/hal/avr/hal.o \
-        src/proto/hal/esp32/hal.o \
-        src/proto/hal/linux/hal.o \
-        src/proto/hal/mingw32/hal.o \
+        src/proto/hal/tiny_types.o \
         src/proto/half_duplex/tiny_rq_pool.o \
         src/TinyHdlc.o \
         src/TinyProtocolHd.o \

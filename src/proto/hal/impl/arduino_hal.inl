@@ -17,8 +17,6 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined(__AVR__) && !defined(__XTENSA__) && defined(ARDUINO)
-
 #include "proto/hal/tiny_types.h"
 
 #if defined(__TARGET_CPU_CORTEX_M0) || defined(__TARGET_CPU_CORTEX_M0_) || defined(__ARM_ARCH_6M__)
@@ -79,7 +77,7 @@ int _free_lock(int status)
 
 #endif
 
-#include "../hal_single_core.inl"
+#include "hal_single_core.inl"
 
 void tiny_sleep(uint32_t ms)
 {
@@ -90,6 +88,4 @@ uint32_t tiny_millis()
 {
     return millis();
 }
-
-#endif
 

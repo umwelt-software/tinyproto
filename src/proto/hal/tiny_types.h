@@ -31,17 +31,18 @@ extern "C" {
 #endif
 
 #if defined(__AVR__)
-#include "avr/tiny_defines.h"
+#include "include/avr_hal.h"
 #elif defined(__XTENSA__)
-#include "esp32/tiny_defines.h"
+#include "include/esp32_hal.h"
 #elif defined(ARDUINO)
-#include "arduino/tiny_defines.h"
+#include "include/arduino_hal.h"
 #elif defined(__linux__)
-#include "linux/tiny_defines.h"
+#include "include/linux_hal.h"
 #elif defined(__MINGW32__)
-#include "mingw32/tiny_defines.h"
+#include "include/mingw32_hal.h"
 #else
-#error "Platform not supported"
+#warning "Platform not supported. Multithread support is disabled"
+#include "include/no_platform_hal.h"
 #endif
 
 #include <stdint.h>
