@@ -127,6 +127,8 @@ typedef struct _hdlc_handle_t
 #endif
 } hdlc_struct_t, *hdlc_handle_t;
 
+//------------------------ GENERIC FUNCIONS ------------------------------
+
 /**
  * Initializes hdlc level and returns hdlc handle or NULL in case of error.
  *
@@ -151,6 +153,8 @@ int hdlc_close( hdlc_handle_t handle );
  */
 void hdlc_reset( hdlc_handle_t handle );
 
+//------------------------ RX FUNCIONS ------------------------------
+
 /**
  * Processes incoming data. Implementation of reading data from hw is user
  * responsibility. If hdlc_run_rx() returns value less than size of data
@@ -169,10 +173,22 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
 int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout );
 
 /**
+ * Sets new RX buffer for hdlc protocol. This function is not thread-safe.
+ *
+ * @param handle handle to hdlc instance
+ * @param data pointer to rx buffer
+ * @param size size of rx buffer in bytes
+ */
+void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size);
+
+//------------------------ TX FUNCIONS ------------------------------
+
+/**
  * Runs transmission at hdlc level. If there is frame to send, or
  * send is in progress, this function will call send_tx() callback
  * multiple times. If send_tx() callback reports 0, that means that
- * there is nothing to send of hw device is busy.
+ * hw device is busy and in this case hdlc_run_tx() will return immediately.
+ *
  * @warning this function must be called from one thread only.
  *
  * @param handle handle to hdlc instance
@@ -189,23 +205,29 @@ int hdlc_run_tx( hdlc_handle_t handle );
  * If multithread_mode is specificed for hdlc protocol, then
  * hdlc_send() function will wait for specified timeout until
  * some tx thread, implemented by application, completes sending
- * of the frame.
+ * of the frame. If timeout happens, you may call hdlc_send()
+ * second time, using NULL as data argument, but be careful, since
+ * another thread may complete sending between two calls.
  *
  * If multithread_mode is disabled for hdlc protocol, then
  * hdlc_send() function will start frame sending immediately by
  * itself if TX line is not busy. In this case hdlc_send() will
- * block until frame is sent or timeout.
+ * block until frame is sent or timeout. If timeout happens, but
+ * the frame is not sent still, you need to call hdlc_send()
+ * second time, but with data pameter specified as NULL.
  *
  * If timeout is specified as 0, hdlc_send() function will not
- * wait or perform send operation, but only pass dtaa pointer to
- * hdlc state machine.
+ * wait or perform send operation, but only pass data pointer to
+ * hdlc state machine. In this case, some other thread needs to
+ * or in the same thread you need to send data using hdlc_run_tx().
  *
  * @param handle handle to hdlc instance
- * @param data pointer to new data to send
+ * @param data pointer to new data to send (can be NULL is you need to retry sending)
  * @param len size of data to send in bytes
  * @param timeout time in milliseconds to wait for data to be sent
  * @return TINY_ERR_FAILED if generic error happens
- *         TINY_ERR_TIMEOUT if TX queue is busy for specified timeout period
+ *         TINY_ERR_BUSY if TX queue is busy with another frame.
+ *         TINY_ERR_TIMEOUT if send operation cannot be completed in specified time.
  *         TINY_SUCCESS if data is successfully sent
  * @warning buffer with data must be available all the time until
  *          data are actually sent to tx hw channel. That is if you use
@@ -213,15 +235,6 @@ int hdlc_run_tx( hdlc_handle_t handle );
  *          is not longer needed at hdlc level.
  */
 int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout );
-
-/**
- * Sets new RX buffer for hdlc protocol. This function is not thread-safe.
- *
- * @param handle handle to hdlc instance
- * @param data pointer to rx buffer
- * @param size size of rx buffer in bytes
- */
-void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size);
 
 /**
  * @}

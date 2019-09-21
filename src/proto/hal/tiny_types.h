@@ -150,6 +150,8 @@ typedef int (*read_block_cb_t)(void *pdata, void *buffer, int size);
 typedef void (*on_frame_cb_t)(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
 #define EVENT_BIS_ALL  0xFF
+#define EVENT_BITS_CLEAR 1
+#define EVENT_BITS_LEAVE 0
 
 void tiny_mutex_create(tiny_mutex_t *mutex);
 

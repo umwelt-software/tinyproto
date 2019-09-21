@@ -35,7 +35,7 @@ public:
 private:
     int          m_writeptr;
     int          m_readptr;
-    std::mutex   m_mutex;
+    std::mutex   m_mutex{};
     uint8_t      m_buf[1024];
 };
 

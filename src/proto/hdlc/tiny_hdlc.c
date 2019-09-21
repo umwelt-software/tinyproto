@@ -9,7 +9,7 @@
 
 #if TINY_HDLC_DEBUG
 #include <stdio.h>
-#define LOG(...)  fprintf(stderr, ...)
+#define LOG(...)  fprintf(stderr, __VA_ARGS__)
 #else
 #define LOG(...)
 #endif
@@ -85,7 +85,7 @@ void hdlc_reset( hdlc_handle_t handle )
 
 static int hdlc_send_start( hdlc_handle_t handle )
 {
-    int bits = tiny_events_wait( &handle->events, TX_DATA_READY_BIT, 0, 0 );
+    int bits = tiny_events_wait( &handle->events, TX_DATA_READY_BIT, EVENT_BITS_LEAVE, 0 );
     if ( bits == 0 )
     {
         return 0;
@@ -239,9 +239,10 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
     for(;;)
     {
         result = handle->tx.state( handle );
+
         if ( result < 0 )
             break;
-        uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, 1, 0 );
+        uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, EVENT_BITS_CLEAR, 0 );
         if  ( bits != 0 )
         {
             result = TINY_SUCCESS;
@@ -258,30 +259,39 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
 
 static int hdlc_put( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
 {
-    if ( tiny_events_wait( &handle->events, TX_ACCEPT_BIT, 1, timeout ) == 0 )
+    // Check if TX thread is ready to accept new data
+    if ( tiny_events_wait( &handle->events, TX_ACCEPT_BIT, EVENT_BITS_CLEAR, timeout ) == 0 )
     {
         return TINY_ERR_TIMEOUT;
     }
     handle->tx.origin_data = data;
     handle->tx.data = data;
     handle->tx.len = len;
+    // Indicate that now we have something to send
     tiny_events_set( &handle->events, TX_DATA_READY_BIT );
     return TINY_SUCCESS;
 }
 
 int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
 {
+    int result = TINY_SUCCESS;
     tiny_mutex_lock( &handle->send_mutex );
-    int result = hdlc_put( handle, data, len, timeout );
+    if ( data != NULL )
+    {
+        result = hdlc_put( handle, data, len, timeout );
+        if ( result == TINY_ERR_TIMEOUT ) result = TINY_ERR_BUSY;
+    }
     if ( result >= 0 && timeout)
     {
         if ( handle->multithread_mode )
         {
-            uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, 1, timeout );
-            result = bits == 0 ? TINY_ERR_FAILED: TINY_SUCCESS;
+            // in multithreaded mode we must wait, until Tx thread sends the data
+            uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, EVENT_BITS_CLEAR, timeout );
+            result = bits == 0 ? TINY_ERR_TIMEOUT: TINY_SUCCESS;
         }
         else
         {
+            // while in single thread mode we must send the data by ourselves
             result = hdlc_run_tx_until_sent( handle, timeout );
         }
     }
@@ -347,6 +357,7 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
     if ( handle->rx.len == 0)
     {
         // Impossible, maybe frame alignment is wrong, go to read data again
+        LOG( "[HDLC:%p] RX: error in frame alignment, recovering...\n", handle);
         handle->rx.len = 0;
         handle->rx.escape = 0;
         handle->rx.state = hdlc_read_data;
@@ -356,11 +367,13 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
     if ( handle->rx.len > handle->rx_buf_size )
     {
         // Buffer size issue, too long packet
+        LOG( "[HDLC:%p] RX: tool long frame\n", handle);
         return 1;
     }
     if ( handle->rx.len < (uint8_t)handle->crc_type / 8 )
     {
         // CRC size issue
+        LOG( "[HDLC:%p] RX: crc field is too short\n", handle);
         return 1;
     }
     crc_t calc_crc = 0;
@@ -395,20 +408,21 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
     {
         // CRC calculate issue
         #if TINY_HDLC_DEBUG
-        LOG(stderr, "[HDLC:%p] RX: WRONG CRC (calc:%08X != %08X)\n", handle, calc_crc, read_crc);
-        for (int i=0; i< handle->rx.len; i++) fprintf(stderr, " %c ", (char)handle->rx.data[i]);
-        LOG(stderr,"\n");
-        for (int i=0; i< handle->rx.len; i++) LOG(stderr, " %02X ", handle->rx.data[i]);
-        LOG(stderr,"\n-----------\n");
+        LOG( "[HDLC:%p] RX: WRONG CRC (calc:%08X != %08X)\n", handle, calc_crc, read_crc);
+        for (int i=0; i< handle->rx.len; i++) LOG(" %c ", (char)handle->rx.data[i]);
+        LOG("\n");
+        for (int i=0; i< handle->rx.len; i++) LOG( " %02X ", handle->rx.data[i]);
+        LOG("\n-----------\n");
         #endif
         return 1;
     }
-    LOG(stderr, "[HDLC:%p] RX: GOOD\n", handle);
+    // LOG( "[HDLC:%p] RX: GOOD\n", handle);
     handle->rx.len -= (uint8_t)handle->crc_type / 8;
     if ( handle->on_frame_read )
     {
         handle->on_frame_read( handle->user_data, handle->rx.data, handle->rx.len );
     }
+    // Set bit indicating that we have read and processed the frame
     tiny_events_set( &handle->events, RX_DATA_READY_BIT );
     return 1;
 }
@@ -426,6 +440,7 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
                 *error = temp_result;
             }
             // Just clear this bit, since the caller doesn't want to wait for any frame
+            // This bit is used only by hdlc_run_rx_until_read()
             tiny_events_clear( &handle->events, RX_DATA_READY_BIT );
             break;
         }
@@ -449,6 +464,7 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
     int result = 0;
     for(;;)
     {
+        // Read single byte and process it
         uint8_t data;
         result = readcb( user_data, &data, sizeof(data) );
         if ( result > 0 )
@@ -463,14 +479,14 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
         {
             break;
         }
-        uint8_t bits = handle->multithread_mode ?
-                       tiny_events_wait( &handle->events, RX_DATA_READY_BIT, 1, 0 ):
-                       tiny_events_wait( &handle->events, RX_DATA_READY_BIT, 1, 0 );
+        // Check for RX_DATA_READY_BIT without timeout. If frame is ready - exit
+        uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, EVENT_BITS_CLEAR, 0 );
         if ( bits )
         {
             result = handle->rx.len;
             break;
         }
+        // Check if we need to exit on timeout
         if ( (uint16_t)(tiny_millis() - ts) >= timeout )
         {
             result = TINY_ERR_TIMEOUT;

@@ -29,7 +29,7 @@
 
 #if TINY_HD_DEBUG
 #include <stdio.h>
-#define LOG(...)  fprintf(stderr, ...)
+#define LOG(...)  fprintf(stderr, __VA_ARGS__)
 #else
 #define LOG(...)
 #endif
@@ -92,11 +92,11 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
         data[0] = (request.uid >> 8) & 0xFF;
         data[1] = request.uid & 0xFF;
         memcpy( data + sizeof(uint16_t), buf, len);
-        LOG(stderr, "[%p] >>>> %04X (DATA)\n", handle, request.uid);
+        LOG( "[%p] >>>> %04X (DATA)\n", handle, request.uid);
         result = hdlc_send( &handle->_hdlc , data, len + sizeof(uint16_t), handle->timeout);
         if (result < 0)
         {
-            LOG(stderr, "[%p] >>>> %04X (DATA FAILED)\n", handle, request.uid);
+            LOG( "[%p] >>>> %04X (DATA FAILED)\n", handle, request.uid);
             tiny_remove_request(&request);
             return result;
         }
@@ -136,23 +136,23 @@ static int on_frame_read(void *user_data, void *data, int len)
     /** response */
     if ( uid & ACK_FRAME_FLAG )
     {
-        LOG(stderr, "[%p] <<<< %04X (I,ACK)\n", user_data, uid);
+        LOG( "[%p] <<<< %04X (I,ACK)\n", user_data, uid);
         /* this is response. Mark frame as successfully delivered and exit */
         tiny_commit_request( uid & ~(ACK_FRAME_FLAG) );
         return len;
     }
     if ( uid & DATA_FRAME_FLAG )
     {
-        LOG(stderr, "[%p] <<<< %04X (DATA)\n", user_data, uid);
+        LOG( "[%p] <<<< %04X (DATA)\n", user_data, uid);
         uid |= ACK_FRAME_FLAG;
         uint8_t *buf = (uint8_t *)handle->_hdlc.rx_buf + handle->_hdlc.rx_buf_size;
         buf[0] = (uid >> 8) & 0xFF;
         buf[1] = uid & 0xFF;
-        LOG(stderr, "[%p] >>>> %04X (O,ACK)\n", user_data, uid);
+        LOG( "[%p] >>>> %04X (O,ACK)\n", user_data, uid);
         int result = hdlc_send( &handle->_hdlc, buf, sizeof(uid), handle->timeout );
         if ( result < 0)
         {
-            LOG(stderr, "[%p] >>>> %04X (O,ACK FAILED)\n", user_data, uid);
+            LOG( "[%p] >>>> %04X (O,ACK FAILED)\n", user_data, uid);
             return result; // return error if failed to send ACK
         }
     }

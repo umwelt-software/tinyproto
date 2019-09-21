@@ -69,7 +69,7 @@ TEST(HdTests, TinyHd_Send)
         txbuf[1] = 0xFF;
 //        printf("sending %d bytes\n", 2);
         int result = helper2.send_wait_ack( txbuf, 2 );
-        CHECK( result >= 0 );
+        CHECK_EQUAL( 2, result );
     }
     // sleep for 10 ms befoe last frame arrives
     usleep(10000);
@@ -106,7 +106,7 @@ TEST(HdTests, TinyHd_Multithread)
         txbuf[1] = 0xFF;
 //        printf("sending %d bytes\n", 2);
         int result = helper2.send_wait_ack( txbuf, 2 );
-        CHECK( result >= 0 );
+        CHECK_EQUAL( 2, result );
     }
     // sleep for 10 ms befoe last frame arrives
     usleep(10000);
