@@ -1,5 +1,4 @@
  - Add cancel packet sending if timeout happens
- - Update hdlc & hd levels to avoid busy loops
  - Add more debug to all levels
  - multithread mode for Hd protocol
  - Implement Mingw32 support (partially implemented)

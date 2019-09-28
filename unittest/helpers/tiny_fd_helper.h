@@ -17,30 +17,33 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _FAKE_WIRE_H_
-#define _FAKE_WIRE_H_
+#pragma once
 
+#include "tiny_base_helper.h"
+#include <functional>
 #include <stdint.h>
-#include <pthread.h>
-#include <mutex>
+#include <thread>
+#include <atomic>
+#include "proto/fd/tiny_fd.h"
+#include "fake_channel.h"
 
-class FakeWire
+
+class TinyHelperFd: public IBaseHelper<TinyHelperFd>
 {
 public:
-    FakeWire();
-    ~FakeWire();
-    int read(uint8_t * data, int length);
-    int write(const uint8_t * data, int length);
-    void generate_error_on_byte(int byte_num) { m_error_byte_num = byte_num; };
-    void reset();
+    TinyHelperFd(FakeChannel * channel,
+                 int rxBufferSize,
+                 const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb = nullptr,
+                 bool  multithread_mode = false);
+    ~TinyHelperFd();
+    int send(uint8_t *buf, int len, int timeout = 30);
+    int run() override;
+    using IBaseHelper<TinyHelperFd>::run;
 private:
-    int          m_writeptr;
-    int          m_readptr;
-    std::mutex   m_mutex{};
-    uint8_t      m_buf[1024];
-    int          m_error_byte_num = 0;
-    int          m_byte_counter = 0;
+    tiny_fd_handle_t   m_handle;
+    std::function<void(uint16_t,uint8_t*,int)>
+                  m_onRxFrameCb;
+
+    static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
 };
 
-
-#endif /* _FAKE_WIRE_H_ */

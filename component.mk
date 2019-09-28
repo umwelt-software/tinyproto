@@ -6,6 +6,7 @@ COMPONENT_SRCDIRS := ./src \
                      ./src/proto/hal \
                      ./src/proto/_old \
                      ./src/proto/hdlc \
+                     ./src/proto/fd \
                      ./src/proto/half_duplex \
                      ./src/proto/light \
                      ./src/proto/crc \

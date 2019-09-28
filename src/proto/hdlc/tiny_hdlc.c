@@ -310,7 +310,6 @@ static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len )
         // TODO: Skip byte, but we received some wrong data
         return 1;
     }
-    handle->rx.len = 0;
     handle->rx.escape = 0;
     handle->rx.data = (uint8_t *)handle->rx_buf;
     handle->rx.state = hdlc_read_data;
@@ -335,42 +334,42 @@ static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
         handle->rx.escape = 1;
         return 1;
     }
-    if ( handle->rx.len < handle->rx_buf_size )
+    if ( handle->rx.data - (uint8_t *)handle->rx_buf < handle->rx_buf_size )
     {
         if ( handle->rx.escape )
         {
-            handle->rx.data[ handle->rx.len ] = byte ^ TINY_ESCAPE_BIT;
+            *handle->rx.data = byte ^ TINY_ESCAPE_BIT;
             handle->rx.escape = 0;
         }
         else
         {
-            handle->rx.data[ handle->rx.len ] = byte;
+            *handle->rx.data = byte;
         }
     }
 //    LOG("%02X\n", handle->rx.data[ handle->rx.len ]);
-    handle->rx.len++;
+    handle->rx.data++;
     return 1;
 }
 
-static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
+static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_bytes )
 {
-    if ( handle->rx.len == 0)
+    if ( handle->rx.data == handle->rx_buf )
     {
         // Impossible, maybe frame alignment is wrong, go to read data again
         LOG( "[HDLC:%p] RX: error in frame alignment, recovering...\n", handle);
-        handle->rx.len = 0;
         handle->rx.escape = 0;
         handle->rx.state = hdlc_read_data;
         return 1;
     }
     handle->rx.state = hdlc_read_start;
-    if ( handle->rx.len > handle->rx_buf_size )
+    int len = handle->rx.data - (uint8_t *)handle->rx_buf;
+    if ( len > handle->rx_buf_size )
     {
         // Buffer size issue, too long packet
         LOG( "[HDLC:%p] RX: tool long frame\n", handle);
         return 1;
     }
-    if ( handle->rx.len < (uint8_t)handle->crc_type / 8 )
+    if ( len < (uint8_t)handle->crc_type / 8 )
     {
         // CRC size issue
         LOG( "[HDLC:%p] RX: crc field is too short\n", handle);
@@ -382,24 +381,24 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
     {
 #ifdef CONFIG_ENABLE_CHECKSUM
         case HDLC_CRC_8:
-            calc_crc = chksum( INITCHECKSUM, handle->rx.data, handle->rx.len - 1 ) & 0x00FF;
-            read_crc = handle->rx.data[ handle->rx.len - 1 ];
+            calc_crc = chksum( INITCHECKSUM, handle->rx_buf, len - 1 ) & 0x00FF;
+            read_crc = handle->rx.data[-1];
             break;
 #endif
 #ifdef CONFIG_ENABLE_FCS16
         case HDLC_CRC_16:
-            calc_crc = crc16( PPPINITFCS16, handle->rx.data, handle->rx.len - 2 );
-            read_crc = handle->rx.data[ handle->rx.len - 2 ] |
-                       ((uint16_t)handle->rx.data[ handle->rx.len - 1 ] << 8 );
+            calc_crc = crc16( PPPINITFCS16, handle->rx_buf, len - 2 );
+            read_crc = handle->rx.data[ -2 ] |
+                       ((uint16_t)handle->rx.data[ -1 ] << 8 );
             break;
 #endif
 #ifdef CONFIG_ENABLE_FCS32
         case HDLC_CRC_32:
-            calc_crc = crc32( PPPINITFCS32, handle->rx.data, handle->rx.len - 4 );
-            read_crc = handle->rx.data[ handle->rx.len - 4 ] |
-                       ((uint32_t)handle->rx.data[ handle->rx.len - 3 ] << 8 ) |
-                       ((uint32_t)handle->rx.data[ handle->rx.len - 2 ] << 16 ) |
-                       ((uint32_t)handle->rx.data[ handle->rx.len - 1 ] << 24 );
+            calc_crc = crc32( PPPINITFCS32, handle->rx_buf, len - 4 );
+            read_crc = handle->rx.data[ -4 ] |
+                       ((uint32_t)handle->rx.data[ -3 ] << 8 ) |
+                       ((uint32_t)handle->rx.data[ -2 ] << 16 ) |
+                       ((uint32_t)handle->rx.data[ -1 ] << 24 );
             break;
 #endif
         default: break;
@@ -409,18 +408,18 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len )
         // CRC calculate issue
         #if TINY_HDLC_DEBUG
         LOG( "[HDLC:%p] RX: WRONG CRC (calc:%08X != %08X)\n", handle, calc_crc, read_crc);
-        for (int i=0; i< handle->rx.len; i++) LOG(" %c ", (char)handle->rx.data[i]);
+        for (int i=0; i< len; i++) LOG(" %c ", (char)handle->rx_buf[i]);
         LOG("\n");
-        for (int i=0; i< handle->rx.len; i++) LOG( " %02X ", handle->rx.data[i]);
+        for (int i=0; i< len; i++) LOG( " %02X ", handle->rx_buf[i]);
         LOG("\n-----------\n");
         #endif
         return 1;
     }
     // LOG( "[HDLC:%p] RX: GOOD\n", handle);
-    handle->rx.len -= (uint8_t)handle->crc_type / 8;
+    len -= (uint8_t)handle->crc_type / 8;
     if ( handle->on_frame_read )
     {
-        handle->on_frame_read( handle->user_data, handle->rx.data, handle->rx.len );
+        handle->on_frame_read( handle->user_data, handle->rx_buf, len );
     }
     // Set bit indicating that we have read and processed the frame
     tiny_events_set( &handle->events, RX_DATA_READY_BIT );
@@ -455,7 +454,6 @@ void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size)
 {
     handle->rx_buf = data;
     handle->rx_buf_size = size;
-    handle->rx.data = (uint8_t *)handle->rx_buf;
 }
 
 int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout )
@@ -483,7 +481,7 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
         uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, EVENT_BITS_CLEAR, 0 );
         if ( bits )
         {
-            result = handle->rx.len;
+            result = handle->rx.data - (uint8_t *)handle->rx_buf;
             break;
         }
         // Check if we need to exit on timeout

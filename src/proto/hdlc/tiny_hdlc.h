@@ -111,7 +111,6 @@ typedef struct _hdlc_handle_t
     struct
     {
         uint8_t *data;
-        int len;
         int (*state)( struct _hdlc_handle_t *handle, const uint8_t *data, int len );
         uint8_t escape;
     } rx;

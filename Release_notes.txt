@@ -1,0 +1,10 @@
+== ver. 0.9.0 =======================================
+ - Initial full duplex implementation:
+   - Supports I-frames
+   - Supports RR and REJ S-frames
+   - Supports multithread mode (no singlethread mode)
+
+== ver. 0.8.0 =======================================
+ - Officially published in Arduino Library Manager
+ - low level hdlc framing support
+ - half duplex support

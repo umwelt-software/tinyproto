@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -77,8 +77,16 @@ int FakeWire::write(const uint8_t *data, int length)
             /* no space to write */
             break;
         }
+        m_byte_counter++;
 //        fprintf(stderr, "%02X ", data[size]);
-        m_buf[m_writeptr] = data[size];
+        if ( m_error_byte_num != 0 && (m_byte_counter % m_error_byte_num) == 0 )
+        {
+            m_buf[m_writeptr] = data[size] ^ 0x34;
+        }
+        else
+        {
+            m_buf[m_writeptr] = data[size];
+        }
         m_writeptr = l_writeptr;
         size++;
     }

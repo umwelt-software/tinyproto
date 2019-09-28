@@ -21,6 +21,7 @@ reading bytes from communication line.
 With this library you can easy communicate your Arduino with applications
 on PC and other boards. You don't need to think about data synchronization
 between points.
+No dynamic allocation of memory, so, it can be used on the systems with limited resources
 
 ## Key Features
 
@@ -45,6 +46,8 @@ Main features:
  * Low Flash consumption (many features can be disabled at compilation time)
  * Serial performance tool (sperf)
  * Loopback tool for debug purposes
+ * No dynamic memory allocations (suitable for using on uC with limited resources)
+ * Zero copy implementation (application buffers are used as is, no copy operations)
 
 ## Supported platforms
 

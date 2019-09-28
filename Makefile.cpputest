@@ -8,11 +8,13 @@ OBJ_UNIT_TEST = \
         unittest/helpers/tiny_hdlc_helper.o \
         unittest/helpers/tiny_light_helper.o \
         unittest/helpers/tiny_hd_helper.o \
+        unittest/helpers/tiny_fd_helper.o \
         unittest/main.o \
         unittest/basic_tests.o \
         unittest/hdlc_tests.o \
         unittest/light_tests.o \
-        unittest/hd_tests.o
+        unittest/hd_tests.o \
+        unittest/fd_tests.o \
 
 unittest: $(OBJ_UNIT_TEST) library
 	$(CXX) $(CPPFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L$(BLD) -lm -pthread -ltinyprotocol -lCppUTest -lCppUTestExt
