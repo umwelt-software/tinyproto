@@ -65,7 +65,7 @@ extern "C" {
 #define TINY_ERR_FAILED                 (-1)
 /// Timeout happened. The function must be called once again.
 #define TINY_ERR_TIMEOUT                (-2)
-/// Data too large to fit the user buffer, valid for tiny_read function
+/// Data too large to fit the user buffer
 #define TINY_ERR_DATA_TOO_LARGE         (-3)
 /// Some invalid data passed to Tiny API function.
 #define TINY_ERR_INVALID_DATA           (-4)
@@ -75,6 +75,8 @@ extern "C" {
 #define TINY_ERR_OUT_OF_SYNC            (-6)
 /// No data for now, need to retry reading once again
 #define TINY_ERR_AGAIN                  (-7)
+/// Invalid crc field of incoming frame
+#define TINY_ERR_WRONG_CRC              (-8)
 
 /** @} */
 

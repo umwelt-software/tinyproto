@@ -1,7 +1,9 @@
 == ver. 0.9.0 =======================================
  - Initial full duplex implementation:
+   - Supports ABM (Asynchronous ballanced mode)
    - Supports I-frames
    - Supports RR and REJ S-frames
+   - Supports SABM, UA U-frames
    - Supports multithread mode (no singlethread mode)
 
 == ver. 0.8.0 =======================================

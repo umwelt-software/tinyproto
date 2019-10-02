@@ -23,6 +23,8 @@
 
  @file
  @brief Tiny Protocol Full Duplex API
+
+ @details Implements full duplex asynchronous ballanced mode (ABM)
 */
 #pragma once
 
@@ -102,59 +104,62 @@ extern int tiny_fd_init(tiny_fd_handle_t *handle,
  *
  * stops Tiny Full Duplex state machine.
  *
- * @param handle - pointer to tiny_fd_handle_t
+ * @param handle handle of full-duplex protocol
  */
 extern void tiny_fd_close(tiny_fd_handle_t handle);
 
+/**
+ * @brief runs tx processing for specified period of time.
+ *
+ * Runs tx processing for specified period of time.
+ * After timeout happens, the function returns. If you need it to
+ * run in non-blocking mode, please using timeout 0 ms.
+ *
+ * @important this function actually sends data to the communication channel. tiny_fd_send()
+ *            puts data to queue, but doesn't really send them.
+ *
+ * @param handle handle of full-duplex protocol
+ * @param timeout maximum timeout in milliseconds to perform tx operations
+ */
 extern int tiny_fd_run_tx(tiny_fd_handle_t handle, uint16_t timeout);
 
+/**
+ * @brief runs rx processing for specified period of time.
+ *
+ * Runs rx processing for specified period of time.
+ * After timeout happens, the function returns. If you need it to
+ * run in non-blocking mode, please using timeout 0 ms.
+ *
+ * @param handle handle of full-duplex protocol
+ * @param timeout maximum timeout in milliseconds to perform rx operations
+ */
 extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
 
 /**
- * @brief runs receive functions of Tiny Full Duplex protocol.
+ * @brief Sends userdata over full-duplex protocol.
  *
- * Runs receive functions of Tiny Full Duplex protocol. This function
- * must be called all the time in the loop if send operation is not performed.
- * For atmega controllers this means to call tiny_fd_run() in loop() routine.
- * If user packet is received during execution of the function, it wil
- * call on_frame_cb_t callback to process received packet.
+ * Sends userdata over full-duplex protocol. Note, that this command
+ * will return success, when data are copied to internal queue. That doesn't mean
+ * that data physically sent, but they are enqueued for sending.
  *
- * @param handle - pointer to tiny_fd_handle_t
- * @see TINY_ERR_FAILED
- * @see TINY_ERR_DATA_TOO_LARGE
- * @see TINY_ERR_OUT_OF_SYNC
- * @see TINY_ERR_BUSY
- * @see TINY_NO_ERROR
- * @return TINY_ERR_OUT_OF_SYNC    - if first byte received from the channel is not packet marker. You may ignore this error.
- *         TINY_ERR_DATA_TOO_LARGE - if incoming packet is too large to fit the buffer
- *         TINY_ERR_FAILED         - if something wrong with received data
- *         TINY_BUSY               - if another receive operation is in progress.
- *         TINY_NO_ERROR           - if nothing is received.
- *         greater 0               - number of received bytes. Callbak will be called in this case.
- * @warning do not use blocking send (tiny_send_wait_ack) in on_frame_cb_t callback.
- */
-extern int tiny_fd_run(tiny_fd_handle_t handle);
-
-/**
- * @brief Sends userdata and waits for acknowledgement from remote side.
+ * When timeout happens, the data were not actually enqueued. Call this function once again.
+ * If TINY_ERR_DATA_TOO_LARGE is returned, try to send less data. If you don't want to care about
+ * data size, please, use different function tiny_fd_write()..
  *
- * Sends userdata and waits for acknowledgement from remote side.
+ * @param handle   pointer to tiny_fd_handle_t
+ * @param buf      data to send
+ * @param len      length of data to send
+ * @param timeout  timeout in milliseconds to wait before function fails, if no
+ *                 room in internal queue to put data.
  *
- * @remarks Each outoing packet is assigned 16-bit uid, and remote side must confirm
- * with service packet sent back with this 16-bit uid.
- * Generated uids have range in [0 : 0x0FFF]. Higher 4 bits of uid field are used
- * to pass flags with the packet.
- *
- * @param handle - pointer to tiny_fd_handle_t
- * @param buf    - data to send
- * @param len    - length of data to send
- *
- * @return number of bytes, sent.
- *         TINY_ERR_TIMEOUT  - if no response from remote side after 3 retries.
- *         TINY_ERR_FAILED   - if request was cancelled, by tiny_hd_close().
- *         other error codes - if send/receive errors happened.
+ * @return TINY_SUCCESS          if user data are put to internal queue.
+ *         TINY_ERR_TIMEOUT      if no room in internal queue to put data. Retry operation once again.
+ *         TINY_ERR_FAILED       if request was cancelled, by tiny_hd_close().
+ *         TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
  */
 extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len, uint16_t timeout);
+
+extern int tiny_fd_write(tiny_fd_handle_t handle, const void *buf, int len, uint16_t timeout);
 
 /**
  * @}

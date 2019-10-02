@@ -35,9 +35,10 @@ public:
                  int rxBufferSize,
                  const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb = nullptr,
                  bool  multithread_mode = false);
-    ~TinyHelperFd();
+    virtual ~TinyHelperFd();
     int send(uint8_t *buf, int len, int timeout = 30);
-    int run() override;
+    int run_rx() override;
+    int run_tx() override;
     using IBaseHelper<TinyHelperFd>::run;
 private:
     tiny_fd_handle_t   m_handle;

@@ -35,7 +35,8 @@ public:
                    int rx_buf_size = 1024 );
     ~TinyHdlcHelper();
     int send(uint8_t *buf, int len);
-    int run() override;
+    int run_rx() override;
+    int run_tx() override;
 private:
     std::function<void(uint8_t*,int)> m_onRxFrameCb;
     std::function<void(uint8_t*,int)> m_onTxFrameCb;

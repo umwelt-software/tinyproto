@@ -47,9 +47,13 @@ int TinyHelperFd::send(uint8_t *buf, int len, int timeout)
     return tiny_fd_send(m_handle, buf, len, timeout);
 }
 
-int TinyHelperFd::run()
+int TinyHelperFd::run_tx()
 {
-    tiny_fd_run_tx(m_handle, 10);
+    return tiny_fd_run_tx(m_handle, 10);
+}
+
+int TinyHelperFd::run_rx()
+{
     return tiny_fd_run_rx(m_handle, 10);
 }
 

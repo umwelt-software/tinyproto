@@ -19,6 +19,7 @@
 
 #include "fake_wire.h"
 #include <stdio.h>
+#include <thread>
 
 FakeWire::FakeWire()
     :m_buf{0}
@@ -30,8 +31,12 @@ FakeWire::FakeWire()
 
 int FakeWire::read(uint8_t *data, int length)
 {
-    m_mutex.lock();
     int size = 0;
+    if (!m_mutex.try_lock())
+    {
+        std::this_thread::sleep_for(std::chrono::microseconds(1000));
+        return size;
+    }
     while (size < length)
     {
         if ( m_readptr == m_writeptr )
@@ -63,7 +68,11 @@ void FakeWire::reset()
 int FakeWire::write(const uint8_t *data, int length)
 {
     int size = 0;
-    m_mutex.lock();
+    if (!m_mutex.try_lock())
+    {
+        std::this_thread::sleep_for(std::chrono::microseconds(1000));
+        return size;
+    }
     while (size < length)
     {
         int l_writeptr = m_writeptr + 1;

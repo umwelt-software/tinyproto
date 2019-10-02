@@ -29,6 +29,13 @@ extern "C" {
 #include "proto/hdlc/tiny_hdlc.h"
 #include "proto/hal/tiny_types.h"
 
+typedef enum
+{
+    TINY_FD_STATE_DISCONNECTED,
+    TINY_FD_STATE_CONNECTING,
+    TINY_FD_STATE_CONNECTED_ABM,
+} tiny_fd_state_t;
+
 typedef struct
 {
     uint8_t address;
@@ -51,7 +58,7 @@ typedef struct
 typedef struct
 {
     tiny_i_frame_info_t **i_frames;
-    uint8_t control_cmd;
+    uint32_t control_cmds; // max 4 control commands, each is 1 byte
     tiny_s_frame_info_t s_frame;
     uint8_t *rx_buffer;
     uint8_t *tx_buffer;
@@ -63,6 +70,7 @@ typedef struct
     uint8_t next_ns; // next frame to be sent
     uint8_t confirm_ns; // next frame to be confirmed
     uint8_t last_ns; // next free frame in cycle buffer
+    uint8_t ns_offset; // used for implementation of RSET commands
 
     tiny_events_t events;
 } tiny_frames_info_t;
@@ -71,6 +79,8 @@ typedef struct tiny_fd_data_t
 {
     /// hdlc information
     hdlc_struct_t     _hdlc;
+    /// state of hdlc protocol according to ISO & RFC
+    tiny_fd_state_t    state;
     /// callback function to write bytes to the physical channel
     write_block_cb_t   write_func;
     /// callback function to read bytes from the physical channel
@@ -82,7 +92,7 @@ typedef struct tiny_fd_data_t
     /// Timeout for operations with acknowledge
     uint16_t           timeout;
     /// Information for frames being processed
-    tiny_frames_info_t    frames;
+    tiny_frames_info_t frames;
     /**
      * @brief Multithread mode. Should be zero.
      *

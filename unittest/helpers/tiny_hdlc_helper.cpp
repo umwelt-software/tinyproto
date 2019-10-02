@@ -43,8 +43,7 @@ int TinyHdlcHelper::send(uint8_t *buf, int len)
     return result;
 }
 
-
-int TinyHdlcHelper::run()
+int TinyHdlcHelper::run_rx()
 {
     uint8_t byte;
     while ( m_channel->read(&byte, 1) == 1 )
@@ -60,6 +59,12 @@ int TinyHdlcHelper::run()
         }
     }
     return 0;
+}
+
+int TinyHdlcHelper::run_tx()
+{
+    usleep( 1000 );
+    return TINY_SUCCESS;
 }
 
 int TinyHdlcHelper::onRxFrame(void *handle, void * buf, int len)

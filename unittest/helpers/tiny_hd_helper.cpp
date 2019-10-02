@@ -45,9 +45,15 @@ int TinyHelperHd::send_wait_ack(uint8_t *buf, int len)
     return tiny_send_wait_ack(&m_handle, buf, len);
 }
 
-int TinyHelperHd::run()
+int TinyHelperHd::run_rx()
 {
     return tiny_hd_run(&m_handle);
+}
+
+int TinyHelperHd::run_tx()
+{
+    usleep( 1000 );
+    return TINY_SUCCESS;
 }
 
 void  TinyHelperHd::onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)

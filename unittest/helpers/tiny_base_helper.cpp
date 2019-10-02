@@ -26,19 +26,19 @@ BaseHelper::BaseHelper(FakeChannel * channel,
 {
     m_buffer = new uint8_t[rxBufferSize];
     m_channel = channel;
-    m_thread = nullptr;
 }
 
 int BaseHelper::run(bool forked)
 {
     if (forked)
     {
-        m_thread = new std::thread(receiveThread,this);
+        m_receiveThread = new std::thread(receiveThread,this);
+        m_sendThread = new std::thread(sendThread, this);
         return 0;
     }
     else
     {
-        return run();
+        return run_rx() | run_tx();
     }
 }
 
@@ -46,7 +46,20 @@ void BaseHelper::receiveThread(BaseHelper *p)
 {
     while (p->m_forceStop == false)
     {
-        int result = p->run();
+        int result = p->run_rx();
+        if ( result < 0 && result != TINY_ERR_TIMEOUT )
+        {
+            break;
+        }
+        usleep(10);
+    }
+}
+
+void BaseHelper::sendThread(BaseHelper *p)
+{
+    while (p->m_forceStop == false)
+    {
+        int result = p->run_tx();
         if ( result < 0 && result != TINY_ERR_TIMEOUT )
         {
             break;
@@ -58,11 +71,17 @@ void BaseHelper::receiveThread(BaseHelper *p)
 void BaseHelper::stop()
 {
     m_forceStop = true;
-    if (m_thread != nullptr)
+    if (m_receiveThread != nullptr)
     {
-        m_thread->join();
-        delete m_thread;
-        m_thread = nullptr;
+        m_receiveThread->join();
+        delete m_receiveThread;
+        m_receiveThread = nullptr;
+    }
+    if (m_sendThread != nullptr)
+    {
+        m_sendThread->join();
+        delete m_sendThread;
+        m_sendThread = nullptr;
     }
 }
 

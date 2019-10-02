@@ -12,6 +12,11 @@ extern "C"
 /**
  * @defgroup HDLC_API Tiny HDLC protocol API functions
  * @{
+ *
+ * @brief low level HDLC protocol function - only framing
+ *
+ * @details this group implements low level HDLC functions, which implement
+ *          framing only according to RFC 1662: 0x7E, 0x7D, 0x20 (ISO Standard 3309-1979).
  */
 
 /// \cond
@@ -159,6 +164,12 @@ void hdlc_reset( hdlc_handle_t handle );
  * responsibility. If hdlc_run_rx() returns value less than size of data
  * passed to the function, then hdlc_run_rx() must be called later second
  * time with the pointer to and size of not processed bytes.
+ *
+ * This function will return the following codes in error field:
+ *   - TINY_ERR_DATA_TOO_LARGE if receiving data fails to fit incoming buffer
+ *   - TINY_ERR_FAILED if generic failure happened
+ *   - TINY_ERR_WRONG_CRC if crc field of incoming frame is incorrect
+ *   - TINY_SUCCESS if operation completed successfully
  *
  * @param handle handle to hdlc instance
  * @param data pointer to incoming data to process

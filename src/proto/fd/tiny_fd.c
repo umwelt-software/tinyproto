@@ -43,6 +43,17 @@
 #define HDLC_S_FRAME_TYPE_RR  0x00
 #define HDLC_S_FRAME_TYPE_MASK 0x0C
 
+#define HDLC_U_FRAME_BITS  0x03
+#define HDLC_U_FRAME_MASK  0x03
+#define HDLC_U_FRAME_TYPE_UA   0x60
+#define HDLC_U_FRAME_TYPE_FRMR 0x84
+#define HDLC_U_FRAME_TYPE_RSET 0x8C
+#define HDLC_U_FRAME_TYPE_SABM 0x2C
+#define HDLC_U_FRAME_TYPE_MASK 0xEC
+
+#define HDLC_P_BIT         0x10
+#define HDLC_F_BIT         0x10
+
 enum
 {
     FD_EVENT_TX_SENDING = 0x01,
@@ -56,11 +67,21 @@ static int on_frame_sent(void *user_data, const void *data, int len);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void __request_control_frame(tiny_fd_handle_t handle, uint8_t type, uint8_t seq_num)
+static void __send_control_frame(tiny_fd_handle_t handle, uint8_t control)
 {
-    handle->frames.control_cmd = HDLC_S_FRAME_BITS | type |
-                                 ( seq_num << 5 );
+    handle->frames.control_cmds <<= 8;
+    handle->frames.control_cmds |= control;
     tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+}
+
+static void __send_u_frame(tiny_fd_handle_t handle, uint8_t control)
+{
+    __send_control_frame( handle, control | HDLC_U_FRAME_BITS );
+}
+
+static void __send_s_frame(tiny_fd_handle_t handle, uint8_t type, uint8_t seq_num)
+{
+    __send_control_frame( handle, HDLC_S_FRAME_BITS | type | ( seq_num << 5 ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,14 +98,14 @@ static int check_received_frame(tiny_fd_handle_t handle, uint8_t ns)
         if ( handle->frames.next_ns == handle->frames.last_ns )
         {
             // nothing to send, send control frame
-            __request_control_frame( handle, HDLC_S_FRAME_TYPE_RR, handle->frames.next_nr );
+            __send_s_frame( handle, HDLC_S_FRAME_TYPE_RR, handle->frames.next_nr );
         }
     }
     else
     {
         // definitely we need to send reject. We want to see next_nr frame
         //LOG("[%p] Reject frame %d, need %d\n", handle, ns, handle->frames.next_nr);
-        __request_control_frame( handle, HDLC_S_FRAME_TYPE_REJ, handle->frames.next_nr );
+        __send_s_frame( handle, HDLC_S_FRAME_TYPE_REJ, handle->frames.next_nr );
         result = TINY_ERR_FAILED;
     }
     tiny_mutex_unlock( &handle->frames.mutex );
@@ -119,6 +140,97 @@ static void resend_all_unconfirmed_frames( tiny_fd_handle_t handle, uint8_t nr )
 
 ///////////////////////////////////////////////////////////////////////////////
 
+static int on_i_frame_read( tiny_fd_handle_t handle, void *data, int len )
+{
+    uint8_t control = ((uint8_t *)data)[1];
+    uint8_t nr = control >> 5;
+    uint8_t ns = (control >> 1) & 0x07;
+    int result = TINY_ERR_FAILED;
+    if ( handle->state == TINY_FD_STATE_CONNECTED_ABM )
+    {
+        result = check_received_frame( handle, ns );
+        confirm_sent_frames( handle, nr );
+        // Provide data to user only if we expect this frame
+        if ( result == TINY_SUCCESS )
+        {
+            /* inform user application about new frame received */
+            if (handle->on_frame_cb)
+            {
+                handle->on_frame_cb( handle->user_data, 0, (uint8_t *)data + 2, len - 2 );
+            }
+        }
+    }
+    else
+    {
+        LOG("[%p] ABM connection is not established\n", handle);
+    }
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static int on_s_frame_read( tiny_fd_handle_t handle, void *data, int len )
+{
+    uint8_t control = ((uint8_t *)data)[1];
+    uint8_t nr = control >> 5;
+    int result = TINY_ERR_FAILED;
+    if ( handle->state == TINY_FD_STATE_CONNECTED_ABM )
+    {
+        if ( (control & HDLC_S_FRAME_TYPE_MASK) == HDLC_S_FRAME_TYPE_REJ )
+        {
+            confirm_sent_frames( handle, nr );
+            resend_all_unconfirmed_frames( handle, nr );
+        }
+        else if ( (control & HDLC_S_FRAME_TYPE_MASK) == HDLC_S_FRAME_TYPE_RR )
+        {
+            confirm_sent_frames( handle, nr );
+        }
+    }
+    else
+    {
+        LOG("[%p] ABM connection is not established\n", handle);
+    }
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static int on_u_frame_read( tiny_fd_handle_t handle, void *data, int len )
+{
+    uint8_t control = ((uint8_t *)data)[1];
+    uint8_t type = control & HDLC_U_FRAME_TYPE_MASK;
+    int result = TINY_ERR_FAILED;
+    if ( type == HDLC_U_FRAME_TYPE_SABM )
+    {
+        tiny_mutex_lock( &handle->frames.mutex );
+        __send_u_frame( handle, HDLC_U_FRAME_TYPE_UA | HDLC_F_BIT );
+        tiny_mutex_unlock( &handle->frames.mutex );
+    }
+    else if ( type == HDLC_U_FRAME_TYPE_RSET )
+    {
+        // resets N(R) = 0 in secondary, resets N(S) = 0 in primary
+        // expected answer UA
+    }
+    else if ( type == HDLC_U_FRAME_TYPE_FRMR )
+    {
+        // response of secondary in case of protocol errors: invalid control field, invalid N(R),
+        // information field too long or not expected in this frame
+    }
+    else if ( type == HDLC_U_FRAME_TYPE_UA )
+    {
+        // confirmation received
+        handle->state = TINY_FD_STATE_CONNECTED_ABM;
+        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+    }
+    else
+    {
+        LOG("[%p] Unknown hdlc U-frame received\n", handle);
+    }
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 static int on_frame_read(void *user_data, void *data, int len)
 {
     tiny_fd_handle_t handle = (tiny_fd_handle_t)user_data;
@@ -131,31 +243,19 @@ static int on_frame_read(void *user_data, void *data, int len)
     uint8_t control = ((uint8_t *)data)[1];
     if ( (control & HDLC_I_FRAME_MASK) == HDLC_I_FRAME_BITS )
     {
-        uint8_t nr = control >> 5;
-        uint8_t ns = (control >> 1) & 0x07;
-        int result = check_received_frame( handle, ns );
-        confirm_sent_frames( handle, nr );
-        // Provide data to user only if we expect this frame
-        if ( result == TINY_SUCCESS )
-        {
-            /* inform user application about new frame received */
-            if (handle->on_frame_cb)
-            {
-                handle->on_frame_cb( handle->user_data, 0, data, len - 2 );
-            }
-        }
+        on_i_frame_read( handle, data, len );
     }
     else if ( (control & HDLC_S_FRAME_MASK) == HDLC_S_FRAME_BITS )
     {
-        uint8_t nr = control >> 5;
-        if ( (control & HDLC_S_FRAME_TYPE_MASK) == HDLC_S_FRAME_TYPE_REJ )
-        {
-            resend_all_unconfirmed_frames( handle, nr );
-        }
-        else if ( (control & HDLC_S_FRAME_TYPE_MASK) == HDLC_S_FRAME_TYPE_RR )
-        {
-            confirm_sent_frames( handle, nr );
-        }
+        on_s_frame_read( handle, data, len );
+    }
+    else if ( (control & HDLC_U_FRAME_MASK) == HDLC_U_FRAME_MASK )
+    {
+        on_u_frame_read( handle, data, len );
+    }
+    else
+    {
+        LOG("[%p] Unknown hdlc frame received\n", handle);
     }
     return len;
 }
@@ -166,8 +266,8 @@ static int on_frame_sent(void *user_data, const void *data, int len)
     uint8_t control = *(uint8_t *)data;
     if ( (control & HDLC_S_FRAME_MASK) == HDLC_I_FRAME_BITS )
     {
-        tiny_events_set( &handle->frames.events, FD_EVENT_TX_QUEUE_FREE );
-        // nothing to do for now
+        // check for more data to send
+        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
     }
     else if ( (control & HDLC_S_FRAME_MASK) == HDLC_S_FRAME_BITS )
     {
@@ -229,6 +329,10 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->on_sent_cb = init->on_sent_cb;
     protocol->multithread_mode = init->multithread_mode;
     protocol->timeout = init->timeout ? init->timeout : 1000;
+    protocol->state = TINY_FD_STATE_DISCONNECTED;
+
+    // Request remote side for ABM
+    __send_u_frame( *handle, HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM );
     return TINY_SUCCESS;
 }
 
@@ -253,7 +357,18 @@ static int write_func_cb(void *user_data, const void *data, int len)
 
 int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
 {
-    return hdlc_run_rx_until_read( &handle->_hdlc, handle->read_func, handle->user_data, timeout );
+    uint16_t ts = tiny_millis();
+    int result;
+    do
+    {
+        uint8_t data;
+        result = handle->read_func( handle->user_data, &data, sizeof(data) );
+        if ( result > 0 )
+        {
+            hdlc_run_rx( &handle->_hdlc, &data, sizeof(data), &result );
+        }
+    } while ((uint16_t)(tiny_millis() - ts) < timeout);
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,29 +378,41 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
     uint8_t *data = NULL;
     // Tx data available
     tiny_mutex_lock( &handle->frames.mutex );
-    if ( handle->frames.control_cmd != 0 )
+    if ( handle->frames.control_cmds != 0 )
     {
         *len = sizeof(tiny_s_frame_info_t);
         data = (uint8_t *)&handle->frames.s_frame.header;
         handle->frames.s_frame.header.address = 0xFF;
-        handle->frames.s_frame.header.control = handle->frames.control_cmd;
+        do
+        {
+            handle->frames.s_frame.header.control = handle->frames.control_cmds >> 24;
+            handle->frames.control_cmds <<= 8;
+        } while (handle->frames.s_frame.header.control == 0);
         #ifdef TINY_FD_DEBUG
-        LOG("[%p] Sending S-Frame N(R)=%02X, type=%s\n",
-            handle, (handle->frames.s_frame.header.control >> 5),
-            ((handle->frames.control_cmd >> 2) & 0x03) == 0x00 ? "RR" : "REJ");
+        if ( (handle->frames.s_frame.header.control & HDLC_U_FRAME_MASK) == HDLC_U_FRAME_BITS )
+        {
+            LOG("[%p] Sending U-Frame type=%02X\n",
+                handle, handle->frames.s_frame.header.control & HDLC_U_FRAME_TYPE_MASK);
+        }
+        else
+        {
+            LOG("[%p] Sending S-Frame N(R)=%02X, type=%s\n",
+                handle, (handle->frames.s_frame.header.control >> 5),
+                ((handle->frames.s_frame.header.control >> 2) & 0x03) == 0x00 ? "RR" : "REJ");
+        }
         #endif
-        handle->frames.control_cmd = 0;
     }
-    else if ( handle->frames.next_ns != handle->frames.last_ns )
+    else if ( handle->frames.next_ns != handle->frames.last_ns && handle->state == TINY_FD_STATE_CONNECTED_ABM )
     {
-        uint8_t i = handle->frames.next_ns;
+        uint8_t i = (handle->frames.next_ns + handle->frames.ns_offset) & handle->frames.seq_bits;
         data = (uint8_t *)&handle->frames.i_frames[i]->header;
         *len = handle->frames.i_frames[i]->len + sizeof(tiny_frame_header_t);
         handle->frames.i_frames[i]->header.address = 0xFF;
         handle->frames.i_frames[i]->header.control = (handle->frames.next_ns << 1) |
                                                      (handle->frames.next_nr << 5);
         LOG("[%p] Sending I-Frame N(R)=%02X,N(S)=%02X\n", handle, handle->frames.next_nr, handle->frames.next_ns);
-        handle->frames.next_ns = (i + 1) & handle->frames.seq_bits;
+        handle->frames.next_ns++;
+        handle->frames.next_ns &= handle->frames.seq_bits;
     }
     tiny_mutex_unlock( &handle->frames.mutex );
     return data;
@@ -296,10 +423,12 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
 int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
 {
     int result = TINY_ERR_TIMEOUT;
+    // Check if send on hdlc level operation is in progress and do some work
     if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_SENDING, EVENT_BITS_LEAVE, 0 ) )
     {
         result = hdlc_run_tx( &handle->_hdlc );
     }
+    // Since no send operation is in progress, check if we have something to send
     else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_DATA, EVENT_BITS_CLEAR, timeout ) )
     {
         int len = 0;
@@ -319,20 +448,32 @@ int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
 int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len, uint16_t timeout)
 {
     int result;
+    // Check frame size againts mtu
     if ( len > handle->frames.mtu )
     {
-        result = TINY_ERR_INVALID_DATA;
+        result = TINY_ERR_DATA_TOO_LARGE;
     }
+    // Wait until there is room for new frame
     else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_QUEUE_FREE, EVENT_BITS_CLEAR, timeout ) )
     {
         tiny_mutex_lock( &handle->frames.mutex );
-        handle->frames.i_frames[handle->frames.last_ns]->len = len;
-        memcpy( &handle->frames.i_frames[handle->frames.last_ns]->user_payload, data, len );
-        handle->frames.last_ns = (handle->frames.last_ns + 1) & handle->frames.seq_bits;
-        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
-        if ( ((handle->frames.last_ns + 1) & handle->frames.seq_bits) != handle->frames.confirm_ns )
+        uint8_t new_last_ns = (handle->frames.last_ns + 1) & handle->frames.seq_bits;
+        // Check if space is available
+        if ( new_last_ns != handle->frames.confirm_ns )
         {
-            tiny_events_set( &handle->frames.events, FD_EVENT_TX_QUEUE_FREE );
+            uint8_t i = (handle->frames.last_ns + handle->frames.ns_offset) & handle->frames.seq_bits;
+            handle->frames.i_frames[i]->len = len;
+            memcpy( &handle->frames.i_frames[i]->user_payload, data, len );
+            handle->frames.last_ns = new_last_ns;
+            tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+            if ( ((handle->frames.last_ns + 1) & handle->frames.seq_bits) != handle->frames.confirm_ns )
+            {
+                tiny_events_set( &handle->frames.events, FD_EVENT_TX_QUEUE_FREE );
+            }
+        }
+        else
+        {
+            LOG("[%p] Wrong flag FD_EVENT_TX_QUEUE_FREE\n", handle);
         }
         tiny_mutex_unlock( &handle->frames.mutex );
         result = TINY_SUCCESS;

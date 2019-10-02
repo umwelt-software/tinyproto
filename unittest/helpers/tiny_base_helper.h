@@ -32,17 +32,20 @@ class BaseHelper
 public:
     BaseHelper(FakeChannel * channel,
                int rxBufferSize );
-    ~BaseHelper();
-    virtual int run() = 0;
+    virtual ~BaseHelper();
+    virtual int run_rx() = 0;
+    virtual int run_tx() = 0;
     int run(bool forked);
     void stop();
 protected:
     FakeChannel * m_channel;
-    std::thread * m_thread;
+    std::thread * m_receiveThread = nullptr;
+    std::thread * m_sendThread = nullptr;
     std::atomic<bool> m_forceStop;
     uint8_t     * m_buffer;
 
     static void   receiveThread(BaseHelper *p);
+    static void   sendThread(BaseHelper *p);
 };
 
 template <typename T>

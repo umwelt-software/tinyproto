@@ -327,7 +327,7 @@ static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
     {
         handle->rx.state = hdlc_read_end;
         // Leave this byte for CRC check
-        return 0;
+        return 1;
     }
     if ( byte == TINY_ESCAPE_CHAR )
     {
@@ -359,7 +359,7 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
         LOG( "[HDLC:%p] RX: error in frame alignment, recovering...\n", handle);
         handle->rx.escape = 0;
         handle->rx.state = hdlc_read_data;
-        return 1;
+        return 0; // That's OK, we actually didn't process anything from user bytes
     }
     handle->rx.state = hdlc_read_start;
     int len = handle->rx.data - (uint8_t *)handle->rx_buf;
@@ -367,13 +367,13 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
     {
         // Buffer size issue, too long packet
         LOG( "[HDLC:%p] RX: tool long frame\n", handle);
-        return 1;
+        return TINY_ERR_DATA_TOO_LARGE;
     }
     if ( len < (uint8_t)handle->crc_type / 8 )
     {
         // CRC size issue
         LOG( "[HDLC:%p] RX: crc field is too short\n", handle);
-        return 1;
+        return TINY_ERR_WRONG_CRC;
     }
     crc_t calc_crc = 0;
     crc_t read_crc = 0;
@@ -413,7 +413,7 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
         for (int i=0; i< len; i++) LOG( " %02X ", handle->rx_buf[i]);
         LOG("\n-----------\n");
         #endif
-        return 1;
+        return TINY_ERR_WRONG_CRC;
     }
     // LOG( "[HDLC:%p] RX: GOOD\n", handle);
     len -= (uint8_t)handle->crc_type / 8;
@@ -423,12 +423,12 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
     }
     // Set bit indicating that we have read and processed the frame
     tiny_events_set( &handle->events, RX_DATA_READY_BIT );
-    return 1;
+    return TINY_SUCCESS;
 }
 
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
 {
-    int result = 0;
+    int result = TINY_SUCCESS;
     for (;;)
     {
         int temp_result = handle->rx.state( handle, (const uint8_t *)data, len );
@@ -472,6 +472,10 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
                 int temp = handle->rx.state( handle, &data, result );
                 if ( temp > 0 ) result -= temp;
             } while (result > 0);
+            if ( handle->rx.state == hdlc_read_end )
+            {
+                handle->rx.state( handle, &data, result );
+            }
         }
         if ( result < 0 )
         {
