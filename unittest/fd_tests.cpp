@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "helpers/tiny_fd_helper.h"
+#include "helpers/fake_connection.h"
 
 
 TEST_GROUP(FdTests)
@@ -40,44 +41,49 @@ TEST_GROUP(FdTests)
 };
 
 #if 1
-TEST(FdTests, TinyFd_Multithread)
+TEST(FdTests, TinyFd_Multithread_basic)
 {
-    uint8_t      txbuf[4096];
-    FakeWire     line1;
-    FakeWire     line2;
-    FakeChannel  channel1( &line1, &line2 );
-    FakeChannel  channel2( &line2, &line1 );
-    uint16_t     nreceived = 0;
+    FakeConnection conn;
     uint16_t     nsent = 0;
-
-    // Do not use multithread mode
-    TinyHelperFd helper1( &channel1,
-                          sizeof(txbuf),
-                          [&nreceived](uint16_t uid, uint8_t *buf, int len)->void
-                          {
-//                              printf("received uid:%04X, len: %d\n", uid, len);
-                              nreceived++;
-                          }, true);
-    TinyHelperFd helper2( &channel2, sizeof(txbuf), nullptr, true );
-
-//    line2.generate_error_on_byte( 200 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true);
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true );
     helper1.run(true);
     helper2.run(true);
 
-    // sent 4 packets small packets with ACK
+    // sent 500 small packets
     for (nsent = 0; nsent < 500; nsent++)
     {
-        txbuf[0] = 0xAA;
-        txbuf[1] = 0xFF;
-        txbuf[2] = 0xCC;
-        txbuf[3] = 0x66;
-        //printf("sending %d bytes\n", 4);
-        int result = helper2.send( txbuf, 4, 1000 );
+        uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
+        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // sleep for 50 ms before last frame arrives
-    usleep(50000);
-    CHECK_EQUAL( 500, nreceived );
+    usleep(100000);
+    CHECK_EQUAL( 500, helper1.rx_count() );
+}
+#endif
+
+#if 1
+TEST(FdTests, TinyFd_Errors_on_line)
+{
+    FakeConnection conn;
+    uint16_t     nsent = 0;
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true);
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true );
+    conn.line2().generate_error_every_n_byte( 200 );
+    helper1.run(true);
+    helper2.run(true);
+
+    // sent 500 small packets
+    for (nsent = 0; nsent < 500; nsent++)
+    {
+        uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
+        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
+        CHECK_EQUAL( TINY_SUCCESS, result );
+    }
+    // sleep for 50 ms before last frame arrives
+    usleep(100000);
+    CHECK_EQUAL( 500, helper1.rx_count() );
 }
 #endif
 

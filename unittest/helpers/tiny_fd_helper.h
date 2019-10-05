@@ -33,18 +33,24 @@ class TinyHelperFd: public IBaseHelper<TinyHelperFd>
 public:
     TinyHelperFd(FakeChannel * channel,
                  int rxBufferSize,
-                 const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb = nullptr,
+                 const std::function<void( uint16_t,uint8_t*,int )> &onRxFrameCb = nullptr,
                  bool  multithread_mode = false);
     virtual ~TinyHelperFd();
     int send(uint8_t *buf, int len, int timeout = 30);
     int run_rx() override;
     int run_tx() override;
     using IBaseHelper<TinyHelperFd>::run;
+
+    int rx_count() { return m_rx_count; }
+    int tx_count() { return m_tx_count; }
 private:
     tiny_fd_handle_t   m_handle;
+    int m_rx_count = 0;
+    int m_tx_count = 0;
     std::function<void(uint16_t,uint8_t*,int)>
                   m_onRxFrameCb;
 
     static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
+    static void   onTxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
 };
 

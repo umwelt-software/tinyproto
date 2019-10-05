@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <mutex>
+#include <list>
 
 class FakeWire
 {
@@ -31,14 +32,21 @@ public:
     ~FakeWire();
     int read(uint8_t * data, int length);
     int write(const uint8_t * data, int length);
-    void generate_error_on_byte(int byte_num) { m_error_byte_num = byte_num; };
+    void generate_error_every_n_byte(int n) { m_errors.push_back( ErrorDesc{0, n, -1} ); };
+    void generate_error(int first, int period, int count = -1) { m_errors.push_back( ErrorDesc{first, period, count} ); };
     void reset();
 private:
+    typedef struct
+    {
+        int first;
+        int period;
+        int count;
+    } ErrorDesc;
     int          m_writeptr;
     int          m_readptr;
     std::mutex   m_mutex{};
     uint8_t      m_buf[1024];
-    int          m_error_byte_num = 0;
+    std::list<ErrorDesc> m_errors;
     int          m_byte_counter = 0;
 };
 

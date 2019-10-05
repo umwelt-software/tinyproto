@@ -88,14 +88,19 @@ int FakeWire::write(const uint8_t *data, int length)
         }
         m_byte_counter++;
 //        fprintf(stderr, "%02X ", data[size]);
-        if ( m_error_byte_num != 0 && (m_byte_counter % m_error_byte_num) == 0 )
+        bool error_happened = false;
+        for (auto& err: m_errors)
         {
-            m_buf[m_writeptr] = data[size] ^ 0x34;
+            if ( m_byte_counter >= err.first &&
+                 err.count != 0 &&
+                 (m_byte_counter - err.first) % err.period == 0 )
+            {
+                err.count--;
+                error_happened = true;
+                break;
+            }
         }
-        else
-        {
-            m_buf[m_writeptr] = data[size];
-        }
+        m_buf[m_writeptr] = error_happened ? (data[size] ^ 0x34) : data[size];
         m_writeptr = l_writeptr;
         size++;
     }

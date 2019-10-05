@@ -31,7 +31,7 @@ TinyHelperFd::TinyHelperFd(FakeChannel * channel,
     init.read_func        = read_data;
     init.pdata            = this;
     init.on_frame_cb      = onRxFrame;
-//    init.on_sent_cb       = onTxFrame;
+    init.on_sent_cb       = onTxFrame;
     init.buffer           = m_buffer;
     init.buffer_size      = rxBufferSize;
     init.window_frames    = 8;
@@ -60,10 +60,17 @@ int TinyHelperFd::run_rx()
 void  TinyHelperFd::onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)
 {
     TinyHelperFd * helper = reinterpret_cast<TinyHelperFd *>(handle);
+    helper->m_rx_count++;
     if (helper->m_onRxFrameCb)
     {
         helper->m_onRxFrameCb(uid, buf, len);
     }
+}
+
+void  TinyHelperFd::onTxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)
+{
+    TinyHelperFd * helper = reinterpret_cast<TinyHelperFd *>(handle);
+    helper->m_tx_count++;
 }
 
 TinyHelperFd::~TinyHelperFd()
