@@ -368,6 +368,8 @@ int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
         if ( result > 0 )
         {
             hdlc_run_rx( &handle->_hdlc, &data, sizeof(data), &result );
+            // For full duplex protocol consider we have retries
+            if ( result == TINY_ERR_WRONG_CRC ) result = TINY_SUCCESS;
         }
     } while ((uint16_t)(tiny_millis() - ts) < timeout);
     return result;
