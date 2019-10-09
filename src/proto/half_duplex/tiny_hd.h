@@ -63,7 +63,7 @@ typedef struct STinyHdData_
      *
      * @warning only single thread mode is supported now. Should be zero
      */
-    uint8_t            multithread_mode;
+    bool               multithread_mode;
     /// user specific data
     void *             user_data;
 } STinyHdData;
@@ -157,6 +157,8 @@ extern void tiny_hd_close(STinyHdData    * handle);
  */
 extern int tiny_hd_run(STinyHdData   * handle);
 
+extern int tiny_hd_run_tx(STinyHdData * handle);
+
 /**
  * @brief Sends userdata and waits for acknowledgement from remote side.
  *
@@ -184,7 +186,7 @@ static inline STinyData * hd_to_tiny(STinyHdData      * handle)
     return &handle->handle;
 }
 
-static inline STinyHdData * tiny_to_hd(STinyData * handle)
+static inline STinyHdData * tiny_to_hd(STinyHdData * handle)
 {
     return (STinyHdData *)handle;
 }

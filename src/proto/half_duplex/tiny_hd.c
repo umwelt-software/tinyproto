@@ -20,6 +20,7 @@
 #include "proto/hal/tiny_types.h"
 #include "tiny_rq_pool.h"
 #include "tiny_hd.h"
+#include "proto/hal/tiny_debug.h"
 
 #include <string.h>
 
@@ -28,8 +29,7 @@
 #endif
 
 #if TINY_HD_DEBUG
-#include <stdio.h>
-#define LOG(...)  fprintf(stderr, __VA_ARGS__)
+#define LOG(...)  TINY_LOG(__VA_ARGS__)
 #else
 #define LOG(...)
 #endif
@@ -51,6 +51,7 @@ static int tiny_wait_request_update(STinyHdData *handle, tiny_request * request,
         if (handle->multithread_mode)
         {
             /* TODO: Wait in blocking mode */
+            tiny_sleep(1);
         }
         else
         {
@@ -79,6 +80,7 @@ static int tiny_wait_request_update(STinyHdData *handle, tiny_request * request,
 
 int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
 {
+    LOG( TINY_LOG_DEB, "[%p] tiny_send_wait_ack %s mode\n", handle, handle->multithread_mode ? "multithread" : "singlethread" );
     int result = TINY_ERR_FAILED;
     tiny_request request;
     uint8_t retry;
@@ -92,15 +94,16 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
         data[0] = (request.uid >> 8) & 0xFF;
         data[1] = request.uid & 0xFF;
         memcpy( data + sizeof(uint16_t), buf, len);
-        LOG( "[%p] >>>> %04X (DATA)\n", handle, request.uid);
+        LOG( TINY_LOG_INFO, "[%p] >>>> %04X (DATA)\n", handle, request.uid);
         result = hdlc_send( &handle->_hdlc , data, len + sizeof(uint16_t), handle->timeout);
         if (result < 0)
         {
-            LOG( "[%p] >>>> %04X (DATA FAILED)\n", handle, request.uid);
+            LOG( TINY_LOG_ERR, "[%p] >>>> %04X (DATA FAILED)\n", handle, request.uid);
             tiny_remove_request(&request);
             return result;
         }
         result = tiny_wait_request_update(handle, &request, handle->timeout);
+        // exit on error or success, continue on timeout
         if (result != TINY_ERR_TIMEOUT)
         {
             break;
@@ -121,7 +124,7 @@ int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len)
     }
     if (result == TINY_ERR_TIMEOUT)
     {
-//        printf("TIMEOUT\n");
+        LOG( TINY_LOG_WRN, "[%p] >>>> %04X (DATA TIMEOUT)\n", handle, request.uid);
     }
     return result;
 }
@@ -136,23 +139,23 @@ static int on_frame_read(void *user_data, void *data, int len)
     /** response */
     if ( uid & ACK_FRAME_FLAG )
     {
-        LOG( "[%p] <<<< %04X (I,ACK)\n", user_data, uid);
+        LOG( TINY_LOG_INFO, "[%p] <<<< %04X (I,ACK)\n", user_data, uid);
         /* this is response. Mark frame as successfully delivered and exit */
         tiny_commit_request( uid & ~(ACK_FRAME_FLAG) );
         return len;
     }
     if ( uid & DATA_FRAME_FLAG )
     {
-        LOG( "[%p] <<<< %04X (DATA)\n", user_data, uid);
+        LOG( TINY_LOG_INFO, "[%p] <<<< %04X (DATA)\n", user_data, uid);
         uid |= ACK_FRAME_FLAG;
         uint8_t *buf = (uint8_t *)handle->_hdlc.rx_buf + handle->_hdlc.rx_buf_size;
         buf[0] = (uid >> 8) & 0xFF;
         buf[1] = uid & 0xFF;
-        LOG( "[%p] >>>> %04X (O,ACK)\n", user_data, uid);
+        LOG( TINY_LOG_INFO, "[%p] >>>> %04X (O,ACK)\n", user_data, uid);
         int result = hdlc_send( &handle->_hdlc, buf, sizeof(uid), handle->timeout );
         if ( result < 0)
         {
-            LOG( "[%p] >>>> %04X (O,ACK FAILED)\n", user_data, uid);
+            LOG( TINY_LOG_ERR, "[%p] >>>> %04X (O,ACK FAILED)\n", user_data, uid);
             return result; // return error if failed to send ACK
         }
     }
@@ -193,6 +196,7 @@ int tiny_hd_init(STinyHdData      * handle,
     handle->_hdlc.rx_buf = init->inbuf;
     handle->_hdlc.rx_buf_size = init->inbuf_size - sizeof(uint16_t);
     handle->_hdlc.crc_type = init->crc_type;
+    handle->_hdlc.multithread_mode = init->multithread_mode;
 
     hdlc_init( &handle->_hdlc );
 
@@ -222,9 +226,18 @@ static int write_func_cb(void *user_data, const void *data, int len)
     return handle->write_func( handle->user_data, data, len );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 int tiny_hd_run(STinyHdData *handle)
 {
     return hdlc_run_rx_until_read( &handle->_hdlc, handle->read_func, handle->user_data, 100 );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_hd_run_tx(STinyHdData * handle)
+{
+    return hdlc_run_tx( &handle->_hdlc );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

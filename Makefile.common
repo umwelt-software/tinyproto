@@ -4,15 +4,33 @@ BLD ?= bld
 CONFIG_ENABLE_FCS32 ?= y
 CONFIG_ENABLE_FCS16 ?= y
 CONFIG_ENABLE_CHECKSUM ?= y
+LOG_LEVEL ?=
+ifeq ($(ENABLE_LOGS),y)
+    ENABLE_HDLC_LOGS ?= y
+    ENABLE_HD_LOGS ?= y
+    ENABLE_FD_LOGS ?= y
+endif
 
-VERSION=0.7.0
+VERSION=0.8.0
 
 CPPFLAGS += -I./src
 
-CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections \
-        -fno-exceptions
-
+CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections
 CXXFLAGS += -std=c++11
+
+ifneq ($(LOG_LEVEL),)
+    CPPFLAGS += -DTINY_LOG_LEVEL_DEFAULT=$(LOG_LEVEL)
+endif
+
+ifeq ($(ENABLE_HDLC_LOGS),y)
+    CPPFLAGS += -DTINY_HDLC_DEBUG=1
+endif
+ifeq ($(ENABLE_HD_LOGS),y)
+    CPPFLAGS += -DTINY_HD_DEBUG=1
+endif
+ifeq ($(ENABLE_FD_LOGS),y)
+    CPPFLAGS += -DTINY_FD_DEBUG=1
+endif
 
 ifeq ($(CONFIG_ENABLE_FCS32),y)
     CPPFLAGS += -DCONFIG_ENABLE_FCS32

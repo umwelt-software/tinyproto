@@ -151,9 +151,9 @@ typedef int (*read_block_cb_t)(void *pdata, void *buffer, int size);
  */
 typedef void (*on_frame_cb_t)(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
-#define EVENT_BIS_ALL  0xFF
-#define EVENT_BITS_CLEAR 1
-#define EVENT_BITS_LEAVE 0
+#define EVENT_BIS_ALL  0xFF ///< All bits supported by tiny protocol HAL events
+#define EVENT_BITS_CLEAR 1  ///< Flag, used in tiny_events_wait()
+#define EVENT_BITS_LEAVE 0  ///< Flag, used in tiny_events_wait()
 
 void tiny_mutex_create(tiny_mutex_t *mutex);
 
@@ -177,6 +177,8 @@ void tiny_events_set(tiny_events_t *event, uint8_t bits);
 void tiny_events_clear(tiny_events_t *event, uint8_t bits);
 
 void tiny_sleep(uint32_t ms);
+
+void tiny_log_level(uint8_t level);
 
 uint32_t tiny_millis();
 

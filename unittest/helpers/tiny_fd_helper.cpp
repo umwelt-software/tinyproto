@@ -22,7 +22,8 @@
 TinyHelperFd::TinyHelperFd(FakeChannel * channel,
                            int rxBufferSize,
                            const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb,
-                           bool  multithread_mode)
+                           bool  multithread_mode,
+                           int timeout)
     :IBaseHelper(channel, rxBufferSize)
     ,m_onRxFrameCb(onRxFrameCb)
 {
@@ -35,7 +36,7 @@ TinyHelperFd::TinyHelperFd(FakeChannel * channel,
     init.buffer           = m_buffer;
     init.buffer_size      = rxBufferSize;
     init.window_frames    = 8;
-    init.timeout          = 2000;
+    init.timeout          = timeout ? : 2000;
     init.crc_type         = HDLC_CRC_16;
     init.multithread_mode = multithread_mode;
 

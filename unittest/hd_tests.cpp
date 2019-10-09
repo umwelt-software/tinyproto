@@ -47,17 +47,10 @@ TEST(HdTests, TinyHd_Send)
     FakeWire     line2;
     FakeChannel  channel1( &line1, &line2 );
     FakeChannel  channel2( &line2, &line1 );
-    uint16_t     nreceived = 0;
     uint16_t     nsent = 0;
 
     // Do not use multithread mode
-    TinyHelperHd helper1( &channel1,
-                          sizeof(txbuf),
-                          [&nreceived](uint16_t uid, uint8_t *buf, int len)->void
-                          {
-//                              printf("received uid:%04X, len: %d\n", uid, len);
-                              nreceived++;
-                          }, false);
+    TinyHelperHd helper1( &channel1, sizeof(txbuf), nullptr, true);
     TinyHelperHd helper2( &channel2, sizeof(txbuf), nullptr, false );
 
     helper1.run(true);
@@ -73,9 +66,11 @@ TEST(HdTests, TinyHd_Send)
     }
     // sleep for 10 ms befoe last frame arrives
     usleep(10000);
-    CHECK_EQUAL( 500, nreceived );
+    CHECK_EQUAL( 500, helper1.rx_count() );
 }
+#endif
 
+#if 1
 TEST(HdTests, TinyHd_Multithread)
 {
     uint8_t      txbuf[128];
@@ -83,17 +78,10 @@ TEST(HdTests, TinyHd_Multithread)
     FakeWire     line2;
     FakeChannel  channel1( &line1, &line2 );
     FakeChannel  channel2( &line2, &line1 );
-    uint16_t     nreceived = 0;
     uint16_t     nsent = 0;
 
     // Do not use multithread mode
-    TinyHelperHd helper1( &channel1,
-                          sizeof(txbuf),
-                          [&nreceived](uint16_t uid, uint8_t *buf, int len)->void
-                          {
-//                              printf("received uid:%04X, len: %d\n", uid, len);
-                              nreceived++;
-                          }, true);
+    TinyHelperHd helper1( &channel1, sizeof(txbuf), nullptr, true);
     TinyHelperHd helper2( &channel2, sizeof(txbuf), nullptr, true );
 
     helper1.run(true);
@@ -110,7 +98,6 @@ TEST(HdTests, TinyHd_Multithread)
     }
     // sleep for 10 ms befoe last frame arrives
     usleep(10000);
-    CHECK_EQUAL( 500, nreceived );
+    CHECK_EQUAL( 500, helper1.rx_count() );
 }
-
 #endif

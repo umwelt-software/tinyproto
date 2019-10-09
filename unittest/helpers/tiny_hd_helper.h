@@ -41,9 +41,11 @@ public:
     int send_wait_ack(uint8_t *buf, int len);
     int run_rx() override;
     int run_tx() override;
+    int rx_count() const { return m_rx_count; }
     using IBaseHelper<TinyHelperHd>::run;
 private:
     STinyHdData   m_handle;
+    int m_rx_count = 0;
     std::function<void(uint16_t,uint8_t*,int)>
                   m_onRxFrameCb;
 

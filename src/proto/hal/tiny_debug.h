@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2019 (C) Alexey Dynda
+    Copyright 2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,28 +17,35 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tiny_types.h"
+#pragma once
 
-#if defined(__AVR__)
-#include "impl/avr_hal.inl"
-#elif defined(__XTENSA__)
-#include "impl/esp32_hal.inl"
-#elif defined(ARDUINO)
-#include "impl/arduino_hal.inl"
-#elif defined(__linux__)
-#include "impl/linux_hal.inl"
-#elif defined(__MINGW32__)
-#include "impl/mingw32_hal.inl"
-#else
-#warning "Platform not supported. Multithread support is disabled"
-#include "impl/no_platform_hal.inl"
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#include "tiny_debug.h"
+#include <stdio.h>
 
-uint8_t g_tiny_log_level = TINY_LOG_LEVEL_DEFAULT;
+#ifndef TINY_LOG_LEVEL_DEFAULT
+#define TINY_LOG_LEVEL_DEFAULT   0
+#endif
 
-void tiny_log_level(uint8_t level)
+extern uint8_t g_tiny_log_level;
+
+enum
 {
-    g_tiny_log_level = level;
+    TINY_LOG_CRIT = 0,
+    TINY_LOG_ERR  = 1,
+    TINY_LOG_WRN  = 2,
+    TINY_LOG_INFO = 3,
+    TINY_LOG_DEB  = 4,
+};
+
+#define TINY_LOG(lvl, fmt, ...)  { if (lvl < g_tiny_log_level) fprintf(stderr, "%08d ms: "fmt, tiny_millis(), ##__VA_ARGS__); }
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif

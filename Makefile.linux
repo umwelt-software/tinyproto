@@ -6,7 +6,7 @@ CONFIG_ENABLE_CHECKSUM ?= y
 CONFIG_ENABLE_STATS ?=y
 # ************* Common defines ********************
 CPPFLAGS += -I./tools/serial
-CPPFLAGS += -fPIC -pthread -pg
+CPPFLAGS += -fPIC -pthread -pg -fexceptions
 CFLAGS += -g
 LDFLAGS += -L. -lm -shared
 

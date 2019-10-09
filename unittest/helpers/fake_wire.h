@@ -33,6 +33,7 @@ public:
     int read(uint8_t * data, int length);
     int write(const uint8_t * data, int length);
     void generate_error_every_n_byte(int n) { m_errors.push_back( ErrorDesc{0, n, -1} ); };
+    void generate_single_error(int position) { m_errors.push_back( ErrorDesc{position, position, 1} ); };
     void generate_error(int first, int period, int count = -1) { m_errors.push_back( ErrorDesc{first, period, count} ); };
     void reset();
 private:

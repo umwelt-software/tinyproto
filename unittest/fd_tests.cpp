@@ -41,7 +41,7 @@ TEST_GROUP(FdTests)
 };
 
 #if 1
-TEST(FdTests, TinyFd_Multithread_basic)
+TEST(FdTests, TinyFd_multithread_basic_test)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
@@ -64,7 +64,7 @@ TEST(FdTests, TinyFd_Multithread_basic)
 #endif
 
 #if 1
-TEST(FdTests, TinyFd_Errors_on_line)
+TEST(FdTests, TinyFd_errors_on_tx_line)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
@@ -75,7 +75,7 @@ TEST(FdTests, TinyFd_Errors_on_line)
     helper2.run(true);
 
     // sent 500 small packets
-    for (nsent = 0; nsent < 500; nsent++)
+    for (nsent = 0; nsent < 300; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
         int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
@@ -83,46 +83,71 @@ TEST(FdTests, TinyFd_Errors_on_line)
     }
     // sleep for 50 ms before last frame arrives
     usleep(100000);
-    CHECK_EQUAL( 500, helper1.rx_count() );
+    CHECK_EQUAL( 300, helper1.rx_count() );
 }
 #endif
 
 #if 0
-TEST(HdTests, TinyHd_Singlethread)
+TEST(FdTests, TinyFd_error_on_single_I_send)
 {
-    uint8_t      txbuf[4096];
-    FakeWire     line1;
-    FakeWire     line2;
-    FakeChannel  channel1( &line1, &line2 );
-    FakeChannel  channel2( &line2, &line1 );
-    uint16_t     nreceived = 0;
+    // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
+    // TX1: U, U, R
+    // TX2: U, U, I,
+//    tiny_log_level( 1 );
+    FakeConnection conn;
     uint16_t     nsent = 0;
-
-    // Do not use multithread mode
-    TinyHelperHd helper1( &channel1,
-                          sizeof(txbuf),
-                          [&nreceived](uint16_t uid, uint8_t *buf, int len)->void
-                          {
-//                              printf("received uid:%04X, len: %d\n", uid, len);
-                              nreceived++;
-                          }, true);
-    TinyHelperHd helper2( &channel2, sizeof(txbuf), nullptr, true );
-
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true, 2000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true, 2000 );
+    conn.line2().generate_single_error( 6 + 6 + 3 ); // Put error on I-frame
     helper1.run(true);
     helper2.run(true);
 
-    // sent 4 packets small packets with ACK
-    for (nsent = 0; nsent < 500; nsent++)
+    for (nsent = 0; nsent < 1; nsent++)
     {
-        txbuf[0] = 0xAA;
-        txbuf[1] = 0xFF;
-//        printf("sending %d bytes\n", 2);
-        int result = helper2.send_wait_ack( txbuf, 2 );
-        CHECK_EQUAL( 2, result );
+        uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
+        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
+        CHECK_EQUAL( TINY_SUCCESS, result );
     }
-    // sleep for 10 ms befoe last frame arrives
-    usleep(10000);
-    CHECK_EQUAL( 500, nreceived );
+    // sleep for timeout 2 seconds
+    usleep(2000000);
+    tiny_log_level( 0 );
+    CHECK_EQUAL( 1, helper1.rx_count() );
 }
+#endif
 
+#if 0
+TEST(FdTests, TinyFd_error_on_rej)
+{
+//    tiny_log_level( 1 );
+    // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
+    // TX1: U, U, R
+    // TX2: U, U, I,
+    FakeConnection conn;
+    uint16_t     nsent = 0;
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true, 2000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true, 2000 );
+    conn.line2().generate_single_error( 6 + 6 + 4 ); // Put error on first I-frame
+    conn.line1().generate_single_error( 6 + 6 + 3 ); // Put error on S-frame REJ
+    helper1.run(true);
+    helper2.run(true);
+
+    for (nsent = 0; nsent < 2; nsent++)
+    {
+        uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
+        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
+        CHECK_EQUAL( TINY_SUCCESS, result );
+    }
+    // sleep for 50 ms before last frame arrives
+    usleep(2000000);
+    tiny_log_level( 0 );
+    CHECK_EQUAL( 2, helper1.rx_count() );
+}
+#endif
+
+#if 1
+TEST(FdTests, TinyHd_singlethread_basic)
+{
+    // TODO:
+    CHECK_EQUAL( 0, 0 );
+}
 #endif

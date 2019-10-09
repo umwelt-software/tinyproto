@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -52,6 +52,10 @@ int TinyHelperHd::run_rx()
 
 int TinyHelperHd::run_tx()
 {
+    if ( m_handle.multithread_mode )
+    {
+        return tiny_hd_run_tx(&m_handle);
+    }
     usleep( 1000 );
     return TINY_SUCCESS;
 }
@@ -59,6 +63,7 @@ int TinyHelperHd::run_tx()
 void  TinyHelperHd::onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)
 {
     TinyHelperHd * helper = reinterpret_cast<TinyHelperHd *>(handle);
+    helper->m_rx_count++;
     if (helper->m_onRxFrameCb)
     {
         helper->m_onRxFrameCb(uid, buf, len);
