@@ -54,7 +54,7 @@ TEST(FdTests, TinyFd_multithread_basic_test)
     for (nsent = 0; nsent < 500; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
-        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
+        int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // sleep for 50 ms before last frame arrives
@@ -78,7 +78,7 @@ TEST(FdTests, TinyFd_errors_on_tx_line)
     for (nsent = 0; nsent < 300; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
-        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
+        int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // sleep for 50 ms before last frame arrives
@@ -87,7 +87,7 @@ TEST(FdTests, TinyFd_errors_on_tx_line)
 }
 #endif
 
-#if 0
+#if 1
 TEST(FdTests, TinyFd_error_on_single_I_send)
 {
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
@@ -105,7 +105,7 @@ TEST(FdTests, TinyFd_error_on_single_I_send)
     for (nsent = 0; nsent < 1; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
-        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
+        int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // sleep for timeout 2 seconds
@@ -115,7 +115,7 @@ TEST(FdTests, TinyFd_error_on_single_I_send)
 }
 #endif
 
-#if 0
+#if 1
 TEST(FdTests, TinyFd_error_on_rej)
 {
 //    tiny_log_level( 1 );
@@ -134,7 +134,7 @@ TEST(FdTests, TinyFd_error_on_rej)
     for (nsent = 0; nsent < 2; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
-        int result = helper2.send( txbuf, sizeof(txbuf), 1000 );
+        int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // sleep for 50 ms before last frame arrives

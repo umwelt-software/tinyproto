@@ -66,10 +66,20 @@ typedef struct STinyFdInit_
     void             * buffer;
     /// maximum input buffer size
     uint16_t           buffer_size;
-    /// timeout. Can be set to 0 during initialization. In this case timeout will be set to default
+    /**
+     * timeout. Can be set to 0 during initialization. In this case timeout will be set to default.
+     * Timeout parameter sets timeout in milliseconds for blocking API functions: tiny_fd_send().
+     */
     uint16_t           timeout;
+
+    /**
+     * number retries to perform before timeout takes place
+     */
+    uint8_t            retries;
+
     /// multithread mode. 0 for single thread applications, 1 - for multithread applications
     uint8_t            multithread_mode;
+
     /**
      * crc field type to use on hdlc level.
      * If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration),
@@ -157,9 +167,7 @@ extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
  *         TINY_ERR_FAILED       if request was cancelled, by tiny_hd_close().
  *         TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
  */
-extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len, uint16_t timeout);
-
-extern int tiny_fd_write(tiny_fd_handle_t handle, const void *buf, int len, uint16_t timeout);
+extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
 
 /**
  * @}

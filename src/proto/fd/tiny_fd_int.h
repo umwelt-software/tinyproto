@@ -73,6 +73,9 @@ typedef struct
     uint8_t confirm_ns; // next frame to be confirmed
     uint8_t last_ns; // next free frame in cycle buffer
     uint8_t ns_offset; // used for implementation of RSET commands
+    uint32_t last_i_ts; // last sent I-frame timestamp
+
+    uint8_t retries; // Number of retries to perform before timeout takes place
 
     tiny_events_t events;
 } tiny_frames_info_t;
@@ -93,6 +96,8 @@ typedef struct tiny_fd_data_t
     on_frame_cb_t      on_sent_cb;
     /// Timeout for operations with acknowledge
     uint16_t           timeout;
+    /// Retries for timeout operations
+    uint8_t            retries;
     /// Information for frames being processed
     tiny_frames_info_t frames;
     /**

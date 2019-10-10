@@ -37,15 +37,16 @@ TinyHelperFd::TinyHelperFd(FakeChannel * channel,
     init.buffer_size      = rxBufferSize;
     init.window_frames    = 8;
     init.timeout          = timeout ? : 2000;
+    init.retries          = 2;
     init.crc_type         = HDLC_CRC_16;
     init.multithread_mode = multithread_mode;
 
     tiny_fd_init( &m_handle, &init  );
 }
 
-int TinyHelperFd::send(uint8_t *buf, int len, int timeout)
+int TinyHelperFd::send(uint8_t *buf, int len)
 {
-    return tiny_fd_send(m_handle, buf, len, timeout);
+    return tiny_fd_send(m_handle, buf, len);
 }
 
 int TinyHelperFd::run_tx()
