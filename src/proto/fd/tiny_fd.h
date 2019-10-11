@@ -59,18 +59,28 @@ typedef struct STinyFdInit_
     on_frame_cb_t      on_frame_cb;
     /// Callback to get notification of sent frames
     on_frame_cb_t      on_sent_cb;
+
     /**
      * buffer to store data during full-duplex protocol operating.
      * The size should be TBD
      */
     void             * buffer;
+
     /// maximum input buffer size
     uint16_t           buffer_size;
+
     /**
      * timeout. Can be set to 0 during initialization. In this case timeout will be set to default.
      * Timeout parameter sets timeout in milliseconds for blocking API functions: tiny_fd_send().
      */
-    uint16_t           timeout;
+    uint16_t           send_timeout;
+
+    /**
+     * timeout for retry operation. It is valid and applicable to I-frames only.
+     * retry_timeout sets timeout in milliseconds. If zero value is specified, it is calculated as
+     * 
+     */
+    uint16_t           retry_timeout;
 
     /**
      * number retries to perform before timeout takes place

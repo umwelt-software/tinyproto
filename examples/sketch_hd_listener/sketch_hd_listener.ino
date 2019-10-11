@@ -2,7 +2,7 @@
  * This simple example listens for commands from UART.
  * This is demonstration of Half Duplex protocol.
  */
-#include <TinyProtocolHd.h>
+#include <TinyProtocol.h>
 
 /* Function to receive incoming messages from remote side */
 void onFrameIn(uint8_t *buf, int len)

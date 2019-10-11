@@ -2,7 +2,7 @@
  * This example sends <Hello> packet every second.
  * This is demontraction of Half Duplex protocol.
  */
-#include <TinyProtocolHd.h>
+#include <TinyProtocol.h>
 
 /* Function to receive incoming messages from remote side */
 void onFrameIn(uint8_t *buf, int len)

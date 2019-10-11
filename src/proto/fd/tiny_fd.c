@@ -121,6 +121,7 @@ static void confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
     {
         //LOG("[%p] Confirming sent frames %d\n", handle, handle->frames.confirm_ns);
         handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & handle->frames.seq_bits;
+        handle->frames.retries = handle->retries;
         tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
     }
     // LOG("[%p] N(S)=%d, N(R)=%d\n", handle, handle->frames.confirm_ns, handle->frames.next_nr);
@@ -330,8 +331,10 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->on_frame_cb = init->on_frame_cb;
     protocol->on_sent_cb = init->on_sent_cb;
     protocol->multithread_mode = init->multithread_mode;
-    protocol->timeout = init->timeout ? init->timeout : 1000;
+    protocol->send_timeout = init->send_timeout;
+    protocol->retry_timeout = init->retry_timeout ?: (protocol->send_timeout / (init->retries + 1));
     protocol->retries = init->retries;
+    protocol->frames.retries = init->retries;
     protocol->state = TINY_FD_STATE_DISCONNECTED;
 
     // Request remote side for ABM
@@ -444,9 +447,12 @@ int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
 {
     int result = TINY_ERR_TIMEOUT;
     // Check if sent frame was not confirmed due to noisy line
-    if ( (uint32_t)(tiny_millis() - handle->frames.last_i_ts) >= handle->timeout / (handle->retries + 1) &&
-                   handle->frames.last_ns == handle->frames.next_ns )
+    if ( (uint32_t)(tiny_millis() - handle->frames.last_i_ts) >= handle->retry_timeout &&
+                   handle->frames.retries > 0 &&  handle->frames.last_ns == handle->frames.next_ns &&
+                   handle->frames.confirm_ns != handle->frames.last_ns )
     {
+        // TODO:
+        handle->frames.retries--;
         // Do not use mutex for confirm_ns value as it is byte-value
         resend_all_unconfirmed_frames( handle, handle->frames.confirm_ns );
     }
@@ -466,7 +472,7 @@ int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
             tiny_events_set( &handle->frames.events, FD_EVENT_TX_SENDING );
             // we need to use here timeout, specified by a user in config file
             // because timeout for function is used for implementing single-threaded applications
-            result = hdlc_send( &handle->_hdlc, data, len, handle->timeout );
+            result = hdlc_send( &handle->_hdlc, data, len, timeout );
         }
     }
     return result;
@@ -485,7 +491,7 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
         result = TINY_ERR_DATA_TOO_LARGE;
     }
     // Wait until there is room for new frame
-    else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_I_QUEUE_FREE, EVENT_BITS_CLEAR, handle->timeout ) )
+    else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_I_QUEUE_FREE, EVENT_BITS_CLEAR, handle->send_timeout ) )
     {
         tiny_mutex_lock( &handle->frames.mutex );
         uint8_t new_last_ns = (handle->frames.last_ns + 1) & handle->frames.seq_bits;

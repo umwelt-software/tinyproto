@@ -95,9 +95,11 @@ typedef struct tiny_fd_data_t
     /// Callback to get notification of sent frames
     on_frame_cb_t      on_sent_cb;
     /// Timeout for operations with acknowledge
-    uint16_t           timeout;
-    /// Retries for timeout operations
-    uint8_t            retries;
+    uint16_t           send_timeout;
+    /// Timeout before retrying resend I-frames
+    uint16_t           retry_timeout;
+    /// Number of retries to perform before timeout takes place
+    uint8_t retries;
     /// Information for frames being processed
     tiny_frames_info_t frames;
     /**

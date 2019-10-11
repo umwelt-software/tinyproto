@@ -15,11 +15,23 @@
  * Also, this example demonstrates how to pass data between 2 systems
  * By default the sketch and sperf works as 115200 speed.
  */
-
 #include <TinyProtocol.h>
 
-/* Creating protocol object is simple */
-Tiny::ProtoLight  proto;
+void onReceive(Tiny::IPacket &pkt);
+
+/* Creating protocol object is simple. Lets allocate 512 bytes for it. *
+ * In this case, 512 byte buffer is used to store internal state and.  *
+ * 4 buffers for outgoing and 1 buffer for incoming frames.            */
+Tiny::ProtoFd<512>  proto(onReceive);
+
+void onReceive(Tiny::IPacket &pkt)
+{
+    if ( proto.write(pkt) == TINY_ERR_TIMEOUT )
+    {
+        // Do what you need to do if there is no place to put new frame to.
+        // But never use blocking operations inside callback
+    }
+}
 
 void setup()
 {
@@ -31,19 +43,11 @@ void setup()
     proto.beginToSerial();
 }
 
-/* Specify buffer for packets to send and receive */
-char g_buf[256];
-
 void loop()
 {
     if (Serial.available())
     {
-        int len = proto.read( g_buf, sizeof(g_buf) );
-        /* If we receive valid message */
-        if (len > 0)
-        {
-            /* Send message back */
-            proto.write( g_buf, len );
-        }
+        proto.run_rx();
     }
+    proto.run_tx();
 }

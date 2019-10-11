@@ -66,6 +66,7 @@ OBJ_LIB += \
         src/proto/half_duplex/tiny_rq_pool.o \
         src/TinyHdlc.o \
         src/TinyProtocolHd.o \
+        src/TinyProtocolFd.o \
 	src/TinyLightProtocol.o \
 
 library: $(OBJ_LIB)

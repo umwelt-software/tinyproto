@@ -175,6 +175,7 @@ public:
 private:
     friend class        IHdlc;
     friend class        ProtoHd;
+    friend class        IProtoFd;
     friend class        ProtoLight;
 
     uint8_t*            m_buf;
