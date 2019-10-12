@@ -78,7 +78,6 @@ typedef struct STinyFdInit_
     /**
      * timeout for retry operation. It is valid and applicable to I-frames only.
      * retry_timeout sets timeout in milliseconds. If zero value is specified, it is calculated as
-     * 
      */
     uint16_t           retry_timeout;
 
@@ -178,6 +177,8 @@ extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
  *         TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
  */
 extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
+
+extern int tiny_fd_buffer_size_by_mtu( int mtu, int window_frames );
 
 /**
  * @}

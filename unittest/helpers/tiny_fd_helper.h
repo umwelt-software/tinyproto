@@ -42,6 +42,8 @@ public:
     int run_tx() override;
     using IBaseHelper<TinyHelperFd>::run;
 
+    void wait_until_rx_count(int count, uint32_t timeout);
+
     int rx_count() { return m_rx_count; }
     int tx_count() { return m_tx_count; }
 private:

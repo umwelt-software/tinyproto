@@ -85,7 +85,3 @@ all: library
 clean:
 	rm -rf $(BLD)
 	rm -rf $(OBJ_LIB)
-
-#clean:
-#	rm -rf $(BLD)
-

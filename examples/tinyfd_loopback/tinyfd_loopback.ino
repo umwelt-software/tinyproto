@@ -16,13 +16,12 @@
  * By default the sketch and sperf works as 115200 speed.
  */
 #include <TinyProtocol.h>
+// We need this hack for very small controllers.
+#include <proto/fd/tiny_fd_int.h>
 
-void onReceive(Tiny::IPacket &pkt);
-
-/* Creating protocol object is simple. Lets allocate 512 bytes for it. *
- * In this case, 512 byte buffer is used to store internal state and.  *
- * 4 buffers for outgoing and 1 buffer for incoming frames.            */
-Tiny::ProtoFd<512>  proto(onReceive);
+/* Creating protocol object is simple. Lets define 64 bytes as maximum. *
+ * size for the packet and use 4 packets in outgoing queue.             */
+Tiny::ProtoFd<FD_MIN_BUF_SIZE(64,4)>  proto;
 
 void onReceive(Tiny::IPacket &pkt)
 {
@@ -39,6 +38,8 @@ void setup()
     Serial.setTimeout(10);
     /* Initialize serial protocol for test purposes */
     Serial.begin(115200);
+    /* Lets process all incoming frames */
+    proto.setReceiveCallback( onReceive );
     /* Redirect all protocol communication to Serial0 UART */
     proto.beginToSerial();
 }

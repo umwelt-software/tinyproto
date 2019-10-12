@@ -38,8 +38,16 @@
 //#   define CONFIG_ENABLE_FCS32
 //#endif
 
+/**
+ * Mutex type used by Tiny Protocol implementation.
+ * The type declaration depends on platform.
+ */
 typedef uint8_t tiny_mutex_t;
 
+/**
+ * Event groups type used by Tiny Protocol implementation.
+ * The type declaration depends on platform.
+ */
 typedef uint8_t tiny_events_t;
 
 

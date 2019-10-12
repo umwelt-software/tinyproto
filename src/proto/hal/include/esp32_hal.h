@@ -36,7 +36,16 @@
 #   define CONFIG_ENABLE_FCS32
 #endif
 
+/**
+ * Mutex type used by Tiny Protocol implementation.
+ * The type declaration depends on platform.
+ */
 typedef SemaphoreHandle_t tiny_mutex_t;
+
+/**
+ * Event groups type used by Tiny Protocol implementation.
+ * The type declaration depends on platform.
+ */
 typedef EventGroupHandle_t tiny_events_t;
 
 

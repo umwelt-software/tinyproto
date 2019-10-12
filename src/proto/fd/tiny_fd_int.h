@@ -29,6 +29,9 @@ extern "C" {
 #include "proto/hdlc/tiny_hdlc.h"
 #include "proto/hal/tiny_types.h"
 
+#define FD_MIN_BUF_SIZE(mtu,window) (sizeof(tiny_fd_data_t) + \
+                                    (sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t) + mtu) * ( window + 1 ))
+
 typedef enum
 {
     TINY_FD_STATE_DISCONNECTED,

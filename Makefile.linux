@@ -28,10 +28,10 @@ OBJ_HD_LOOPBACK = tools/loopback/hd_loopback.o \
 all: sperf hd_loopback
 
 sperf: $(OBJ_SPERF) library
-	$(CC) $(CPPFLAGS) -o $(BLD)/sperf$(TOOLS_EXT) $(OBJ_SPERF) $(TOOLS_LDFLAGS)
+	$(CXX) $(CPPFLAGS) -o $(BLD)/sperf$(TOOLS_EXT) $(OBJ_SPERF) $(TOOLS_LDFLAGS)
 
 hd_loopback: $(OBJ_HD_LOOPBACK) library
-	$(CC) $(CPPFLAGS) -o $(BLD)/hd_loopback$(TOOLS_EXT) $(OBJ_HD_LOOPBACK) $(TOOLS_LDFLAGS)
+	$(CXX) $(CPPFLAGS) -o $(BLD)/hd_loopback$(TOOLS_EXT) $(OBJ_HD_LOOPBACK) $(TOOLS_LDFLAGS)
 
 clean: clean_sperf clean_hd_loopback
 

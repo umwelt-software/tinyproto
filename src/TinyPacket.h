@@ -55,6 +55,11 @@ public:
     IPacket(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_p=0; }
 
     /**
+     * Destroys the object
+     */
+    virtual ~IPacket() = default;
+
+    /**
      * Clears Packet state. Buffer and its size are preserved.
      */
     inline void clear  ()              { m_len = 0; m_p = 0; }
@@ -184,14 +189,39 @@ private:
     int                 m_p;
 };
 
+/**
+ * Template  class to create packet with static allocation of buffer
+ * Use this class for microcontrollers with few resources.
+ */
 template <size_t S>
 class Packet: public IPacket
 {
 public:
+    /**
+     * Creates IPacket instance with statically allocated buffer
+     */
     Packet(): IPacket(m_data, S) {}
 
 private:
     char m_data[S];
+};
+
+/**
+ * Class which allocated buffer for packet dynamically.
+ * Use this class only on powerful microcontrollers.
+ */
+class PacketD: public IPacket
+{
+public:
+    /**
+     * Creates packet with dynamically allocated buffer.
+     * @param size number of bytes to allocate for the packet buffer.
+     */
+    PacketD(int size): IPacket((char *)(new uint8_t[size]), size) {}
+
+    ~PacketD() { delete (uint8_t *)data(); }
+
+private:
 };
 
 

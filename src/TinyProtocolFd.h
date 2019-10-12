@@ -47,6 +47,7 @@ namespace Tiny {
 class IProtoFd
 {
 public:
+    friend class ProtoFdD;
     /**
      * Initializes IProtoFd object
      * @param buffer - buffer to store the frames being received.
@@ -54,13 +55,13 @@ public:
      * @param onReceive - callback to call when new frame is received.
      */
     IProtoFd(void * buffer,
-             int    bufferSize,
-             void (*on_receive)(IPacket &pkt) = nullptr)
+             int    bufferSize)
     {
-        m_buffer      = buffer;
+        m_buffer      = (uint8_t *)buffer;
         m_bufferSize  = bufferSize;
-        m_onReceive   = on_receive;
     }
+
+    virtual ~IProtoFd() = default;
 
     /**
      * Initializes IProtoFd object
@@ -210,6 +211,12 @@ public:
      */
     bool enableCrc32();
 
+    /**
+     * Sets receive callback for incoming messages
+     * @param on_receive user callback to process incoming messages. The processing must be non-blocking
+     */
+    void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr) { m_onReceive = on_receive; };
+
 protected:
     virtual void onReceive(uint8_t *pdata, int size)
     {
@@ -219,28 +226,50 @@ protected:
 
 private:
     /** The variable contain protocol state */
-    tiny_fd_handle_t    m_handle;
+    tiny_fd_handle_t    m_handle = nullptr;
 
     /** buffer to receive data to */
-    void               *m_buffer = nullptr;
+    uint8_t             *m_buffer = nullptr;
+
     hdlc_crc_t          m_crc = HDLC_CRC_DEFAULT;
+
     /** max buffer size */
     int                 m_bufferSize = 0;
+
     /** Callback, when new frame is received */
     void              (*m_onReceive)(IPacket &pkt) = nullptr;
+
     /** Internal function */
     static void         onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
 };
 
+/**
+ * This is class, which allocates buffers statically. Use it for systems with low resources.
+ */
 template <int S>
 class ProtoFd: public IProtoFd
 {
 public:
-    ProtoFd(void (*on_receive)(IPacket &pkt) = nullptr)
-        : IProtoFd( m_data, sizeof(m_data), on_receive ) {}
+    ProtoFd(): IProtoFd( m_data, S ) {}
 private:
     uint8_t m_data[S];
+};
+
+/**
+ * This is special class for Full duplex protocol, which allocates buffers dynamically.
+ * We need to have separate class for this, as on small microcontrollers dynamic allocation
+ * in basic class increases flash consumption, even if dynamic memory is not used.
+ */
+class ProtoFdD: public IProtoFd
+{
+public:
+    /**
+     * Creates instance of Full duplex protocol with dynamically allocated buffer.
+     * Use this class only on powerful microcontrollers.
+     */
+    ProtoFdD(int size): IProtoFd( new uint8_t[size], size ) {}
+    ~ProtoFdD() { delete m_buffer; }
 };
 
 

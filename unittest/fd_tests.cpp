@@ -57,8 +57,8 @@ TEST(FdTests, TinyFd_multithread_basic_test)
         int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
-    // sleep for 50 ms before last frame arrives
-    usleep(100000);
+    // wait until last frame arrives
+    helper1.wait_until_rx_count( 500, 1000 );
     CHECK_EQUAL( 500, helper1.rx_count() );
 }
 #endif
@@ -81,8 +81,8 @@ TEST(FdTests, TinyFd_errors_on_tx_line)
         int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
-    // sleep for 50 ms before last frame arrives
-    usleep(100000);
+    // wait until last frame arrives
+    helper1.wait_until_rx_count( 300, 1000 );
     CHECK_EQUAL( 300, helper1.rx_count() );
 }
 #endif
@@ -93,7 +93,6 @@ TEST(FdTests, TinyFd_error_on_single_I_send)
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
     // TX1: U, U, R
     // TX2: U, U, I,
-//    tiny_log_level( 1 );
     FakeConnection conn;
     uint16_t     nsent = 0;
     TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true, 2000 );
@@ -108,9 +107,8 @@ TEST(FdTests, TinyFd_error_on_single_I_send)
         int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
-    // sleep for timeout 2 seconds
-    usleep(2000000);
-    tiny_log_level( 0 );
+    // wait until last frame arrives
+    helper1.wait_until_rx_count( 1, 2000 );
     CHECK_EQUAL( 1, helper1.rx_count() );
 }
 #endif
@@ -118,7 +116,6 @@ TEST(FdTests, TinyFd_error_on_single_I_send)
 #if 1
 TEST(FdTests, TinyFd_error_on_rej)
 {
-//    tiny_log_level( 1 );
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
     // TX1: U, U, R
     // TX2: U, U, I,
@@ -137,9 +134,8 @@ TEST(FdTests, TinyFd_error_on_rej)
         int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
-    // sleep for 50 ms before last frame arrives
-    usleep(2000000);
-    tiny_log_level( 0 );
+    // wait until last frame arrives
+    helper1.wait_until_rx_count( 2, 2000 );
     CHECK_EQUAL( 2, helper1.rx_count() );
 }
 #endif
