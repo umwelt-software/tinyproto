@@ -21,6 +21,8 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
+#define TINY_FD_U_QUEUE_MAX_SIZE 4
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -52,6 +54,13 @@ typedef struct
 
 typedef struct
 {
+    tiny_frame_header_t header; ///< header of u-frame, non-empty is there is something to send
+    uint8_t data1;
+    uint8_t data2;
+} tiny_u_frame_info_t;
+
+typedef struct
+{
     uint8_t type; ///< 0 for now
     int len;
     tiny_frame_header_t header; ///< header, fill every time, when user payload is sending
@@ -60,15 +69,28 @@ typedef struct
 
 typedef struct
 {
-    tiny_i_frame_info_t **i_frames;
-    uint32_t control_cmds; // max 4 control commands, each is 1 byte
-    struct
+    int len;
+    union
     {
         tiny_s_frame_info_t s_frame;
-        uint8_t u_field1;
-        uint8_t u_field2;
-        uint8_t u_field3;
+        tiny_u_frame_info_t u_frame;
     };
+} tiny_frame_info_t;
+
+typedef struct
+{
+    tiny_i_frame_info_t **i_frames;
+    tiny_frame_info_t queue[TINY_FD_U_QUEUE_MAX_SIZE];
+    uint8_t queue_ptr;
+    uint8_t queue_len;
+//    uint32_t control_cmds; // max 4 control commands, each is 1 byte
+//    struct
+//    {
+//        tiny_s_frame_info_t s_frame;
+//        uint8_t u_field1;
+//        uint8_t u_field2;
+//        uint8_t u_field3;
+//    };
     uint8_t *rx_buffer;
     uint8_t *tx_buffer;
     uint8_t seq_bits;
