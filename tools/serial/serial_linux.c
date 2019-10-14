@@ -128,7 +128,7 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
            .fd = handleToFile(hPort),
            .events = POLLOUT | POLLWRNORM
     };
-    ret = poll(&fds, 1, 1000);
+    ret = poll(&fds, 1, 100);
     if (ret <= 0)
     {
         return -1;
@@ -160,7 +160,20 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
 
 int SerialReceive(SerialHandle hPort, void *buf, int len)
 {
-    int ret = read(handleToFile(hPort), buf, len);
+    struct pollfd fds = {
+           .fd = handleToFile(hPort),
+           .events = POLLIN | POLLRDNORM
+    };
+    int ret = poll(&fds, 1, 100);
+    if (ret <= 0)
+    {
+        return -1;
+    }
+    if (!(fds.revents & (POLLIN | POLLRDNORM)))
+    {
+        return 0;
+    }
+    ret = read(handleToFile(hPort), buf, len);
     if ((ret < 0) && (errno == EAGAIN || errno == EINTR))
     {
         return 0;

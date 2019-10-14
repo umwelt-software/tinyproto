@@ -67,6 +67,9 @@ static int on_frame_sent(void *user_data, const void *data, int len);
 
 ///////////////////////////////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////////////////////////////
+
 static void __send_control_frame(tiny_fd_handle_t handle, uint8_t control)
 {
     handle->frames.control_cmds <<= 8;
@@ -119,6 +122,13 @@ static void confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
     // all frames below nr are received
     while ( nr != handle->frames.confirm_ns )
     {
+        if ( handle->frames.confirm_ns == handle->frames.last_ns )
+        {
+            // TODO: Out of sync
+            LOG( TINY_LOG_CRIT, "[%p] Confirmation contains wrong N(r). Remote side is out of sync\n", handle);
+            tiny_mutex_unlock( &handle->frames.mutex );
+            return;
+        }
         //LOG("[%p] Confirming sent frames %d\n", handle, handle->frames.confirm_ns);
         handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & handle->frames.seq_bits;
         handle->frames.retries = handle->retries;
@@ -130,11 +140,69 @@ static void confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void resend_all_unconfirmed_frames( tiny_fd_handle_t handle, uint8_t nr )
+static void resend_all_unconfirmed_frames( tiny_fd_handle_t handle, uint8_t control, uint8_t nr )
 {
     tiny_mutex_lock( &handle->frames.mutex );
-    handle->frames.next_ns = nr;
+    // First, we need to check if that is possible. Maybe remote side is not in sync
+    while ( handle->frames.next_ns != nr )
+    {
+        if ( handle->frames.confirm_ns == handle->frames.next_ns )
+        {
+            // consider here that remote side is not in sync, we cannot perform request
+            LOG(TINY_LOG_CRIT, "[%p] Remote side not in sync\n", handle );
+            handle->frames.u_field1 = control;
+            handle->frames.u_field2 = ( handle->frames.next_nr << 5 ) |
+                                      ( handle->frames.next_ns << 1 );
+            __send_u_frame( handle, HDLC_U_FRAME_TYPE_FRMR | HDLC_F_BIT );
+            tiny_mutex_unlock( &handle->frames.mutex );
+            return;
+        }
+        handle->frames.next_ns = (handle->frames.next_ns - 1) & handle->frames.seq_bits;
+    }
     tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+    tiny_mutex_unlock( &handle->frames.mutex );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static void switch_to_connected_state( tiny_fd_handle_t handle )
+{
+    tiny_mutex_lock( &handle->frames.mutex );
+    if ( handle->state != TINY_FD_STATE_CONNECTED_ABM )
+    {
+        handle->state = TINY_FD_STATE_CONNECTED_ABM;
+        handle->frames.confirm_ns = 0;
+        handle->frames.last_ns = 0;
+        handle->frames.next_ns = 0;
+        handle->frames.next_nr = 0;
+        handle->frames.sent_nr = 0;
+        handle->frames.sent_reject = 0;
+        handle->frames.ns_offset = 0;
+        tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
+        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+        LOG(TINY_LOG_INFO, "[%p] ABM connection is established\n", handle);
+    }
+    tiny_mutex_unlock( &handle->frames.mutex );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static void switch_to_disconnected_state( tiny_fd_handle_t handle )
+{
+    tiny_mutex_lock( &handle->frames.mutex );
+    if ( handle->state != TINY_FD_STATE_DISCONNECTED )
+    {
+        handle->state = TINY_FD_STATE_DISCONNECTED;
+        handle->frames.confirm_ns = 0;
+        handle->frames.last_ns = 0;
+        handle->frames.next_ns = 0;
+        handle->frames.next_nr = 0;
+        handle->frames.sent_nr = 0;
+        handle->frames.sent_reject = 0;
+        handle->frames.ns_offset = 0;
+        tiny_events_clear( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
+        LOG(TINY_LOG_INFO, "[%p] Disconnected\n", handle);
+    }
     tiny_mutex_unlock( &handle->frames.mutex );
 }
 
@@ -164,6 +232,10 @@ static int on_i_frame_read( tiny_fd_handle_t handle, void *data, int len )
     else
     {
         LOG(TINY_LOG_ERR, "[%p] ABM connection is not established\n", handle);
+        tiny_mutex_lock( &handle->frames.mutex );
+        __send_u_frame( handle, HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM );
+        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+        tiny_mutex_unlock( &handle->frames.mutex );
     }
     return result;
 }
@@ -182,7 +254,7 @@ static int on_s_frame_read( tiny_fd_handle_t handle, void *data, int len )
         if ( (control & HDLC_S_FRAME_TYPE_MASK) == HDLC_S_FRAME_TYPE_REJ )
         {
             confirm_sent_frames( handle, nr );
-            resend_all_unconfirmed_frames( handle, nr );
+            resend_all_unconfirmed_frames( handle, control, nr );
         }
         else if ( (control & HDLC_S_FRAME_TYPE_MASK) == HDLC_S_FRAME_TYPE_RR )
         {
@@ -203,11 +275,13 @@ static int on_u_frame_read( tiny_fd_handle_t handle, void *data, int len )
     uint8_t control = ((uint8_t *)data)[1];
     uint8_t type = control & HDLC_U_FRAME_TYPE_MASK;
     int result = TINY_ERR_FAILED;
+    LOG(TINY_LOG_INFO, "[%p] Receiving U-Frame type=%02X\n", handle, type);
     if ( type == HDLC_U_FRAME_TYPE_SABM )
     {
         tiny_mutex_lock( &handle->frames.mutex );
         __send_u_frame( handle, HDLC_U_FRAME_TYPE_UA | HDLC_F_BIT );
         tiny_mutex_unlock( &handle->frames.mutex );
+        switch_to_connected_state( handle );
     }
     else if ( type == HDLC_U_FRAME_TYPE_RSET )
     {
@@ -222,8 +296,7 @@ static int on_u_frame_read( tiny_fd_handle_t handle, void *data, int len )
     else if ( type == HDLC_U_FRAME_TYPE_UA )
     {
         // confirmation received
-        handle->state = TINY_FD_STATE_CONNECTED_ABM;
-        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+        switch_to_connected_state( handle );
     }
     else
     {
@@ -267,13 +340,14 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 {
     tiny_fd_handle_t handle = (tiny_fd_handle_t)user_data;
     uint8_t control = *(uint8_t *)data;
-    if ( (control & HDLC_S_FRAME_MASK) == HDLC_I_FRAME_BITS )
+    if ( (control & HDLC_I_FRAME_MASK) == HDLC_I_FRAME_BITS )
     {
         // check for more data to send
-        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+//        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
     }
     else if ( (control & HDLC_S_FRAME_MASK) == HDLC_S_FRAME_BITS )
     {
+//        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
     }
     tiny_events_clear( &handle->frames.events, FD_EVENT_TX_SENDING );
     return len;
@@ -313,7 +387,6 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
         protocol->frames.i_frames[i] = (tiny_i_frame_info_t *)(i * protocol->frames.mtu + protocol->frames.tx_buffer);
     tiny_mutex_create( &protocol->frames.mutex );
     tiny_events_create( &protocol->frames.events );
-    tiny_events_set( &protocol->frames.events, FD_EVENT_I_QUEUE_FREE );
 
     protocol->_hdlc.send_tx = write_func_cb;
     protocol->_hdlc.on_frame_read = on_frame_read;
@@ -322,6 +395,8 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->_hdlc.rx_buf = protocol->frames.rx_buffer;
     protocol->_hdlc.rx_buf_size = protocol->frames.mtu;
     protocol->_hdlc.crc_type = init->crc_type;
+    // Let's use single thread mode of hdlc, as high level full duplex will take care of multithread applications
+    protocol->_hdlc.multithread_mode = false;
 
     hdlc_init( &protocol->_hdlc );
 
@@ -330,7 +405,6 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->write_func = init->write_func;
     protocol->on_frame_cb = init->on_frame_cb;
     protocol->on_sent_cb = init->on_sent_cb;
-    protocol->multithread_mode = init->multithread_mode;
     protocol->send_timeout = init->send_timeout;
     protocol->retry_timeout = init->retry_timeout ?: (protocol->send_timeout / (init->retries + 1));
     protocol->retries = init->retries;
@@ -447,14 +521,24 @@ int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
 {
     int result = TINY_ERR_TIMEOUT;
     // Check if sent frame was not confirmed due to noisy line
-    if ( (uint32_t)(tiny_millis() - handle->frames.last_i_ts) >= handle->retry_timeout &&
-                   handle->frames.retries > 0 &&  handle->frames.last_ns == handle->frames.next_ns &&
-                   handle->frames.confirm_ns != handle->frames.last_ns )
+    if ( handle->frames.last_ns == handle->frames.next_ns &&
+         handle->frames.confirm_ns != handle->frames.last_ns &&
+         (uint32_t)(tiny_millis() - handle->frames.last_i_ts) >= handle->retry_timeout )
     {
-        // TODO:
-        handle->frames.retries--;
-        // Do not use mutex for confirm_ns value as it is byte-value
-        resend_all_unconfirmed_frames( handle, handle->frames.confirm_ns );
+        if ( handle->frames.retries > 0 )
+        {
+            // TODO:
+            LOG( TINY_LOG_WRN, "[%p] Timeout, resending unconfirmed frames\n", handle );
+            handle->frames.retries--;
+            // Do not use mutex for confirm_ns value as it is byte-value
+            resend_all_unconfirmed_frames( handle, 0, handle->frames.confirm_ns );
+        }
+        else
+        {
+            // TODO: We failed to confirm sent frames. Just flush the queue
+            LOG( TINY_LOG_CRIT, "[%p] Remote side not responding, flushing I-frames\n", handle );
+            switch_to_disconnected_state( handle );
+        }
     }
     // Check if send on hdlc level operation is in progress and do some work
     if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_SENDING, EVENT_BITS_LEAVE, 0 ) )
@@ -470,9 +554,10 @@ int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
         {
             tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
             tiny_events_set( &handle->frames.events, FD_EVENT_TX_SENDING );
-            // we need to use here timeout, specified by a user in config file
-            // because timeout for function is used for implementing single-threaded applications
-            result = hdlc_send( &handle->_hdlc, data, len, timeout );
+            // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
+            // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
+            // send data.
+            result = hdlc_send( &handle->_hdlc, data, len, 0 /*timeout*/ );
         }
     }
     return result;
@@ -510,7 +595,8 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
             }
             else
             {
-                LOG( TINY_LOG_ERR, "[%p] I_QUEUE is full\n", handle);
+                LOG( TINY_LOG_ERR, "[%p] I_QUEUE is full N(S)sent=%d, N(S)confirm=%d\n",
+                     handle, handle->frames.last_ns, handle->frames.confirm_ns);
             }
         }
         else

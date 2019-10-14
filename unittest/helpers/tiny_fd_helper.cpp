@@ -39,7 +39,6 @@ TinyHelperFd::TinyHelperFd(FakeChannel * channel,
     init.send_timeout     = timeout < 0 ? 2000: timeout;
     init.retries          = 2;
     init.crc_type         = HDLC_CRC_16;
-    init.multithread_mode = multithread_mode;
 
     tiny_fd_init( &m_handle, &init  );
 }

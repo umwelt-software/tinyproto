@@ -45,7 +45,7 @@ protected:
     uint8_t     * m_buffer;
 
     static void   receiveThread(BaseHelper *p);
-    static void   sendThread(BaseHelper *p);
+void wait_until_rx_count(int count, uint32_t timeout);    static void   sendThread(BaseHelper *p);
 };
 
 template <typename T>

@@ -52,12 +52,11 @@ void IProtoFd::begin(write_block_cb_t writecb,
 //    init.on_sent_cb       = onTxFrame;
     init.buffer           = m_buffer;
     init.buffer_size      = m_bufferSize;
-    init.window_frames    = 4;
-    init.send_timeout     = 0; // Set to zero again for small controllers
-    init.retry_timeout    = 100;
+    init.window_frames    = m_window;
+    init.send_timeout     = m_sendTimeout;
+    init.retry_timeout    = 200;
     init.retries          = 2;
     init.crc_type         = m_crc;
-    init.multithread_mode = false; // No multithread mode for small controllers
 
     tiny_fd_init( &m_handle, &init  );
 }

@@ -86,9 +86,6 @@ typedef struct STinyFdInit_
      */
     uint8_t            retries;
 
-    /// multithread mode. 0 for single thread applications, 1 - for multithread applications
-    uint8_t            multithread_mode;
-
     /**
      * crc field type to use on hdlc level.
      * If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration),

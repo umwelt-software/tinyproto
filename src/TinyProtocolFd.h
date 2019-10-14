@@ -56,9 +56,9 @@ public:
      */
     IProtoFd(void * buffer,
              int    bufferSize)
+         : m_buffer( (uint8_t *)buffer )
+         , m_bufferSize( bufferSize )
     {
-        m_buffer      = (uint8_t *)buffer;
-        m_bufferSize  = bufferSize;
     }
 
     virtual ~IProtoFd() = default;
@@ -69,7 +69,10 @@ public:
      * @param bufferSize - size of the buffer
      * @param onReceive - callback to call when new frame is received.
      */
-    IProtoFd(tiny_fd_handle_t  handle): m_handle( handle ) {}
+    IProtoFd(tiny_fd_handle_t  handle): m_handle( handle )
+    {
+        // TODO: Multithread
+    }
 
     /**
      * Initializes protocol internal variables.
@@ -217,10 +220,15 @@ public:
      */
     void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr) { m_onReceive = on_receive; };
 
+    void setWindowSize(uint8_t window) { m_window = window; }
+
+    void setSendTimeout(uint16_t timeout) { m_sendTimeout = timeout; }
+
 protected:
     virtual void onReceive(uint8_t *pdata, int size)
     {
         IPacket pkt((char *)pdata, size);
+        pkt.m_len = size;
         if ( m_onReceive ) m_onReceive( pkt );
     }
 
@@ -235,6 +243,12 @@ private:
 
     /** max buffer size */
     int                 m_bufferSize = 0;
+
+    /** Use 0-value timeout for small controllers as all operations should be non-blocking */
+    uint16_t            m_sendTimeout = 0;
+
+    /** Limit window to only 4 frames for small controllers by default */
+    uint8_t             m_window = 4;
 
     /** Callback, when new frame is received */
     void              (*m_onReceive)(IPacket &pkt) = nullptr;
@@ -268,8 +282,9 @@ public:
      * Creates instance of Full duplex protocol with dynamically allocated buffer.
      * Use this class only on powerful microcontrollers.
      */
-    ProtoFdD(int size): IProtoFd( new uint8_t[size], size ) {}
+    ProtoFdD( int size ): IProtoFd( new uint8_t[size], size ) { }
     ~ProtoFdD() { delete m_buffer; }
+private:
 };
 
 

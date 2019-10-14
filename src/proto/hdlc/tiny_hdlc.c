@@ -313,7 +313,10 @@ int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout
     }
     else
     {
-        LOG(TINY_LOG_DEB,"[HDLC:%p] hdlc_send timeout is zero, exiting\n", handle);
+        if ( !timeout )
+        {
+            LOG(TINY_LOG_DEB,"[HDLC:%p] hdlc_send timeout is zero, exiting\n", handle);
+        }
     }
     tiny_mutex_unlock( &handle->send_mutex );
     return result;

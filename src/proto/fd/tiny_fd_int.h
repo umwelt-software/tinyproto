@@ -62,7 +62,13 @@ typedef struct
 {
     tiny_i_frame_info_t **i_frames;
     uint32_t control_cmds; // max 4 control commands, each is 1 byte
-    tiny_s_frame_info_t s_frame;
+    struct
+    {
+        tiny_s_frame_info_t s_frame;
+        uint8_t u_field1;
+        uint8_t u_field2;
+        uint8_t u_field3;
+    };
     uint8_t *rx_buffer;
     uint8_t *tx_buffer;
     uint8_t seq_bits;
@@ -102,15 +108,9 @@ typedef struct tiny_fd_data_t
     /// Timeout before retrying resend I-frames
     uint16_t           retry_timeout;
     /// Number of retries to perform before timeout takes place
-    uint8_t retries;
+    uint8_t            retries;
     /// Information for frames being processed
     tiny_frames_info_t frames;
-    /**
-     * @brief Multithread mode. Should be zero.
-     *
-     * @warning only single thread mode is supported now. Should be zero
-     */
-    uint8_t            multithread_mode;
     /// user specific data
     void *             user_data;
 } tiny_fd_data_t;

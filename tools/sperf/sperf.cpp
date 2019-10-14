@@ -19,6 +19,7 @@
 
 #include "serial_api.h"
 #include "proto/light/tiny_light.h"
+#include "TinyProtocol.h"
 #include <stdio.h>
 #include <time.h>
 
@@ -32,24 +33,11 @@ static int serial_receive(void *p, void *buf, int len)
     return SerialReceive((uintptr_t)p, buf, len);
 }
 
-int main(int argc, char *argv[])
+uint32_t bytesSent = 0;
+uint32_t bytesReceived = 0;
+
+int run_light(SerialHandle hPort)
 {
-    if ( argc < 2)
-    {
-        printf("Usage: sperf Serial\n");
-        printf("        COM1, COM2 ...  for Windows\n");
-        printf("        /dev/ttyS0, /dev/ttyS1 ...  for Linux\n");
-        return 1;
-    }
-
-    SerialHandle hPort = OpenSerial(argv[1], SERIAL_115200);
-
-    if ( hPort == INVALID_SERIAL )
-    {
-        printf("Error opening serial port\n");
-        return 1;
-    }
-
     uint8_t outBuffer[4096]{};
     uint8_t inBuffer[4096]{};
     int sync_frame_len = 0;
@@ -79,8 +67,6 @@ int main(int argc, char *argv[])
     /* Start speed test */
     printf("Test is in progress\n");
     time_t startTs = time(NULL);
-    uint32_t bytesSent = 0;
-    uint32_t bytesReceived = 0;
     /* Run test for 15 seconds */
     while ( time(NULL) < (startTs + 15) )
     {
@@ -113,10 +99,48 @@ int main(int argc, char *argv[])
         }
     }
     tiny_light_close(&tiny);
-    CloseSerial(hPort);
+    return 0;
+}
+
+// =============================================================
+
+
+static void onReceive(Tiny::IPacket &pkt)
+{
+    bytesReceived += pkt.size();
+}
+
+int run_full(SerialHandle hPort)
+{
+    Tiny::ProtoFd<2048> proto;
+    proto.setReceiveCallback(onReceive);
+    return 0;
+}
+
+int main(int argc, char *argv[])
+{
+    if ( argc < 2)
+    {
+        printf("Usage: sperf Serial\n");
+        printf("        COM1, COM2 ...  for Windows\n");
+        printf("        /dev/ttyS0, /dev/ttyS1 ...  for Linux\n");
+        return 1;
+    }
+
+    SerialHandle hPort = OpenSerial(argv[1], SERIAL_115200);
+
+    if ( hPort == INVALID_SERIAL )
+    {
+        printf("Error opening serial port\n");
+        return 1;
+    }
+
+    int result = run_light( hPort );
+
+    CloseSerial( hPort );
 
     // We summarize TX and RX speed, because we're working in half duplex mode
     // When we receive something, we do not transmit anything.
     printf("Registered speed: %u baud\n", (bytesSent + bytesReceived) * 8 / 9);
-    return 0;
+    return result;
 }
