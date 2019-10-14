@@ -57,6 +57,7 @@ typedef struct
     tiny_frame_header_t header; ///< header of u-frame, non-empty is there is something to send
     uint8_t data1;
     uint8_t data2;
+    uint8_t data3;
 } tiny_u_frame_info_t;
 
 typedef struct
@@ -83,14 +84,6 @@ typedef struct
     tiny_frame_info_t queue[TINY_FD_U_QUEUE_MAX_SIZE];
     uint8_t queue_ptr;
     uint8_t queue_len;
-//    uint32_t control_cmds; // max 4 control commands, each is 1 byte
-//    struct
-//    {
-//        tiny_s_frame_info_t s_frame;
-//        uint8_t u_field1;
-//        uint8_t u_field2;
-//        uint8_t u_field3;
-//    };
     uint8_t *rx_buffer;
     uint8_t *tx_buffer;
     uint8_t seq_bits;
@@ -105,6 +98,7 @@ typedef struct
     uint8_t last_ns; // next free frame in cycle buffer
     uint8_t ns_offset; // used for implementation of RSET commands
     uint32_t last_i_ts; // last sent I-frame timestamp
+    uint32_t last_ka_ts; // last keep alive timestamp
 
     uint8_t retries; // Number of retries to perform before timeout takes place
 
@@ -129,6 +123,8 @@ typedef struct tiny_fd_data_t
     uint16_t           send_timeout;
     /// Timeout before retrying resend I-frames
     uint16_t           retry_timeout;
+    /// Timeout before sending keep alive HDLC frame (RR)
+    uint16_t           ka_timeout;
     /// Number of retries to perform before timeout takes place
     uint8_t            retries;
     /// Information for frames being processed
