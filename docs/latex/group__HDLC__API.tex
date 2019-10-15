@@ -1,5 +1,10 @@
 \hypertarget{group__HDLC__API}{}\section{Tiny H\+D\+LC protocol A\+PI functions}
 \label{group__HDLC__API}\index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
+
+
+low level H\+D\+LC protocol function -\/ only framing  
+
+
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -11,8 +16,8 @@ struct \hyperlink{struct__hdlc__handle__t}{\+\_\+hdlc\+\_\+handle\+\_\+t}
 typedef struct \hyperlink{struct__hdlc__handle__t}{\+\_\+hdlc\+\_\+handle\+\_\+t} \hyperlink{group__HDLC__API_ga4537a8665b2abe023cb7fe40ea1bd024}{hdlc\+\_\+struct\+\_\+t}
 \item 
 \mbox{\Hypertarget{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}\label{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}} 
-typedef struct \hyperlink{struct__hdlc__handle__t}{\+\_\+hdlc\+\_\+handle\+\_\+t} $\ast$ {\bfseries hdlc\+\_\+handle\+\_\+t}
-\end{DoxyCompactItemize}
+typedef struct \hyperlink{struct__hdlc__handle__t}{\+\_\+hdlc\+\_\+handle\+\_\+t} $\ast$ \hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}
+\begin{DoxyCompactList}\small\item\em hdlc handle \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
@@ -28,27 +33,28 @@ enum \hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+c
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} \hyperlink{group__HDLC__API_gaa41c388433273a76460ddfbaff0f8f5d}{hdlc\+\_\+init} (\hyperlink{group__HDLC__API_ga4537a8665b2abe023cb7fe40ea1bd024}{hdlc\+\_\+struct\+\_\+t} $\ast$hdlc\+\_\+info)
+\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} \hyperlink{group__HDLC__API_gaa41c388433273a76460ddfbaff0f8f5d}{hdlc\+\_\+init} (\hyperlink{group__HDLC__API_ga4537a8665b2abe023cb7fe40ea1bd024}{hdlc\+\_\+struct\+\_\+t} $\ast$hdlc\+\_\+info)
 \item 
-int \hyperlink{group__HDLC__API_ga21d727583f0f4534c8e4688eafcec66f}{hdlc\+\_\+close} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle)
+int \hyperlink{group__HDLC__API_ga21d727583f0f4534c8e4688eafcec66f}{hdlc\+\_\+close} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle)
 \item 
-void \hyperlink{group__HDLC__API_ga532836280097de1c8881df8336f21075}{hdlc\+\_\+reset} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle)
+void \hyperlink{group__HDLC__API_ga532836280097de1c8881df8336f21075}{hdlc\+\_\+reset} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle)
 \item 
-int \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle, const void $\ast$data, int len, int $\ast$error)
+int \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle, const void $\ast$data, int len, int $\ast$error)
 \item 
-\mbox{\Hypertarget{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}\label{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}} 
-int {\bfseries hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle, \hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} readcb, void $\ast$user\+\_\+data, uint16\+\_\+t timeout)
+int \hyperlink{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}{hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle, \hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} readcb, void $\ast$user\+\_\+data, uint16\+\_\+t timeout)
 \item 
-int \hyperlink{group__HDLC__API_gae31d921043b4f175603114c206b6b829}{hdlc\+\_\+run\+\_\+tx} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle)
+void \hyperlink{group__HDLC__API_ga73156f5cc3e59c3abb880d124de78f91}{hdlc\+\_\+set\+\_\+rx\+\_\+buffer} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle, void $\ast$data, int size)
 \item 
-int \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle, const void $\ast$data, int len, uint32\+\_\+t timeout)
+int \hyperlink{group__HDLC__API_gae31d921043b4f175603114c206b6b829}{hdlc\+\_\+run\+\_\+tx} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle)
 \item 
-void \hyperlink{group__HDLC__API_ga73156f5cc3e59c3abb880d124de78f91}{hdlc\+\_\+set\+\_\+rx\+\_\+buffer} (\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} handle, void $\ast$data, int size)
+int \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle, const void $\ast$data, int len, uint32\+\_\+t timeout)
 \end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
+low level H\+D\+LC protocol function -\/ only framing 
 
+this group implements low level H\+D\+LC functions, which implement framing only according to R\+FC 1662\+: 0x7E, 0x7D, 0x20 (I\+SO Standard 3309-\/1979). 
 
 \subsection{Typedef Documentation}
 \mbox{\Hypertarget{group__HDLC__API_ga4537a8665b2abe023cb7fe40ea1bd024}\label{group__HDLC__API_ga4537a8665b2abe023cb7fe40ea1bd024}} 
@@ -95,7 +101,7 @@ H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+\+O\+FF&Disable C\+RC field. \\
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+close@{hdlc\+\_\+close}}
 \index{hdlc\+\_\+close@{hdlc\+\_\+close}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{hdlc\+\_\+close()}{hdlc\_close()}}
-{\footnotesize\ttfamily int hdlc\+\_\+close (\begin{DoxyParamCaption}\item[{\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t}}]{handle }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int hdlc\+\_\+close (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle }\end{DoxyParamCaption})}
 
 Shutdowns all hdlc activity
 
@@ -108,7 +114,7 @@ Shutdowns all hdlc activity
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+init@{hdlc\+\_\+init}}
 \index{hdlc\+\_\+init@{hdlc\+\_\+init}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{hdlc\+\_\+init()}{hdlc\_init()}}
-{\footnotesize\ttfamily \hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t} hdlc\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_ga4537a8665b2abe023cb7fe40ea1bd024}{hdlc\+\_\+struct\+\_\+t} $\ast$}]{hdlc\+\_\+info }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} hdlc\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_ga4537a8665b2abe023cb7fe40ea1bd024}{hdlc\+\_\+struct\+\_\+t} $\ast$}]{hdlc\+\_\+info }\end{DoxyParamCaption})}
 
 Initializes hdlc level and returns hdlc handle or N\+U\+LL in case of error.
 
@@ -127,7 +133,7 @@ hdlc\+\_\+info structure passed to the function must be allocated all the time.
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+reset@{hdlc\+\_\+reset}}
 \index{hdlc\+\_\+reset@{hdlc\+\_\+reset}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{hdlc\+\_\+reset()}{hdlc\_reset()}}
-{\footnotesize\ttfamily void hdlc\+\_\+reset (\begin{DoxyParamCaption}\item[{\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t}}]{handle }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void hdlc\+\_\+reset (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle }\end{DoxyParamCaption})}
 
 Resets hdlc state. Use this function, if hw error happened on tx or rx line, and this requires hardware change, and cancelling current operation.
 
@@ -140,9 +146,17 @@ Resets hdlc state. Use this function, if hw error happened on tx or rx line, and
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+run\+\_\+rx@{hdlc\+\_\+run\+\_\+rx}}
 \index{hdlc\+\_\+run\+\_\+rx@{hdlc\+\_\+run\+\_\+rx}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{hdlc\+\_\+run\+\_\+rx()}{hdlc\_run\_rx()}}
-{\footnotesize\ttfamily int hdlc\+\_\+run\+\_\+rx (\begin{DoxyParamCaption}\item[{\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{const void $\ast$}]{data,  }\item[{int}]{len,  }\item[{int $\ast$}]{error }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int hdlc\+\_\+run\+\_\+rx (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{const void $\ast$}]{data,  }\item[{int}]{len,  }\item[{int $\ast$}]{error }\end{DoxyParamCaption})}
 
 Processes incoming data. Implementation of reading data from hw is user responsibility. If \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx()} returns value less than size of data passed to the function, then \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx()} must be called later second time with the pointer to and size of not processed bytes.
+
+This function will return the following codes in error field\+:
+\begin{DoxyItemize}
+\item T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE if receiving data fails to fit incoming buffer
+\item T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED if generic failure happened
+\item T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+W\+R\+O\+N\+G\+\_\+\+C\+RC if crc field of incoming frame is incorrect
+\item T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+SS if operation completed successfully
+\end{DoxyItemize}
 
 
 \begin{DoxyParams}{Parameters}
@@ -158,13 +172,42 @@ Processes incoming data. Implementation of reading data from hw is user responsi
 \begin{DoxyReturn}{Returns}
 number of processed bytes from specified data buffer. 
 \end{DoxyReturn}
+\mbox{\Hypertarget{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}\label{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}} 
+\index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read@{hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read}}
+\index{hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read@{hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
+\subsubsection{\texorpdfstring{hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read()}{hdlc\_run\_rx\_until\_read()}}
+{\footnotesize\ttfamily int hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb,  }\item[{void $\ast$}]{user\+\_\+data,  }\item[{uint16\+\_\+t}]{timeout }\end{DoxyParamCaption})}
+
+Runs rx cycle until full frame received.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & handle to hdlc instance \\
+\hline
+{\em readcb} & callback to read bytes from channel function \\
+\hline
+{\em user\+\_\+data} & user data to pass to readcb callback function \\
+\hline
+{\em timeout} & timeout in milliseconds to wait for new frame. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\begin{DoxyItemize}
+\item T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+SS if operation completed successfully
+\item T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED if generic failure happened
+\item T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+UT if operation cannot be completed in specified time. 
+\end{DoxyItemize}
+\end{DoxyReturn}
 \mbox{\Hypertarget{group__HDLC__API_gae31d921043b4f175603114c206b6b829}\label{group__HDLC__API_gae31d921043b4f175603114c206b6b829}} 
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+run\+\_\+tx@{hdlc\+\_\+run\+\_\+tx}}
 \index{hdlc\+\_\+run\+\_\+tx@{hdlc\+\_\+run\+\_\+tx}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{hdlc\+\_\+run\+\_\+tx()}{hdlc\_run\_tx()}}
-{\footnotesize\ttfamily int hdlc\+\_\+run\+\_\+tx (\begin{DoxyParamCaption}\item[{\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t}}]{handle }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int hdlc\+\_\+run\+\_\+tx (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle }\end{DoxyParamCaption})}
 
-Runs transmission at hdlc level. If there is frame to send, or send is in progress, this function will call send\+\_\+tx() callback multiple times. If send\+\_\+tx() callback reports 0, that means that there is nothing to send of hw device is busy. \begin{DoxyWarning}{Warning}
+Runs transmission at hdlc level. If there is frame to send, or send is in progress, this function will call send\+\_\+tx() callback multiple times. If send\+\_\+tx() callback reports 0, that means that hw device is busy and in this case \hyperlink{group__HDLC__API_gae31d921043b4f175603114c206b6b829}{hdlc\+\_\+run\+\_\+tx()} will return immediately.
+
+\begin{DoxyWarning}{Warning}
 this function must be called from one thread only.
 \end{DoxyWarning}
 
@@ -179,21 +222,21 @@ negative value in case of error 0 if hw is busy, or no data is waiting for sendi
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+send@{hdlc\+\_\+send}}
 \index{hdlc\+\_\+send@{hdlc\+\_\+send}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{hdlc\+\_\+send()}{hdlc\_send()}}
-{\footnotesize\ttfamily int hdlc\+\_\+send (\begin{DoxyParamCaption}\item[{\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{const void $\ast$}]{data,  }\item[{int}]{len,  }\item[{uint32\+\_\+t}]{timeout }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int hdlc\+\_\+send (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{const void $\ast$}]{data,  }\item[{int}]{len,  }\item[{uint32\+\_\+t}]{timeout }\end{DoxyParamCaption})}
 
 Puts next frame for sending. This function is thread-\/safe. You may call it from parallel threads.
 
-If multithread\+\_\+mode is specificed for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will wait for specified timeout until some tx thread, implemented by application, completes sending of the frame.
+If multithread\+\_\+mode is specificed for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will wait for specified timeout until some tx thread, implemented by application, completes sending of the frame. If timeout happens, you may call \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} second time, using N\+U\+LL as data argument, but be careful, since another thread may complete sending between two calls.
 
-If multithread\+\_\+mode is disabled for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will start frame sending immediately by itself if TX line is not busy. In this case \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} will block until frame is sent or timeout.
+If multithread\+\_\+mode is disabled for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will start frame sending immediately by itself if TX line is not busy. In this case \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} will block until frame is sent or timeout. If timeout happens, but the frame is not sent still, you need to call \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} second time, but with data pameter specified as N\+U\+LL.
 
-If timeout is specified as 0, \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will not wait or perform send operation, but only pass dtaa pointer to hdlc state machine.
+If timeout is specified as 0, \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will not wait or perform send operation, but only pass data pointer to hdlc state machine. In this case, some other thread needs to or in the same thread you need to send data using \hyperlink{group__HDLC__API_gae31d921043b4f175603114c206b6b829}{hdlc\+\_\+run\+\_\+tx()}.
 
 
 \begin{DoxyParams}{Parameters}
 {\em handle} & handle to hdlc instance \\
 \hline
-{\em data} & pointer to new data to send \\
+{\em data} & pointer to new data to send (can be N\+U\+LL is you need to retry sending) \\
 \hline
 {\em len} & size of data to send in bytes \\
 \hline
@@ -201,7 +244,7 @@ If timeout is specified as 0, \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED if generic error happens T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+UT if TX queue is busy for specified timeout period T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+SS if data is successfully sent 
+T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED if generic error happens T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+B\+U\+SY if TX queue is busy with another frame. T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+UT if send operation cannot be completed in specified time. T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+SS if data is successfully sent 
 \end{DoxyReturn}
 \begin{DoxyWarning}{Warning}
 buffer with data must be available all the time until data are actually sent to tx hw channel. That is if you use zero timeout, you need to use callback to understand, when buffer is not longer needed at hdlc level. 
@@ -210,7 +253,7 @@ buffer with data must be available all the time until data are actually sent to 
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+set\+\_\+rx\+\_\+buffer@{hdlc\+\_\+set\+\_\+rx\+\_\+buffer}}
 \index{hdlc\+\_\+set\+\_\+rx\+\_\+buffer@{hdlc\+\_\+set\+\_\+rx\+\_\+buffer}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
 \subsubsection{\texorpdfstring{hdlc\+\_\+set\+\_\+rx\+\_\+buffer()}{hdlc\_set\_rx\_buffer()}}
-{\footnotesize\ttfamily void hdlc\+\_\+set\+\_\+rx\+\_\+buffer (\begin{DoxyParamCaption}\item[{\hyperlink{struct__hdlc__handle__t}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{void $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void hdlc\+\_\+set\+\_\+rx\+\_\+buffer (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{void $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
 
 Sets new RX buffer for hdlc protocol. This function is not thread-\/safe.
 

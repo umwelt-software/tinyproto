@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -76,15 +76,14 @@ $(function() {
 
 <p>Tiny protocol Types.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;arduino/tiny_defines.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;include/arduino_hal.h&quot;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for tiny_types.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="tiny__types_8h__incl.png" border="0" usemap="#src_2proto_2hal_2tiny__types_8h" alt=""/></div>
 <map name="src_2proto_2hal_2tiny__types_8h" id="src_2proto_2hal_2tiny__types_8h">
-<area shape="rect" id="node2" href="arduino_2tiny__defines_8h_source.html" title="arduino/tiny_defines.h" alt="" coords="5,95,155,121"/>
-<area shape="rect" id="node3" href="arduino_2tiny__config_8h_source.html" title="tiny_config.h" alt="" coords="32,169,128,196"/>
+<area shape="rect" id="node2" href="arduino__hal_8h_source.html" title="include/arduino_hal.h" alt="" coords="5,95,167,121"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -92,16 +91,16 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="tiny__types_8h__dep__incl.png" border="0" usemap="#src_2proto_2hal_2tiny__types_8hdep" alt=""/></div>
 <map name="src_2proto_2hal_2tiny__types_8hdep" id="src_2proto_2hal_2tiny__types_8hdep">
-<area shape="rect" id="node2" href="tiny__layer2_8h.html" title="Tiny protocol API. " alt="" coords="5,95,132,136"/>
-<area shape="rect" id="node3" href="crc_8h_source.html" title="src/proto/crc/crc.h" alt="" coords="157,102,285,129"/>
-<area shape="rect" id="node4" href="tiny__rq__pool_8h_source.html" title="src/proto/half_duplex\l/tiny_rq_pool.h" alt="" coords="309,95,452,136"/>
-<area shape="rect" id="node5" href="tiny__hd_8h.html" title="Tiny Protocol Half Duplex API. " alt="" coords="371,184,513,225"/>
-<area shape="rect" id="node8" href="tiny__hdlc_8h_source.html" title="src/proto/hdlc/tiny\l_hdlc.h" alt="" coords="528,95,655,136"/>
-<area shape="rect" id="node9" href="tiny__light_8h.html" title="Tiny Light protocol API. " alt="" coords="669,184,796,225"/>
-<area shape="rect" id="node6" href="TinyProtocolHd_8h.html" title="Tiny protocol Arduino API. " alt="" coords="427,273,572,300"/>
-<area shape="rect" id="node7" href="TinyProtocol_8h.html" title="Tiny protocol Arduino API. " alt="" coords="522,348,650,375"/>
-<area shape="rect" id="node11" href="TinyHdlc_8h.html" title="Tiny light protocol Arduino API. " alt="" coords="538,191,645,218"/>
-<area shape="rect" id="node10" href="TinyLightProtocol_8h.html" title="Tiny light protocol Arduino API. " alt="" coords="625,273,781,300"/>
+<area shape="rect" id="node2" href="crc_8h_source.html" title="src/proto/crc/crc.h" alt="" coords="5,102,143,129"/>
+<area shape="rect" id="node3" href="tiny__fd_8h.html" title="Tiny Protocol Full Duplex API. " alt="" coords="63,191,221,218"/>
+<area shape="rect" id="node6" href="tiny__rq__pool_8h_source.html" title="src/proto/half_duplex\l/tiny_rq_pool.h" alt="" coords="483,95,641,136"/>
+<area shape="rect" id="node7" href="tiny__hd_8h.html" title="Tiny Protocol Half Duplex API. " alt="" coords="245,184,404,225"/>
+<area shape="rect" id="node9" href="tiny__hdlc_8h_source.html" title="src/proto/hdlc/tiny\l_hdlc.h" alt="" coords="218,95,357,136"/>
+<area shape="rect" id="node10" href="tiny__light_8h.html" title="Tiny Light protocol API. " alt="" coords="429,184,570,225"/>
+<area shape="rect" id="node4" href="TinyProtocolFd_8h.html" title="Tiny protocol Arduino API. " alt="" coords="65,273,219,300"/>
+<area shape="rect" id="node5" href="TinyProtocol_8h.html" title="Tiny protocol Arduino API. " alt="" coords="251,348,390,375"/>
+<area shape="rect" id="node8" href="TinyProtocolHd_8h.html" title="Tiny protocol Arduino API. " alt="" coords="243,273,399,300"/>
+<area shape="rect" id="node11" href="TinyLightProtocol_8h.html" title="Tiny light protocol Arduino API. " alt="" coords="423,273,594,300"/>
 </map>
 </div>
 </div>
@@ -128,7 +127,7 @@ Macros</h2></td></tr>
 <tr class="separator:gac9ba8076a1eb8613e8d1f07629ff0cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="memItemLeft" align="right" valign="top">
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7">TINY_ERR_DATA_TOO_LARGE</a>&#160;&#160;&#160;(-3)</td></tr>
-<tr class="memdesc:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data too large to fit the user buffer, valid for tiny_read function. <br /></td></tr>
+<tr class="memdesc:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data too large to fit the user buffer. <br /></td></tr>
 <tr class="separator:ga7bbe7440d11ad304b0af68e011f4eab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga541a9e67a84e39595ad647d641c4df2e"><td class="memItemLeft" align="right" valign="top">
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga541a9e67a84e39595ad647d641c4df2e">TINY_ERR_INVALID_DATA</a>&#160;&#160;&#160;(-4)</td></tr>
@@ -146,6 +145,10 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#gab15347e8e9f90d709d94d9c151d505b7">TINY_ERR_AGAIN</a>&#160;&#160;&#160;(-7)</td></tr>
 <tr class="memdesc:gab15347e8e9f90d709d94d9c151d505b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">No data for now, need to retry reading once again. <br /></td></tr>
 <tr class="separator:gab15347e8e9f90d709d94d9c151d505b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga618f7dd6cead76223e60300212712871"><td class="memItemLeft" align="right" valign="top">
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ERROR__FLAGS.html#ga618f7dd6cead76223e60300212712871">TINY_ERR_WRONG_CRC</a>&#160;&#160;&#160;(-8)</td></tr>
+<tr class="memdesc:ga618f7dd6cead76223e60300212712871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invalid crc field of incoming frame. <br /></td></tr>
+<tr class="separator:ga618f7dd6cead76223e60300212712871"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadadd60eb21d7949e6d097ad36aab9b2e"><td class="memItemLeft" align="right" valign="top">
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FLAGS__GROUP.html#gadadd60eb21d7949e6d097ad36aab9b2e">TINY_FLAG_NO_WAIT</a>&#160;&#160;&#160;(0)</td></tr>
 <tr class="memdesc:gadadd60eb21d7949e6d097ad36aab9b2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This flag makes tiny API functions perform as non-blocking. <br /></td></tr>
@@ -163,8 +166,17 @@ Macros</h2></td></tr>
 <tr class="memdesc:ga3a34267804581c5709d03f52d232b307"><td class="mdescLeft">&#160;</td><td class="mdescRight">This flag makes tiny API functions perform in blocking mode. <br /></td></tr>
 <tr class="separator:ga3a34267804581c5709d03f52d232b307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27b8fac677976106d127489aed30c6ea"><td class="memItemLeft" align="right" valign="top"><a id="a27b8fac677976106d127489aed30c6ea"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>EVENT_BIS_ALL</b>&#160;&#160;&#160;0xFF</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a27b8fac677976106d127489aed30c6ea">EVENT_BIS_ALL</a>&#160;&#160;&#160;0xFF</td></tr>
+<tr class="memdesc:a27b8fac677976106d127489aed30c6ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">All bits supported by tiny protocol HAL events. <br /></td></tr>
 <tr class="separator:a27b8fac677976106d127489aed30c6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1077ed0be1ef067bb34790e17829eff"><td class="memItemLeft" align="right" valign="top"><a id="ad1077ed0be1ef067bb34790e17829eff"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#ad1077ed0be1ef067bb34790e17829eff">EVENT_BITS_CLEAR</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:ad1077ed0be1ef067bb34790e17829eff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag, used in <a class="el" href="tiny__types_8h.html#aa9f8404c92b31f6df4b2b929ad54588b">tiny_events_wait()</a> <br /></td></tr>
+<tr class="separator:ad1077ed0be1ef067bb34790e17829eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5326a270b651a7a0d23e219e63de174"><td class="memItemLeft" align="right" valign="top"><a id="aa5326a270b651a7a0d23e219e63de174"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#aa5326a270b651a7a0d23e219e63de174">EVENT_BITS_LEAVE</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:aa5326a270b651a7a0d23e219e63de174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag, used in <a class="el" href="tiny__types_8h.html#aa9f8404c92b31f6df4b2b929ad54588b">tiny_events_wait()</a> <br /></td></tr>
+<tr class="separator:aa5326a270b651a7a0d23e219e63de174"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -177,42 +189,32 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad33eeb8054f4677e4441d3602d33b734"><td class="memItemLeft" align="right" valign="top"><a id="ad33eeb8054f4677e4441d3602d33b734"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_mutex_create</b> (tiny_mutex_t *mutex)</td></tr>
+<tr class="memitem:ad33eeb8054f4677e4441d3602d33b734"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#ad33eeb8054f4677e4441d3602d33b734">tiny_mutex_create</a> (tiny_mutex_t *mutex)</td></tr>
 <tr class="separator:ad33eeb8054f4677e4441d3602d33b734"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae469a75fca0339d7455583955920647c"><td class="memItemLeft" align="right" valign="top"><a id="ae469a75fca0339d7455583955920647c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_mutex_destroy</b> (tiny_mutex_t *mutex)</td></tr>
+<tr class="memitem:ae469a75fca0339d7455583955920647c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#ae469a75fca0339d7455583955920647c">tiny_mutex_destroy</a> (tiny_mutex_t *mutex)</td></tr>
 <tr class="separator:ae469a75fca0339d7455583955920647c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62207a0f8490d55b9fc529a8773bcf0a"><td class="memItemLeft" align="right" valign="top"><a id="a62207a0f8490d55b9fc529a8773bcf0a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_mutex_lock</b> (tiny_mutex_t *mutex)</td></tr>
+<tr class="memitem:a62207a0f8490d55b9fc529a8773bcf0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a62207a0f8490d55b9fc529a8773bcf0a">tiny_mutex_lock</a> (tiny_mutex_t *mutex)</td></tr>
 <tr class="separator:a62207a0f8490d55b9fc529a8773bcf0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c5ef9a47c4bcb2d4f7f59ec91b8dc68"><td class="memItemLeft" align="right" valign="top"><a id="a3c5ef9a47c4bcb2d4f7f59ec91b8dc68"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_mutex_try_lock</b> (tiny_mutex_t *mutex)</td></tr>
+<tr class="memitem:a3c5ef9a47c4bcb2d4f7f59ec91b8dc68"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a3c5ef9a47c4bcb2d4f7f59ec91b8dc68">tiny_mutex_try_lock</a> (tiny_mutex_t *mutex)</td></tr>
 <tr class="separator:a3c5ef9a47c4bcb2d4f7f59ec91b8dc68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef1ccb057b482b334079565a0e75eb6c"><td class="memItemLeft" align="right" valign="top"><a id="aef1ccb057b482b334079565a0e75eb6c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_mutex_unlock</b> (tiny_mutex_t *mutex)</td></tr>
+<tr class="memitem:aef1ccb057b482b334079565a0e75eb6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#aef1ccb057b482b334079565a0e75eb6c">tiny_mutex_unlock</a> (tiny_mutex_t *mutex)</td></tr>
 <tr class="separator:aef1ccb057b482b334079565a0e75eb6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f8dca30c01b01d94c80babecd4396a7"><td class="memItemLeft" align="right" valign="top"><a id="a8f8dca30c01b01d94c80babecd4396a7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_events_create</b> (<a class="el" href="structtiny__events__t.html">tiny_events_t</a> *events)</td></tr>
+<tr class="memitem:a8f8dca30c01b01d94c80babecd4396a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a8f8dca30c01b01d94c80babecd4396a7">tiny_events_create</a> (tiny_events_t *events)</td></tr>
 <tr class="separator:a8f8dca30c01b01d94c80babecd4396a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a786fc845ce2ff24d7633d41e2524785c"><td class="memItemLeft" align="right" valign="top"><a id="a786fc845ce2ff24d7633d41e2524785c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_events_destroy</b> (<a class="el" href="structtiny__events__t.html">tiny_events_t</a> *events)</td></tr>
+<tr class="memitem:a786fc845ce2ff24d7633d41e2524785c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a786fc845ce2ff24d7633d41e2524785c">tiny_events_destroy</a> (tiny_events_t *events)</td></tr>
 <tr class="separator:a786fc845ce2ff24d7633d41e2524785c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9f8404c92b31f6df4b2b929ad54588b"><td class="memItemLeft" align="right" valign="top"><a id="aa9f8404c92b31f6df4b2b929ad54588b"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_events_wait</b> (<a class="el" href="structtiny__events__t.html">tiny_events_t</a> *event, uint8_t bits, uint8_t clear, uint32_t timeout)</td></tr>
+<tr class="memitem:aa9f8404c92b31f6df4b2b929ad54588b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#aa9f8404c92b31f6df4b2b929ad54588b">tiny_events_wait</a> (tiny_events_t *event, uint8_t bits, uint8_t clear, uint32_t timeout)</td></tr>
 <tr class="separator:aa9f8404c92b31f6df4b2b929ad54588b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d57419d88bfa7496e9d743c7831590a"><td class="memItemLeft" align="right" valign="top"><a id="a7d57419d88bfa7496e9d743c7831590a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_events_set</b> (<a class="el" href="structtiny__events__t.html">tiny_events_t</a> *event, uint8_t bits)</td></tr>
+<tr class="memitem:a7d57419d88bfa7496e9d743c7831590a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a7d57419d88bfa7496e9d743c7831590a">tiny_events_set</a> (tiny_events_t *event, uint8_t bits)</td></tr>
 <tr class="separator:a7d57419d88bfa7496e9d743c7831590a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a478739391a83f06f56a5beaef649410c"><td class="memItemLeft" align="right" valign="top"><a id="a478739391a83f06f56a5beaef649410c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_events_clear</b> (<a class="el" href="structtiny__events__t.html">tiny_events_t</a> *event, uint8_t bits)</td></tr>
+<tr class="memitem:a478739391a83f06f56a5beaef649410c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a478739391a83f06f56a5beaef649410c">tiny_events_clear</a> (tiny_events_t *event, uint8_t bits)</td></tr>
 <tr class="separator:a478739391a83f06f56a5beaef649410c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae024e04660c8b9a9a231965f7aee5112"><td class="memItemLeft" align="right" valign="top"><a id="ae024e04660c8b9a9a231965f7aee5112"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_sleep</b> (uint32_t ms)</td></tr>
+<tr class="memitem:ae024e04660c8b9a9a231965f7aee5112"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#ae024e04660c8b9a9a231965f7aee5112">tiny_sleep</a> (uint32_t ms)</td></tr>
 <tr class="separator:ae024e04660c8b9a9a231965f7aee5112"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43bebe1b00a80373afd7b8061bf742fe"><td class="memItemLeft" align="right" valign="top"><a id="a43bebe1b00a80373afd7b8061bf742fe"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_millis</b> ()</td></tr>
+<tr class="memitem:a43bebe1b00a80373afd7b8061bf742fe"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a43bebe1b00a80373afd7b8061bf742fe">tiny_millis</a> ()</td></tr>
 <tr class="separator:a43bebe1b00a80373afd7b8061bf742fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c7a23a4fe40e7c33691618b7ad91e87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a3c7a23a4fe40e7c33691618b7ad91e87">tiny_log_level</a> (uint8_t level)</td></tr>
+<tr class="separator:a3c7a23a4fe40e7c33691618b7ad91e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Tiny protocol Types. </p>
@@ -239,7 +241,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_millis</b> (
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c" title="set callbacks for processing frames The function sets callback procs for specified Tiny channel...">tiny_set_callbacks</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>tiny_set_callbacks </dd></dl>
 
 </div>
 </div>
@@ -288,6 +290,362 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tiny_millis</b> (
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the function must return negative value in case of error or number of bytes written or zero. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a478739391a83f06f56a5beaef649410c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a478739391a83f06f56a5beaef649410c">&#9670;&nbsp;</a></span>tiny_events_clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_events_clear </td>
+          <td>(</td>
+          <td class="paramtype">tiny_events_t *&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>bits</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Clears bits for cross-platform event group object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>pointer to tiny_event_t variable. </td></tr>
+    <tr><td class="paramname">bits</td><td>bits to clear </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8f8dca30c01b01d94c80babecd4396a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f8dca30c01b01d94c80babecd4396a7">&#9670;&nbsp;</a></span>tiny_events_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_events_create </td>
+          <td>(</td>
+          <td class="paramtype">tiny_events_t *&#160;</td>
+          <td class="paramname"><em>events</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates cross platform event group object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">events</td><td>pointer to tiny_event_t variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a786fc845ce2ff24d7633d41e2524785c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a786fc845ce2ff24d7633d41e2524785c">&#9670;&nbsp;</a></span>tiny_events_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_events_destroy </td>
+          <td>(</td>
+          <td class="paramtype">tiny_events_t *&#160;</td>
+          <td class="paramname"><em>events</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Destroys cross platform event group object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">events</td><td>pointer to tiny_event_t variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7d57419d88bfa7496e9d743c7831590a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d57419d88bfa7496e9d743c7831590a">&#9670;&nbsp;</a></span>tiny_events_set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_events_set </td>
+          <td>(</td>
+          <td class="paramtype">tiny_events_t *&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>bits</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets bits for cross-platform event group object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>pointer to tiny_event_t variable. </td></tr>
+    <tr><td class="paramname">bits</td><td>bits to set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa9f8404c92b31f6df4b2b929ad54588b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9f8404c92b31f6df4b2b929ad54588b">&#9670;&nbsp;</a></span>tiny_events_wait()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t tiny_events_wait </td>
+          <td>(</td>
+          <td class="paramtype">tiny_events_t *&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>bits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>clear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>timeout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Waits until any of specified bits is set or timeout. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>pointer to tiny_event_t variable. </td></tr>
+    <tr><td class="paramname">bits</td><td>bits to wait for </td></tr>
+    <tr><td class="paramname">clear</td><td>flags EVENT_BITS_CLEAR or EVENT_BITS_LEAVE </td></tr>
+    <tr><td class="paramname">timeout</td><td>timeout in milliseconds to wait </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on timeout list of bits from the input argument, which were set </dd></dl>
+
+</div>
+</div>
+<a id="a3c7a23a4fe40e7c33691618b7ad91e87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c7a23a4fe40e7c33691618b7ad91e87">&#9670;&nbsp;</a></span>tiny_log_level()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_log_level </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets logging level if tiny library is compiled with logs </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">level</td><td>log level to set, or 0 to disable logs </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a43bebe1b00a80373afd7b8061bf742fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43bebe1b00a80373afd7b8061bf742fe">&#9670;&nbsp;</a></span>tiny_millis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t tiny_millis </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns timestamp in milliseconds since system started up. </p>
+
+</div>
+</div>
+<a id="ad33eeb8054f4677e4441d3602d33b734"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad33eeb8054f4677e4441d3602d33b734">&#9670;&nbsp;</a></span>tiny_mutex_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_mutex_create </td>
+          <td>(</td>
+          <td class="paramtype">tiny_mutex_t *&#160;</td>
+          <td class="paramname"><em>mutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates cross-platform mutex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mutex</td><td>pointer to tiny_mutex_t variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae469a75fca0339d7455583955920647c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae469a75fca0339d7455583955920647c">&#9670;&nbsp;</a></span>tiny_mutex_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_mutex_destroy </td>
+          <td>(</td>
+          <td class="paramtype">tiny_mutex_t *&#160;</td>
+          <td class="paramname"><em>mutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Destroys cross-platform mutex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mutex</td><td>pointer to tiny_mutex_t variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a62207a0f8490d55b9fc529a8773bcf0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62207a0f8490d55b9fc529a8773bcf0a">&#9670;&nbsp;</a></span>tiny_mutex_lock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_mutex_lock </td>
+          <td>(</td>
+          <td class="paramtype">tiny_mutex_t *&#160;</td>
+          <td class="paramname"><em>mutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Locks cross-platform mutex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mutex</td><td>pointer to tiny_mutex_t variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3c5ef9a47c4bcb2d4f7f59ec91b8dc68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c5ef9a47c4bcb2d4f7f59ec91b8dc68">&#9670;&nbsp;</a></span>tiny_mutex_try_lock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t tiny_mutex_try_lock </td>
+          <td>(</td>
+          <td class="paramtype">tiny_mutex_t *&#160;</td>
+          <td class="paramname"><em>mutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Attempts to lock cross-platform mutex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mutex</td><td>pointer to tiny_mutex_t variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if failed to lock 1 if success </dd></dl>
+
+</div>
+</div>
+<a id="aef1ccb057b482b334079565a0e75eb6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef1ccb057b482b334079565a0e75eb6c">&#9670;&nbsp;</a></span>tiny_mutex_unlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_mutex_unlock </td>
+          <td>(</td>
+          <td class="paramtype">tiny_mutex_t *&#160;</td>
+          <td class="paramname"><em>mutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Unlocks cross-platform mutex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mutex</td><td>pointer to tiny_mutex_t variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae024e04660c8b9a9a231965f7aee5112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae024e04660c8b9a9a231965f7aee5112">&#9670;&nbsp;</a></span>tiny_sleep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_sleep </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sleeps for specified period in milliseconds. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ms</td><td>time in milliseconds to sleep </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

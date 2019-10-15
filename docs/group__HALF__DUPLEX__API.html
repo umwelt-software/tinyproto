@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -78,6 +78,8 @@ Functions</h2></td></tr>
 <tr class="memitem:gac962595f09883dea1dd0992a608a17b9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HALF__DUPLEX__API.html#gac962595f09883dea1dd0992a608a17b9">tiny_hd_run</a> (<a class="el" href="tiny__hd_8h.html#af9f81ad129b754a780dfca5dcd7f7cf9">STinyHdData</a> *handle)</td></tr>
 <tr class="memdesc:gac962595f09883dea1dd0992a608a17b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">runs receive functions of Tiny Half Duplex protocol.  <a href="#gac962595f09883dea1dd0992a608a17b9">More...</a><br /></td></tr>
 <tr class="separator:gac962595f09883dea1dd0992a608a17b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga84325cc961c3f31e2ba6111d0235bd61"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HALF__DUPLEX__API.html#ga84325cc961c3f31e2ba6111d0235bd61">tiny_hd_run_tx</a> (<a class="el" href="tiny__hd_8h.html#af9f81ad129b754a780dfca5dcd7f7cf9">STinyHdData</a> *handle)</td></tr>
+<tr class="separator:ga84325cc961c3f31e2ba6111d0235bd61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5aad8dcb504b80bac923496f2686a6d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HALF__DUPLEX__API.html#ga5aad8dcb504b80bac923496f2686a6d6">tiny_send_wait_ack</a> (<a class="el" href="tiny__hd_8h.html#af9f81ad129b754a780dfca5dcd7f7cf9">STinyHdData</a> *handle, void *buf, uint16_t len)</td></tr>
 <tr class="memdesc:ga5aad8dcb504b80bac923496f2686a6d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends userdata and waits for acknowledgement from remote side.  <a href="#ga5aad8dcb504b80bac923496f2686a6d6">More...</a><br /></td></tr>
 <tr class="separator:ga5aad8dcb504b80bac923496f2686a6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,15 +179,41 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7" title="Data too large to fit the user buffer, valid for tiny_read function. ">TINY_ERR_DATA_TOO_LARGE</a> </dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7" title="Data too large to fit the user buffer. ">TINY_ERR_DATA_TOO_LARGE</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a" title="Out of sync - received some data, which are not part of the frame (tiny_read) ">TINY_ERR_OUT_OF_SYNC</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga9b3e170e1c6ce269f216ef4a1ac61995" title="API function detected that operation cannot be performed right now. ">TINY_ERR_BUSY</a> </dd>
 <dd>
 TINY_NO_ERROR </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_OUT_OF_SYNC - if first byte received from the channel is not packet marker. You may ignore this error. TINY_ERR_DATA_TOO_LARGE - if incoming packet is too large to fit the buffer TINY_ERR_FAILED - if something wrong with received data TINY_BUSY - if another receive operation is in progress. TINY_NO_ERROR - if nothing is received. greater 0 - number of received bytes. Callbak will be called in this case. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_OUT_OF_SYNC - if first byte received from the channel is not packet marker. You may ignore this error. TINY_ERR_DATA_TOO_LARGE - if incoming packet is too large to fit the buffer TINY_ERR_FAILED - if something wrong with received data TINY_BUSY - if another receive operation is in progress. TINY_SUCCESS - if nothing is received. greater 0 - number of received bytes. Callbak will be called in this case. </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>do not use blocking send (tiny_send_wait_ack) in on_frame_cb_t callback. </dd></dl>
+
+</div>
+</div>
+<a id="ga84325cc961c3f31e2ba6111d0235bd61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga84325cc961c3f31e2ba6111d0235bd61">&#9670;&nbsp;</a></span>tiny_hd_run_tx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tiny_hd_run_tx </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tiny__hd_8h.html#af9f81ad129b754a780dfca5dcd7f7cf9">STinyHdData</a> *&#160;</td>
+          <td class="paramname"><em>handle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Use this function for multithread mode, when you need to run tx in separate thread.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>- pointer to STinyHdData </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_FAILED - if something wrong with received data TINY_SUCCESS - if nothing is received. </dd></dl>
 
 </div>
 </div>

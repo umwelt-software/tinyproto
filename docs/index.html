@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -82,11 +82,13 @@ Tiny Protocol API</h1>
 <h1><a class="anchor" id="packet"></a>
 Packet Structure</h1>
 <p>Full packet format: </p><pre>
-     8       16       any len    None/8/16/32     8
- |   7E   |  UID  |  USER DATA  |    FCS     |   7E   |
+     8        any len    None/8/16/32     8
+ |   7E   |  USER DATA  |    FCS     |   7E   |
+</pre><p>Full duplex hdlc uses standard hdlc frame format: </p><pre>
+     8     ADDR  CONTROL     any len    None/8/16/32     8
+ |   7E   | FF | hdlc ctl | USER DATA  |    FCS     |   7E   |
 </pre><ul>
 <li>7E is packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing. packet delimiter is used by the protocol to find first and last byte of the frame being transmitted.</li>
-<li>UID mean unique identifier of the frame (in network byte order). For Half Duplex Tiny Protocol (<a class="el" href="group__HALF__DUPLEX__API.html">Tiny Half Duplex API functions</a>) it is widely used in acknowledge frames. This field is optional, you may omit UID parameter in <a class="el" href="group__SIMPLE__API.html">Tiny simple API functions</a> and <a class="el" href="group__ADVANCED__API.html">Tiny advanced API functions</a> functions. <a class="el" href="group__LIGHT__API.html">Tiny light protocol API functions</a> do not use UID field in the frames.</li>
 <li>USER DATA of any length. This field contains user data with replaced 0x7D and 0x7E bytes by special sequenced as defined in HDLC/PPP framing. Length of data is now limited on buffer used to receive frames and/or 32767 bytes (Tiny Protocol using 16-bit field to store frame length).</li>
 <li>FCS is standard checksum. Depending on your selection, this is 8-bit, 16-bit or 32-bit field, or it can be absent at all. Refer to RFC1662 for examples. FCS field is also optional and can be disabled. But in this case transport errors are not detected.</li>
 </ul>

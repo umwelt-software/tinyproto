@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -79,7 +79,8 @@ Inheritance diagram for Tiny::IPacket:</div>
 <div class="dyncontent">
 <div class="center"><img src="classTiny_1_1IPacket__inherit__graph.png" border="0" usemap="#Tiny_1_1IPacket_inherit__map" alt="Inheritance graph"/></div>
 <map name="Tiny_1_1IPacket_inherit__map" id="Tiny_1_1IPacket_inherit__map">
-<area shape="rect" id="node2" href="classTiny_1_1Packet.html" title="Tiny::Packet\&lt; S \&gt;" alt="" coords="5,80,135,107"/>
+<area shape="rect" id="node2" href="classTiny_1_1Packet.html" title="Tiny::Packet\&lt; S \&gt;" alt="" coords="5,80,144,107"/>
+<area shape="rect" id="node3" href="classTiny_1_1PacketD.html" title="Tiny::PacketD" alt="" coords="169,80,279,107"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -87,6 +88,8 @@ Inheritance diagram for Tiny::IPacket:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af44b18c4c8481475d40d8b87a6cb38ff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IPacket.html#af44b18c4c8481475d40d8b87a6cb38ff">IPacket</a> (char *buf, size_t <a class="el" href="classTiny_1_1IPacket.html#a76b6389f0d47b67c8428c58c2b09df51">size</a>)</td></tr>
 <tr class="separator:af44b18c4c8481475d40d8b87a6cb38ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a187fce5726b428db3a36e62522472c5b"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IPacket.html#a187fce5726b428db3a36e62522472c5b">~IPacket</a> ()=default</td></tr>
+<tr class="separator:a187fce5726b428db3a36e62522472c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cc28c5235de6a9ce68bea546a4db17c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IPacket.html#a6cc28c5235de6a9ce68bea546a4db17c">clear</a> ()</td></tr>
 <tr class="separator:a6cc28c5235de6a9ce68bea546a4db17c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d5ba62a453b9cd364c0e214c245f11d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IPacket.html#a9d5ba62a453b9cd364c0e214c245f11d">put</a> (uint8_t byte)</td></tr>
@@ -128,12 +131,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:acbcf3346413014c93a372add37dc3afc"><td class="memItemLeft" align="right" valign="top"><a id="acbcf3346413014c93a372add37dc3afc"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>IHdlc</b></td></tr>
-<tr class="separator:acbcf3346413014c93a372add37dc3afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f90e063a34c3417ed1ea25e64608857"><td class="memItemLeft" align="right" valign="top"><a id="a7f90e063a34c3417ed1ea25e64608857"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoHd</b></td></tr>
 <tr class="separator:a7f90e063a34c3417ed1ea25e64608857"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb64e0550d8886dc8b8b5f1393667578"><td class="memItemLeft" align="right" valign="top"><a id="acb64e0550d8886dc8b8b5f1393667578"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>IProtoFd</b></td></tr>
+<tr class="separator:acb64e0550d8886dc8b8b5f1393667578"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d317236f2a79fa559d5a9112e555882"><td class="memItemLeft" align="right" valign="top"><a id="a1d317236f2a79fa559d5a9112e555882"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoLight</b></td></tr>
 <tr class="separator:a1d317236f2a79fa559d5a9112e555882"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,6 +185,32 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoLight</b></td><
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>passed buffer must exist all lifecycle of the <a class="el" href="classTiny_1_1Packet.html">Packet</a> object. </dd></dl>
+
+</div>
+</div>
+<a id="a187fce5726b428db3a36e62522472c5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a187fce5726b428db3a36e62522472c5b">&#9670;&nbsp;</a></span>~IPacket()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Tiny::IPacket::~IPacket </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Destroys the object </p>
 
 </div>
 </div>

@@ -1,19 +1,19 @@
 This is Tiny protocol implementation for microcontrollers (Arduino, Stellaris).\hypertarget{arduino_arduino_tiny}{}\section{Simple Tiny Protocol examples}\label{arduino_arduino_tiny}
-Simple Tiny Protocol examples section is applicable only when working with \hyperlink{group__SIMPLE__API}{Tiny simple A\+PI functions} and \hyperlink{group__ADVANCED__API}{Tiny advanced A\+PI functions}. If you want to work with Tiny Half Duplex protocol, please refere to \hyperlink{arduino_arduino_tiny_hd}{Half Duplex Tiny Protocol examples} section.\hypertarget{arduino_arduino_tiny_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_init}
+Simple Tiny Protocol examples section is applicable only when working with \hyperlink{group__LIGHT__API}{Tiny light protocol A\+PI functions}. If you want to work with Tiny Half Duplex protocol, please refere to \hyperlink{arduino_arduino_tiny_hd}{Half Duplex Tiny Protocol examples} section.\hypertarget{arduino_arduino_tiny_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_init}
 
 \begin{DoxyCode}
-Tiny::Proto proto;
+\hyperlink{classTiny_1_1ProtoLight}{Tiny::ProtoLight} proto;
 
 \textcolor{keywordtype}{void} setup()
 \{
-    proto.beginToSerial();
+    proto.\hyperlink{classTiny_1_1ProtoLight_a50bf63fe1891edda48980ca2893485d7}{beginToSerial}();
 \}
 \end{DoxyCode}
 \hypertarget{arduino_arduino_tiny_send}{}\subsection{Sending/\+Receiving data over protocol}\label{arduino_arduino_tiny_send}
 \hypertarget{arduino_arduino_tiny_send_receive1}{}\subsubsection{Variant 1}\label{arduino_arduino_tiny_send_receive1}
 First variant\+: without using any helpers to work with data 
 \begin{DoxyCode}
-Tiny::Proto proto;
+\hyperlink{classTiny_1_1ProtoLight}{Tiny::ProtoLight} proto;
 
 \textcolor{comment}{/* The buffer must be defined globally */}
 uint8\_t g\_buffer[16];
@@ -30,10 +30,10 @@ uint8\_t g\_buffer[16];
         buffer[1] = 20;
 
         \textcolor{comment}{/* Send 2 bytes to remote side */}
-        proto.write( buffer, 2 );
+        proto.\hyperlink{classTiny_1_1ProtoLight_a46a27ee9d0b55c88672c98abf04dbdce}{write}( buffer, 2 );
     \}
     \textcolor{keywordtype}{int} length;
-    length = proto.read( g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{TINY\_FLAG\_NO\_WAIT} );
+    length = proto.\hyperlink{classTiny_1_1ProtoLight_acf18a8b73ee6c6394270c903ad7882b8}{read}( g\_buffer, \textcolor{keyword}{sizeof}(g\_buffer), \hyperlink{group__FLAGS__GROUP_gadadd60eb21d7949e6d097ad36aab9b2e}{TINY\_FLAG\_NO\_WAIT} );
     \textcolor{keywordflow}{if} ( length > 0 )
     \{
         \textcolor{comment}{/* Parse your data received from remote side here. */}
@@ -86,7 +86,7 @@ Tiny::Proto proto;
 \}
 \end{DoxyCode}
 \hypertarget{arduino_arduino_tiny_hd}{}\section{Half Duplex Tiny Protocol examples}\label{arduino_arduino_tiny_hd}
-Half Duplex Tiny Protocol examples section is applicable when working with \hyperlink{group__HALF__DUPLEX__API}{Tiny Half Duplex A\+PI functions}, \hyperlink{group__SIMPLE__API}{Tiny simple A\+PI functions} and \hyperlink{group__ADVANCED__API}{Tiny advanced A\+PI functions}.\hypertarget{arduino_arduino_tiny_hd_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_hd_init}
+Half Duplex Tiny Protocol examples section is applicable when working with \hyperlink{group__HALF__DUPLEX__API}{Tiny Half Duplex A\+PI functions}, \hyperlink{group__LIGHT__API}{Tiny light protocol A\+PI functions}.\hypertarget{arduino_arduino_tiny_hd_init}{}\subsection{Initialization}\label{arduino_arduino_tiny_hd_init}
 
 \begin{DoxyCode}
 uint8\_t g\_buffer[64];

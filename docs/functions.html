@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -64,23 +64,34 @@ $(function() {
 
 <h3><a id="index_b"></a>- b -</h3><ul>
 <li>begin()
-: <a class="el" href="classTiny_1_1IHdlc.html#aa14687d45f4762e1a87b8a4afc871a4b">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#aae4e613316866105c130d613ecb25dd4">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#a112ae02531837a852af7ca3c9a32a7eb">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#ad27dfcef54a8316228469ef0a4267962">Tiny::ProtoLight</a>
 </li>
 <li>beginToSerial()
-: <a class="el" href="classTiny_1_1IHdlc.html#a549747579cf72e8809b2939104d42667">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#a1cf42b4182e49dcde4862a768d07c811">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#a0e88ac5b3c67ca67c566742c22180050">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#a50bf63fe1891edda48980ca2893485d7">Tiny::ProtoLight</a>
 </li>
 <li>beginToSerial1()
-: <a class="el" href="classTiny_1_1ProtoHd.html#a1b2975217b0523c3de4b534644cfa501">Tiny::ProtoHd</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#a7d41a0caae1d5e6808a441c821ed8927">Tiny::IProtoFd</a>
+, <a class="el" href="classTiny_1_1ProtoHd.html#a1b2975217b0523c3de4b534644cfa501">Tiny::ProtoHd</a>
+, <a class="el" href="classTiny_1_1ProtoLight.html#a4de4d11cc7f68dcefa5ca1357e6dfc35">Tiny::ProtoLight</a>
 </li>
 <li>beginToSerial2()
-: <a class="el" href="classTiny_1_1ProtoHd.html#a450fc792e515ffd150072988bc632c9e">Tiny::ProtoHd</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#ae7582aca0fa5472da6f4ae2911d56259">Tiny::IProtoFd</a>
+, <a class="el" href="classTiny_1_1ProtoHd.html#a450fc792e515ffd150072988bc632c9e">Tiny::ProtoHd</a>
+, <a class="el" href="classTiny_1_1ProtoLight.html#a40a4d002f53c842b1a3577a8a9c8eebb">Tiny::ProtoLight</a>
 </li>
 <li>beginToSerial3()
-: <a class="el" href="classTiny_1_1ProtoHd.html#acd6519f6652c279b3a3b98aabbaeed65">Tiny::ProtoHd</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#a2d4df949358d4e8afa391e8960729d71">Tiny::IProtoFd</a>
+, <a class="el" href="classTiny_1_1ProtoHd.html#acd6519f6652c279b3a3b98aabbaeed65">Tiny::ProtoHd</a>
+</li>
+<li>buffer
+: <a class="el" href="structSTinyFdInit__.html#a7ffe2a907dc18e66e84507b1620c7bfa">STinyFdInit_</a>
+</li>
+<li>buffer_size
+: <a class="el" href="structSTinyFdInit__.html#a359626e717ca121225a9adce7e6782ba">STinyFdInit_</a>
 </li>
 <li>bytesReceived
 : <a class="el" href="structSTinyStats.html#ab58c342d0fc862c193bff6f71dc725ac">STinyStats</a>
@@ -97,6 +108,7 @@ $(function() {
 </li>
 <li>crc_type
 : <a class="el" href="struct__hdlc__handle__t.html#a156f67a5da24e537a8c0dcda28b59668">_hdlc_handle_t</a>
+, <a class="el" href="structSTinyFdInit__.html#a7a0bb8f1faf2c8adac2ac8ed5dcb5afd">STinyFdInit_</a>
 , <a class="el" href="structSTinyHdInit__.html#a520f9fbb19f5ec84f3f86a10d819faf4">STinyHdInit_</a>
 </li>
 </ul>
@@ -107,7 +119,7 @@ $(function() {
 : <a class="el" href="classTiny_1_1IPacket.html#aedf2ba31c5a29e3829458bd9f03a7051">Tiny::IPacket</a>
 </li>
 <li>disableCrc()
-: <a class="el" href="classTiny_1_1IHdlc.html#aa96fa5be8ae3ee108258a4f0a6c14cba">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#af41446f47a7c520ff8f9683e6ae45614">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#ae90a0a40de0b71a015f7f7f940440fa0">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#af93e0591ca33137ad79ffb054953001c">Tiny::ProtoLight</a>
 </li>
@@ -119,22 +131,22 @@ $(function() {
 : <a class="el" href="structtiny__request__.html#a02c8fb6d26d0cfb0264423a1cb643159">tiny_request_</a>
 </li>
 <li>enableCheckSum()
-: <a class="el" href="classTiny_1_1IHdlc.html#abb55ff8f38be7541b9b2bb4832c7ecda">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#a0f43402e86ea64f5c0154477d84b0c7c">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#ace4e6b993532b3eb47d025b8db94192d">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#ad7b4ef5a43c187f0d1915efe7450bc40">Tiny::ProtoLight</a>
 </li>
 <li>enableCrc16()
-: <a class="el" href="classTiny_1_1IHdlc.html#acedafa846397ca07002d2c6374d6d85e">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#a8b57afdb66434aa35409af34b04e1db9">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#a0887adedc93b7538dbaef3fc8e0b2819">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#a110b654e476691518790edcc5bf1bd80">Tiny::ProtoLight</a>
 </li>
 <li>enableCrc32()
-: <a class="el" href="classTiny_1_1IHdlc.html#a857e7423c3ac10f15fac95e23e2a3eee">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#a1bf1f5211ae3a49caf73ee3de3bb9247">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#a4110a0112548d5e47d312d190930ad20">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#a8ae8a3ace46234a65f83c564dc56fd26">Tiny::ProtoLight</a>
 </li>
 <li>end()
-: <a class="el" href="classTiny_1_1IHdlc.html#aba569c97764fdd95e6f140ef51ea83f8">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#ad17e76d0ef7ea40838e51acc2498c482">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#ac87bf8264895b654025001a0e6014f3f">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#a948b2a0e37177b7434581adc64b36497">Tiny::ProtoLight</a>
 </li>
@@ -142,17 +154,6 @@ $(function() {
 
 
 <h3><a id="index_f"></a>- f -</h3><ul>
-<li>fcs
-: <a class="el" href="structSTinyRxStatus.html#a609d1743d90eff27819207961850ee48">STinyRxStatus</a>
-, <a class="el" href="structSTinyTxStatus.html#a48dd8a16aab283ac5fc6d8d77f30e8cc">STinyTxStatus</a>
-</li>
-<li>fcs_bits
-: <a class="el" href="structSTinyData.html#a3cf4d6009cc472630e20a68d6fa50186">STinyData</a>
-</li>
-<li>framelen
-: <a class="el" href="structSTinyRxStatus.html#ad9f6055b8e74f10894c48ff2247f51c4">STinyRxStatus</a>
-, <a class="el" href="structSTinyTxStatus.html#a9f6d1382fec34b6c7daf60d95c5a540d">STinyTxStatus</a>
-</li>
 <li>framesBroken
 : <a class="el" href="structSTinyStats.html#abe4f4a9455b532e22f29e60789386130">STinyStats</a>
 </li>
@@ -194,12 +195,11 @@ $(function() {
 <li>inbuf_size
 : <a class="el" href="structSTinyHdInit__.html#a0eed47c62a16fa29435d480541989cf6">STinyHdInit_</a>
 </li>
-<li>inprogress
-: <a class="el" href="structSTinyRxStatus.html#aaa956a3e43e12753ef43b76bb51d298e">STinyRxStatus</a>
-, <a class="el" href="structSTinyTxStatus.html#a8d7fa9861ba2adb1fd4ad4689548d238">STinyTxStatus</a>
-</li>
 <li>IPacket()
 : <a class="el" href="classTiny_1_1IPacket.html#af44b18c4c8481475d40d8b87a6cb38ff">Tiny::IPacket</a>
+</li>
+<li>IProtoFd()
+: <a class="el" href="classTiny_1_1IProtoFd.html#a65976c6faaf41504b7c15036edc054cf">Tiny::IProtoFd</a>
 </li>
 </ul>
 
@@ -210,7 +210,7 @@ $(function() {
 </li>
 <li>multithread_mode
 : <a class="el" href="struct__hdlc__handle__t.html#aa70c56a76a3c4c5d9ccdee3b019bbce7">_hdlc_handle_t</a>
-, <a class="el" href="structSTinyHdData__.html#a37dca10adb0dd210f02365b7fa20a598">STinyHdData_</a>
+, <a class="el" href="structSTinyHdData__.html#afb1a42e064291b2775024b20d4c9eb79">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#a404947e25922fa8400daa924a032897e">STinyHdInit_</a>
 </li>
 </ul>
@@ -218,7 +218,8 @@ $(function() {
 
 <h3><a id="index_o"></a>- o -</h3><ul>
 <li>on_frame_cb
-: <a class="el" href="structSTinyHdData__.html#abf8a0eb5006769a92adc186554a3a1c0">STinyHdData_</a>
+: <a class="el" href="structSTinyFdInit__.html#a124f9a751438676e0e5f2720249ab3e4">STinyFdInit_</a>
+, <a class="el" href="structSTinyHdData__.html#abf8a0eb5006769a92adc186554a3a1c0">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#ae2eea5181620dfbb47b60a5073bd5ed2">STinyHdInit_</a>
 </li>
 <li>on_frame_read
@@ -228,8 +229,12 @@ $(function() {
 : <a class="el" href="struct__hdlc__handle__t.html#a9aba360df83395af01ff448bca03e259">_hdlc_handle_t</a>
 </li>
 <li>on_sent_cb
-: <a class="el" href="structSTinyHdData__.html#a159a56591682bfb0ff6c5020b26590f6">STinyHdData_</a>
+: <a class="el" href="structSTinyFdInit__.html#a046e2f90d72f4b412cff4ff4f3871736">STinyFdInit_</a>
+, <a class="el" href="structSTinyHdData__.html#a159a56591682bfb0ff6c5020b26590f6">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#aa1d724d6a284de5f995273e0e3e70318">STinyHdInit_</a>
+</li>
+<li>onReceive()
+: <a class="el" href="classTiny_1_1IProtoFd.html#a795b41c969708964cd4646580af1c3ab">Tiny::IProtoFd</a>
 </li>
 <li>oosyncBytes
 : <a class="el" href="structSTinyStats.html#a79119146606964d4e3345a0c019db329">STinyStats</a>
@@ -244,12 +249,15 @@ $(function() {
 
 
 <h3><a id="index_p"></a>- p -</h3><ul>
-<li>pdata
-: <a class="el" href="structSTinyData.html#a3ac48d44af9b2912dd980c7377a020be">STinyData</a>
-, <a class="el" href="structSTinyHdInit__.html#a7b6be4e09ea04eaa4372eadce4d51055">STinyHdInit_</a>
+<li>Packet()
+: <a class="el" href="classTiny_1_1Packet.html#a81a8b302018e7091616e5c853b005201">Tiny::Packet&lt; S &gt;</a>
 </li>
-<li>pframe
-: <a class="el" href="structSTinyTxStatus.html#adad1f600118b0c12040d344c073f0f1a">STinyTxStatus</a>
+<li>PacketD()
+: <a class="el" href="classTiny_1_1PacketD.html#a337a74c5e513be616aff0c1a0746612a">Tiny::PacketD</a>
+</li>
+<li>pdata
+: <a class="el" href="structSTinyFdInit__.html#ac9c2069df0b5008bd849ce2c368bed63">STinyFdInit_</a>
+, <a class="el" href="structSTinyHdInit__.html#a7b6be4e09ea04eaa4372eadce4d51055">STinyHdInit_</a>
 </li>
 <li>pnext
 : <a class="el" href="structlist__element__.html#a81cb2c54606be8120460bded0d919039">list_element_</a>
@@ -257,34 +265,42 @@ $(function() {
 <li>pprev
 : <a class="el" href="structlist__element__.html#a0f6c573966c9d70d4a2ef19b73717515">list_element_</a>
 </li>
+<li>ProtoFdD()
+: <a class="el" href="classTiny_1_1ProtoFdD.html#ac6d3b1143cb0776b9ae16e57068f03dc">Tiny::ProtoFdD</a>
+</li>
 <li>ProtoHd()
 : <a class="el" href="classTiny_1_1ProtoHd.html#a1a55191980c259f2c760997d9c07cb48">Tiny::ProtoHd</a>
 </li>
 <li>put()
-: <a class="el" href="classTiny_1_1IPacket.html#a9dd0344bbed4500af63a3f700d31945b">Tiny::IPacket</a>
+: <a class="el" href="classTiny_1_1IPacket.html#a9d5ba62a453b9cd364c0e214c245f11d">Tiny::IPacket</a>
 </li>
 </ul>
 
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>read()
-: <a class="el" href="classTiny_1_1IHdlc.html#a54c9d5e5be794fa119d526578392825a">Tiny::IHdlc</a>
-, <a class="el" href="classTiny_1_1ProtoLight.html#aa040cbf16f9c074959fb410db6858b9b">Tiny::ProtoLight</a>
-</li>
-<li>read_cb
-: <a class="el" href="structSTinyData.html#a31ba50154472c11e0d063b0aeef95f4d">STinyData</a>
+: <a class="el" href="classTiny_1_1ProtoLight.html#acf18a8b73ee6c6394270c903ad7882b8">Tiny::ProtoLight</a>
 </li>
 <li>read_func
-: <a class="el" href="structSTinyData.html#a9714041284fd99230be0e7efbc8c60cf">STinyData</a>
+: <a class="el" href="structSTinyFdInit__.html#a9ec37074009427a1ccc042ba9387676e">STinyFdInit_</a>
 , <a class="el" href="structSTinyHdData__.html#a788bb96f41bfd7bdb6ce62e5fd018632">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#a5de352b11ca7915737bc459cde7c566d">STinyHdInit_</a>
 , <a class="el" href="structSTinyLightData.html#af9b045852adb08c137abce21d02f00ea">STinyLightData</a>
 </li>
+<li>retries
+: <a class="el" href="structSTinyFdInit__.html#acaf92c5f021e949607bb7ce161d029e9">STinyFdInit_</a>
+</li>
+<li>retry_timeout
+: <a class="el" href="structSTinyFdInit__.html#a75f9853077c7d614cbdaf49d644ea82a">STinyFdInit_</a>
+</li>
 <li>run()
 : <a class="el" href="classTiny_1_1ProtoHd.html#af07b1f5d0df3021e00a4b4f04af4150b">Tiny::ProtoHd</a>
 </li>
-<li>rx
-: <a class="el" href="structSTinyData.html#aa3b43db99a1a6bf3d562f932d5a539db">STinyData</a>
+<li>run_rx()
+: <a class="el" href="classTiny_1_1IProtoFd.html#a37292eb5c9faf1be8c4850985e0ae2eb">Tiny::IProtoFd</a>
+</li>
+<li>run_tx()
+: <a class="el" href="classTiny_1_1IProtoFd.html#a19be0bd5124009c7de051554841070b3">Tiny::IProtoFd</a>
 </li>
 <li>rx_buf
 : <a class="el" href="struct__hdlc__handle__t.html#a4736ab7a858df79cf74bd19e6dbacb13">_hdlc_handle_t</a>
@@ -296,18 +312,26 @@ $(function() {
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>send_timeout
+: <a class="el" href="structSTinyFdInit__.html#a63abe062807f7467de14c366e6ffcd10">STinyFdInit_</a>
+</li>
 <li>send_tx
 : <a class="el" href="struct__hdlc__handle__t.html#a1b3432eda3d865c6edd355ff9e8d588c">_hdlc_handle_t</a>
 </li>
-<li>sentbytes
-: <a class="el" href="structSTinyTxStatus.html#ab5074839815ccf15744e258ce4816c06">STinyTxStatus</a>
+<li>setReceiveCallback()
+: <a class="el" href="classTiny_1_1IProtoFd.html#a70aa7c85b5fe83513eebb63b803d5825">Tiny::IProtoFd</a>
+</li>
+<li>setSendTimeout()
+: <a class="el" href="classTiny_1_1IProtoFd.html#a2492655abda41d5b0fbda6f0e1c6badc">Tiny::IProtoFd</a>
+</li>
+<li>setWindowSize()
+: <a class="el" href="classTiny_1_1IProtoFd.html#adddcc24bf1ef40d39c944679a97c1ec4">Tiny::IProtoFd</a>
 </li>
 <li>size()
 : <a class="el" href="classTiny_1_1IPacket.html#a76b6389f0d47b67c8428c58c2b09df51">Tiny::IPacket</a>
 </li>
 <li>stat
-: <a class="el" href="structSTinyData.html#a16ba8c9e60d6aee3fcd4909f85561f3d">STinyData</a>
-, <a class="el" href="structSTinyLightData.html#a623323a7a84807b5ce14a7cb56ec07f0">STinyLightData</a>
+: <a class="el" href="structSTinyLightData.html#a623323a7a84807b5ce14a7cb56ec07f0">STinyLightData</a>
 </li>
 <li>state
 : <a class="el" href="structtiny__request__.html#a019207b55569a48a82a2922dd3cc7eb2">tiny_request_</a>
@@ -320,9 +344,6 @@ $(function() {
 : <a class="el" href="structSTinyHdData__.html#a7ca4e5b23cf480d93317245010bcbe73">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#ac7a1ae9314efc1296d78927198f07ac8">STinyHdInit_</a>
 </li>
-<li>tx
-: <a class="el" href="structSTinyData.html#aa099adb35f3494332747eb18851fbb23">STinyData</a>
-</li>
 </ul>
 
 
@@ -330,9 +351,6 @@ $(function() {
 <li>uid
 : <a class="el" href="structSTinyHdData__.html#a7084eac08b744ad0aa2624b854866825">STinyHdData_</a>
 , <a class="el" href="structtiny__request__.html#aefa85d07e09d6772963532b6cf1ed125">tiny_request_</a>
-</li>
-<li>uid_support
-: <a class="el" href="structSTinyData.html#aa004bdc7db38cbbef4df4a4d94ca6a4b">STinyData</a>
 </li>
 <li>user_data
 : <a class="el" href="struct__hdlc__handle__t.html#a41563ee7b01240a582d2f9ce9a632da8">_hdlc_handle_t</a>
@@ -343,19 +361,26 @@ $(function() {
 
 
 <h3><a id="index_w"></a>- w -</h3><ul>
+<li>window_frames
+: <a class="el" href="structSTinyFdInit__.html#a67643289960e239a8c22e2dbebfebce6">STinyFdInit_</a>
+</li>
 <li>write()
-: <a class="el" href="classTiny_1_1IHdlc.html#ab02dd87b4465ffb73fd409dffbe394d2">Tiny::IHdlc</a>
+: <a class="el" href="classTiny_1_1IProtoFd.html#adea59df6702e16fd986a91c7ee62012a">Tiny::IProtoFd</a>
 , <a class="el" href="classTiny_1_1ProtoHd.html#af53c8817317d3a62535e68ca236a038f">Tiny::ProtoHd</a>
 , <a class="el" href="classTiny_1_1ProtoLight.html#ad980940fd5eca35204a70a5cfe5ccccd">Tiny::ProtoLight</a>
 </li>
-<li>write_cb
-: <a class="el" href="structSTinyData.html#ada334c88e86bfd2c10191f65818c3fb3">STinyData</a>
-</li>
 <li>write_func
-: <a class="el" href="structSTinyData.html#a26c40b0b7e18776af99745624c460c5a">STinyData</a>
+: <a class="el" href="structSTinyFdInit__.html#ae3c802c6512ecc30e2f703263e31a6d5">STinyFdInit_</a>
 , <a class="el" href="structSTinyHdData__.html#a38e79c64fc438348421c3dac60349cbe">STinyHdData_</a>
 , <a class="el" href="structSTinyHdInit__.html#a0bd05a4fc43236ff37d67aec4d2a0952">STinyHdInit_</a>
 , <a class="el" href="structSTinyLightData.html#a0bd1b1a01e1eaa15f22dec1e886c2e3c">STinyLightData</a>
+</li>
+</ul>
+
+
+<h3><a id="index_0x7e"></a>- ~ -</h3><ul>
+<li>~IPacket()
+: <a class="el" href="classTiny_1_1IPacket.html#a187fce5726b428db3a36e62522472c5b">Tiny::IPacket</a>
 </li>
 </ul>
 </div><!-- contents -->

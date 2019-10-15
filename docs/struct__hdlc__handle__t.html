@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -135,7 +135,8 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>User-defined callback, which is called when new packet arrives from hw channel. The context of this callback is context, where <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a> is called from. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">user_data</td><td>user-defined data  data pointer to received data </td></tr>
+    <tr><td class="paramname">user_data</td><td>user-defined data </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to received data </td></tr>
     <tr><td class="paramname">len</td><td>size of received data in bytes </td></tr>
   </table>
   </dd>
@@ -157,7 +158,8 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>User-defined callback, which is called when the packet is sent to TX channel. The context of this callback is context, where <a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx()</a> is called from. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">user_data</td><td>user-defined data  data pointer to sent data </td></tr>
+    <tr><td class="paramname">user_data</td><td>user-defined data </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to sent data </td></tr>
     <tr><td class="paramname">len</td><td>size of sent data in bytes </td></tr>
   </table>
   </dd>

@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['packet',['Packet',['../classTiny_1_1Packet.html',1,'Tiny']]],
-  ['protohd',['ProtoHd',['../classTiny_1_1ProtoHd.html',1,'Tiny']]],
-  ['protolight',['ProtoLight',['../classTiny_1_1ProtoLight.html',1,'Tiny']]]
+  ['stinyfdinit_5f',['STinyFdInit_',['../structSTinyFdInit__.html',1,'']]],
+  ['stinyhddata_5f',['STinyHdData_',['../structSTinyHdData__.html',1,'']]],
+  ['stinyhdinit_5f',['STinyHdInit_',['../structSTinyHdInit__.html',1,'']]],
+  ['stinylightdata',['STinyLightData',['../structSTinyLightData.html',1,'']]],
+  ['stinystats',['STinyStats',['../structSTinyStats.html',1,'']]]
 ];

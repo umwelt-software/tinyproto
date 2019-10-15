@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -62,6 +62,19 @@ $(function() {
 <div class="contents">
 <div class="textblock">Here is a list of all documented file members with links to the documentation:</div>
 
+<h3><a id="index_e"></a>- e -</h3><ul>
+<li>EVENT_BIS_ALL
+: <a class="el" href="tiny__types_8h.html#a27b8fac677976106d127489aed30c6ea">tiny_types.h</a>
+</li>
+<li>EVENT_BITS_CLEAR
+: <a class="el" href="tiny__types_8h.html#ad1077ed0be1ef067bb34790e17829eff">tiny_types.h</a>
+</li>
+<li>EVENT_BITS_LEAVE
+: <a class="el" href="tiny__types_8h.html#aa5326a270b651a7a0d23e219e63de174">tiny_types.h</a>
+</li>
+</ul>
+
+
 <h3><a id="index_o"></a>- o -</h3><ul>
 <li>on_frame_cb_t
 : <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">tiny_types.h</a>
@@ -77,6 +90,9 @@ $(function() {
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>STinyFdInit
+: <a class="el" href="tiny__fd_8h.html#ac931714d7bbe299856f4533fd1edb7f6">tiny_fd.h</a>
+</li>
 <li>STinyHdData
 : <a class="el" href="tiny__hd_8h.html#af9f81ad129b754a780dfca5dcd7f7cf9">tiny_hd.h</a>
 </li>
@@ -87,15 +103,6 @@ $(function() {
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
-<li>tiny_clear_stat()
-: <a class="el" href="group__ADVANCED__API.html#gac75ee03ea3691b0a8bf842d764b342d9">tiny_layer2.h</a>
-</li>
-<li>tiny_close()
-: <a class="el" href="group__SIMPLE__API.html#ga48cf9ffab9eeb9665e61ae69e28938b8">tiny_layer2.h</a>
-</li>
-<li>tiny_enable_uid()
-: <a class="el" href="group__ADVANCED__API.html#gac5cabf56a5b22e96036b9e5bff926f1d">tiny_layer2.h</a>
-</li>
 <li>TINY_ERR_AGAIN
 : <a class="el" href="group__ERROR__FLAGS.html#gab15347e8e9f90d709d94d9c151d505b7">tiny_types.h</a>
 </li>
@@ -117,6 +124,45 @@ $(function() {
 <li>TINY_ERR_TIMEOUT
 : <a class="el" href="group__ERROR__FLAGS.html#gac9ba8076a1eb8613e8d1f07629ff0cd1">tiny_types.h</a>
 </li>
+<li>TINY_ERR_WRONG_CRC
+: <a class="el" href="group__ERROR__FLAGS.html#ga618f7dd6cead76223e60300212712871">tiny_types.h</a>
+</li>
+<li>tiny_events_clear()
+: <a class="el" href="tiny__types_8h.html#a478739391a83f06f56a5beaef649410c">tiny_types.h</a>
+</li>
+<li>tiny_events_create()
+: <a class="el" href="tiny__types_8h.html#a8f8dca30c01b01d94c80babecd4396a7">tiny_types.h</a>
+</li>
+<li>tiny_events_destroy()
+: <a class="el" href="tiny__types_8h.html#a786fc845ce2ff24d7633d41e2524785c">tiny_types.h</a>
+</li>
+<li>tiny_events_set()
+: <a class="el" href="tiny__types_8h.html#a7d57419d88bfa7496e9d743c7831590a">tiny_types.h</a>
+</li>
+<li>tiny_events_wait()
+: <a class="el" href="tiny__types_8h.html#aa9f8404c92b31f6df4b2b929ad54588b">tiny_types.h</a>
+</li>
+<li>tiny_fd_buffer_size_by_mtu()
+: <a class="el" href="group__FULL__DUPLEX__API.html#ga19789bea5b5acd68804773f0d6b0e3f7">tiny_fd.h</a>
+</li>
+<li>tiny_fd_close()
+: <a class="el" href="group__FULL__DUPLEX__API.html#ga11e470503e3359bc29a5bcb65a9771d5">tiny_fd.h</a>
+</li>
+<li>tiny_fd_handle_t
+: <a class="el" href="tiny__fd_8h.html#a91e6b79431fe38570fb102701ef0b7e8">tiny_fd.h</a>
+</li>
+<li>tiny_fd_init()
+: <a class="el" href="group__FULL__DUPLEX__API.html#ga73c3e76cfbcd7b9bb8e1f7826175774b">tiny_fd.h</a>
+</li>
+<li>tiny_fd_run_rx()
+: <a class="el" href="group__FULL__DUPLEX__API.html#gad31f944514aef01e27bc3ec67fdbe140">tiny_fd.h</a>
+</li>
+<li>tiny_fd_run_tx()
+: <a class="el" href="group__FULL__DUPLEX__API.html#ga601c9874a570331580856c1ea28f7914">tiny_fd.h</a>
+</li>
+<li>tiny_fd_send()
+: <a class="el" href="group__FULL__DUPLEX__API.html#ga490157ee98ea6148f99a5bb1f26c5f60">tiny_fd.h</a>
+</li>
 <li>TINY_FLAG_LOCK_SEND
 : <a class="el" href="group__FLAGS__GROUP.html#ga593e3353339a36dcd0746057e2864958">tiny_types.h</a>
 </li>
@@ -129,12 +175,6 @@ $(function() {
 <li>TINY_FLAG_WAIT_FOREVER
 : <a class="el" href="group__FLAGS__GROUP.html#ga3a34267804581c5709d03f52d232b307">tiny_types.h</a>
 </li>
-<li>tiny_get_callbacks()
-: <a class="el" href="group__ADVANCED__API.html#gabe38a1f81966f6901eb2f6969b568298">tiny_layer2.h</a>
-</li>
-<li>tiny_get_stat()
-: <a class="el" href="group__ADVANCED__API.html#ga5f61774b2027a91f772f31d943acdd3f">tiny_layer2.h</a>
-</li>
 <li>tiny_hd_close()
 : <a class="el" href="group__HALF__DUPLEX__API.html#ga275846730a88b9654345d5defbda31e7">tiny_hd.h</a>
 </li>
@@ -144,8 +184,8 @@ $(function() {
 <li>tiny_hd_run()
 : <a class="el" href="group__HALF__DUPLEX__API.html#gac962595f09883dea1dd0992a608a17b9">tiny_hd.h</a>
 </li>
-<li>tiny_init()
-: <a class="el" href="group__SIMPLE__API.html#gab9bfaed3c75551c8b7f3f8b25e766546">tiny_layer2.h</a>
+<li>tiny_hd_run_tx()
+: <a class="el" href="group__HALF__DUPLEX__API.html#ga84325cc961c3f31e2ba6111d0235bd61">tiny_hd.h</a>
 </li>
 <li>tiny_light_close()
 : <a class="el" href="group__LIGHT__API.html#ga6e045b8f4ef551c274fbacaa625e2748">tiny_light.h</a>
@@ -162,59 +202,35 @@ $(function() {
 <li>tiny_light_send()
 : <a class="el" href="group__LIGHT__API.html#ga12391f0d4c06fb6296b84fd4681a87f7">tiny_light.h</a>
 </li>
-<li>tiny_lock()
-: <a class="el" href="group__ADVANCED__API.html#gac318682c20279f9f20ffc6f636a7f1c9">tiny_layer2.h</a>
+<li>tiny_log_level()
+: <a class="el" href="tiny__types_8h.html#a3c7a23a4fe40e7c33691618b7ad91e87">tiny_types.h</a>
 </li>
-<li>tiny_on_rx_byte()
-: <a class="el" href="group__ADVANCED__API.html#gaaf9bf6423bd0b8388c3387225b805278">tiny_layer2.h</a>
+<li>tiny_millis()
+: <a class="el" href="tiny__types_8h.html#a43bebe1b00a80373afd7b8061bf742fe">tiny_types.h</a>
 </li>
-<li>tiny_read()
-: <a class="el" href="group__SIMPLE__API.html#ga470d59a60a496944e63031ba43a00e3d">tiny_layer2.h</a>
+<li>tiny_mutex_create()
+: <a class="el" href="tiny__types_8h.html#ad33eeb8054f4677e4441d3602d33b734">tiny_types.h</a>
 </li>
-<li>tiny_read_buffer()
-: <a class="el" href="group__ADVANCED__API.html#gade4e07eb12b8e32e6dd0c7b9757e8f39">tiny_layer2.h</a>
+<li>tiny_mutex_destroy()
+: <a class="el" href="tiny__types_8h.html#ae469a75fca0339d7455583955920647c">tiny_types.h</a>
 </li>
-<li>tiny_read_start()
-: <a class="el" href="group__ADVANCED__API.html#ga2f0547115de5b96a828d79f5491d22fa">tiny_layer2.h</a>
+<li>tiny_mutex_lock()
+: <a class="el" href="tiny__types_8h.html#a62207a0f8490d55b9fc529a8773bcf0a">tiny_types.h</a>
 </li>
-<li>tiny_read_terminate()
-: <a class="el" href="group__ADVANCED__API.html#gaab48caab81a46d74fb52f2afb2649b61">tiny_layer2.h</a>
+<li>tiny_mutex_try_lock()
+: <a class="el" href="tiny__types_8h.html#a3c5ef9a47c4bcb2d4f7f59ec91b8dc68">tiny_types.h</a>
 </li>
-<li>tiny_send()
-: <a class="el" href="group__SIMPLE__API.html#ga988a41addbe75dc15cc13006de6740e0">tiny_layer2.h</a>
-</li>
-<li>tiny_send_buffer()
-: <a class="el" href="group__ADVANCED__API.html#gabe04a4e76adc5421deac4e3699a15646">tiny_layer2.h</a>
-</li>
-<li>tiny_send_end()
-: <a class="el" href="group__ADVANCED__API.html#ga2e85c7e9efb0bbe9c6adfd923ec7c73c">tiny_layer2.h</a>
-</li>
-<li>tiny_send_start()
-: <a class="el" href="group__ADVANCED__API.html#ga159189fa29f3eaa79a76a3fa87b31084">tiny_layer2.h</a>
-</li>
-<li>tiny_send_terminate()
-: <a class="el" href="group__ADVANCED__API.html#ga73c9f1cfb0948bd559d3704749db540b">tiny_layer2.h</a>
+<li>tiny_mutex_unlock()
+: <a class="el" href="tiny__types_8h.html#aef1ccb057b482b334079565a0e75eb6c">tiny_types.h</a>
 </li>
 <li>tiny_send_wait_ack()
 : <a class="el" href="group__HALF__DUPLEX__API.html#ga5aad8dcb504b80bac923496f2686a6d6">tiny_hd.h</a>
 </li>
-<li>tiny_set_callbacks()
-: <a class="el" href="group__ADVANCED__API.html#gac562103dd1699b82fddf29dccdc0ec7c">tiny_layer2.h</a>
-</li>
-<li>tiny_set_fcs_bits()
-: <a class="el" href="group__ADVANCED__API.html#ga5e66725a2818491d4e2b1134951d9229">tiny_layer2.h</a>
-</li>
-<li>tiny_simple_read()
-: <a class="el" href="group__SIMPLE__API.html#gac9eaac50ab16b9891ca74e5c5e46b778">tiny_layer2.h</a>
-</li>
-<li>tiny_simple_send()
-: <a class="el" href="group__SIMPLE__API.html#gafae39ccf72f1f22f4dc47bd54998e88c">tiny_layer2.h</a>
+<li>tiny_sleep()
+: <a class="el" href="tiny__types_8h.html#ae024e04660c8b9a9a231965f7aee5112">tiny_types.h</a>
 </li>
 <li>TINY_SUCCESS
 : <a class="el" href="group__ERROR__FLAGS.html#ga16cd043c890ed1fa381b3a20f75a626c">tiny_types.h</a>
-</li>
-<li>tiny_unlock()
-: <a class="el" href="group__ADVANCED__API.html#gae4bfad55a4ef5814a5af50f044f6d7cd">tiny_layer2.h</a>
 </li>
 </ul>
 

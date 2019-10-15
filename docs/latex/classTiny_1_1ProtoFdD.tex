@@ -1,0 +1,49 @@
+\hypertarget{classTiny_1_1ProtoFdD}{}\section{Tiny\+:\+:Proto\+FdD Class Reference}
+\label{classTiny_1_1ProtoFdD}\index{Tiny\+::\+Proto\+FdD@{Tiny\+::\+Proto\+FdD}}
+
+
+{\ttfamily \#include $<$Tiny\+Protocol\+Fd.\+h$>$}
+
+
+
+Inheritance diagram for Tiny\+:\+:Proto\+FdD\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=167pt]{classTiny_1_1ProtoFdD__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Tiny\+:\+:Proto\+FdD\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=167pt]{classTiny_1_1ProtoFdD__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classTiny_1_1ProtoFdD_ac6d3b1143cb0776b9ae16e57068f03dc}{Proto\+FdD} (int size)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+This is special class for Full duplex protocol, which allocates buffers dynamically. We need to have separate class for this, as on small microcontrollers dynamic allocation in basic class increases flash consumption, even if dynamic memory is not used. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTiny_1_1ProtoFdD_ac6d3b1143cb0776b9ae16e57068f03dc}\label{classTiny_1_1ProtoFdD_ac6d3b1143cb0776b9ae16e57068f03dc}} 
+\index{Tiny\+::\+Proto\+FdD@{Tiny\+::\+Proto\+FdD}!Proto\+FdD@{Proto\+FdD}}
+\index{Proto\+FdD@{Proto\+FdD}!Tiny\+::\+Proto\+FdD@{Tiny\+::\+Proto\+FdD}}
+\subsubsection{\texorpdfstring{Proto\+Fd\+D()}{ProtoFdD()}}
+{\footnotesize\ttfamily Tiny\+::\+Proto\+Fd\+D\+::\+Proto\+FdD (\begin{DoxyParamCaption}\item[{int}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Creates instance of Full duplex protocol with dynamically allocated buffer. Use this class only on powerful microcontrollers. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\hyperlink{TinyProtocolFd_8h}{Tiny\+Protocol\+Fd.\+h}\end{DoxyCompactItemize}

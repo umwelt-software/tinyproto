@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -85,7 +85,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ga0181db79922917957779e1f2d740c407"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#ga0181db79922917957779e1f2d740c407">tiny_light_read</a> (void *handle, uint8_t *pbuf, int len)</td></tr>
 <tr class="memdesc:ga0181db79922917957779e1f2d740c407"><td class="mdescLeft">&#160;</td><td class="mdescRight">reads frame from the channel in blocking mode.  <a href="#ga0181db79922917957779e1f2d740c407">More...</a><br /></td></tr>
 <tr class="separator:ga0181db79922917957779e1f2d740c407"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabf582877977ecd57299d8675a1279e36"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#gabf582877977ecd57299d8675a1279e36">tiny_light_get_hdlc</a> (void *handle)</td></tr>
+<tr class="memitem:gabf582877977ecd57299d8675a1279e36"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__HDLC__API.html#gabeaf7578aed5279d3af891bd85a9f961">hdlc_handle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIGHT__API.html#gabf582877977ecd57299d8675a1279e36">tiny_light_get_hdlc</a> (void *handle)</td></tr>
 <tr class="memdesc:gabf582877977ecd57299d8675a1279e36"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns lower level hdlc handle.  <a href="#gabf582877977ecd57299d8675a1279e36">More...</a><br /></td></tr>
 <tr class="separator:gabf582877977ecd57299d8675a1279e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -112,7 +112,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__SIMPLE__API.html#gab9bfaed3c75551c8b7f3f8b25e766546">tiny_init()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>tiny_init() </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_ERR_INVALID_DATA, TINY_NO_ERROR. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
 
@@ -125,7 +125,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct__hdlc__handle__t.html">hdlc_handle_t</a> tiny_light_get_hdlc </td>
+          <td class="memname"><a class="el" href="group__HDLC__API.html#gabeaf7578aed5279d3af891bd85a9f961">hdlc_handle_t</a> tiny_light_get_hdlc </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>handle</em></td><td>)</td>
@@ -245,7 +245,7 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#ga84e6ca143550038e1a71cf36078d1926" title="Timeout. ">TINY_ERR_FAILED</a> </dd>
 <dd>
-<a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7" title="Data too large to fit the user buffer, valid for tiny_read function. ">TINY_ERR_DATA_TOO_LARGE</a> </dd>
+<a class="el" href="group__ERROR__FLAGS.html#ga7bbe7440d11ad304b0af68e011f4eab7" title="Data too large to fit the user buffer. ">TINY_ERR_DATA_TOO_LARGE</a> </dd>
 <dd>
 <a class="el" href="group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a" title="Out of sync - received some data, which are not part of the frame (tiny_read) ">TINY_ERR_OUT_OF_SYNC</a> </dd>
 <dd>

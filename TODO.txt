@@ -1,8 +1,5 @@
- - Add cancel packet sending if timeout happens for FD version of protocol
  - Add recovering for FD protocol, if remote side do not respond correctly for a long time (relates to item above)
  - Add buffer send operation like write in Linux
- - Add more debug to all levels
- - multithread mode for Hd protocol
  - Implement Mingw32 support (partially implemented)
  - Implement MSVC support
  

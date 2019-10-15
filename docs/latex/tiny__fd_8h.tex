@@ -1,0 +1,76 @@
+\hypertarget{tiny__fd_8h}{}\section{src/proto/fd/tiny\+\_\+fd.h File Reference}
+\label{tiny__fd_8h}\index{src/proto/fd/tiny\+\_\+fd.\+h@{src/proto/fd/tiny\+\_\+fd.\+h}}
+
+
+Tiny Protocol Full Duplex A\+PI.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}proto/hdlc/tiny\+\_\+hdlc.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}proto/hal/tiny\+\_\+types.\+h\char`\"{}}\newline
+Include dependency graph for tiny\+\_\+fd.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=333pt]{tiny__fd_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{tiny__fd_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSTinyFdInit__}{S\+Tiny\+Fd\+Init\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct tiny\+\_\+fd\+\_\+data\+\_\+t $\ast$ \hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}
+\item 
+typedef struct \hyperlink{structSTinyFdInit__}{S\+Tiny\+Fd\+Init\+\_\+} \hyperlink{tiny__fd_8h_ac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga73c3e76cfbcd7b9bb8e1f7826175774b}{tiny\+\_\+fd\+\_\+init} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} $\ast$handle, \hyperlink{tiny__fd_8h_ac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init} $\ast$init)
+\begin{DoxyCompactList}\small\item\em Initialized communication for Tiny Full Duplex protocol. \end{DoxyCompactList}\item 
+void \hyperlink{group__FULL__DUPLEX__API_ga11e470503e3359bc29a5bcb65a9771d5}{tiny\+\_\+fd\+\_\+close} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle)
+\begin{DoxyCompactList}\small\item\em stops Tiny Full Duplex state machine \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga601c9874a570331580856c1ea28f7914}{tiny\+\_\+fd\+\_\+run\+\_\+tx} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, uint16\+\_\+t timeout)
+\begin{DoxyCompactList}\small\item\em runs tx processing for specified period of time. \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_gad31f944514aef01e27bc3ec67fdbe140}{tiny\+\_\+fd\+\_\+run\+\_\+rx} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, uint16\+\_\+t timeout)
+\begin{DoxyCompactList}\small\item\em runs rx processing for specified period of time. \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga490157ee98ea6148f99a5bb1f26c5f60}{tiny\+\_\+fd\+\_\+send} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, const void $\ast$buf, int len)
+\begin{DoxyCompactList}\small\item\em Sends userdata over full-\/duplex protocol. \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu} (int mtu, int max\+\_\+tx\+\_\+frames)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Tiny Protocol Full Duplex A\+PI. 
+
+This is Tiny Half-\/\+Duplex protocol implementation for microcontrollers. It is built on top of Tiny Protocol (tiny\+\_\+layer2.\+c)
+
+Implements full duplex asynchronous ballanced mode (A\+BM) 
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{tiny__fd_8h_ac931714d7bbe299856f4533fd1edb7f6}\label{tiny__fd_8h_ac931714d7bbe299856f4533fd1edb7f6}} 
+\index{tiny\+\_\+fd.\+h@{tiny\+\_\+fd.\+h}!S\+Tiny\+Fd\+Init@{S\+Tiny\+Fd\+Init}}
+\index{S\+Tiny\+Fd\+Init@{S\+Tiny\+Fd\+Init}!tiny\+\_\+fd.\+h@{tiny\+\_\+fd.\+h}}
+\subsubsection{\texorpdfstring{S\+Tiny\+Fd\+Init}{STinyFdInit}}
+{\footnotesize\ttfamily typedef struct \hyperlink{structSTinyFdInit__}{S\+Tiny\+Fd\+Init\+\_\+}  \hyperlink{tiny__fd_8h_ac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init}}
+
+This structure is used for initialization of Tiny Full Duplex protocol. \mbox{\Hypertarget{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}\label{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}} 
+\index{tiny\+\_\+fd.\+h@{tiny\+\_\+fd.\+h}!tiny\+\_\+fd\+\_\+handle\+\_\+t@{tiny\+\_\+fd\+\_\+handle\+\_\+t}}
+\index{tiny\+\_\+fd\+\_\+handle\+\_\+t@{tiny\+\_\+fd\+\_\+handle\+\_\+t}!tiny\+\_\+fd.\+h@{tiny\+\_\+fd.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+handle\+\_\+t}{tiny\_fd\_handle\_t}}
+{\footnotesize\ttfamily typedef struct tiny\+\_\+fd\+\_\+data\+\_\+t$\ast$ \hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}}
+
+This handle points to service data, required for full-\/duplex functioning. 

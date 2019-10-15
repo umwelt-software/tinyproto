@@ -1,0 +1,145 @@
+\hypertarget{group__FULL__DUPLEX__API}{}\section{Tiny Full Duplex A\+PI functions}
+\label{group__FULL__DUPLEX__API}\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga73c3e76cfbcd7b9bb8e1f7826175774b}{tiny\+\_\+fd\+\_\+init} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} $\ast$handle, \hyperlink{tiny__fd_8h_ac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init} $\ast$init)
+\begin{DoxyCompactList}\small\item\em Initialized communication for Tiny Full Duplex protocol. \end{DoxyCompactList}\item 
+void \hyperlink{group__FULL__DUPLEX__API_ga11e470503e3359bc29a5bcb65a9771d5}{tiny\+\_\+fd\+\_\+close} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle)
+\begin{DoxyCompactList}\small\item\em stops Tiny Full Duplex state machine \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga601c9874a570331580856c1ea28f7914}{tiny\+\_\+fd\+\_\+run\+\_\+tx} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, uint16\+\_\+t timeout)
+\begin{DoxyCompactList}\small\item\em runs tx processing for specified period of time. \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_gad31f944514aef01e27bc3ec67fdbe140}{tiny\+\_\+fd\+\_\+run\+\_\+rx} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, uint16\+\_\+t timeout)
+\begin{DoxyCompactList}\small\item\em runs rx processing for specified period of time. \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga490157ee98ea6148f99a5bb1f26c5f60}{tiny\+\_\+fd\+\_\+send} (\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, const void $\ast$buf, int len)
+\begin{DoxyCompactList}\small\item\em Sends userdata over full-\/duplex protocol. \end{DoxyCompactList}\item 
+int \hyperlink{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu} (int mtu, int max\+\_\+tx\+\_\+frames)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}\label{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu@{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu}}
+\index{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu@{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu()}{tiny\_fd\_buffer\_size\_by\_mtu()}}
+{\footnotesize\ttfamily int tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu (\begin{DoxyParamCaption}\item[{int}]{mtu,  }\item[{int}]{max\+\_\+tx\+\_\+frames }\end{DoxyParamCaption})}
+
+Returns minimum required buffer size for specified parameters. 
+\begin{DoxyParams}{Parameters}
+{\em mtu} & size of desired user payload in bytes. \\
+\hline
+{\em max\+\_\+tx\+\_\+frames} & maximum tx queue size of I-\/frames. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga11e470503e3359bc29a5bcb65a9771d5}\label{group__FULL__DUPLEX__API_ga11e470503e3359bc29a5bcb65a9771d5}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+close@{tiny\+\_\+fd\+\_\+close}}
+\index{tiny\+\_\+fd\+\_\+close@{tiny\+\_\+fd\+\_\+close}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+close()}{tiny\_fd\_close()}}
+{\footnotesize\ttfamily void tiny\+\_\+fd\+\_\+close (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}}]{handle }\end{DoxyParamCaption})}
+
+
+
+stops Tiny Full Duplex state machine 
+
+stops Tiny Full Duplex state machine.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & handle of full-\/duplex protocol \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga73c3e76cfbcd7b9bb8e1f7826175774b}\label{group__FULL__DUPLEX__API_ga73c3e76cfbcd7b9bb8e1f7826175774b}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+init@{tiny\+\_\+fd\+\_\+init}}
+\index{tiny\+\_\+fd\+\_\+init@{tiny\+\_\+fd\+\_\+init}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+init()}{tiny\_fd\_init()}}
+{\footnotesize\ttfamily int tiny\+\_\+fd\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} $\ast$}]{handle,  }\item[{\hyperlink{tiny__fd_8h_ac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init} $\ast$}]{init }\end{DoxyParamCaption})}
+
+
+
+Initialized communication for Tiny Full Duplex protocol. 
+
+The function initializes internal structures for Tiny Full Duplex state machine.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & -\/ pointer to Tiny Full Duplex data \\
+\hline
+{\em init} & -\/ pointer to S\+Tiny\+Fd\+Init data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+N\+O\+\_\+\+E\+R\+R\+OR in case of success. T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED if init parameters are incorrect. 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+This function is not thread safe. 
+\end{DoxyRemark}
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_gad31f944514aef01e27bc3ec67fdbe140}\label{group__FULL__DUPLEX__API_gad31f944514aef01e27bc3ec67fdbe140}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+run\+\_\+rx@{tiny\+\_\+fd\+\_\+run\+\_\+rx}}
+\index{tiny\+\_\+fd\+\_\+run\+\_\+rx@{tiny\+\_\+fd\+\_\+run\+\_\+rx}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+run\+\_\+rx()}{tiny\_fd\_run\_rx()}}
+{\footnotesize\ttfamily int tiny\+\_\+fd\+\_\+run\+\_\+rx (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}}]{handle,  }\item[{uint16\+\_\+t}]{timeout }\end{DoxyParamCaption})}
+
+
+
+runs rx processing for specified period of time. 
+
+Runs rx processing for specified period of time. After timeout happens, the function returns. If you need it to run in non-\/blocking mode, please using timeout 0 ms.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & handle of full-\/duplex protocol \\
+\hline
+{\em timeout} & maximum timeout in milliseconds to perform rx operations \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga601c9874a570331580856c1ea28f7914}\label{group__FULL__DUPLEX__API_ga601c9874a570331580856c1ea28f7914}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+run\+\_\+tx@{tiny\+\_\+fd\+\_\+run\+\_\+tx}}
+\index{tiny\+\_\+fd\+\_\+run\+\_\+tx@{tiny\+\_\+fd\+\_\+run\+\_\+tx}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+run\+\_\+tx()}{tiny\_fd\_run\_tx()}}
+{\footnotesize\ttfamily int tiny\+\_\+fd\+\_\+run\+\_\+tx (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}}]{handle,  }\item[{uint16\+\_\+t}]{timeout }\end{DoxyParamCaption})}
+
+
+
+runs tx processing for specified period of time. 
+
+Runs tx processing for specified period of time. After timeout happens, the function returns. If you need it to run in non-\/blocking mode, please use timeout 0 ms.
+
+\begin{DoxyWarning}{Warning}
+this function actually sends data to the communication channel. \hyperlink{group__FULL__DUPLEX__API_ga490157ee98ea6148f99a5bb1f26c5f60}{tiny\+\_\+fd\+\_\+send()} puts data to queue, but doesn\textquotesingle{}t really send them.
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & handle of full-\/duplex protocol \\
+\hline
+{\em timeout} & maximum timeout in milliseconds to perform tx operations \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga490157ee98ea6148f99a5bb1f26c5f60}\label{group__FULL__DUPLEX__API_ga490157ee98ea6148f99a5bb1f26c5f60}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+send@{tiny\+\_\+fd\+\_\+send}}
+\index{tiny\+\_\+fd\+\_\+send@{tiny\+\_\+fd\+\_\+send}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+send()}{tiny\_fd\_send()}}
+{\footnotesize\ttfamily int tiny\+\_\+fd\+\_\+send (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__fd_8h_a91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}}]{handle,  }\item[{const void $\ast$}]{buf,  }\item[{int}]{len }\end{DoxyParamCaption})}
+
+
+
+Sends userdata over full-\/duplex protocol. 
+
+Sends userdata over full-\/duplex protocol. Note, that this command will return success, when data are copied to internal queue. That doesn\textquotesingle{}t mean that data physically sent, but they are enqueued for sending.
+
+When timeout happens, the data were not actually enqueued. Call this function once again. If T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE is returned, try to send less data. If you don\textquotesingle{}t want to care about data size, please, use different function tiny\+\_\+fd\+\_\+write()..
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & pointer to tiny\+\_\+fd\+\_\+handle\+\_\+t \\
+\hline
+{\em buf} & data to send \\
+\hline
+{\em len} & length of data to send\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+SS if user data are put to internal queue. T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+T\+I\+M\+E\+O\+UT if no room in internal queue to put data. Retry operation once again. T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED if request was cancelled, by \hyperlink{group__HALF__DUPLEX__API_ga275846730a88b9654345d5defbda31e7}{tiny\+\_\+hd\+\_\+close()}. T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE if user data are too big to fit in tx buffer. 
+\end{DoxyReturn}

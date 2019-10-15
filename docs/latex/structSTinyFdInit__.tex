@@ -1,0 +1,81 @@
+\hypertarget{structSTinyFdInit__}{}\section{S\+Tiny\+Fd\+Init\+\_\+ Struct Reference}
+\label{structSTinyFdInit__}\index{S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}}
+
+
+{\ttfamily \#include $<$tiny\+\_\+fd.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSTinyFdInit___ae3c802c6512ecc30e2f703263e31a6d5}\label{structSTinyFdInit___ae3c802c6512ecc30e2f703263e31a6d5}} 
+\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyFdInit___ae3c802c6512ecc30e2f703263e31a6d5}{write\+\_\+func}
+\begin{DoxyCompactList}\small\item\em callback function to write bytes to the physical channel \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyFdInit___a9ec37074009427a1ccc042ba9387676e}\label{structSTinyFdInit___a9ec37074009427a1ccc042ba9387676e}} 
+\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} \hyperlink{structSTinyFdInit___a9ec37074009427a1ccc042ba9387676e}{read\+\_\+func}
+\begin{DoxyCompactList}\small\item\em callback function to read bytes from the physical channel \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyFdInit___ac9c2069df0b5008bd849ce2c368bed63}\label{structSTinyFdInit___ac9c2069df0b5008bd849ce2c368bed63}} 
+void $\ast$ \hyperlink{structSTinyFdInit___ac9c2069df0b5008bd849ce2c368bed63}{pdata}
+\begin{DoxyCompactList}\small\item\em user data for block read/write functions \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyFdInit___a124f9a751438676e0e5f2720249ab3e4}\label{structSTinyFdInit___a124f9a751438676e0e5f2720249ab3e4}} 
+\hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyFdInit___a124f9a751438676e0e5f2720249ab3e4}{on\+\_\+frame\+\_\+cb}
+\begin{DoxyCompactList}\small\item\em callback function to process incoming frames \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSTinyFdInit___a046e2f90d72f4b412cff4ff4f3871736}\label{structSTinyFdInit___a046e2f90d72f4b412cff4ff4f3871736}} 
+\hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structSTinyFdInit___a046e2f90d72f4b412cff4ff4f3871736}{on\+\_\+sent\+\_\+cb}
+\begin{DoxyCompactList}\small\item\em Callback to get notification of sent frames. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{structSTinyFdInit___a7ffe2a907dc18e66e84507b1620c7bfa}{buffer}
+\item 
+\mbox{\Hypertarget{structSTinyFdInit___a359626e717ca121225a9adce7e6782ba}\label{structSTinyFdInit___a359626e717ca121225a9adce7e6782ba}} 
+uint16\+\_\+t \hyperlink{structSTinyFdInit___a359626e717ca121225a9adce7e6782ba}{buffer\+\_\+size}
+\begin{DoxyCompactList}\small\item\em maximum input buffer size \end{DoxyCompactList}\item 
+uint16\+\_\+t \hyperlink{structSTinyFdInit___a63abe062807f7467de14c366e6ffcd10}{send\+\_\+timeout}
+\item 
+uint16\+\_\+t \hyperlink{structSTinyFdInit___a75f9853077c7d614cbdaf49d644ea82a}{retry\+\_\+timeout}
+\item 
+uint8\+\_\+t \hyperlink{structSTinyFdInit___acaf92c5f021e949607bb7ce161d029e9}{retries}
+\item 
+\hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+crc\+\_\+t} \hyperlink{structSTinyFdInit___a7a0bb8f1faf2c8adac2ac8ed5dcb5afd}{crc\+\_\+type}
+\item 
+\mbox{\Hypertarget{structSTinyFdInit___a67643289960e239a8c22e2dbebfebce6}\label{structSTinyFdInit___a67643289960e239a8c22e2dbebfebce6}} 
+uint8\+\_\+t \hyperlink{structSTinyFdInit___a67643289960e239a8c22e2dbebfebce6}{window\+\_\+frames}
+\begin{DoxyCompactList}\small\item\em number of frames in window. Must be at least 2 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This structure is used for initialization of Tiny Full Duplex protocol. 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structSTinyFdInit___a7ffe2a907dc18e66e84507b1620c7bfa}\label{structSTinyFdInit___a7ffe2a907dc18e66e84507b1620c7bfa}} 
+\index{S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}!buffer@{buffer}}
+\index{buffer@{buffer}!S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}}
+\subsubsection{\texorpdfstring{buffer}{buffer}}
+{\footnotesize\ttfamily void$\ast$ S\+Tiny\+Fd\+Init\+\_\+\+::buffer}
+
+buffer to store data during full-\/duplex protocol operating. The size should be T\+BD \mbox{\Hypertarget{structSTinyFdInit___a7a0bb8f1faf2c8adac2ac8ed5dcb5afd}\label{structSTinyFdInit___a7a0bb8f1faf2c8adac2ac8ed5dcb5afd}} 
+\index{S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}!crc\+\_\+type@{crc\+\_\+type}}
+\index{crc\+\_\+type@{crc\+\_\+type}!S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}}
+\subsubsection{\texorpdfstring{crc\+\_\+type}{crc\_type}}
+{\footnotesize\ttfamily \hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+crc\+\_\+t} S\+Tiny\+Fd\+Init\+\_\+\+::crc\+\_\+type}
+
+crc field type to use on hdlc level. If H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+\+D\+E\+F\+A\+U\+LT is passed, crc type will be selected automatically (depending on library configuration), but H\+D\+L\+C\+\_\+\+C\+R\+C\+\_\+16 has higher priority. \mbox{\Hypertarget{structSTinyFdInit___acaf92c5f021e949607bb7ce161d029e9}\label{structSTinyFdInit___acaf92c5f021e949607bb7ce161d029e9}} 
+\index{S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}!retries@{retries}}
+\index{retries@{retries}!S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}}
+\subsubsection{\texorpdfstring{retries}{retries}}
+{\footnotesize\ttfamily uint8\+\_\+t S\+Tiny\+Fd\+Init\+\_\+\+::retries}
+
+number retries to perform before timeout takes place \mbox{\Hypertarget{structSTinyFdInit___a75f9853077c7d614cbdaf49d644ea82a}\label{structSTinyFdInit___a75f9853077c7d614cbdaf49d644ea82a}} 
+\index{S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}!retry\+\_\+timeout@{retry\+\_\+timeout}}
+\index{retry\+\_\+timeout@{retry\+\_\+timeout}!S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}}
+\subsubsection{\texorpdfstring{retry\+\_\+timeout}{retry\_timeout}}
+{\footnotesize\ttfamily uint16\+\_\+t S\+Tiny\+Fd\+Init\+\_\+\+::retry\+\_\+timeout}
+
+timeout for retry operation. It is valid and applicable to I-\/frames only. retry\+\_\+timeout sets timeout in milliseconds. If zero value is specified, it is calculated as \mbox{\Hypertarget{structSTinyFdInit___a63abe062807f7467de14c366e6ffcd10}\label{structSTinyFdInit___a63abe062807f7467de14c366e6ffcd10}} 
+\index{S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}!send\+\_\+timeout@{send\+\_\+timeout}}
+\index{send\+\_\+timeout@{send\+\_\+timeout}!S\+Tiny\+Fd\+Init\+\_\+@{S\+Tiny\+Fd\+Init\+\_\+}}
+\subsubsection{\texorpdfstring{send\+\_\+timeout}{send\_timeout}}
+{\footnotesize\ttfamily uint16\+\_\+t S\+Tiny\+Fd\+Init\+\_\+\+::send\+\_\+timeout}
+
+timeout. Can be set to 0 during initialization. In this case timeout will be set to default. Timeout parameter sets timeout in milliseconds for blocking A\+PI functions\+: \hyperlink{group__FULL__DUPLEX__API_ga490157ee98ea6148f99a5bb1f26c5f60}{tiny\+\_\+fd\+\_\+send()}. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/proto/fd/\hyperlink{tiny__fd_8h}{tiny\+\_\+fd.\+h}\end{DoxyCompactItemize}

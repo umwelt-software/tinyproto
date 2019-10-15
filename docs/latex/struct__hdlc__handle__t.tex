@@ -49,7 +49,9 @@ Set this to true, if you want to implements TX data transmission in separate thr
 
 User-\/defined callback, which is called when new packet arrives from hw channel. The context of this callback is context, where \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx()} is called from. 
 \begin{DoxyParams}{Parameters}
-{\em user\+\_\+data} & user-\/defined data  data pointer to received data \\
+{\em user\+\_\+data} & user-\/defined data \\
+\hline
+{\em data} & pointer to received data \\
 \hline
 {\em len} & size of received data in bytes \\
 \hline
@@ -65,7 +67,9 @@ user callback must return negative value in case of error or 0 value if packet i
 
 User-\/defined callback, which is called when the packet is sent to TX channel. The context of this callback is context, where \hyperlink{group__HDLC__API_gae31d921043b4f175603114c206b6b829}{hdlc\+\_\+run\+\_\+tx()} is called from. 
 \begin{DoxyParams}{Parameters}
-{\em user\+\_\+data} & user-\/defined data  data pointer to sent data \\
+{\em user\+\_\+data} & user-\/defined data \\
+\hline
+{\em data} & pointer to sent data \\
 \hline
 {\em len} & size of sent data in bytes \\
 \hline
