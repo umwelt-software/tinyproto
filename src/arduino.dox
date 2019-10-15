@@ -10,14 +10,14 @@
 
  \section arduino_tiny Simple Tiny Protocol examples
 
- Simple Tiny Protocol examples section is applicable only when working with \ref SIMPLE_API and \ref ADVANCED_API.
+ Simple Tiny Protocol examples section is applicable only when working with \ref LIGHT_API.
  If you want to work with Tiny Half Duplex protocol, please refere to \ref arduino_tiny_hd
  section.
 
  \subsection arduino_tiny_init Initialization
 
 @code{.cpp}
-Tiny::Proto proto;
+Tiny::ProtoLight proto;
 
 void setup()
 {
@@ -31,7 +31,7 @@ void setup()
 
 First variant: without using any helpers to work with data
 @code{.cpp}
-Tiny::Proto proto;
+Tiny::ProtoLight proto;
 
 /* The buffer must be defined globally */
 uint8_t g_buffer[16];
@@ -111,7 +111,7 @@ void loop()
  \section arduino_tiny_hd Half Duplex Tiny Protocol examples
 
  Half Duplex Tiny Protocol examples section is applicable when working with \ref HALF_DUPLEX_API,
- \ref SIMPLE_API and \ref ADVANCED_API.
+ \ref LIGHT_API.
 
  \subsection arduino_tiny_hd_init Initialization
 

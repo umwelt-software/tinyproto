@@ -25,17 +25,19 @@ protocol for Arduino projects. Please refer to documentation.
 
 Full packet format:
 <pre>
-     8       16       any len    None/8/16/32     8
- |   7E   |  UID  |  USER DATA  |    FCS     |   7E   |
+     8        any len    None/8/16/32     8
+ |   7E   |  USER DATA  |    FCS     |   7E   |
+</pre>
+
+Full duplex hdlc uses standard hdlc frame format:
+<pre>
+     8     ADDR  CONTROL     any len    None/8/16/32     8
+ |   7E   | FF | hdlc ctl | USER DATA  |    FCS     |   7E   |
 </pre>
 
  - 7E is packet delimiter (commonly used on layer 2) as defined in HDLC/PPP framing.
    packet delimiter is used by the protocol to find first and last byte of the frame
    being transmitted.
- - UID mean unique identifier of the frame (in network byte order). For Half Duplex
-   Tiny Protocol (\ref HALF_DUPLEX_API) it is widely used in acknowledge frames.
-   This field is optional, you may omit UID parameter in \ref SIMPLE_API
-   and \ref ADVANCED_API functions. \ref LIGHT_API do not use UID field in the frames.
  - USER DATA of any length. This field contains user data with replaced 0x7D and 0x7E bytes by
    special sequenced as defined in HDLC/PPP framing. Length of data is now limited on buffer
    used to receive frames and/or 32767 bytes (Tiny Protocol using 16-bit field to store frame

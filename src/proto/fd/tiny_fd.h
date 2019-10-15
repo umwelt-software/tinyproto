@@ -129,9 +129,9 @@ extern void tiny_fd_close(tiny_fd_handle_t handle);
  *
  * Runs tx processing for specified period of time.
  * After timeout happens, the function returns. If you need it to
- * run in non-blocking mode, please using timeout 0 ms.
+ * run in non-blocking mode, please use timeout 0 ms.
  *
- * @important this function actually sends data to the communication channel. tiny_fd_send()
+ * @warning this function actually sends data to the communication channel. tiny_fd_send()
  *            puts data to queue, but doesn't really send them.
  *
  * @param handle handle of full-duplex protocol
@@ -165,8 +165,6 @@ extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
  * @param handle   pointer to tiny_fd_handle_t
  * @param buf      data to send
  * @param len      length of data to send
- * @param timeout  timeout in milliseconds to wait before function fails, if no
- *                 room in internal queue to put data.
  *
  * @return TINY_SUCCESS          if user data are put to internal queue.
  *         TINY_ERR_TIMEOUT      if no room in internal queue to put data. Retry operation once again.
@@ -175,7 +173,12 @@ extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
  */
 extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
 
-extern int tiny_fd_buffer_size_by_mtu( int mtu, int window_frames );
+/**
+ * Returns minimum required buffer size for specified parameters.
+ * @param mtu size of desired user payload in bytes.
+ * @param max_tx_frames maximum tx queue size of I-frames.
+ */
+extern int tiny_fd_buffer_size_by_mtu( int mtu, int max_tx_frames );
 
 /**
  * @}

@@ -178,7 +178,6 @@ public:
     IPacket &operator=        (char chr){ put(chr); return *this; }
 
 private:
-    friend class        IHdlc;
     friend class        ProtoHd;
     friend class        IProtoFd;
     friend class        ProtoLight;

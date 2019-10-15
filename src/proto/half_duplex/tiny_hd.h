@@ -151,12 +151,19 @@ extern void tiny_hd_close(STinyHdData    * handle);
  *         TINY_ERR_DATA_TOO_LARGE - if incoming packet is too large to fit the buffer
  *         TINY_ERR_FAILED         - if something wrong with received data
  *         TINY_BUSY               - if another receive operation is in progress.
- *         TINY_NO_ERROR           - if nothing is received.
+ *         TINY_SUCCESS            - if nothing is received.
  *         greater 0               - number of received bytes. Callbak will be called in this case.
  * @warning do not use blocking send (tiny_send_wait_ack) in on_frame_cb_t callback.
  */
 extern int tiny_hd_run(STinyHdData   * handle);
 
+/**
+ * Use this function for multithread mode, when you need to run tx in separate thread.
+ *
+ * @param handle - pointer to STinyHdData
+ * @return TINY_ERR_FAILED         - if something wrong with received data
+ *         TINY_SUCCESS            - if nothing is received.
+ */
 extern int tiny_hd_run_tx(STinyHdData * handle);
 
 /**

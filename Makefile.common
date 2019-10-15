@@ -56,7 +56,6 @@ TARGET_LIB = libtinyprotocol.a
 
 OBJ_LIB += \
         src/proto/crc/crc.o \
-        src/proto/_old/tiny_layer2.o \
         src/proto/light/tiny_light.o \
         src/proto/hdlc/tiny_hdlc.o \
         src/proto/fd/tiny_fd.o \
@@ -64,7 +63,6 @@ OBJ_LIB += \
         src/proto/hal/tiny_list.o \
         src/proto/hal/tiny_types.o \
         src/proto/half_duplex/tiny_rq_pool.o \
-        src/TinyHdlc.o \
         src/TinyProtocolHd.o \
         src/TinyProtocolFd.o \
 	src/TinyLightProtocol.o \

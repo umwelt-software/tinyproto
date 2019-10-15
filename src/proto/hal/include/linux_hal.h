@@ -36,6 +36,8 @@
 #   define CONFIG_ENABLE_FCS32
 #endif
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
 /**
  * Mutex type used by Tiny Protocol implementation.
  * The type declaration depends on platform.
@@ -54,4 +56,4 @@ typedef struct
     pthread_cond_t cond;
 } tiny_events_t;
 
-
+#endif

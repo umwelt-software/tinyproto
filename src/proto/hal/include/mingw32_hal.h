@@ -37,6 +37,8 @@
 #   define CONFIG_ENABLE_FCS32
 #endif
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
 /**
  * Mutex type used by Tiny Protocol implementation.
  * The type declaration depends on platform.
@@ -101,5 +103,7 @@ static inline uint16_t PLATFORM_TICKS()
 {
     return GetTickCount();
 }
+
+#endif
 
 #endif

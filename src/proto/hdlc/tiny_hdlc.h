@@ -63,7 +63,7 @@ typedef struct _hdlc_handle_t
      * channel. The context of this callback is context, where hdlc_run_rx() is
      * called from.
      * @param user_data user-defined data
-     * @data data pointer to received data
+     * @param data pointer to received data
      * @param len size of received data in bytes
      * @return user callback must return negative value in case of error
      *         or 0 value if packet is successfully processed.
@@ -76,7 +76,7 @@ typedef struct _hdlc_handle_t
      * channel. The context of this callback is context, where hdlc_run_tx() is
      * called from.
      * @param user_data user-defined data
-     * @data data pointer to sent data
+     * @param data pointer to sent data
      * @param len size of sent data in bytes
      * @return user callback must return negative value in case of error
      *         or 0 value if packet is successfully processed.
@@ -129,7 +129,7 @@ typedef struct _hdlc_handle_t
         int (*state)( struct _hdlc_handle_t *handle );
     } tx;
 #endif
-} hdlc_struct_t, *hdlc_handle_t;
+} hdlc_struct_t, *hdlc_handle_t; ///< hdlc handle
 
 //------------------------ GENERIC FUNCIONS ------------------------------
 
@@ -180,6 +180,18 @@ void hdlc_reset( hdlc_handle_t handle );
  */
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
 
+/**
+ * Runs rx cycle until full frame received.
+ *
+ * @param handle handle to hdlc instance
+ * @param readcb callback to read bytes from channel function
+ * @param user_data user data to pass to readcb callback function
+ * @param timeout timeout in milliseconds to wait for new frame.
+ * @return
+ *   - TINY_SUCCESS if operation completed successfully
+ *   - TINY_ERR_FAILED if generic failure happened
+ *   - TINY_ERR_TIMEOUT if operation cannot be completed in specified time.
+ */
 int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout );
 
 /**

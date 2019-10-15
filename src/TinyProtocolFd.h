@@ -52,7 +52,6 @@ public:
      * Initializes IProtoFd object
      * @param buffer - buffer to store the frames being received.
      * @param bufferSize - size of the buffer
-     * @param onReceive - callback to call when new frame is received.
      */
     IProtoFd(void * buffer,
              int    bufferSize)
@@ -62,17 +61,6 @@ public:
     }
 
     virtual ~IProtoFd() = default;
-
-    /**
-     * Initializes IProtoFd object
-     * @param buffer - buffer to store the frames being received.
-     * @param bufferSize - size of the buffer
-     * @param onReceive - callback to call when new frame is received.
-     */
-    IProtoFd(tiny_fd_handle_t  handle): m_handle( handle )
-    {
-        // TODO: Multithread
-    }
 
     /**
      * Initializes protocol internal variables.
@@ -220,11 +208,25 @@ public:
      */
     void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr) { m_onReceive = on_receive; };
 
+    /**
+     * Sets desired window size. Use this function only before begin() call.
+     * @param window window size, valid between 2 - 8
+     */
     void setWindowSize(uint8_t window) { m_window = window; }
 
+    /**
+     * Sets send timeout in milliseconds.
+     * @param timeout timeout in milliseconds,
+     */
     void setSendTimeout(uint16_t timeout) { m_sendTimeout = timeout; }
 
 protected:
+    /**
+     * Method called by hdlc protocol upon receiving new frame.
+     * Can be redefined in derived classes.
+     * @param pdata pointer to received data
+     * @param size size of received payload in bytes
+     */
     virtual void onReceive(uint8_t *pdata, int size)
     {
         IPacket pkt((char *)pdata, size);

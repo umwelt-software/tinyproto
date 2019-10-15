@@ -155,33 +155,92 @@ typedef void (*on_frame_cb_t)(void *handle, uint16_t uid, uint8_t *pdata, int si
 #define EVENT_BITS_CLEAR 1  ///< Flag, used in tiny_events_wait()
 #define EVENT_BITS_LEAVE 0  ///< Flag, used in tiny_events_wait()
 
+/**
+ * Creates cross-platform mutex.
+ * @param mutex pointer to tiny_mutex_t variable.
+ */
 void tiny_mutex_create(tiny_mutex_t *mutex);
 
+/**
+ * Destroys cross-platform mutex.
+ * @param mutex pointer to tiny_mutex_t variable.
+ */
 void tiny_mutex_destroy(tiny_mutex_t *mutex);
 
+/**
+ * Locks cross-platform mutex.
+ * @param mutex pointer to tiny_mutex_t variable.
+ */
 void tiny_mutex_lock(tiny_mutex_t *mutex);
 
+/**
+ * Attempts to lock cross-platform mutex.
+ * @param mutex pointer to tiny_mutex_t variable.
+ * @return 0 if failed to lock
+ *         1 if success
+ */
 uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex);
 
+/**
+ * Unlocks cross-platform mutex.
+ * @param mutex pointer to tiny_mutex_t variable.
+ */
 void tiny_mutex_unlock(tiny_mutex_t *mutex);
 
+/**
+ * Creates cross platform event group object.
+ * @param events pointer to tiny_event_t variable.
+ */
 void tiny_events_create(tiny_events_t *events);
 
+/**
+ * Destroys cross platform event group object.
+ * @param events pointer to tiny_event_t variable.
+ */
 void tiny_events_destroy(tiny_events_t *events);
 
+/**
+ * Waits until any of specified bits is set or timeout.
+ * @param event pointer to tiny_event_t variable.
+ * @param bits bits to wait for
+ * @param clear flags EVENT_BITS_CLEAR or EVENT_BITS_LEAVE
+ * @param timeout timeout in milliseconds to wait
+ * @return 0 on timeout
+ *         list of bits from the input argument, which were set
+ */
 uint8_t tiny_events_wait(tiny_events_t *event, uint8_t bits,
                          uint8_t clear, uint32_t timeout);
 
+/**
+ * Sets bits for cross-platform event group object.
+ * @param event pointer to tiny_event_t variable.
+ * @param bits bits to set
+ */
 void tiny_events_set(tiny_events_t *event, uint8_t bits);
 
+/**
+ * Clears bits for cross-platform event group object.
+ * @param event pointer to tiny_event_t variable.
+ * @param bits bits to clear
+ */
 void tiny_events_clear(tiny_events_t *event, uint8_t bits);
 
+/**
+ * Sleeps for specified period in milliseconds.
+ * @param ms time in milliseconds to sleep
+ */
 void tiny_sleep(uint32_t ms);
 
-void tiny_log_level(uint8_t level);
-
+/**
+ * Returns timestamp in milliseconds since system started up.
+ */
 uint32_t tiny_millis();
 
+/**
+ * Sets logging level if tiny library is compiled with logs
+ * @param level log level to set, or 0 to disable logs
+ */
+void tiny_log_level(uint8_t level);
 
 #ifdef __cplusplus
 }
