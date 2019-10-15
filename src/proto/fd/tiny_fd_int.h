@@ -99,6 +99,7 @@ typedef struct
     uint8_t ns_offset; // used for implementation of RSET commands
     uint32_t last_i_ts; // last sent I-frame timestamp
     uint32_t last_ka_ts; // last keep alive timestamp
+    uint8_t  ka_confirmed;
 
     uint8_t retries; // Number of retries to perform before timeout takes place
 

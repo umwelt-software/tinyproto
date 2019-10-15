@@ -37,6 +37,7 @@ static char *s_port = nullptr;
 static bool s_generatorEnabled = false;
 static protocol_type_t s_protocol = protocol_type_t::HD;
 static int s_packetSize = 64;
+static int s_windowSize = 4;
 static bool s_terminate = false;
 
 static int serial_send(void *p, const void *buf, int len)
@@ -61,6 +62,7 @@ static void print_help()
     fprintf(stderr, "    -c <crc>, --crc <crc>      crc type: 0, 8, 16, 32\n");
     fprintf(stderr, "    -g, --generator            turn on packet generating\n");
     fprintf(stderr, "    -s, --size                 packet size: 64 (by default)\n");
+    fprintf(stderr, "    -w, --window               window size: 3 (by default), 7\n");
 }
 
 static int parse_args(int argc, char *argv[])
@@ -99,6 +101,16 @@ static int parse_args(int argc, char *argv[])
             if (s_packetSize < 32 )
             {
                 fprintf(stderr, "Packets size less than 32 bytes are not supported\n"); return -1;
+                return -1;
+            }
+        }
+        else if ((!strcmp(argv[i],"-w")) || (!strcmp(argv[i],"--window")))
+        {
+            if (++i >= argc ) return -1;
+            s_windowSize = strtoul(argv[i], nullptr, 10) + 1;
+            if (s_windowSize != 4 && s_windowSize != 8 )
+            {
+                fprintf(stderr, "Allowable window size is 3 or 7\n"); return -1;
                 return -1;
             }
         }
@@ -202,9 +214,9 @@ static int serial_receive_fd(void *p, void *buf, int len)
 static int run_fd(SerialHandle port)
 {
     s_serialFd = port;
-    Tiny::ProtoFdD proto( tiny_fd_buffer_size_by_mtu( s_packetSize, 4 ) );
+    Tiny::ProtoFdD proto( tiny_fd_buffer_size_by_mtu( s_packetSize, s_windowSize ) );
     // Set window size to 4 frames. This should be the same value, used by other size
-    proto.setWindowSize( 4 );
+    proto.setWindowSize( s_windowSize );
     // Set send timeout to 1000ms as we are going to use multithread mode
     // With generator mode it is ok to send with timeout from run_fd() function
     // But in loopback mode (!generator), we must resend frames from receiveCallback as soon as possible, use no timeout then
