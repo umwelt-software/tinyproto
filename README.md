@@ -5,6 +5,7 @@
   * [Introduction](#introduction)
   * [Key Features](#key-features)
   * [Supported platforms](#supported-platforms)
+  * [Easy to use](#easy-to-use)
   * [Setting up](#setting-up)
   * [Using hd_loopback tool](#using-hd_loopback-tool)
   * [Running sperf](#running-sperf)
@@ -14,44 +15,71 @@
 
 ## Introduction
 
-Tiny Protocol is layer 2 simple protocol. It is intended to be used for the systems with
+Tiny Protocol is layer 2 protocol. It is intended to be used for the systems with
 small amount of resources. It is also can be compiled for desktop Linux system, and it can
 be built it for Windows. All you need is to implement callback for writing and
-reading bytes from communication line.
-With this library you can easy communicate your Arduino with applications
+reading bytes from communication line, and implement 2 application callback for incoming
+message event and outgoing message event. With this library you can easy communicate your Arduino with applications
 on PC and other boards. You don't need to think about data synchronization
-between points.
-No dynamic allocation of memory, so, it can be used on the systems with limited resources
+between points. No dynamic allocation of memory, so, it can be used on the systems with limited resources
 
 ## Key Features
 
-This protocol allows to organize communication either between PC and EVK board or
-between two microcontrollers. Passing raw bytes over communication channel has big
-disadvantages:
- * absence of synchronization. If devices start at different time, then some device can start
-   reading from the middle of the frame data,
- * no error correction. If hardware channel is noise, there is a big chance to get some garbage
-   on communication line.
-These issues can be solved with tinyproto protocol. It supports error checking and framing for
-the data being sent.
-
 Main features:
- * Error detection (absent in TinyProto Light version)
-   * Simple 8-bit checksum
+ * 4 protocol variants depending on your needs (basic hdlc, light, hd and fd)
+ * Error detection (basic hdlc, hd and fd variants)
+   * Simple 8-bit checksum (sum of bytes)
    * FCS16 (CCITT-16)
    * FCS32 (CCITT-32)
- * Frame transfer acknowledgement (TinyProto Half Duplex version)
- * Frames of maximum 32K size (limit depends on OS).
- * Low SRAM consumption
- * Low Flash consumption (many features can be disabled at compilation time)
+ * Frame transfer acknowledgement (hd and fd variants)
+ * Frames of maximum 32K or 2G size (limit depends on platform).
+ * Low SRAM consumption.
+ * Low Flash consumption (features can be disabled and enabled at compilation time)
+ * No dynamic memory allocations (suitable for using on uC with limited resources or without memory manager)
+ * Zero copy implementation (basic hdlc, light versions do not use copy operations)
+ * Serial loopback tool for debug purposes
  * Serial performance tool (sperf)
- * Loopback tool for debug purposes
- * No dynamic memory allocations (suitable for using on uC with limited resources)
- * Zero copy implementation (application buffers are used as is, no copy operations)
 
 ## Supported platforms
 
  * Any platform, where C/C++ compiler is available (C99, C++11)
+
+## Easy to use
+
+Using light variant of Tiny Protocol can look like this:
+```.cpp
+Tiny::ProtoLight  proto;
+Tiny::Packet<256> packet;
+...
+    if (Serial.available()) {
+        int len = proto.read( packet );
+        if (len > 0) {
+            /* Send message back */
+            proto.write( packet );
+        }
+    }
+```
+
+Example of using fd variant of Tiny Protocol is a little bit bigger, but it is still simple:
+```.cpp
+Tiny::ProtoFd<FD_MIN_BUF_SIZE(64,4)>  proto;
+
+void onReceive(Tiny::IPacket &pkt) {
+    if ( proto.write(pkt) == TINY_ERR_TIMEOUT ) {
+        // Do what you need to do if looping back failed on timeout.
+        // But never use blocking operations inside callback
+    }
+}
+...
+proto.setReceiveCallback( onReceive );
+...
+void loop() {
+    if (Serial.available()) {
+        proto.run_rx();
+    }
+    proto.run_tx();
+}
+```
 
 ## Setting up
 

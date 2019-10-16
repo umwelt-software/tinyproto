@@ -32,18 +32,17 @@ void setup()
 }
 
 /* Specify buffer for packets to send and receive */
-char g_buf[256];
+Tiny::Packet<256> packet;
 
 void loop()
 {
     if (Serial.available())
     {
-        int len = proto.read( g_buf, sizeof(g_buf) );
-        /* If we receive valid message */
+        int len = proto.read( packet );
         if (len > 0)
         {
             /* Send message back */
-            proto.write( g_buf, len );
+            proto.write( packet );
         }
     }
 }

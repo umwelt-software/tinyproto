@@ -18,23 +18,22 @@ void setup() {
 }
 
 /* Specify buffer for packets to send and receive */
-char g_inBuf[32];
-char g_outBuf[32];
+Tiny::Packet<32> inPacket;
 
 void loop()
 {
-    /* Prepare data you want to send here */
-    g_outBuf[0] = 'D'; g_outBuf[1] = 'A'; g_outBuf[2] = 'T'; g_outBuf[3] = 'A';
-
+    Tiny::Packet<32> outPacket;
+    /* Prepare data you want to send here - null-terminated string "DATA" */
+    outPacket.put("DATA");
     /* Send packet over UART to other side */
-    proto.write(g_outBuf, 4);
+    proto.write(outPacket);
 
     unsigned long start = millis();
     /* read answer from remote side */
     int len;
     do
     {
-        len = proto.read(g_inBuf, sizeof(g_inBuf));
+        len = proto.read(inPacket);
         /* Wait 1000ms for any answer from remote side */
         if (millis() - start >= 1000)
         {
@@ -43,6 +42,6 @@ void loop()
     } while (len <= 0);
     if (len > 0)
     {
-        /* Process response from remote side here (len bytes) */
+        /* Process response in inPacket from remote side here (len bytes) */
     }
 }
