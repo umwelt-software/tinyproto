@@ -1,29 +1,60 @@
 \hypertarget{group__HALF__DUPLEX__API}{}\section{Tiny Half Duplex A\+PI functions}
 \label{group__HALF__DUPLEX__API}\index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSTinyHdData__}{S\+Tiny\+Hd\+Data\+\_\+}
+\item 
+struct \hyperlink{structSTinyHdInit__}{S\+Tiny\+Hd\+Init\+\_\+}
+\item 
+class \hyperlink{classTiny_1_1ProtoHd}{Tiny\+::\+Proto\+Hd}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structSTinyHdData__}{S\+Tiny\+Hd\+Data\+\_\+} \hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data}
+\item 
+typedef struct \hyperlink{structSTinyHdInit__}{S\+Tiny\+Hd\+Init\+\_\+} \hyperlink{group__HALF__DUPLEX__API_ga784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init}
+\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{group__HALF__DUPLEX__API_ga747e6a3a0b5d2a9e1fe0c143c20057e9}{tiny\+\_\+hd\+\_\+init} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle, \hyperlink{tiny__hd_8h_a784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init} $\ast$init)
+int \hyperlink{group__HALF__DUPLEX__API_ga747e6a3a0b5d2a9e1fe0c143c20057e9}{tiny\+\_\+hd\+\_\+init} (\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle, \hyperlink{group__HALF__DUPLEX__API_ga784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init} $\ast$init)
 \begin{DoxyCompactList}\small\item\em Initialized communication for Tiny Half Duplex protocol. \end{DoxyCompactList}\item 
-void \hyperlink{group__HALF__DUPLEX__API_ga275846730a88b9654345d5defbda31e7}{tiny\+\_\+hd\+\_\+close} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
+void \hyperlink{group__HALF__DUPLEX__API_ga275846730a88b9654345d5defbda31e7}{tiny\+\_\+hd\+\_\+close} (\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
 \begin{DoxyCompactList}\small\item\em stops Tiny Half Duplex state machine \end{DoxyCompactList}\item 
-int \hyperlink{group__HALF__DUPLEX__API_gac962595f09883dea1dd0992a608a17b9}{tiny\+\_\+hd\+\_\+run} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
+int \hyperlink{group__HALF__DUPLEX__API_gac962595f09883dea1dd0992a608a17b9}{tiny\+\_\+hd\+\_\+run} (\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
 \begin{DoxyCompactList}\small\item\em runs receive functions of Tiny Half Duplex protocol. \end{DoxyCompactList}\item 
-int \hyperlink{group__HALF__DUPLEX__API_ga84325cc961c3f31e2ba6111d0235bd61}{tiny\+\_\+hd\+\_\+run\+\_\+tx} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
+int \hyperlink{group__HALF__DUPLEX__API_ga84325cc961c3f31e2ba6111d0235bd61}{tiny\+\_\+hd\+\_\+run\+\_\+tx} (\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle)
 \item 
-int \hyperlink{group__HALF__DUPLEX__API_ga5aad8dcb504b80bac923496f2686a6d6}{tiny\+\_\+send\+\_\+wait\+\_\+ack} (\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle, void $\ast$buf, uint16\+\_\+t len)
+int \hyperlink{group__HALF__DUPLEX__API_ga5aad8dcb504b80bac923496f2686a6d6}{tiny\+\_\+send\+\_\+wait\+\_\+ack} (\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$handle, void $\ast$buf, uint16\+\_\+t len)
 \begin{DoxyCompactList}\small\item\em Sends userdata and waits for acknowledgement from remote side. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
 
 
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}\label{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}} 
+\index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}!S\+Tiny\+Hd\+Data@{S\+Tiny\+Hd\+Data}}
+\index{S\+Tiny\+Hd\+Data@{S\+Tiny\+Hd\+Data}!Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{S\+Tiny\+Hd\+Data}{STinyHdData}}
+{\footnotesize\ttfamily typedef struct \hyperlink{structSTinyHdData__}{S\+Tiny\+Hd\+Data\+\_\+}  \hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data}}
+
+This structure contains service data, required for half-\/duplex functioning. \mbox{\Hypertarget{group__HALF__DUPLEX__API_ga784f1a0f0ae7f06da4bc288fa3f22408}\label{group__HALF__DUPLEX__API_ga784f1a0f0ae7f06da4bc288fa3f22408}} 
+\index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}!S\+Tiny\+Hd\+Init@{S\+Tiny\+Hd\+Init}}
+\index{S\+Tiny\+Hd\+Init@{S\+Tiny\+Hd\+Init}!Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{S\+Tiny\+Hd\+Init}{STinyHdInit}}
+{\footnotesize\ttfamily typedef struct \hyperlink{structSTinyHdInit__}{S\+Tiny\+Hd\+Init\+\_\+}  \hyperlink{group__HALF__DUPLEX__API_ga784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init}}
+
+This structure is used for initialization of Tiny Half Duplex protocol. 
+
 \subsection{Function Documentation}
 \mbox{\Hypertarget{group__HALF__DUPLEX__API_ga275846730a88b9654345d5defbda31e7}\label{group__HALF__DUPLEX__API_ga275846730a88b9654345d5defbda31e7}} 
 \index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}!tiny\+\_\+hd\+\_\+close@{tiny\+\_\+hd\+\_\+close}}
 \index{tiny\+\_\+hd\+\_\+close@{tiny\+\_\+hd\+\_\+close}!Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+hd\+\_\+close()}{tiny\_hd\_close()}}
-{\footnotesize\ttfamily void tiny\+\_\+hd\+\_\+close (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void tiny\+\_\+hd\+\_\+close (\begin{DoxyParamCaption}\item[{\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle }\end{DoxyParamCaption})}
 
 
 
@@ -40,7 +71,7 @@ stops Tiny Half Duplex state machine.
 \index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}!tiny\+\_\+hd\+\_\+init@{tiny\+\_\+hd\+\_\+init}}
 \index{tiny\+\_\+hd\+\_\+init@{tiny\+\_\+hd\+\_\+init}!Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+hd\+\_\+init()}{tiny\_hd\_init()}}
-{\footnotesize\ttfamily int tiny\+\_\+hd\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle,  }\item[{\hyperlink{tiny__hd_8h_a784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init} $\ast$}]{init }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int tiny\+\_\+hd\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle,  }\item[{\hyperlink{group__HALF__DUPLEX__API_ga784f1a0f0ae7f06da4bc288fa3f22408}{S\+Tiny\+Hd\+Init} $\ast$}]{init }\end{DoxyParamCaption})}
 
 
 
@@ -65,7 +96,7 @@ This function is not thread safe.
 \index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}!tiny\+\_\+hd\+\_\+run@{tiny\+\_\+hd\+\_\+run}}
 \index{tiny\+\_\+hd\+\_\+run@{tiny\+\_\+hd\+\_\+run}!Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+hd\+\_\+run()}{tiny\_hd\_run()}}
-{\footnotesize\ttfamily int tiny\+\_\+hd\+\_\+run (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int tiny\+\_\+hd\+\_\+run (\begin{DoxyParamCaption}\item[{\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle }\end{DoxyParamCaption})}
 
 
 
@@ -99,7 +130,7 @@ do not use blocking send (tiny\+\_\+send\+\_\+wait\+\_\+ack) in on\+\_\+frame\+\
 \index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}!tiny\+\_\+hd\+\_\+run\+\_\+tx@{tiny\+\_\+hd\+\_\+run\+\_\+tx}}
 \index{tiny\+\_\+hd\+\_\+run\+\_\+tx@{tiny\+\_\+hd\+\_\+run\+\_\+tx}!Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+hd\+\_\+run\+\_\+tx()}{tiny\_hd\_run\_tx()}}
-{\footnotesize\ttfamily int tiny\+\_\+hd\+\_\+run\+\_\+tx (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int tiny\+\_\+hd\+\_\+run\+\_\+tx (\begin{DoxyParamCaption}\item[{\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle }\end{DoxyParamCaption})}
 
 Use this function for multithread mode, when you need to run tx in separate thread.
 
@@ -115,7 +146,7 @@ T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED -\/ if something wrong with rece
 \index{Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}!tiny\+\_\+send\+\_\+wait\+\_\+ack@{tiny\+\_\+send\+\_\+wait\+\_\+ack}}
 \index{tiny\+\_\+send\+\_\+wait\+\_\+ack@{tiny\+\_\+send\+\_\+wait\+\_\+ack}!Tiny Half Duplex A\+P\+I functions@{Tiny Half Duplex A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+send\+\_\+wait\+\_\+ack()}{tiny\_send\_wait\_ack()}}
-{\footnotesize\ttfamily int tiny\+\_\+send\+\_\+wait\+\_\+ack (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__hd_8h_af9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle,  }\item[{void $\ast$}]{buf,  }\item[{uint16\+\_\+t}]{len }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int tiny\+\_\+send\+\_\+wait\+\_\+ack (\begin{DoxyParamCaption}\item[{\hyperlink{group__HALF__DUPLEX__API_gaf9f81ad129b754a780dfca5dcd7f7cf9}{S\+Tiny\+Hd\+Data} $\ast$}]{handle,  }\item[{void $\ast$}]{buf,  }\item[{uint16\+\_\+t}]{len }\end{DoxyParamCaption})}
 
 
 

@@ -78,12 +78,16 @@ Introduction</h1>
 <p>This protocol is intended to be used in low-memory systems, like microcontrollers (Stellaris, Arduino). It is also can be compiled for desktop Linux systems, and it is possible to build it for Windows.</p>
 <h1><a class="anchor" id="api"></a>
 Tiny Protocol API</h1>
-<p>Linux API supports C-Style functions, while Arduino API supports both C-Style and C++ classes. Usage C++ Arduino classes makes easy use of the protocol for Arduino projects. Please refer to documentation.</p>
+<p>Library API supports C-Style functions - the basic API, and C++ API, which provides high level easy to use classes. Please refer to documentation. Basically TinyProto library provides 4 different protocol implementations:</p>
+<p><a class="el" href="group__HDLC__API.html">Tiny HDLC protocol API functions</a> This is basis, which all other protocols implementations are built on top of. Hdlc api provides basic input/output operations, like FCS, escape sequencies, etc. There is no C++ wrappers for it.</p>
+<p><a class="el" href="group__LIGHT__API.html">Tiny light protocol API functions</a> This is simple protocol, based on HDLC api. It simplifies sending and receiving messages on small controllers, and at the same time it has low memory consumption (800 bytes of flash). But, be careful since light version doesn't have any confirmation from remote side.</p>
+<p><a class="el" href="group__HALF__DUPLEX__API.html">Tiny Half Duplex API functions</a> This is simple implementation with ACK from remote side. It needs a little more memory than light version, but it is good still for small microcontrollers. The disadvantages of hd protocol is: it doesn't use official HDLC frame format, each frame being sent must be confirmed before sending next frame. This can cause slow down in communication.</p>
+<p><a class="el" href="group__FULL__DUPLEX__API.html">Tiny Full Duplex API functions</a> This is the heaviest protocol implementation in the library. For atmega controllers it requires 7KiB of flash, and at least 700 bytes to operation with 64-byte length frames. Unlike hd version, fd version of protocol is faster, as it doesn't wait for confirmation before sending next frame (thanks to window, specified in HDLC specs). Fd version of protocol uses official HDLC frame format, and implements U-frames (SABM,UA), S-frames (RR,REJ), I-frames.</p>
 <h1><a class="anchor" id="packet"></a>
 Packet Structure</h1>
-<p>Full packet format: </p><pre>
+<p>HDLC frame format: </p><pre>
      8        any len    None/8/16/32     8
- |   7E   |  USER DATA  |    FCS     |   7E   |
+ |   7E   |    DATA     |    FCS     |   7E   |
 </pre><p>Full duplex hdlc uses standard hdlc frame format: </p><pre>
      8     ADDR  CONTROL     any len    None/8/16/32     8
  |   7E   | FF | hdlc ctl | USER DATA  |    FCS     |   7E   |
@@ -100,7 +104,7 @@ User-defined callbacks</h1>
 <li>on_frame_read() is called by HDLC implementation every time, new frame arrives and checksum is correct.</li>
 <li>on_frame_sent() is called by HDLC implementation every time, new frame is sent to TX. HDLC protocol requires only write_func_cb() to be defined. Other callbacks are optional. As for RX processes, your application code is responsible for reading data from RX line, then all you need to do, is to pass received bytes to HDLC implementation for processing via <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a>.</li>
 </ul>
-<p>All higher level protocols (<a class="el" href="group__LIGHT__API.html">Tiny light protocol API functions</a>, <a class="el" href="group__HALF__DUPLEX__API.html">Tiny Half Duplex API functions</a>) needs 4 callback functions, defined by a user: read_func_cb() is added. The list of callbacks:</p>
+<p>All higher level protocols (<a class="el" href="group__LIGHT__API.html">Tiny light protocol API functions</a>, <a class="el" href="group__HALF__DUPLEX__API.html">Tiny Half Duplex API functions</a>, <a class="el" href="group__FULL__DUPLEX__API.html">Tiny Full Duplex API functions</a>) needs 4 callback functions, defined by a user: read_func_cb() is added. The list of callbacks:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">int</span> write_func_cb(<span class="keywordtype">void</span> *user_data, <span class="keyword">const</span> <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> len);</div><div class="line"><span class="keywordtype">int</span> read_func_cb(<span class="keywordtype">void</span> *user_data, <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> len);</div><div class="line"><span class="keywordtype">int</span> on_frame_read(<span class="keywordtype">void</span> *user_data, <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> len);</div><div class="line"><span class="keywordtype">int</span> on_frame_sent(<span class="keywordtype">void</span> *user_data, <span class="keyword">const</span> <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> len);</div></div><!-- fragment --><p>Unlike HDLC implementation, higher level protocols use different approach. They control both TX and RX channels, for example, to transparently send ACK frames, etc. That's why higher level protocols need to read_func_cb to be defined:</p>
 <ul>
 <li>read_func_cb() is called by higher level protocol implementation every time, it needs to read bytes from RX channel.</li>
