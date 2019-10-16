@@ -383,7 +383,7 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 ///////////////////////////////////////////////////////////////////////////////
 
 int tiny_fd_init(tiny_fd_handle_t      * handle,
-                 STinyFdInit      * init)
+                 tiny_fd_init_t        * init)
 {
     if ( (0 == init->on_frame_cb) ||
          (0 == init->buffer) ||

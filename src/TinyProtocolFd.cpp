@@ -44,7 +44,7 @@ void IProtoFd::begin(write_block_cb_t writecb,
     {
         return;
     }
-    STinyFdInit   init{};
+    tiny_fd_init_t        init{};
     init.write_func       = writecb;
     init.read_func        = readcb;
     init.pdata            = this;

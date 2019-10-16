@@ -35,6 +35,10 @@ extern "C" {
 #include "proto/hdlc/tiny_hdlc.h"
 #include "proto/hal/tiny_types.h"
 
+/**
+ * @defgroup HALF_DUPLEX_API Tiny Half Duplex API functions
+ * @{
+ */
 
 /**
  * This structure contains service data, required for half-duplex
@@ -103,11 +107,6 @@ typedef struct STinyHdInit_
      */
     hdlc_crc_t         crc_type;
 } STinyHdInit;
-
-/**
- * @defgroup HALF_DUPLEX_API Tiny Half Duplex API functions
- * @{
- */
 
 /**
  * @brief Initialized communication for Tiny Half Duplex protocol.

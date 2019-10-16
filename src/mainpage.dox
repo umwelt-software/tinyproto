@@ -17,16 +17,36 @@ Windows.
 
  \section api Tiny Protocol API
 
-Linux API supports C-Style functions, while Arduino API supports both
-C-Style and C++ classes. Usage C++ Arduino classes makes easy use of the
-protocol for Arduino projects. Please refer to documentation.
+Library API supports C-Style functions - the basic API, and C++ API, which provides
+high level easy to use classes. Please refer to documentation. Basically TinyProto
+library provides 4 different protocol implementations:
+
+ * \ref HDLC_API This is basis, which all other protocols implementations are built on top of. Hdlc api provides
+                 basic input/output operations, like FCS, escape sequencies, etc. There is
+                 no C++ wrappers for it.
+
+ * \ref LIGHT_API This is simple protocol, based on HDLC api. It simplifies sending and receiving messages
+                 on small controllers, and at the same time it has low memory consumption (800 bytes of flash).
+                 But, be careful since light version doesn't have any confirmation from remote side.
+
+ * \ref HALF_DUPLEX_API This is simple implementation with ACK from remote side. It needs a little more
+                 memory than light version, but it is good still for small microcontrollers. The disadvantages
+                 of hd protocol is: it doesn't use official HDLC frame format, each frame being sent must be
+                 confirmed before sending next frame. This can cause slow down in communication.
+
+ * \ref FULL_DUPLEX_API This is the heaviest protocol implementation in the library. For atmega controllers
+                 it requires 7KiB of flash, and at least 700 bytes to operation with 64-byte length frames.
+                 Unlike hd version, fd version of protocol is faster, as it doesn't wait for confirmation
+                 before sending next frame (thanks to window, specified in HDLC specs). Fd version of protocol
+                 uses official HDLC frame format, and implements U-frames (SABM,UA), S-frames (RR,REJ),
+                 I-frames.
 
  \section packet Packet Structure
 
-Full packet format:
+HDLC frame format:
 <pre>
      8        any len    None/8/16/32     8
- |   7E   |  USER DATA  |    FCS     |   7E   |
+ |   7E   |    DATA     |    FCS     |   7E   |
 </pre>
 
 Full duplex hdlc uses standard hdlc frame format:
@@ -68,8 +88,8 @@ As for RX processes, your application code is responsible for reading data from 
 then all you need to do, is to pass received bytes to HDLC implementation for processing
 via hdlc_run_rx().
 
-All higher level protocols (\ref LIGHT_API, \ref HALF_DUPLEX_API) needs 4 callback functions,
-defined by a user: read_func_cb() is added.
+All higher level protocols (\ref LIGHT_API, \ref HALF_DUPLEX_API, \ref FULL_DUPLEX_API)
+needs 4 callback functions, defined by a user: read_func_cb() is added.
 The list of callbacks:
 
 @code{.cpp}

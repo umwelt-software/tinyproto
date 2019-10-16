@@ -38,6 +38,12 @@
 namespace Tiny {
 
 /**
+ * @ingroup FULL_DUPLEX_API
+ * @{
+ */
+
+
+/**
  *  IProtoFd class incapsulates Full Duplex Protocol functionality.
  *  Full Duplex version of the Protocol allows to send messages with
  *  confirmation.
@@ -289,6 +295,9 @@ public:
 private:
 };
 
+/**
+ * @}
+ */
 
 } // Tiny namespace
 

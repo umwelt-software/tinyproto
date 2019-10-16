@@ -36,6 +36,11 @@ extern "C" {
 #include "proto/hdlc/tiny_hdlc.h"
 #include "proto/hal/tiny_types.h"
 
+/**
+ * @defgroup FULL_DUPLEX_API Tiny Full Duplex API functions
+ * @{
+ */
+
 struct tiny_fd_data_t;
 
 /**
@@ -47,7 +52,7 @@ typedef struct tiny_fd_data_t *tiny_fd_handle_t;
 /**
  * This structure is used for initialization of Tiny Full Duplex protocol.
  */
-typedef struct STinyFdInit_
+typedef struct tiny_fd_init_t_
 {
     /// callback function to write bytes to the physical channel
     write_block_cb_t   write_func;
@@ -94,12 +99,7 @@ typedef struct STinyFdInit_
     hdlc_crc_t         crc_type;
     /// number of frames in window. Must be at least 2
     uint8_t            window_frames;
-} STinyFdInit;
-
-/**
- * @defgroup FULL_DUPLEX_API Tiny Full Duplex API functions
- * @{
- */
+} tiny_fd_init_t;
 
 /**
  * @brief Initialized communication for Tiny Full Duplex protocol.
@@ -107,13 +107,13 @@ typedef struct STinyFdInit_
  * The function initializes internal structures for Tiny Full Duplex state machine.
  *
  * @param handle - pointer to Tiny Full Duplex data
- * @param init - pointer to STinyFdInit data.
+ * @param init - pointer to tiny_fd_init_t data.
  * @return TINY_NO_ERROR in case of success.
  *         TINY_ERR_FAILED if init parameters are incorrect.
  * @remarks This function is not thread safe.
  */
 extern int tiny_fd_init(tiny_fd_handle_t *handle,
-                        STinyFdInit      *init);
+                        tiny_fd_init_t   *init);
 
 /**
  * @brief stops Tiny Full Duplex state machine
@@ -166,10 +166,11 @@ extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
  * @param buf      data to send
  * @param len      length of data to send
  *
- * @return TINY_SUCCESS          if user data are put to internal queue.
- *         TINY_ERR_TIMEOUT      if no room in internal queue to put data. Retry operation once again.
- *         TINY_ERR_FAILED       if request was cancelled, by tiny_hd_close().
- *         TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
+ * @return Success result or error code:
+ *         * TINY_SUCCESS          if user data are put to internal queue.
+ *         * TINY_ERR_TIMEOUT      if no room in internal queue to put data. Retry operation once again.
+ *         * TINY_ERR_FAILED       if request was cancelled, by tiny_fd_close() or other error happened.
+ *         * TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
  */
 extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
 

@@ -39,6 +39,11 @@
 namespace Tiny {
 
 /**
+ * @ingroup LIGHT_API
+ * @{
+ */
+
+/**
  *  ProtoLight class incapsulates Protocol functionality.
  *  Remember that you may use always C-style API functions
  *  instead C++. Please refer to documentation.
@@ -181,8 +186,10 @@ private:
     hdlc_crc_t           m_crc = HDLC_CRC_DEFAULT;
 };
 
+/**
+ * @}
+ */
 
 } // Tiny namespace
-
 
 #endif

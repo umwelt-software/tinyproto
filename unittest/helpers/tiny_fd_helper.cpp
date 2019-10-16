@@ -27,7 +27,7 @@ TinyHelperFd::TinyHelperFd(FakeChannel * channel,
     :IBaseHelper(channel, rxBufferSize)
     ,m_onRxFrameCb(onRxFrameCb)
 {
-    STinyFdInit   init = {0};
+    tiny_fd_init_t   init = {0};
     init.write_func       = write_data;
     init.read_func        = read_data;
     init.pdata            = this;

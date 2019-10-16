@@ -40,6 +40,11 @@
 namespace Tiny {
 
 /**
+ * @ingroup HALF_DUPLEX_API
+ * @{
+ */
+
+/**
  *  ProtoHd class incapsulates Half Duplex Protocol functionality.
  *  Half Duplex version of the Protocol allows to send messages with
  *  confirmation.
@@ -216,6 +221,9 @@ private:
 
 };
 
+/**
+ * @}
+ */
 
 } // Tiny namespace
 
