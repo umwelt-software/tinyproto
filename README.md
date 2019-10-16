@@ -7,7 +7,7 @@
   * [Supported platforms](#supported-platforms)
   * [Easy to use](#easy-to-use)
   * [Setting up](#setting-up)
-  * [Using hd_loopback tool](#using-hd_loopback-tool)
+  * [Using tiny_loopback tool](#using-tiny_loopback-tool)
   * [Running sperf](#running-sperf)
   * [License](#license)
 
@@ -109,12 +109,17 @@ void loop() {
    * Install avr gcc compilers
    * Run `make ARCH=avr`
 
-## Using hd_loopback tool
+## Using tiny_loopback tool
 
  * Connect your Arduino board to PC
  * Run your sketch or sketch_hd_sender
- * Compile hd_loopback tool
- * Run hd_loopback tool: `./bld/hd_loopback -p /dev/ttyUSB0 -c 8 -g`
+ * Compile tiny_loopback tool
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -c 8 -g`
+
+ * Connect your Arduino board to PC
+ * Run your sketch or tinyfd_loopback
+ * Compile tiny_loopback tool
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t fd -g`
 
 ## Running sperf
 

@@ -1,4 +1,4 @@
-.PHONY: sperf clean_sperf hd_loopback clean_hd_loopback
+.PHONY: sperf clean_sperf tiny_loopback clean_tiny_loopback
 
 CONFIG_ENABLE_FCS32 ?= y
 CONFIG_ENABLE_FCS16 ?= y
@@ -21,22 +21,22 @@ OBJ_SPERF = tools/sperf/sperf.o \
         tools/serial/serial_linux.o \
         tools/serial/serial_win32.o
 
-OBJ_HD_LOOPBACK = tools/loopback/hd_loopback.o \
+OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o \
 	tools/serial/serial_linux.o \
 	tools/serial/serial_win32.o
 
-all: sperf hd_loopback
+all: sperf tiny_loopback
 
 sperf: $(OBJ_SPERF) library
 	$(CXX) $(CPPFLAGS) -o $(BLD)/sperf$(TOOLS_EXT) $(OBJ_SPERF) $(TOOLS_LDFLAGS)
 
-hd_loopback: $(OBJ_HD_LOOPBACK) library
-	$(CXX) $(CPPFLAGS) -o $(BLD)/hd_loopback$(TOOLS_EXT) $(OBJ_HD_LOOPBACK) $(TOOLS_LDFLAGS)
+tiny_loopback: $(OBJ_TINY_LOOPBACK) library
+	$(CXX) $(CPPFLAGS) -o $(BLD)/tiny_loopback$(TOOLS_EXT) $(OBJ_TINY_LOOPBACK) $(TOOLS_LDFLAGS)
 
-clean: clean_sperf clean_hd_loopback
+clean: clean_sperf clean_tiny_loopback
 
 clean_sperf:
 	rm -rf $(OBJ_SPERF)
 
-clean_hd_loopback:
-	rm -rf $(OBJ_HD_LOOPBACK)
+clean_tiny_loopback:
+	rm -rf $(OBJ_TINY_LOOPBACK)

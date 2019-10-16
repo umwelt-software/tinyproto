@@ -39,6 +39,10 @@ static protocol_type_t s_protocol = protocol_type_t::HD;
 static int s_packetSize = 64;
 static int s_windowSize = 4;
 static bool s_terminate = false;
+static bool s_runTest = false;
+
+static int s_receivedBytes = 0;
+static int s_sentBytes = 0;
 
 static int serial_send(void *p, const void *buf, int len)
 {
@@ -63,6 +67,7 @@ static void print_help()
     fprintf(stderr, "    -g, --generator            turn on packet generating\n");
     fprintf(stderr, "    -s, --size                 packet size: 64 (by default)\n");
     fprintf(stderr, "    -w, --window               window size: 3 (by default), 7\n");
+    fprintf(stderr, "    -r, --run-test             run 15 seconds speed test\n");
 }
 
 static int parse_args(int argc, char *argv[])
@@ -118,6 +123,10 @@ static int parse_args(int argc, char *argv[])
         {
             s_generatorEnabled = true;
         }
+        else if ((!strcmp(argv[i],"-r")) || (!strcmp(argv[i],"--run-test")))
+        {
+            s_runTest = true;
+        }
         else if ((!strcmp(argv[i],"-t")) || (!strcmp(argv[i],"--protocol")))
         {
             if (++i >= argc ) return -1;
@@ -139,21 +148,34 @@ static int parse_args(int argc, char *argv[])
 
 //=================================== HD ============================================
 
+static STinyHdData *s_protoHd = nullptr;
+
 static void onReceiveFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
 {
-    fprintf(stderr, "<<< Frame received UID=%04X, payload len=%d\n", uid, size);
+    if ( !s_runTest )
+        fprintf(stderr, "<<< Frame received UID=%04X, payload len=%d\n", uid, size);
+    s_receivedBytes += size;
+    if ( !s_generatorEnabled )
+    {
+        if ( tiny_send_wait_ack( s_protoHd, pdata, size ) < 0 )
+        {
+            fprintf( stderr, "Failed to send packet\n" );
+        }
+    }
 }
 
 static void onSendFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
 {
-    fprintf(stderr, ">>> Frame sent UID=%04X, payload len=%d\n", uid, size);
+    if ( !s_runTest )
+        fprintf(stderr, ">>> Frame sent UID=%04X, payload len=%d\n", uid, size);
+    s_sentBytes += size;
 }
 
 static int run_hd(SerialHandle port)
 {
     uint8_t inBuffer[s_packetSize * 2]{};
-    STinyHdData tiny{};
     STinyHdInit init{};
+    STinyHdData tiny{};
     init.write_func       = serial_send;
     init.read_func        = serial_receive;
     init.pdata            = (void *)port;
@@ -166,9 +188,13 @@ static int run_hd(SerialHandle port)
     init.multithread_mode = 0;
     /* Initialize tiny hd protocol */
     tiny_hd_init( &tiny, &init  );
+    s_protoHd = &tiny;
+
+    auto startTs = std::chrono::steady_clock::now();
+    auto progressTs = startTs;
 
     /* Run main cycle forever */
-    for(;;)
+    while (!s_terminate)
     {
         if (s_generatorEnabled)
         {
@@ -180,8 +206,19 @@ static int run_hd(SerialHandle port)
             }
         }
         tiny_hd_run( &tiny );
+        if ( s_runTest && s_generatorEnabled )
+        {
+            auto ts = std::chrono::steady_clock::now();
+            if (ts - startTs >= std::chrono::seconds(15)) s_terminate = true;
+            if (ts - progressTs >= std::chrono::seconds(1))
+            {
+                progressTs = ts;
+                fprintf(stderr, ".");
+            }
+        }
     }
     tiny_hd_close(&tiny);
+    return 0;
 }
 
 //================================== FD ======================================
@@ -191,7 +228,9 @@ Tiny::ProtoFdD *s_protoFd = nullptr;
 
 void onReceiveFrameFd(Tiny::IPacket &pkt)
 {
-    fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size() );
+    if ( !s_runTest )
+        fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size() );
+    s_receivedBytes += pkt.size();
     if ( !s_generatorEnabled )
     {
         if ( s_protoFd->write( pkt ) < 0 )
@@ -228,21 +267,38 @@ static int run_fd(SerialHandle port)
     std::thread rxThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_rx(100); }, std::ref(proto) );
     std::thread txThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_tx(100); }, std::ref(proto) );
 
+    auto startTs = std::chrono::steady_clock::now();
+    auto progressTs = startTs;
+
     /* Run main cycle forever */
     while (!s_terminate)
     {
         if (s_generatorEnabled)
         {
             Tiny::PacketD packet(s_packetSize);
-            packet.put("Generated frame");
+            packet.put("Generated frame. test in progress");
             if ( proto.write( packet.data(), packet.size() ) < 0 )
             {
                 fprintf( stderr, "Failed to send packet\n" );
+            }
+            else
+            {
+                s_sentBytes += packet.size();
             }
         }
         else
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        if ( s_runTest && s_generatorEnabled )
+        {
+            auto ts = std::chrono::steady_clock::now();
+            if (ts - startTs >= std::chrono::seconds(15)) s_terminate = true;
+            if (ts - progressTs >= std::chrono::seconds(1))
+            {
+                progressTs = ts;
+                fprintf(stderr, ".");
+            }
         }
     }
     rxThread.join();
@@ -275,5 +331,10 @@ int main(int argc, char *argv[])
         default: fprintf(stderr, "Unknown protocol type"); break;
     }
     CloseSerial(hPort);
+    if ( s_runTest )
+    {
+        printf("\nRegistered TX speed: %u bps\n", (s_sentBytes) * 8 / 15);
+        printf("Registered RX speed: %u bps\n", (s_receivedBytes) * 8 / 15);
+    }
     return result;
 }
