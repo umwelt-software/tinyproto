@@ -1,5 +1,7 @@
 # Tiny Protocol
 
+[![Build Status](https://travis-ci.org/lexus2k/tinyproto.svg?branch=master)](https://travis-ci.org/lexus2k/tinyproto)
+
 [tocstart]: # (toc start)
 
   * [Introduction](#introduction)
