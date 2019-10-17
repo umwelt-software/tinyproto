@@ -8,6 +8,7 @@ addons:
   apt:
     packages:
       - gcc-avr
+      - avr-libc
       - doxygen
       - cppcheck
       - cpputest
