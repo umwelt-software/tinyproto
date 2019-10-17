@@ -23,13 +23,19 @@
 
 static tiny_request * s_pool = 0;
 
+#if TINY_HD_DEBUG
+#define LOG(...)  TINY_LOG(__VA_ARGS__)
+#else
+#define LOG(...)
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 
 void tiny_put_request(tiny_request *request)
 {
     request->state = TINY_HD_REQUEST_INIT;
     request->uid = tiny_list_add((list_element **)&s_pool, (list_element *)request);
-    TINY_LOG( TINY_LOG_DEB, "== new request [%04X]\n", request->uid);
+    LOG( TINY_LOG_DEB, "== new request [%04X]\n", request->uid);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,7 +49,7 @@ void tiny_remove_request(tiny_request *request)
 
 static uint8_t decline_function(list_element *element, uint16_t data)
 {
-    TINY_LOG( TINY_LOG_DEB, "== declined [%04X]\n", data);
+    LOG( TINY_LOG_DEB, "== declined [%04X]\n", data);
     ((tiny_request *)element)->state = TINY_HD_REQUEST_DECLINED;
     return 1;
 }
@@ -63,7 +69,7 @@ static uint8_t commit_function(list_element *element, uint16_t data)
     if (data == ((tiny_request *)element)->uid)
     {
         ((tiny_request *)element)->state = TINY_HD_REQUEST_SUCCESSFUL;
-        TINY_LOG( TINY_LOG_DEB, "== commit success [%04X]\n", data);
+        LOG( TINY_LOG_DEB, "== commit success [%04X]\n", data);
         return 0;
     }
     return 1;
@@ -73,7 +79,7 @@ static uint8_t commit_function(list_element *element, uint16_t data)
 
 void tiny_commit_request(uint16_t uid)
 {
-    TINY_LOG( TINY_LOG_DEB, "== commit [%04X]\n", uid);
+    LOG( TINY_LOG_DEB, "== commit [%04X]\n", uid);
     tiny_list_enumerate((list_element *)s_pool, commit_function, uid);
 }
 

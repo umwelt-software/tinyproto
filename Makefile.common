@@ -24,14 +24,19 @@ endif
 
 ifeq ($(ENABLE_HDLC_LOGS),y)
     CPPFLAGS += -DTINY_HDLC_DEBUG=1
+    ENABLE_DEBUG=y
 endif
 ifeq ($(ENABLE_HD_LOGS),y)
     CPPFLAGS += -DTINY_HD_DEBUG=1
+    ENABLE_DEBUG=y
 endif
 ifeq ($(ENABLE_FD_LOGS),y)
     CPPFLAGS += -DTINY_FD_DEBUG=1
+    ENABLE_DEBUG=y
 endif
-
+ifeq ($(ENABLE_DEBUG),y)
+    CPPFLAGS += -DTINY_DEBUG=1
+endif
 ifeq ($(CONFIG_ENABLE_FCS32),y)
     CPPFLAGS += -DCONFIG_ENABLE_FCS32
 endif

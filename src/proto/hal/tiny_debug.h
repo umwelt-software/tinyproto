@@ -26,6 +26,7 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+#include <inttypes.h>
 
 #ifndef TINY_LOG_LEVEL_DEFAULT
 #define TINY_LOG_LEVEL_DEFAULT   0
@@ -42,7 +43,15 @@ enum
     TINY_LOG_DEB  = 4,
 };
 
-#define TINY_LOG(lvl, fmt, ...)  { if (lvl < g_tiny_log_level) fprintf(stderr, "%08d ms: "fmt, tiny_millis(), ##__VA_ARGS__); }
+#ifndef TINY_DEBUG
+#define TINY_DEBUG 1
+#endif
+
+#if TINY_DEBUG
+#define TINY_LOG(lvl, fmt, ...)  { if (lvl < g_tiny_log_level) fprintf(stderr, "%08"PRIu32" ms: "fmt, tiny_millis(), ##__VA_ARGS__); }
+#else
+#define TINY_LOG(...)
+#endif
 
 #ifdef __cplusplus
 }

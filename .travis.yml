@@ -3,20 +3,25 @@ language: cpp
 compiler:
   - gcc
 #  - clang
-#before_install:
-#  - sudo apt-get install -y doxygen cppcheck cpputest graphviz socat
 
 addons:
   apt:
     packages:
+      - gcc-avr
       - doxygen
       - cppcheck
       - cpputest
       - graphviz
       - socat
 install: skip
-script:
-  - make
-  - make check
-  - ./tools/run_tests.sh
-  - make docs
+jobs:
+  include:
+    script:
+      - make
+      - make docs
+      - make check
+      - ./tools/run_tests.sh
+
+  include:
+    script:
+      - make ARCH=avr
