@@ -238,11 +238,14 @@ Sets send timeout in milliseconds.
 \subsubsection{\texorpdfstring{set\+Window\+Size()}{setWindowSize()}}
 {\footnotesize\ttfamily void Tiny\+::\+I\+Proto\+Fd\+::set\+Window\+Size (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{window }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Sets desired window size. Use this function only before \hyperlink{classTiny_1_1IProtoFd_aae4e613316866105c130d613ecb25dd4}{begin()} call. 
+Sets desired window size. Use this function only before \hyperlink{classTiny_1_1IProtoFd_aae4e613316866105c130d613ecb25dd4}{begin()} call. window size is number of frames, which confirmation may be deferred for. 
 \begin{DoxyParams}{Parameters}
-{\em window} & window size, valid between 2 -\/ 8 \\
+{\em window} & window size, valid between 1 -\/ 7 inclusively \\
 \hline
 \end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+if you use smallest window size, this can reduce throughput of the channel. 
+\end{DoxyWarning}
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_adea59df6702e16fd986a91c7ee62012a}\label{classTiny_1_1IProtoFd_adea59df6702e16fd986a91c7ee62012a}} 
 \index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!write@{write}}
 \index{write@{write}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}

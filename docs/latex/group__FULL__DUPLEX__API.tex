@@ -3,7 +3,7 @@
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \hyperlink{structSTinyFdInit__}{S\+Tiny\+Fd\+Init\+\_\+}
+struct \hyperlink{structtiny__fd__init__t__}{tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+}
 \item 
 class \hyperlink{classTiny_1_1IProtoFd}{Tiny\+::\+I\+Proto\+Fd}
 \end{DoxyCompactItemize}
@@ -12,12 +12,12 @@ class \hyperlink{classTiny_1_1IProtoFd}{Tiny\+::\+I\+Proto\+Fd}
 \item 
 typedef struct tiny\+\_\+fd\+\_\+data\+\_\+t $\ast$ \hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}
 \item 
-typedef struct \hyperlink{structSTinyFdInit__}{S\+Tiny\+Fd\+Init\+\_\+} \hyperlink{group__FULL__DUPLEX__API_gac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init}
+typedef struct \hyperlink{structtiny__fd__init__t__}{tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+} \hyperlink{group__FULL__DUPLEX__API_gad19ac27f4ba1d2b807e0a440b0c927d2}{tiny\+\_\+fd\+\_\+init\+\_\+t}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{group__FULL__DUPLEX__API_ga73c3e76cfbcd7b9bb8e1f7826175774b}{tiny\+\_\+fd\+\_\+init} (\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} $\ast$handle, \hyperlink{group__FULL__DUPLEX__API_gac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init} $\ast$init)
+int \hyperlink{group__FULL__DUPLEX__API_ga27fa59dffd1575419753beb35282bad5}{tiny\+\_\+fd\+\_\+init} (\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} $\ast$handle, \hyperlink{group__FULL__DUPLEX__API_gad19ac27f4ba1d2b807e0a440b0c927d2}{tiny\+\_\+fd\+\_\+init\+\_\+t} $\ast$init)
 \begin{DoxyCompactList}\small\item\em Initialized communication for Tiny Full Duplex protocol. \end{DoxyCompactList}\item 
 void \hyperlink{group__FULL__DUPLEX__API_ga11e470503e3359bc29a5bcb65a9771d5}{tiny\+\_\+fd\+\_\+close} (\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle)
 \begin{DoxyCompactList}\small\item\em stops Tiny Full Duplex state machine \end{DoxyCompactList}\item 
@@ -35,19 +35,19 @@ int \hyperlink{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}{tiny
 
 
 \subsection{Typedef Documentation}
-\mbox{\Hypertarget{group__FULL__DUPLEX__API_gac931714d7bbe299856f4533fd1edb7f6}\label{group__FULL__DUPLEX__API_gac931714d7bbe299856f4533fd1edb7f6}} 
-\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!S\+Tiny\+Fd\+Init@{S\+Tiny\+Fd\+Init}}
-\index{S\+Tiny\+Fd\+Init@{S\+Tiny\+Fd\+Init}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
-\subsubsection{\texorpdfstring{S\+Tiny\+Fd\+Init}{STinyFdInit}}
-{\footnotesize\ttfamily typedef struct \hyperlink{structSTinyFdInit__}{S\+Tiny\+Fd\+Init\+\_\+}  \hyperlink{group__FULL__DUPLEX__API_gac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init}}
-
-This structure is used for initialization of Tiny Full Duplex protocol. \mbox{\Hypertarget{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}\label{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}} 
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}\label{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}} 
 \index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+handle\+\_\+t@{tiny\+\_\+fd\+\_\+handle\+\_\+t}}
 \index{tiny\+\_\+fd\+\_\+handle\+\_\+t@{tiny\+\_\+fd\+\_\+handle\+\_\+t}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+handle\+\_\+t}{tiny\_fd\_handle\_t}}
 {\footnotesize\ttfamily typedef struct tiny\+\_\+fd\+\_\+data\+\_\+t$\ast$ \hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}}
 
-This handle points to service data, required for full-\/duplex functioning. 
+This handle points to service data, required for full-\/duplex functioning. \mbox{\Hypertarget{group__FULL__DUPLEX__API_gad19ac27f4ba1d2b807e0a440b0c927d2}\label{group__FULL__DUPLEX__API_gad19ac27f4ba1d2b807e0a440b0c927d2}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+init\+\_\+t@{tiny\+\_\+fd\+\_\+init\+\_\+t}}
+\index{tiny\+\_\+fd\+\_\+init\+\_\+t@{tiny\+\_\+fd\+\_\+init\+\_\+t}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+init\+\_\+t}{tiny\_fd\_init\_t}}
+{\footnotesize\ttfamily typedef struct \hyperlink{structtiny__fd__init__t__}{tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+}  \hyperlink{group__FULL__DUPLEX__API_gad19ac27f4ba1d2b807e0a440b0c927d2}{tiny\+\_\+fd\+\_\+init\+\_\+t}}
+
+This structure is used for initialization of Tiny Full Duplex protocol. 
 
 \subsection{Function Documentation}
 \mbox{\Hypertarget{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}\label{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}} 
@@ -80,11 +80,11 @@ stops Tiny Full Duplex state machine.
 {\em handle} & handle of full-\/duplex protocol \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga73c3e76cfbcd7b9bb8e1f7826175774b}\label{group__FULL__DUPLEX__API_ga73c3e76cfbcd7b9bb8e1f7826175774b}} 
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_ga27fa59dffd1575419753beb35282bad5}\label{group__FULL__DUPLEX__API_ga27fa59dffd1575419753beb35282bad5}} 
 \index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+init@{tiny\+\_\+fd\+\_\+init}}
 \index{tiny\+\_\+fd\+\_\+init@{tiny\+\_\+fd\+\_\+init}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
 \subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+init()}{tiny\_fd\_init()}}
-{\footnotesize\ttfamily int tiny\+\_\+fd\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} $\ast$}]{handle,  }\item[{\hyperlink{group__FULL__DUPLEX__API_gac931714d7bbe299856f4533fd1edb7f6}{S\+Tiny\+Fd\+Init} $\ast$}]{init }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int tiny\+\_\+fd\+\_\+init (\begin{DoxyParamCaption}\item[{\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} $\ast$}]{handle,  }\item[{\hyperlink{group__FULL__DUPLEX__API_gad19ac27f4ba1d2b807e0a440b0c927d2}{tiny\+\_\+fd\+\_\+init\+\_\+t} $\ast$}]{init }\end{DoxyParamCaption})}
 
 
 
@@ -96,7 +96,7 @@ The function initializes internal structures for Tiny Full Duplex state machine.
 \begin{DoxyParams}{Parameters}
 {\em handle} & -\/ pointer to Tiny Full Duplex data \\
 \hline
-{\em init} & -\/ pointer to S\+Tiny\+Fd\+Init data. \\
+{\em init} & -\/ pointer to tiny\+\_\+fd\+\_\+init\+\_\+t data. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

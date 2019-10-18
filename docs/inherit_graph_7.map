@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classTiny_1_1IPacket.html" title="Tiny::IPacket" alt="" coords="5,31,109,57"/>
-<area shape="rect" id="node2" href="$classTiny_1_1Packet.html" title="Tiny::Packet\&lt; S \&gt;" alt="" coords="157,5,296,32"/>
-<area shape="rect" id="node3" href="$classTiny_1_1PacketD.html" title="Tiny::PacketD" alt="" coords="171,56,282,83"/>
+<area shape="rect" id="node1" href="$classTiny_1_1IProtoFd.html" title="Tiny::IProtoFd" alt="" coords="5,31,116,57"/>
+<area shape="rect" id="node2" href="$classTiny_1_1ProtoFd.html" title="Tiny::ProtoFd\&lt; S \&gt;" alt="" coords="164,5,308,32"/>
+<area shape="rect" id="node3" href="$classTiny_1_1ProtoFdD.html" title="Tiny::ProtoFdD" alt="" coords="178,56,294,83"/>
 </map>

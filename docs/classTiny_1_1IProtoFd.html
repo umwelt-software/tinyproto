@@ -581,12 +581,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets desired window size. Use this function only before <a class="el" href="classTiny_1_1IProtoFd.html#aae4e613316866105c130d613ecb25dd4">begin()</a> call. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sets desired window size. Use this function only before <a class="el" href="classTiny_1_1IProtoFd.html#aae4e613316866105c130d613ecb25dd4">begin()</a> call. window size is number of frames, which confirmation may be deferred for. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">window</td><td>window size, valid between 2 - 8 </td></tr>
+    <tr><td class="paramname">window</td><td>window size, valid between 1 - 7 inclusively </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section warning"><dt>Warning</dt><dd>if you use smallest window size, this can reduce throughput of the channel. </dd></dl>
 
 </div>
 </div>
