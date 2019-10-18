@@ -15,7 +15,7 @@ VERSION=0.8.0
 
 CPPFLAGS += -I./src
 
-CFLAGS += -std=c99
+CFLAGS += -std=gnu99
 CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections
 CXXFLAGS += -std=c++11
 
