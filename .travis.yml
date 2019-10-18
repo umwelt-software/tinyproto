@@ -1,4 +1,6 @@
-os: linux
+os:
+  - linux
+  - windows
 language: cpp
 compiler:
   - gcc
@@ -16,6 +18,8 @@ addons:
       - socat
 install: skip
 jobs:
+  allow_failures:
+    - os: windows
   include:
     - stage: Check linux code
       script:
