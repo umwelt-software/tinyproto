@@ -36,7 +36,7 @@ tiny_loopback: $(OBJ_TINY_LOOPBACK) library
 clean: clean_sperf clean_tiny_loopback
 
 clean_sperf:
-	rm -rf $(OBJ_SPERF)
+	rm -rf $(OBJ_SPERF) $(OBJ_SPERF:.o=.gcno) $(OBJ_SPERF.o=.gcda)
 
 clean_tiny_loopback:
-	rm -rf $(OBJ_TINY_LOOPBACK)
+	rm -rf $(OBJ_TINY_LOOPBACK) $(OBJ_TINY_LOOPBACK:.o=.gcno) $(OBJ_TINY_LOOPBACK:.o=.gcda)

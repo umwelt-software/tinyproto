@@ -16,6 +16,8 @@ addons:
       - cpputest
       - graphviz
       - socat
+before_install:
+  - pip install --user cpp-coveralls
 install: skip
 jobs:
   allow_failures:
@@ -23,10 +25,12 @@ jobs:
   include:
     - stage: Check linux code
       script:
-        - make
+        - make EXTRA_CPPFLAGS="--coverage"
         - make docs
         - make check
         - ./.travis/run_tests.sh
+      after_success:
+        - coveralls --exclude unittest --exclude tools --gcov-options '\-lp'
     - stage: Check avr code
       script:
         - make ARCH=avr

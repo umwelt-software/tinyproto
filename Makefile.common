@@ -16,7 +16,7 @@ VERSION=0.8.0
 CPPFLAGS += -I./src
 
 CFLAGS += -std=gnu99
-CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections
+CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections $(EXTRA_CPPFLAGS)
 CXXFLAGS += -std=c++11
 
 ifneq ($(LOG_LEVEL),)
@@ -88,4 +88,4 @@ all: library
 
 clean:
 	rm -rf $(BLD)
-	rm -rf $(OBJ_LIB)
+	rm -rf $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda)

@@ -23,4 +23,4 @@ check: unittest
 clean: clean_unittest
 
 clean_unittest:
-	rm -rf $(OBJ_UNIT_TEST)
+	rm -rf $(OBJ_UNIT_TEST) $(OBJ_UNIT_TEST:.o=.gcno) $(OBJ_UNIT_TEST:.o=.gcda)
