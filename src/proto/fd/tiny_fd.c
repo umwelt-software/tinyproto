@@ -61,6 +61,10 @@ enum
     FD_EVENT_I_QUEUE_FREE = 0x04,
 };
 
+static const uint8_t seq_bits_mask = 0x07;
+
+#define i_queue_len(h) ((h->frames.last_ns - h->frames.confirm_ns) & seq_bits_mask)
+
 static int write_func_cb(void *user_data, const void *data, int len);
 static int on_frame_read(void *user_data, void *data, int len);
 static int on_frame_sent(void *user_data, const void *data, int len);
@@ -93,7 +97,7 @@ static int __check_received_frame(tiny_fd_handle_t handle, uint8_t ns)
     {
         // this is what, we've been waiting for
         //LOG("[%p] Confirming received frame <= %d\n", handle, ns);
-        handle->frames.next_nr = (handle->frames.next_nr + 1) & handle->frames.seq_bits;
+        handle->frames.next_nr = (handle->frames.next_nr + 1) & seq_bits_mask;
         handle->frames.sent_reject = 0;
     }
     else
@@ -128,7 +132,10 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
             return;
         }
         //LOG("[%p] Confirming sent frames %d\n", handle, handle->frames.confirm_ns);
-        handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & handle->frames.seq_bits;
+        handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & seq_bits_mask;
+        handle->frames.ns_offset++;
+        if ( handle->frames.ns_offset >= handle->frames.max_i_frames )
+            handle->frames.ns_offset -= handle->frames.max_i_frames;
         handle->frames.retries = handle->retries;
         tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
     }
@@ -157,7 +164,7 @@ static void __resend_all_unconfirmed_frames( tiny_fd_handle_t handle, uint8_t co
             __send_control_frame( handle, &frame, 4 );
             return;
         }
-        handle->frames.next_ns = (handle->frames.next_ns - 1) & handle->frames.seq_bits;
+        handle->frames.next_ns = (handle->frames.next_ns - 1) & seq_bits_mask;
     }
     tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
 }
@@ -398,6 +405,11 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
             sizeof(hdlc_struct_t) );
         return TINY_ERR_INVALID_DATA;
     }
+    if ( init->window_frames > 7 )
+    {
+        LOG(TINY_LOG_CRIT, "HDLC doesn't support more than 7-frames queue\n");
+        return TINY_ERR_INVALID_DATA;
+    }
     memset(init->buffer, 0, init->buffer_size);
 
     tiny_fd_data_t *protocol = init->buffer;
@@ -407,7 +419,7 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     *handle = protocol;
     protocol->frames.i_frames = i_frames;
     protocol->frames.tx_buffer = tx_buffer;
-    protocol->frames.seq_bits = init->window_frames - 1;
+    protocol->frames.max_i_frames = init->window_frames;
     protocol->frames.mtu = ((uint8_t *)init->buffer + init->buffer_size - tx_buffer) / (init->window_frames + 1);
     protocol->frames.rx_buffer = tx_buffer + protocol->frames.mtu * init->window_frames;
     for (int i=0; i < init->window_frames; i++)
@@ -507,7 +519,8 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
     }
     else if ( handle->frames.next_ns != handle->frames.last_ns && handle->state == TINY_FD_STATE_CONNECTED_ABM )
     {
-        uint8_t i = (handle->frames.next_ns + handle->frames.ns_offset) & handle->frames.seq_bits;
+        uint8_t i = ( handle->frames.next_ns - handle->frames.confirm_ns + handle->frames.ns_offset ) & seq_bits_mask;
+        if ( i >= handle->frames.max_i_frames ) i-= handle->frames.max_i_frames;
         data = (uint8_t *)&handle->frames.i_frames[i]->header;
         *len = handle->frames.i_frames[i]->len + sizeof(tiny_frame_header_t);
         handle->frames.i_frames[i]->header.address = 0xFF;
@@ -515,7 +528,7 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
                                                      (handle->frames.next_nr << 5);
         LOG(TINY_LOG_INFO, "[%p] Sending I-Frame N(R)=%02X,N(S)=%02X\n", handle, handle->frames.next_nr, handle->frames.next_ns);
         handle->frames.next_ns++;
-        handle->frames.next_ns &= handle->frames.seq_bits;
+        handle->frames.next_ns &= seq_bits_mask;
         // Move to different place
         handle->frames.sent_nr = handle->frames.next_nr;
         handle->frames.last_i_ts = tiny_millis();
@@ -618,18 +631,19 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
     else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_I_QUEUE_FREE, EVENT_BITS_CLEAR, handle->send_timeout ) )
     {
         tiny_mutex_lock( &handle->frames.mutex );
-        uint8_t new_last_ns = (handle->frames.last_ns + 1) & handle->frames.seq_bits;
         // Check if space is available
-        if ( new_last_ns != handle->frames.confirm_ns )
+        if ( i_queue_len( handle ) < handle->frames.max_i_frames )
         {
-            uint8_t i = (handle->frames.last_ns + handle->frames.ns_offset) & handle->frames.seq_bits;
+            uint8_t i = (handle->frames.last_ns - handle->frames.confirm_ns + handle->frames.ns_offset) & seq_bits_mask;
+            if ( i >= handle->frames.max_i_frames ) i -= handle->frames.max_i_frames;
             handle->frames.i_frames[i]->len = len;
             memcpy( &handle->frames.i_frames[i]->user_payload, data, len );
-            handle->frames.last_ns = new_last_ns;
+            handle->frames.last_ns = (handle->frames.last_ns + 1) & seq_bits_mask;
             tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
-            if ( ((handle->frames.last_ns + 1) & handle->frames.seq_bits) != handle->frames.confirm_ns )
+            LOG( TINY_LOG_DEB, "[%p] PUT frame success\n", handle );
+
+            if ( i_queue_len( handle ) < handle->frames.max_i_frames )
             {
-                LOG( TINY_LOG_DEB, "[%p] PUT frame success\n", handle );
                 tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
             }
             else

@@ -37,7 +37,7 @@ static char *s_port = nullptr;
 static bool s_generatorEnabled = false;
 static protocol_type_t s_protocol = protocol_type_t::HD;
 static int s_packetSize = 64;
-static int s_windowSize = 4;
+static int s_windowSize = 7;
 static bool s_terminate = false;
 static bool s_runTest = false;
 
@@ -66,7 +66,7 @@ static void print_help()
     fprintf(stderr, "    -c <crc>, --crc <crc>      crc type: 0, 8, 16, 32\n");
     fprintf(stderr, "    -g, --generator            turn on packet generating\n");
     fprintf(stderr, "    -s, --size                 packet size: 64 (by default)\n");
-    fprintf(stderr, "    -w, --window               window size: 3 (by default), 7\n");
+    fprintf(stderr, "    -w, --window               window size: 7 (by default)\n");
     fprintf(stderr, "    -r, --run-test             run 15 seconds speed test\n");
 }
 
@@ -112,10 +112,10 @@ static int parse_args(int argc, char *argv[])
         else if ((!strcmp(argv[i],"-w")) || (!strcmp(argv[i],"--window")))
         {
             if (++i >= argc ) return -1;
-            s_windowSize = strtoul(argv[i], nullptr, 10) + 1;
-            if (s_windowSize != 4 && s_windowSize != 8 )
+            s_windowSize = strtoul(argv[i], nullptr, 10);
+            if (s_windowSize < 1 || s_windowSize > 7 )
             {
-                fprintf(stderr, "Allowable window size is 3 or 7\n"); return -1;
+                fprintf(stderr, "Allowable window size is between 1 and 7 inclusively\n"); return -1;
                 return -1;
             }
         }

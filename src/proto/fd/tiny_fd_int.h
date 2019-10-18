@@ -81,12 +81,14 @@ typedef struct
 typedef struct
 {
     tiny_i_frame_info_t **i_frames;
+    uint8_t max_i_frames;
+    uint8_t ns_offset;
+
     tiny_frame_info_t queue[TINY_FD_U_QUEUE_MAX_SIZE];
     uint8_t queue_ptr;
     uint8_t queue_len;
     uint8_t *rx_buffer;
     uint8_t *tx_buffer;
-    uint8_t seq_bits;
     int mtu;
 
     tiny_mutex_t mutex;
@@ -96,7 +98,6 @@ typedef struct
     uint8_t next_ns; // next frame to be sent
     uint8_t confirm_ns; // next frame to be confirmed
     uint8_t last_ns; // next free frame in cycle buffer
-    uint8_t ns_offset; // used for implementation of RSET commands
     uint32_t last_i_ts; // last sent I-frame timestamp
     uint32_t last_ka_ts; // last keep alive timestamp
     uint8_t  ka_confirmed;

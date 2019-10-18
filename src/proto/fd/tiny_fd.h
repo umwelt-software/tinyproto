@@ -97,7 +97,13 @@ typedef struct tiny_fd_init_t_
      * but HDLC_CRC_16 has higher priority.
      */
     hdlc_crc_t         crc_type;
-    /// number of frames in window. Must be at least 2
+
+    /**
+     * Number of frames in window, which confirmation may be deferred for. Must be at least 1. Maximum allowable
+     * value is 7. Extended HDLC format (with 127 window size) is not yet supported.
+     * Smaller values reduce channel throughput, while higher values require more RAM.
+     * It is not mandatory to have the same window_frames value on both endpoints.
+     */
     uint8_t            window_frames;
 } tiny_fd_init_t;
 

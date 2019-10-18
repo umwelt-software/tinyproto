@@ -216,7 +216,9 @@ public:
 
     /**
      * Sets desired window size. Use this function only before begin() call.
-     * @param window window size, valid between 2 - 8
+     * window size is number of frames, which confirmation may be deferred for.
+     * @param window window size, valid between 1 - 7 inclusively
+     * @warning if you use smallest window size, this can reduce throughput of the channel.
      */
     void setWindowSize(uint8_t window) { m_window = window; }
 
@@ -255,8 +257,8 @@ private:
     /** Use 0-value timeout for small controllers as all operations should be non-blocking */
     uint16_t            m_sendTimeout = 0;
 
-    /** Limit window to only 4 frames for small controllers by default */
-    uint8_t             m_window = 4;
+    /** Limit window to only 3 frames for small controllers by default */
+    uint8_t             m_window = 3;
 
     /** Callback, when new frame is received */
     void              (*m_onReceive)(IPacket &pkt) = nullptr;
