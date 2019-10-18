@@ -17,12 +17,13 @@ addons:
 install: skip
 jobs:
   include:
-    script:
-      - make
-      - make docs
-      - make check
-      - ./tools/run_tests.sh
+    - stage: Check linux code
+      script:
+        - make
+        - make docs
+        - make check
+        - ./.travis/run_tests.sh
+    - stage: Check avr code
+      script:
+        - make ARCH=avr
 
-  include:
-    script:
-      - make ARCH=avr
