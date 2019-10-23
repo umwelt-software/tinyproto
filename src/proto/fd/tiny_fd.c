@@ -489,7 +489,7 @@ int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
         result = handle->read_func( handle->user_data, &data, sizeof(data) );
         if ( result > 0 )
         {
-            hdlc_run_rx( &handle->_hdlc, &data, sizeof(data), &result );
+            while ( hdlc_run_rx( &handle->_hdlc, &data, sizeof(data), &result ) == 0 );
             // For full duplex protocol consider we have retries
             if ( result == TINY_ERR_WRONG_CRC ) result = TINY_SUCCESS;
         }
@@ -648,8 +648,8 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
             }
             else
             {
-                LOG( TINY_LOG_ERR, "[%p] I_QUEUE is full N(S)sent=%d, N(S)confirm=%d\n",
-                     handle, handle->frames.last_ns, handle->frames.confirm_ns);
+                LOG( TINY_LOG_ERR, "[%p] I_QUEUE is full N(S)queue=%d, N(S)confirm=%d, N(S)next=%d\n",
+                     handle, handle->frames.last_ns, handle->frames.confirm_ns, handle->frames.next_ns);
             }
         }
         else
