@@ -24,9 +24,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "helpers/tiny_light_helper.h"
+#include "helpers/fake_connection.h"
 
 
-TEST_GROUP(LightTests)
+TEST_GROUP(LIGHT)
 {
     void setup()
     {
@@ -41,14 +42,13 @@ TEST_GROUP(LightTests)
 
 
 #if 1
-TEST(LightTests, Send_Receive)
+TEST(LIGHT, send_receive)
 {
-    FakeWire     line1;
-    FakeWire     line2;
-    FakeChannel  channel1( &line1, &line2 );
-    FakeChannel  channel2( &line2, &line1 );
-    TinyLightHelper   helper1( &channel1 );
-    TinyLightHelper   helper2( &channel2 );
+    FakeConnection conn;
+    conn.endpoint1().setTimeout( 100 );
+    conn.endpoint2().setTimeout( 100 );
+    TinyLightHelper   helper1( &conn.endpoint1() );
+    TinyLightHelper   helper2( &conn.endpoint2() );
     uint8_t      txbuf[128]{};
     uint8_t      rxbuf[128]{};
 
@@ -64,14 +64,13 @@ TEST(LightTests, Send_Receive)
     }
 }
 
-TEST(LightTests, Small_Frames)
+TEST(LIGHT, small_frames)
 {
-    FakeWire     line1;
-    FakeWire     line2;
-    FakeChannel  channel1( &line1, &line2 );
-    FakeChannel  channel2( &line2, &line1 );
-    TinyLightHelper   helper1( &channel1 );
-    TinyLightHelper   helper2( &channel2 );
+    FakeConnection conn;
+    conn.endpoint1().setTimeout( 100 );
+    conn.endpoint2().setTimeout( 100 );
+    TinyLightHelper   helper1( &conn.endpoint1() );
+    TinyLightHelper   helper2( &conn.endpoint2() );
     uint8_t      txbuf[3]{};
     uint8_t      rxbuf[3]{};
     txbuf[0]='T';

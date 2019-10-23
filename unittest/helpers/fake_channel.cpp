@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -33,13 +33,13 @@ FakeChannel::~FakeChannel()
 
 int FakeChannel::read(uint8_t * data, int length)
 {
-    return m_rx->read(data, length);
+    return m_rx->read(data, length, m_timeout);
 }
 
 
 int FakeChannel::write(const uint8_t * data, int length)
 {
-    return m_tx->write(data, length);
+    return m_tx->write(data, length, m_timeout);
 }
 
 

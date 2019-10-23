@@ -22,7 +22,8 @@
 TinyHdlcHelper::TinyHdlcHelper(FakeChannel * channel,
                                const std::function<void(uint8_t*,int)> &onRxFrameCb,
                                const std::function<void(uint8_t*,int)> &onTxFrameCb,
-                               int rx_buf_size)
+                               int rx_buf_size,
+                               hdlc_crc_t crc)
     : IBaseHelper( channel, rx_buf_size )
     , m_handle{}
     , m_onRxFrameCb(onRxFrameCb)
@@ -34,12 +35,13 @@ TinyHdlcHelper::TinyHdlcHelper(FakeChannel * channel,
     m_handle.on_frame_sent = onTxFrame;
     m_handle.rx_buf = malloc( rx_buf_size );
     m_handle.rx_buf_size = rx_buf_size;
+    m_handle.crc_type = crc;
     hdlc_init( &m_handle );
 }
 
-int TinyHdlcHelper::send(uint8_t *buf, int len)
+int TinyHdlcHelper::send(uint8_t *buf, int len, int timeout)
 {
-    int result = hdlc_send( &m_handle, (uint8_t *)buf, len, 1000);
+    int result = hdlc_send( &m_handle, (uint8_t *)buf, len, timeout );
     return result;
 }
 
@@ -57,12 +59,22 @@ int TinyHdlcHelper::run_rx()
         {
             return error;
         }
+//        break;
     }
     return 0;
 }
 
+int TinyHdlcHelper::run_rx_until_read(int timeout)
+{
+    return hdlc_run_rx_until_read( &m_handle, read_data, this, timeout );
+}
+
 int TinyHdlcHelper::run_tx()
 {
+    if ( m_tx_from_main )
+    {
+        return hdlc_run_tx( &m_handle );
+    }
     usleep( 1000 );
     return TINY_SUCCESS;
 }
@@ -70,6 +82,7 @@ int TinyHdlcHelper::run_tx()
 int TinyHdlcHelper::onRxFrame(void *handle, void * buf, int len)
 {
     TinyHdlcHelper * helper = reinterpret_cast<TinyHdlcHelper *>( handle );
+    helper->m_rx_count++;
     if (helper->m_onRxFrameCb)
     {
         helper->m_onRxFrameCb((uint8_t *)buf, len);
@@ -80,6 +93,7 @@ int TinyHdlcHelper::onRxFrame(void *handle, void * buf, int len)
 int TinyHdlcHelper::onTxFrame(void *handle, const void * buf, int len)
 {
     TinyHdlcHelper * helper = reinterpret_cast<TinyHdlcHelper *>( handle );
+    helper->m_tx_count++;
     if (helper->m_onTxFrameCb)
     {
         helper->m_onTxFrameCb((uint8_t *)buf, len);
@@ -87,8 +101,39 @@ int TinyHdlcHelper::onTxFrame(void *handle, const void * buf, int len)
     return 0;
 }
 
+void TinyHdlcHelper::MessageSenderStatic( TinyHdlcHelper * helper, int count, std::string msg )
+{
+    helper->MessageSender( count, msg );
+}
+
+void TinyHdlcHelper::MessageSender( int count, std::string msg )
+{
+    while ( count-- && !m_stop_sender )
+    {
+        send( (uint8_t *)msg.c_str(), msg.size() );
+    }
+}
+
+void TinyHdlcHelper::send(int count, const std::string &msg)
+{
+    if ( m_sender_thread )
+    {
+        m_stop_sender = true;
+        m_sender_thread->join();
+        delete m_sender_thread;
+        m_sender_thread = nullptr;
+    }
+    if ( count )
+    {
+        m_stop_sender = false;
+        m_sender_thread = new std::thread( MessageSenderStatic, this, count, msg );
+    }
+}
+
 TinyHdlcHelper::~TinyHdlcHelper()
 {
+    send( 0, "" );
+    stop();
     hdlc_close( &m_handle );
     free( m_handle.rx_buf );
 }

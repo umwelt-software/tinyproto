@@ -21,21 +21,25 @@
 #define _FAKE_WIRE_H_
 
 #include <stdint.h>
-#include <pthread.h>
 #include <mutex>
 #include <list>
+#include <thread>
+#include <atomic>
 
 class FakeWire
 {
 public:
-    FakeWire();
+    FakeWire(int readbuf_size  = 1024, int writebuf_size = 1024);
     ~FakeWire();
-    int read(uint8_t * data, int length);
-    int write(const uint8_t * data, int length);
+    int read(uint8_t * data, int length, int timeout = 1000);
+    int write(const uint8_t * data, int length, int timeout = 1000);
     void generate_error_every_n_byte(int n) { m_errors.push_back( ErrorDesc{0, n, -1} ); };
     void generate_single_error(int position) { m_errors.push_back( ErrorDesc{position, position, 1} ); };
     void generate_error(int first, int period, int count = -1) { m_errors.push_back( ErrorDesc{first, period, count} ); };
     void reset();
+    void disable() { m_enabled = false; }
+    void enable()  { m_enabled = true; }
+    int lostBytes() { return m_lostBytes; }
 private:
     typedef struct
     {
@@ -43,12 +47,24 @@ private:
         int period;
         int count;
     } ErrorDesc;
-    int          m_writeptr;
-    int          m_readptr;
-    std::mutex   m_mutex{};
-    uint8_t      m_buf[1024];
+    int          m_writeptr = 0;
+    int          m_readptr = 0;
+    std::mutex   m_readmutex{};
+    std::mutex   m_writemutex{};
+    uint8_t      *m_readbuf = nullptr;
+    uint8_t      *m_writebuf = nullptr;
+    int          m_readbuf_size = 0;
+    int          m_writebuf_size = 0;
+    int          m_readlen = 0;
+    int          m_writelen = 0;
     std::list<ErrorDesc> m_errors;
     int          m_byte_counter = 0;
+    bool         m_enabled = true;
+    std::atomic<int> m_lostBytes{ 0 };
+
+    void         TransferData(int num_bytes);
+
+    friend class FakeConnection;
 };
 
 

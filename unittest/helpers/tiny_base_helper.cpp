@@ -47,11 +47,10 @@ void BaseHelper::receiveThread(BaseHelper *p)
     while (p->m_forceStop == false)
     {
         int result = p->run_rx();
-        if ( result < 0 && result != TINY_ERR_TIMEOUT )
+        if ( result < 0 && result != TINY_ERR_TIMEOUT && result != TINY_ERR_WRONG_CRC )
         {
             break;
         }
-        usleep(10);
     }
 }
 
@@ -64,7 +63,6 @@ void BaseHelper::sendThread(BaseHelper *p)
         {
             break;
         }
-        usleep(10);
     }
 }
 

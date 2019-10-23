@@ -60,6 +60,11 @@ int TinyHelperHd::run_tx()
     return TINY_SUCCESS;
 }
 
+void TinyHelperHd::wait_until_rx_count(int count, uint32_t timeout)
+{
+    while ( m_rx_count != count && timeout-- ) usleep(1000);
+}
+
 void  TinyHelperHd::onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)
 {
     TinyHelperHd * helper = reinterpret_cast<TinyHelperHd *>(handle);

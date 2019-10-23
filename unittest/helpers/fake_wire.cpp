@@ -21,97 +21,123 @@
 #include <stdio.h>
 #include <thread>
 
-FakeWire::FakeWire()
-    :m_buf{0}
+FakeWire::FakeWire(int readbuf_size, int writebuf_size)
+    : m_readbuf( new uint8_t[readbuf_size] )
+    , m_writebuf( new uint8_t[writebuf_size] )
+    , m_readbuf_size( readbuf_size )
+    , m_writebuf_size( writebuf_size )
 {
-    m_writeptr = 0;
-    m_readptr = 0;
 }
 
 
-int FakeWire::read(uint8_t *data, int length)
+int FakeWire::read(uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    if (!m_mutex.try_lock())
+    m_readmutex.lock();
+    auto startTs = std::chrono::steady_clock::now();
+    do
     {
-        std::this_thread::sleep_for(std::chrono::microseconds(1000));
-        return size;
-    }
-    while (size < length)
-    {
-        if ( m_readptr == m_writeptr )
+        int len_to_copy = m_readlen;
+        if ( len_to_copy > length - size ) len_to_copy = length - size;
+        while (len_to_copy--)
         {
-            break;
+            int read_index = m_readptr;
+            data[ size ] = m_readbuf[ read_index ];
+            m_readptr++; if ( m_readptr >= m_readbuf_size ) m_readptr -= m_readbuf_size;
+            m_readlen--;
+            size++;
         }
-        data[size] = m_buf[m_readptr];
-//        fprintf(stderr, "%02X ", data[size]);
-        if (m_readptr >= (int)sizeof(m_buf) - 1)
-            m_readptr = 0;
-        else
-            m_readptr++;
-        size++;
-    }
-//    if ( size ) fprintf( stderr, "\n" );
-    m_mutex.unlock();
+        if ( size == length || timeout == 0 ) break;
+        m_readmutex.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        timeout--;
+        m_readmutex.lock();
+    } while (std::chrono::steady_clock::now() - startTs <= std::chrono::milliseconds(timeout));
+    m_readmutex.unlock();
     return size;
 }
 
 
 void FakeWire::reset()
 {
-    m_mutex.lock();
     m_writeptr = 0;
     m_readptr  = 0;
-    m_mutex.unlock();
+    m_writelen = 0;
+    m_readlen = 0;
 }
 
-int FakeWire::write(const uint8_t *data, int length)
+int FakeWire::write(const uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    if (!m_mutex.try_lock())
+    m_writemutex.lock();
+    auto startTs = std::chrono::steady_clock::now();
+    do
     {
-        std::this_thread::sleep_for(std::chrono::microseconds(1000));
-        return size;
-    }
-    while (size < length)
-    {
-        int l_writeptr = m_writeptr + 1;
-        if (l_writeptr >= (int)sizeof(m_buf))
+        int len_to_copy = m_writebuf_size - m_writelen;
+        if ( len_to_copy > length - size ) len_to_copy = length - size;
+        while (len_to_copy--)
         {
-            l_writeptr = 0;
+            int write_index = m_writeptr + m_writelen;
+            if ( write_index >= m_writebuf_size ) write_index -= m_writebuf_size;
+            m_writebuf[ write_index ] = data[ size ];
+            m_writelen++;
+            size++;
         }
-        /* Atomic read */
-        if (l_writeptr == m_readptr)
-        {
-            /* no space to write */
-            break;
-        }
-        m_byte_counter++;
-//        fprintf(stderr, "%02X ", data[size]);
-        bool error_happened = false;
-        for (auto& err: m_errors)
-        {
-            if ( m_byte_counter >= err.first &&
-                 err.count != 0 &&
-                 (m_byte_counter - err.first) % err.period == 0 )
-            {
-                err.count--;
-                error_happened = true;
-                break;
-            }
-        }
-        m_buf[m_writeptr] = error_happened ? (data[size] ^ 0x34) : data[size];
-        m_writeptr = l_writeptr;
-        size++;
-    }
-//    if ( size ) fprintf( stderr, "\n" );
-    m_mutex.unlock();
+        if ( size == length || !timeout ) break;
+        m_writemutex.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        timeout--;
+        m_writemutex.lock();
+    } while (std::chrono::steady_clock::now() - startTs <= std::chrono::milliseconds(timeout));
+    m_writemutex.unlock();
     return size;
 }
 
+void FakeWire::TransferData(int bytes)
+{
+    m_readmutex.lock();
+    m_writemutex.lock();
+    while ( bytes-- && m_writelen )
+    {
+        if ( m_readlen < m_readbuf_size && m_enabled ) // If we don't have space or device not enabled, the data will be lost
+        {
+            int read_index = m_readptr + m_readlen;
+            if ( read_index >= m_readbuf_size ) read_index -= m_readbuf_size;
+            int write_index = m_writeptr;
+            m_byte_counter++;
+            bool error_happened = false;
+            for (auto& err: m_errors)
+            {
+                if ( m_byte_counter >= err.first &&
+                     err.count != 0 &&
+                    (m_byte_counter - err.first) % err.period == 0 )
+                {
+                    err.count--;
+                    error_happened = true;
+                    break;
+                }
+            }
+            m_readbuf[ read_index ] = error_happened ? ( m_writebuf[write_index] ^ 0x34 ) : m_writebuf[write_index];
+            m_readlen++;
+        }
+        else
+        {
+            if (m_enabled)
+            {
+                //fprintf(stderr, "HW missed byte %d -> %d\n", m_writebuf_size, m_readbuf_size);
+                m_lostBytes++;
+            }
+        }
+        m_writelen--;
+        m_writeptr++;
+        if ( m_writeptr >= m_writebuf_size ) m_writeptr -= m_writebuf_size;
+    }
+    m_writemutex.unlock();
+    m_readmutex.unlock();
+}
 
 FakeWire::~FakeWire()
 {
+    delete[] m_writebuf;
+    delete[] m_readbuf;
 }
-
-

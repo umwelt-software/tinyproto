@@ -24,9 +24,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "helpers/tiny_hd_helper.h"
+#include "helpers/fake_connection.h"
 
 
-TEST_GROUP(HdTests)
+TEST_GROUP(HD)
 {
     void setup()
     {
@@ -40,64 +41,59 @@ TEST_GROUP(HdTests)
 };
 
 #if 1
-TEST(HdTests, TinyHd_Send)
+TEST(HD, singlethread)
 {
-    uint8_t      txbuf[128];
-    FakeWire     line1;
-    FakeWire     line2;
-    FakeChannel  channel1( &line1, &line2 );
-    FakeChannel  channel2( &line2, &line1 );
-    uint16_t     nsent = 0;
+    const int bufsize = 16;
+    const int msgnum = 2;
 
+    FakeConnection conn;
+    conn.endpoint1().setTimeout( 100 );
+    conn.endpoint2().setTimeout( 100 );
     // Do not use multithread mode
-    TinyHelperHd helper1( &channel1, sizeof(txbuf), nullptr, true);
-    TinyHelperHd helper2( &channel2, sizeof(txbuf), nullptr, false );
+    TinyHelperHd helper1( &conn.endpoint1(), bufsize, nullptr, true);
+    TinyHelperHd helper2( &conn.endpoint2(), bufsize, nullptr, false );
 
     helper1.run(true);
 
     // sent 4 packets small packets with ACK
-    for (nsent = 0; nsent < 500; nsent++)
+    for (int nsent = 0; nsent < msgnum; nsent++)
     {
+        uint8_t txbuf[bufsize];
         txbuf[0] = 0xAA;
         txbuf[1] = 0xFF;
-//        printf("sending %d bytes\n", 2);
         int result = helper2.send_wait_ack( txbuf, 2 );
         CHECK_EQUAL( 2, result );
     }
-    // sleep for 10 ms befoe last frame arrives
-    usleep(10000);
-    CHECK_EQUAL( 500, helper1.rx_count() );
+//    helper1.wait_until_rx_count( msgnum, 1000 );
+    CHECK_EQUAL( msgnum, helper1.rx_count() );
 }
 #endif
 
 #if 1
-TEST(HdTests, TinyHd_Multithread)
+TEST(HD, multithread)
 {
-    uint8_t      txbuf[128];
-    FakeWire     line1;
-    FakeWire     line2;
-    FakeChannel  channel1( &line1, &line2 );
-    FakeChannel  channel2( &line2, &line1 );
-    uint16_t     nsent = 0;
+    const int bufsize = 16;
+    const int msgnum = 2;
+    FakeConnection conn;
+    conn.endpoint1().setTimeout( 100 );
+    conn.endpoint2().setTimeout( 100 );
 
-    // Do not use multithread mode
-    TinyHelperHd helper1( &channel1, sizeof(txbuf), nullptr, true);
-    TinyHelperHd helper2( &channel2, sizeof(txbuf), nullptr, true );
+    TinyHelperHd helper1( &conn.endpoint1(), bufsize, nullptr, true);
+    TinyHelperHd helper2( &conn.endpoint2(), bufsize, nullptr, true );
 
     helper1.run(true);
     helper2.run(true);
-
     // sent 4 packets small packets with ACK
-    for (nsent = 0; nsent < 500; nsent++)
+    for (int nsent = 0; nsent < msgnum; nsent++)
     {
+        uint8_t      txbuf[bufsize];
         txbuf[0] = 0xAA;
         txbuf[1] = 0xFF;
-//        printf("sending %d bytes\n", 2);
         int result = helper2.send_wait_ack( txbuf, 2 );
         CHECK_EQUAL( 2, result );
     }
-    // sleep for 10 ms befoe last frame arrives
-    usleep(10000);
-    CHECK_EQUAL( 500, helper1.rx_count() );
+//    helper1.wait_until_rx_count( msgnum, 1000 );
+    CHECK_EQUAL( 0, conn.lostBytes() );
+    CHECK_EQUAL( msgnum, helper1.rx_count() );
 }
 #endif

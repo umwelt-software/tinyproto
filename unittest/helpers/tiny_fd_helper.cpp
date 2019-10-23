@@ -22,12 +22,12 @@
 TinyHelperFd::TinyHelperFd(FakeChannel * channel,
                            int rxBufferSize,
                            const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb,
-                           bool  multithread_mode,
+                           int window_frames,
                            int timeout)
     :IBaseHelper(channel, rxBufferSize)
     ,m_onRxFrameCb(onRxFrameCb)
 {
-    tiny_fd_init_t   init = {0};
+    tiny_fd_init_t   init{};
     init.write_func       = write_data;
     init.read_func        = read_data;
     init.pdata            = this;
@@ -35,8 +35,9 @@ TinyHelperFd::TinyHelperFd(FakeChannel * channel,
     init.on_sent_cb       = onTxFrame;
     init.buffer           = m_buffer;
     init.buffer_size      = rxBufferSize;
-    init.window_frames    = 7;
+    init.window_frames    = window_frames ? : 7;
     init.send_timeout     = timeout < 0 ? 2000: timeout;
+    init.retry_timeout    = init.send_timeout ? (init.send_timeout / 2) : 200;
     init.retries          = 2;
     init.crc_type         = HDLC_CRC_16;
 
@@ -46,6 +47,31 @@ TinyHelperFd::TinyHelperFd(FakeChannel * channel,
 int TinyHelperFd::send(uint8_t *buf, int len)
 {
     return tiny_fd_send(m_handle, buf, len);
+}
+
+void TinyHelperFd::MessageSender(TinyHelperFd *helper, int count, std::string msg)
+{
+    while (count-- && !helper->m_stop_sender)
+    {
+        helper->send((uint8_t *)msg.c_str(), msg.size());
+    }
+}
+
+int TinyHelperFd::send(int count, const std::string &msg)
+{
+    if ( m_message_sender )
+    {
+        m_stop_sender = true;
+        m_message_sender->join();
+        delete m_message_sender;
+        m_message_sender = nullptr;
+    }
+    if ( count != 0 )
+    {
+        m_stop_sender = false;
+        m_message_sender = new std::thread(MessageSender,this,count,msg);
+    }
+    return 0;
 }
 
 int TinyHelperFd::run_tx()
@@ -81,6 +107,8 @@ void  TinyHelperFd::onTxFrame(void *handle, uint16_t uid, uint8_t * buf, int len
 
 TinyHelperFd::~TinyHelperFd()
 {
+    // stop sender thread
+    send(0, "");
     stop();
     tiny_fd_close( m_handle );
 }

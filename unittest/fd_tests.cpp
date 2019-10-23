@@ -23,11 +23,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <thread>
 #include "helpers/tiny_fd_helper.h"
 #include "helpers/fake_connection.h"
 
 
-TEST_GROUP(FdTests)
+TEST_GROUP(FD)
 {
     void setup()
     {
@@ -41,62 +42,91 @@ TEST_GROUP(FdTests)
 };
 
 #if 1
-TEST(FdTests, TinyFd_multithread_basic_test)
+TEST(FD, multithread_basic_test)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true);
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr );
     helper1.run(true);
     helper2.run(true);
 
-    // sent 500 small packets
-    for (nsent = 0; nsent < 500; nsent++)
+    // sent 200 small packets
+    for (nsent = 0; nsent < 200; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
         int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 500, 1000 );
-    CHECK_EQUAL( 500, helper1.rx_count() );
+    helper1.wait_until_rx_count( 200, 1000 );
+    CHECK_EQUAL( 200, helper1.rx_count() );
 }
 #endif
 
 #if 1
-TEST(FdTests, TinyFd_errors_on_tx_line)
+TEST(FD, arduino_to_pc)
+{
+    std::atomic<int> low_device_frames{};
+    FakeConnection conn( 4096, 32 ); // PC side has larger UART buffer: 4096
+    TinyHelperFd pc( &conn.endpoint1(), 4096, nullptr );
+    TinyHelperFd arduino( &conn.endpoint2(), tiny_fd_buffer_size_by_mtu(64,4),
+                          [&arduino, &low_device_frames](uint16_t,uint8_t*b,int s)->void
+                          { if ( arduino.send(b, s) == TINY_ERR_TIMEOUT ) low_device_frames++; }, 4, 0 );
+    conn.endpoint2().setTimeout( 0 );
+    conn.endpoint2().disable();
+    conn.setSpeed( 115200 );
+    pc.run(true);
+    pc.send( 100, "Generated frame. test in progress" );
+    // Usually arduino starts later by 2 seconds due to reboot on UART-2-USB access, emulate al teast 100ms delay
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    conn.endpoint2().enable();
+    // sent 200 small packets
+    auto startTs = std::chrono::steady_clock::now();
+    do
+    {
+        arduino.run_rx();
+        arduino.run_tx();
+    } while ( pc.rx_count() + low_device_frames != 100 && std::chrono::steady_clock::now() - startTs <= std::chrono::seconds(4) );
+    // Not lost bytes check for now, we admit, that FD hdlc can restransmit frames on bad lines
+//    CHECK_EQUAL( 0, conn.lostBytes() );
+    CHECK_EQUAL( 100 - low_device_frames, pc.rx_count() );
+}
+#endif
+
+#if 1
+TEST(FD, errors_on_tx_line)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true);
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr );
     conn.line2().generate_error_every_n_byte( 200 );
     helper1.run(true);
     helper2.run(true);
 
-    // sent 500 small packets
-    for (nsent = 0; nsent < 300; nsent++)
+    for (nsent = 0; nsent < 200; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
         int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 300, 1000 );
-    CHECK_EQUAL( 300, helper1.rx_count() );
+    helper1.wait_until_rx_count( 200, 1000 );
+    CHECK_EQUAL( 200, helper1.rx_count() );
 }
 #endif
 
 #if 1
-TEST(FdTests, TinyFd_error_on_single_I_send)
+TEST(FD, error_on_single_I_send)
 {
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
     // TX1: U, U, R
     // TX2: U, U, I,
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true, 2000 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true, 2000 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 2000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 2000 );
     conn.line2().generate_single_error( 6 + 6 + 3 ); // Put error on I-frame
     helper1.run(true);
     helper2.run(true);
@@ -114,15 +144,15 @@ TEST(FdTests, TinyFd_error_on_single_I_send)
 #endif
 
 #if 1
-TEST(FdTests, TinyFd_error_on_rej)
+TEST(FD, error_on_rej)
 {
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
     // TX1: U, U, R
     // TX2: U, U, I,
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, true, 2000 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, true, 2000 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 2000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 2000 );
     conn.line2().generate_single_error( 6 + 6 + 4 ); // Put error on first I-frame
     conn.line1().generate_single_error( 6 + 6 + 3 ); // Put error on S-frame REJ
     helper1.run(true);
@@ -141,7 +171,7 @@ TEST(FdTests, TinyFd_error_on_rej)
 #endif
 
 #if 1
-TEST(FdTests, TinyHd_singlethread_basic)
+TEST(FD, singlethread_basic)
 {
     // TODO:
     CHECK_EQUAL( 0, 0 );

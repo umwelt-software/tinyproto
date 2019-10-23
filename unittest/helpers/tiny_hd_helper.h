@@ -41,10 +41,11 @@ public:
     int run_rx() override;
     int run_tx() override;
     int rx_count() const { return m_rx_count; }
+    void wait_until_rx_count(int count, uint32_t timeout);
     using IBaseHelper<TinyHelperHd>::run;
 private:
     STinyHdData   m_handle;
-    int m_rx_count = 0;
+    std::atomic<int> m_rx_count{ 0 };
     std::function<void(uint16_t,uint8_t*,int)>
                   m_onRxFrameCb;
 

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2019 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -15,32 +15,32 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
-#ifndef _FAKE_CHANNEL_H_
-#define _FAKE_CHANNEL_H_
+#include "fake_connection.h"
+#include <thread>
+#include <chrono>
 
-#include <stdint.h>
-#include "fake_wire.h"
-
-
-class FakeChannel
+void FakeConnection::TransferDataStatic(FakeConnection *conn)
 {
-public:
-    FakeChannel(FakeWire *tx, FakeWire *rx);
-    ~FakeChannel();
-    int read(uint8_t * data, int length);
-    int write(const uint8_t * data, int length);
+    conn->TransferData();
+}
 
-    void setTimeout( int timeout_ms ) { m_timeout = timeout_ms; }
-    void disable() { m_rx->disable(); }
-    void enable()  { m_rx->enable(); }
-private:
-    FakeWire * m_tx;
-    FakeWire * m_rx;
-    std::mutex m_mutex;
-    int m_timeout = 1000;
-};
+void FakeConnection::TransferData()
+{
+    auto startTs = std::chrono::steady_clock::now();
+    while (!m_stopped)
+    {
+        std::this_thread::sleep_for(std::chrono::microseconds(m_interval_us));
+        int bytes = 0;
+        auto endTs = std::chrono::steady_clock::now();
+        while ( startTs < endTs )
+        {
+            startTs +=  std::chrono::microseconds( m_interval_us.load() ? : 1);
+            bytes++;
+        }
+        m_line1.TransferData( bytes );
+        m_line2.TransferData( bytes );
+    }
+}
 
-
-#endif /* _FAKE_WIRE_H_ */
