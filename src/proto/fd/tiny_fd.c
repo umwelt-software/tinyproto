@@ -398,16 +398,21 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     {
         return TINY_ERR_FAILED;
     }
-    if ( init->buffer_size < sizeof(tiny_fd_data_t) + sizeof(tiny_i_frame_info_t) * init->window_frames  )
+    if ( init->buffer_size < tiny_fd_buffer_size_by_mtu( 4, init->window_frames )  )
     {
-        LOG(TINY_LOG_CRIT, "DDD %i < %li, hdlc %li\n", init->buffer_size,
-            sizeof(tiny_fd_data_t) + sizeof(tiny_i_frame_info_t) * init->window_frames,
-            sizeof(hdlc_struct_t) );
+        LOG(TINY_LOG_CRIT, "Too small buffer for FD HDLC %i < %i, recommended %i bytes\n", init->buffer_size,
+            tiny_fd_buffer_size_by_mtu( 4, init->window_frames ),
+            tiny_fd_buffer_size_by_mtu( 4, init->window_frames ) + 128 * init->window_frames );
         return TINY_ERR_INVALID_DATA;
     }
     if ( init->window_frames > 7 )
     {
         LOG(TINY_LOG_CRIT, "HDLC doesn't support more than 7-frames queue\n");
+        return TINY_ERR_INVALID_DATA;
+    }
+    if ( !init->retry_timeout && !init->send_timeout )
+    {
+        LOG(TINY_LOG_CRIT, "HDLC uses timeouts for ACK, at least retry_timeout, or send_timeout must be specified\n");
         return TINY_ERR_INVALID_DATA;
     }
     memset(init->buffer, 0, init->buffer_size);
@@ -550,7 +555,8 @@ static void tiny_fd_on_idle_timeout( tiny_fd_handle_t handle )
         // if sent frame was not confirmed due to noisy line
         if ( handle->frames.retries > 0 )
         {
-            LOG( TINY_LOG_WRN, "[%p] Timeout, resending unconfirmed frames\n", handle );
+            LOG( TINY_LOG_WRN, "[%p] Timeout, resending unconfirmed frames: last(%"PRIu32" ms, now(%"PRIu32" ms), timeout(%"PRIu32" ms))\n",
+                 handle, handle->frames.last_i_ts, tiny_millis(), handle->retry_timeout );
             handle->frames.retries--;
             // Do not use mutex for confirm_ns value as it is byte-value
             __resend_all_unconfirmed_frames( handle, 0, handle->frames.confirm_ns );
@@ -640,10 +646,11 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
             memcpy( &handle->frames.i_frames[i]->user_payload, data, len );
             handle->frames.last_ns = (handle->frames.last_ns + 1) & seq_bits_mask;
             tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
-            LOG( TINY_LOG_DEB, "[%p] PUT frame success\n", handle );
 
             if ( i_queue_len( handle ) < handle->frames.max_i_frames )
             {
+                LOG( TINY_LOG_INFO, "[%p] I_QUEUE is N(S)queue=%d, N(S)confirm=%d, N(S)next=%d\n",
+                     handle, handle->frames.last_ns, handle->frames.confirm_ns, handle->frames.next_ns);
                 tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
             }
             else

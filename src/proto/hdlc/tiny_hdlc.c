@@ -516,7 +516,7 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
             } while (result > 0);
             if ( handle->rx.state == hdlc_read_end )
             {
-                handle->rx.state( handle, &data, result );
+                result = handle->rx.state( handle, &data, result );
             }
         }
         if ( result < 0 )
