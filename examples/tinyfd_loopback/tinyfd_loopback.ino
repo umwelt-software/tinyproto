@@ -35,7 +35,7 @@ void onReceive(Tiny::IPacket &pkt)
 void setup()
 {
     /* No timeout, since we want non-blocking UART operations. */
-    Serial.setTimeout(10);
+    Serial.setTimeout(0);
     /* Initialize serial protocol for test purposes */
     Serial.begin(115200);
     /* Lets process all incoming frames */
