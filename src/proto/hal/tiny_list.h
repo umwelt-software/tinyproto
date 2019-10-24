@@ -21,6 +21,9 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /// structure defines base type for the lists
 typedef struct list_element_
 {
@@ -41,3 +44,6 @@ void tiny_list_enumerate(list_element *head,
                          uint8_t (*enumerate_func)(list_element *element, uint16_t data),
                          uint16_t      data);
 
+#ifdef __cplusplus
+}
+#endif

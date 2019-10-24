@@ -10,6 +10,7 @@ OBJ_UNIT_TEST = \
         unittest/helpers/tiny_hd_helper.o \
         unittest/helpers/tiny_fd_helper.o \
         unittest/main.o \
+        unittest/hal_tests.o \
         unittest/hdlc_tests.o \
         unittest/light_tests.o \
         unittest/hd_tests.o \
