@@ -87,7 +87,6 @@ uint32_t crc32(uint32_t crc, const uint8_t *buf, int size)
 	const uint8_t *p;
 
 	p = buf;
-	crc = crc ^ ~0U;
 
 	while (size--)
 		crc = fcstab_32[(crc ^ *p++) & 0xFF] ^ (crc >> 8);

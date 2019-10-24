@@ -22,6 +22,10 @@
 #include <stdint.h>
 #include "proto/hal/tiny_types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef CONFIG_ENABLE_CHECKSUM
 #define INITCHECKSUM    0x0000
 #define GOODCHECKSUM    0x0000
@@ -43,3 +47,6 @@ uint32_t crc32_byte(uint32_t crc, uint8_t data);
 uint32_t crc32(uint32_t crc, const uint8_t *buf, int size);
 #endif
 
+#ifdef __cplusplus
+}
+#endif
