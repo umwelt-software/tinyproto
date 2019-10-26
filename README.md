@@ -1,4 +1,4 @@
-![Tiny Protocol](.travis/tinylogo.png)<br>
+![Tiny Protocol](.travis/tinylogo.svg)<br>
 [![Build Status](https://travis-ci.org/lexus2k/tinyproto.svg?branch=master)](https://travis-ci.org/lexus2k/tinyproto)
 [![Coverage Status](https://coveralls.io/repos/github/lexus2k/tinyproto/badge.svg?branch=master)](https://coveralls.io/github/lexus2k/tinyproto?branch=master)
 
