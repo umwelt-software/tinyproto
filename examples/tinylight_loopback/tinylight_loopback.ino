@@ -5,15 +5,13 @@
  * The sketch is developed to perform UART tests between Arduino
  * and PC.
  * 1. Burn this program to Arduino
- * 2. Compile sperf tool (see tools folder) for your system
+ * 2. Compile tiny_loopback tool (see tools folder) for your system
  * 3. Connect Arduino TX and RX lines to your PC com port
- * 4. Run sperf on the PC (use correct port name on your system):
- *      sperf /dev/ttyUSB0
- *      sperf COM1
- * 5. sperf will print the test speed results
+ * 4. Run tiny_loopback on the PC (use correct port name on your system)
+ * 5. tiny_loopback will print the test speed results
  *
  * Also, this example demonstrates how to pass data between 2 systems
- * By default the sketch and sperf works as 115200 speed.
+ * By default the sketch and tiny_loopback works as 115200 speed.
  */
 
 #include <TinyProtocol.h>

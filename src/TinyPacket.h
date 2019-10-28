@@ -218,7 +218,7 @@ public:
      */
     PacketD(int size): IPacket((char *)(new uint8_t[size]), size) {}
 
-    ~PacketD() { delete (uint8_t *)data(); }
+    ~PacketD() { delete[] (uint8_t *)data(); }
 
 private:
 };

@@ -10,7 +10,6 @@
   * [Easy to use](#easy-to-use)
   * [Setting up](#setting-up)
   * [Using tiny_loopback tool](#using-tiny_loopback-tool)
-  * [Running sperf](#running-sperf)
   * [License](#license)
 
 [tocend]: # (toc end)
@@ -39,8 +38,7 @@ Main features:
  * Low Flash consumption (features can be disabled and enabled at compilation time)
  * No dynamic memory allocations (suitable for using on uC with limited resources or without memory manager)
  * Zero copy implementation (basic hdlc, light versions do not use copy operations)
- * Serial loopback tool for debug purposes
- * Serial performance tool (sperf)
+ * Serial loopback tool for debug purposes and performance testing
 
 ## Supported platforms
 
@@ -114,22 +112,19 @@ void loop() {
 ## Using tiny_loopback tool
 
  * Connect your Arduino board to PC
- * Run your sketch or sketch_hd_sender
+ * Run your sketch or tinylight_loopback
  * Compile tiny_loopback tool
- * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -c 8 -g`
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t light -g -c 8 -r`
+
+ * Connect your Arduino board to PC
+ * Run your sketch or tinyhd_loopback
+ * Compile tiny_loopback tool
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t hd -c 8 -g -r`
 
  * Connect your Arduino board to PC
  * Run your sketch or tinyfd_loopback
  * Compile tiny_loopback tool
- * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t fd -g`
-
-## Running sperf
-
- * Connect your Arduino board to PC
- * Burn and run tinylight_loopback sketch on Arduino board
- * Run sperf tool on the PC
-
-sperf sends frames to Arduino board, and tinylight_loopback sketch sends all frames back to PC.
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t fd -c 8 -w 3 -g -r`
 
 For more information about this library, please, visit https://github.com/lexus2k/tinyproto.
 Doxygen documentation can be found at [github.io site](http://lexus2k.github.io/tinyproto).

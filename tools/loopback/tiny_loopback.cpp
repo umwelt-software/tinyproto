@@ -57,7 +57,7 @@ static int serial_receive(void *p, void *buf, int len)
 
 static void print_help()
 {
-    fprintf(stderr, "Usage: sperf -p <port> [-c <crc>]\n");
+    fprintf(stderr, "Usage: tiny_loopback -p <port> [-c <crc>]\n");
     fprintf(stderr, "Note: communication runs at 115200\n");
     fprintf(stderr, "    -p <port>, --port <port>   com port to use\n");
     fprintf(stderr, "                               COM1, COM2 ...  for Windows\n");

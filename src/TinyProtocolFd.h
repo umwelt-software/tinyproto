@@ -300,7 +300,7 @@ public:
      * Use this class only on powerful microcontrollers.
      */
     ProtoFdD( int size ): IProtoFd( new uint8_t[size], size ) { }
-    ~ProtoFdD() { delete m_buffer; }
+    ~ProtoFdD() { delete[] m_buffer; }
 private:
 };
 
