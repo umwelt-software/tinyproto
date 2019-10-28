@@ -72,6 +72,11 @@ void ProtoLight::disableCrc()
     m_crc = HDLC_CRC_OFF;
 }
 
+void ProtoLight::enableCrc(hdlc_crc_t crc)
+{
+    m_crc = crc;
+}
+
 bool ProtoLight::enableCheckSum()
 {
 #if defined(CONFIG_ENABLE_FCS8)

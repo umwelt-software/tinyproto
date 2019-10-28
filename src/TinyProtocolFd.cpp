@@ -92,6 +92,11 @@ void IProtoFd::disableCrc()
     m_crc = HDLC_CRC_OFF;
 }
 
+void IProtoFd::enableCrc(hdlc_crc_t crc)
+{
+    m_crc = crc;
+}
+
 bool IProtoFd::enableCheckSum()
 {
     m_crc = HDLC_CRC_8;

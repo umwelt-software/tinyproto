@@ -153,6 +153,13 @@ public:
     void disableCrc     ();
 
     /**
+     * Enables CRC by specified bit-size.
+     * 8-bit is supported by Nano version of Tiny library.
+     * @param crc crc type
+     */
+    void enableCrc(hdlc_crc_t crc);
+
+    /**
      * Enables CRC 8-bit field in the protocol. This field
      * contains sum of all data bytes in the packet.
      * 8-bit field is supported by Nano version of Tiny library.

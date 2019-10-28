@@ -38,6 +38,8 @@ void setup()
     Serial.setTimeout(0);
     /* Initialize serial protocol for test purposes */
     Serial.begin(115200);
+    /* Lets use 8-bit checksum, available on all platforms */
+    proto.enableCheckSum();
     /* Lets process all incoming frames */
     proto.setReceiveCallback( onReceive );
     /* Redirect all protocol communication to Serial0 UART */
