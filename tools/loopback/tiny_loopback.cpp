@@ -30,6 +30,7 @@ enum class protocol_type_t: uint8_t
     HDLC = 0,
     HD = 1,
     FD = 2,
+    LIGHT = 3,
 };
 
 static hdlc_crc_t s_crc = HDLC_CRC_8;
@@ -61,8 +62,10 @@ static void print_help()
     fprintf(stderr, "    -p <port>, --port <port>   com port to use\n");
     fprintf(stderr, "                               COM1, COM2 ...  for Windows\n");
     fprintf(stderr, "                               /dev/ttyS0, /dev/ttyS1 ...  for Linux\n");
-    fprintf(stderr, "    -t <proto>, --protocol <proto> toe of protocol to use\n");
+    fprintf(stderr, "    -t <proto>, --protocol <proto> type of protocol to use\n");
     fprintf(stderr, "                               hd - half duplex (default)\n");
+    fprintf(stderr, "                               fd - full duplex\n");
+    fprintf(stderr, "                               light - full duplex\n");
     fprintf(stderr, "    -c <crc>, --crc <crc>      crc type: 0, 8, 16, 32\n");
     fprintf(stderr, "    -g, --generator            turn on packet generating\n");
     fprintf(stderr, "    -s, --size                 packet size: 64 (by default)\n");
@@ -134,6 +137,8 @@ static int parse_args(int argc, char *argv[])
                 s_protocol = protocol_type_t::HD;
             else if (!strcmp(argv[i], "fd"))
                 s_protocol = protocol_type_t::FD;
+            else if (!strcmp(argv[i], "light"))
+                s_protocol = protocol_type_t::LIGHT;
             else
                 return -1;
         }
@@ -254,6 +259,7 @@ static int run_fd(SerialHandle port)
 {
     s_serialFd = port;
     Tiny::ProtoFdD proto( tiny_fd_buffer_size_by_mtu( s_packetSize, s_windowSize ) );
+    proto.enableCrc( s_crc );
     // Set window size to 4 frames. This should be the same value, used by other size
     proto.setWindowSize( s_windowSize );
     // Set send timeout to 1000ms as we are going to use multithread mode
@@ -307,6 +313,60 @@ static int run_fd(SerialHandle port)
     return 0;
 }
 
+//================================== LIGHT ======================================
+
+static int run_light(SerialHandle port)
+{
+    s_serialFd = port;
+    Tiny::ProtoLight proto;
+    proto.enableCrc( s_crc );
+
+    proto.begin( serial_send_fd, serial_receive_fd );
+    std::thread rxThread( [](Tiny::ProtoLight &proto)->void
+    {
+        Tiny::PacketD packet(s_packetSize + 4);
+        while (!s_terminate) { if (proto.read(packet) > 0) s_receivedBytes += packet.size(); }
+    }, std::ref(proto) );
+
+    auto startTs = std::chrono::steady_clock::now();
+    auto progressTs = startTs;
+
+    /* Run main cycle forever */
+    while (!s_terminate)
+    {
+        if (s_generatorEnabled)
+        {
+            Tiny::PacketD packet(s_packetSize);
+            packet.put("Generated frame. test in progress");
+            if ( proto.write( packet ) < 0 )
+            {
+                fprintf( stderr, "Failed to send packet\n" );
+            }
+            else
+            {
+                s_sentBytes += packet.size();
+            }
+        }
+        else
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        if ( s_runTest && s_generatorEnabled )
+        {
+            auto ts = std::chrono::steady_clock::now();
+            if (ts - startTs >= std::chrono::seconds(15)) s_terminate = true;
+            if (ts - progressTs >= std::chrono::seconds(1))
+            {
+                progressTs = ts;
+                fprintf(stderr, ".");
+            }
+        }
+    }
+    rxThread.join();
+    proto.end();
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     if ( parse_args(argc, argv) < 0 )
@@ -328,6 +388,7 @@ int main(int argc, char *argv[])
     {
         case protocol_type_t::HD: result = run_hd(hPort); break;
         case protocol_type_t::FD: result = run_fd(hPort); break;
+        case protocol_type_t::LIGHT: result = run_light(hPort); break;
         default: fprintf(stderr, "Unknown protocol type"); break;
     }
     CloseSerial(hPort);
