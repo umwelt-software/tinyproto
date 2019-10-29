@@ -137,7 +137,7 @@ static int hdlc_send_data( hdlc_handle_t handle )
     {
         pos++;
     }
-    int result;
+    int result = 0;
     if ( pos )
     {
         result = handle->send_tx( handle->user_data, handle->tx.data, pos );
@@ -265,6 +265,7 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
 
         if ( result < 0 )
         {
+            LOG(TINY_LOG_ERR, "[HDLC:%p] hdlc_run_tx_until_sent failed: %d\n", handle, result);
             break;
         }
         uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, EVENT_BITS_CLEAR, 0 );

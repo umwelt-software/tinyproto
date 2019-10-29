@@ -86,9 +86,6 @@ int tiny_light_init(void *handle,
     ((STinyLightData *)handle)->_hdlc.rx_buf_size = 0;
     ((STinyLightData *)handle)->_hdlc.crc_type = HDLC_CRC_OFF;
 
-    ((STinyLightData *)handle)->_received = 1;
-    ((STinyLightData *)handle)->_sent = 1;
-
     ((STinyLightData *)handle)->user_data = pdata;
     ((STinyLightData *)handle)->read_func = read_func;
     ((STinyLightData *)handle)->write_func = write_func;
@@ -129,7 +126,6 @@ static int write_func_cb(void *user_data, const void *data, int len)
 
 static int on_frame_sent(void *user_data, const void *data, int len)
 {
-    ((STinyLightData *)user_data)->_sent++;
     return len;
 }
 
@@ -150,7 +146,6 @@ int tiny_light_send(void *handle, const uint8_t * pbuf, int len)
 
 static int on_frame_read(void *user_data, void *data, int len)
 {
-    ((STinyLightData *)user_data)->_received++;
     return len;
 }
 
@@ -158,26 +153,10 @@ static int on_frame_read(void *user_data, void *data, int len)
 int tiny_light_read(void *handle, uint8_t *pbuf, int len)
 {
     hdlc_set_rx_buffer( &((STinyLightData *)handle)->_hdlc, pbuf, len);
-    ((STinyLightData *)handle)->_received = 0;
-    while (((STinyLightData *)handle)->_received == 0)
-    {
-        uint8_t byte;
-        int result = ((STinyLightData *)handle)->read_func(((STinyLightData *)handle)->user_data, &byte, 1);
-        if ( result == 0 )
-        {
-            if ( ((STinyLightData *)handle)->_hdlc.rx.data == ((STinyLightData *)handle)->_hdlc.rx_buf )
-            {
-                break;
-            }
-            continue;
-        }
-        else if ( result < 0 )
-        {
-            break;
-        }
-        while ( hdlc_run_rx( &((STinyLightData *)handle)->_hdlc, &byte, 1, NULL ) == 0 );
-    }
-    return ((STinyLightData *)handle)->_received ? ((STinyLightData *)handle)->_hdlc.rx.data - (uint8_t *)((STinyLightData *)handle)->_hdlc.rx_buf: TINY_ERR_FAILED;
+    int result = hdlc_run_rx_until_read( &((STinyLightData *)handle)->_hdlc,
+                                          ((STinyLightData *)handle)->read_func,
+                                          ((STinyLightData *)handle)->user_data, 1000 );
+    return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

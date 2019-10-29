@@ -129,11 +129,15 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
            .events = POLLOUT | POLLWRNORM
     };
     ret = poll(&fds, 1, 100);
-    if (ret <= 0)
+    if (ret < 0)
     {
-        return -1;
+        if ( errno == EINTR )
+        {
+            ret = 0;
+        }
+        return ret;
     }
-    if (!(fds.revents & (POLLOUT | POLLWRNORM)))
+    if (ret == 0 || !(fds.revents & (POLLOUT | POLLWRNORM)))
     {
         return 0;
     }
@@ -165,11 +169,15 @@ int SerialReceive(SerialHandle hPort, void *buf, int len)
            .events = POLLIN | POLLRDNORM
     };
     int ret = poll(&fds, 1, 100);
-    if (ret <= 0)
+    if (ret < 0)
     {
-        return -1;
+        if ( errno == EINTR )
+        {
+            ret = 0;
+        }
+        return ret;
     }
-    if (!(fds.revents & (POLLIN | POLLRDNORM)))
+    if (ret ==0 || !(fds.revents & (POLLIN | POLLRDNORM)))
     {
         return 0;
     }
