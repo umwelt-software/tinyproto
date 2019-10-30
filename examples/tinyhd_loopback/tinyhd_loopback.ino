@@ -18,7 +18,7 @@ void onFrameIn(uint8_t *buf, int len)
 {
     uint8_t tx_buffer[64];
     memcpy( tx_buffer, buf, len );
-    proto.write( tx_buffer, len );
+    proto.write( (char *)tx_buffer, len );
 }
 
 void setup() {
