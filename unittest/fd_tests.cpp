@@ -41,7 +41,6 @@ TEST_GROUP(FD)
     }
 };
 
-#if 1
 TEST(FD, multithread_basic_test)
 {
     FakeConnection conn;
@@ -62,9 +61,7 @@ TEST(FD, multithread_basic_test)
     helper1.wait_until_rx_count( 200, 1000 );
     CHECK_EQUAL( 200, helper1.rx_count() );
 }
-#endif
 
-#if 1
 TEST(FD, arduino_to_pc)
 {
     std::atomic<int> low_device_frames{};
@@ -92,9 +89,7 @@ TEST(FD, arduino_to_pc)
 //    CHECK_EQUAL( 0, conn.lostBytes() );
     CHECK_EQUAL( 100 - low_device_frames, pc.rx_count() );
 }
-#endif
 
-#if 1
 TEST(FD, errors_on_tx_line)
 {
     FakeConnection conn;
@@ -115,9 +110,7 @@ TEST(FD, errors_on_tx_line)
     helper1.wait_until_rx_count( 200, 1000 );
     CHECK_EQUAL( 200, helper1.rx_count() );
 }
-#endif
 
-#if 1
 TEST(FD, error_on_single_I_send)
 {
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
@@ -141,9 +134,7 @@ TEST(FD, error_on_single_I_send)
     helper1.wait_until_rx_count( 1, 2000 );
     CHECK_EQUAL( 1, helper1.rx_count() );
 }
-#endif
 
-#if 1
 TEST(FD, error_on_rej)
 {
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
@@ -168,12 +159,45 @@ TEST(FD, error_on_rej)
     helper1.wait_until_rx_count( 2, 2000 );
     CHECK_EQUAL( 2, helper1.rx_count() );
 }
-#endif
 
-#if 1
+TEST(FD, switch_to_disconnected)
+{
+    FakeConnection conn(32, 32);
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 4, 100 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 4, 100 );
+    conn.endpoint1().setTimeout( 30 );
+    conn.endpoint2().setTimeout( 30 );
+    helper1.set_ka_timeout( 100 );
+    helper2.set_ka_timeout( 100 );
+    helper1.run(true);
+    helper2.run(true);
+
+    // Consider FD use keep alive to keep connection during 50 milliseconds
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    // Stop remote side, and sleep again for 150 milliseconds, to get disconnected state
+    helper2.stop();
+    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    // Stop both endpoints to do clean flush
+    helper1.stop();
+    conn.endpoint1().flush();
+    conn.endpoint2().flush();
+    // Run local endpoint again.
+    helper1.run(true);
+    // At this step, we should be in disconnected state, and should see SABM frames
+    // Sleep for 100 milliseconds to get at least one Keep Alive
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    uint8_t buffer[32];
+    int len = conn.endpoint2().read( buffer, sizeof(buffer) );
+    const uint8_t sabm_request[] = { 0x7E, 0xFF, 0x3F, 0xF3, 0x39, 0x7E };
+    if ( (size_t)len < sizeof(sabm_request) )
+    {
+         CHECK_EQUAL( sizeof(sabm_request), len );
+    }
+    MEMCMP_EQUAL( sabm_request, buffer, sizeof(sabm_request) );
+}
+
 TEST(FD, singlethread_basic)
 {
     // TODO:
     CHECK_EQUAL( 0, 0 );
 }
-#endif

@@ -57,6 +57,11 @@ void TinyHelperFd::MessageSender(TinyHelperFd *helper, int count, std::string ms
     }
 }
 
+int TinyHelperFd::send( const std::string &message )
+{
+    return send( (uint8_t *)message.c_str(), message.size() );
+}
+
 int TinyHelperFd::send(int count, const std::string &msg)
 {
     if ( m_message_sender )

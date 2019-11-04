@@ -35,6 +35,7 @@ public:
     void setTimeout( int timeout_ms ) { m_timeout = timeout_ms; }
     void disable() { m_rx->disable(); }
     void enable()  { m_rx->enable(); }
+    void flush() { m_rx->flush(); }
 private:
     FakeWire * m_tx;
     FakeWire * m_rx;

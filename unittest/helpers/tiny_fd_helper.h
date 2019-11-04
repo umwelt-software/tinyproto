@@ -38,9 +38,11 @@ public:
                  int timeout = -1);
     virtual ~TinyHelperFd();
     int send(uint8_t *buf, int len);
+    int send( const std::string &message );
     int send(int count, const std::string &msg);
     int run_rx() override;
     int run_tx() override;
+    void set_ka_timeout(uint32_t timeout) { tiny_fd_set_ka_timeout( m_handle, timeout); };
     using IBaseHelper<TinyHelperFd>::run;
 
     void wait_until_rx_count(int count, uint32_t timeout);

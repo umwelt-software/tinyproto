@@ -32,6 +32,7 @@ int BaseHelper::run(bool forked)
 {
     if (forked)
     {
+        m_forceStop = false;
         m_receiveThread = new std::thread(receiveThread,this);
         m_sendThread = new std::thread(sendThread, this);
         return 0;

@@ -57,13 +57,21 @@ int FakeWire::read(uint8_t *data, int length, int timeout)
     return size;
 }
 
-
 void FakeWire::reset()
 {
     m_writeptr = 0;
     m_readptr  = 0;
     m_writelen = 0;
     m_readlen = 0;
+}
+
+void FakeWire::flush()
+{
+    m_readmutex.lock();
+    m_writemutex.lock();
+    reset();
+    m_writemutex.unlock();
+    m_readmutex.unlock();
 }
 
 int FakeWire::write(const uint8_t *data, int length, int timeout)

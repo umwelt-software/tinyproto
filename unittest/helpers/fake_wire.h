@@ -39,6 +39,7 @@ public:
     void reset();
     void disable() { m_enabled = false; }
     void enable()  { m_enabled = true; }
+    void flush();
     int lostBytes() { return m_lostBytes; }
 private:
     typedef struct
