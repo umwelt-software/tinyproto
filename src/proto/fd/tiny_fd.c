@@ -545,7 +545,7 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void tiny_fd_on_idle_timeout( tiny_fd_handle_t handle )
+static void tiny_fd_connected_on_idle_timeout( tiny_fd_handle_t handle )
 {
     tiny_mutex_lock( &handle->frames.mutex );
     if ( handle->frames.confirm_ns != handle->frames.last_ns &&
@@ -567,7 +567,7 @@ static void tiny_fd_on_idle_timeout( tiny_fd_handle_t handle )
             __switch_to_disconnected_state( handle );
         }
     }
-    if ((uint32_t)(tiny_millis() - handle->frames.last_ka_ts) > handle->ka_timeout )
+    else if ((uint32_t)(tiny_millis() - handle->frames.last_ka_ts) > handle->ka_timeout )
     {
         if ( !handle->frames.ka_confirmed )
         {
@@ -591,12 +591,32 @@ static void tiny_fd_on_idle_timeout( tiny_fd_handle_t handle )
 
 ///////////////////////////////////////////////////////////////////////////////
 
+static void tiny_fd_disconnected_on_idle_timeout( tiny_fd_handle_t handle )
+{
+    if ((uint32_t)(tiny_millis() - handle->frames.last_ka_ts) > handle->retry_timeout )
+    {
+        LOG(TINY_LOG_ERR, "[%p] ABM connection is not established\n", handle);
+        tiny_u_frame_info_t frame = {
+            .header.address = 0xFF,
+            .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
+        };
+        __send_control_frame( handle, &frame, 2 );
+        handle->frames.last_ka_ts = tiny_millis();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
 {
     int result = TINY_ERR_TIMEOUT;
     if ( handle->state == TINY_FD_STATE_CONNECTED_ABM )
     {
-        tiny_fd_on_idle_timeout( handle );
+        tiny_fd_connected_on_idle_timeout( handle );
+    }
+    else
+    {
+        tiny_fd_disconnected_on_idle_timeout( handle );
     }
     // Check if send on hdlc level operation is in progress and do some work
     if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_SENDING, EVENT_BITS_LEAVE, 0 ) )
@@ -679,6 +699,13 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
 int tiny_fd_buffer_size_by_mtu( int mtu, int window_frames )
 {
     return FD_MIN_BUF_SIZE(mtu, window_frames);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void tiny_fd_set_ka_timeout( tiny_fd_handle_t handle, uint32_t keep_alive )
+{
+    handle->ka_timeout = keep_alive;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

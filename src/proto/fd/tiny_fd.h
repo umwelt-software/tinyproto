@@ -188,6 +188,14 @@ extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
 extern int tiny_fd_buffer_size_by_mtu( int mtu, int max_tx_frames );
 
 /**
+ * Sets keep alive timeout in milliseconds. This timeout is used to send special RR
+ * frames, when no user data queued for sending.
+ * @param handle   pointer to tiny_fd_handle_t
+ * @param keep_alive timeout in milliseconds
+ */
+extern void tiny_fd_set_ka_timeout( tiny_fd_handle_t handle, uint32_t keep_alive );
+
+/**
  * @}
  */
 
