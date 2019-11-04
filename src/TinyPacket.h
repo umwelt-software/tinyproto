@@ -146,7 +146,7 @@ public:
      * Reads zero-terminated string from the packet.
      * @return zero-terminated string.
      */
-    inline char* getString   ()        { char *p = (char *)&m_buf[m_p]; m_p += strlen((char*)m_buf) + 1; return p; }
+    inline char* getString   ()        { char *p = (char *)&m_buf[m_p]; m_p += strlen(p) + 1; return p; }
 
     /**
      * Returns size of payload data in the received packet.
@@ -170,12 +170,6 @@ public:
      * You may refer to Packet payload data directly by using operator []
      */
     uint8_t &operator[]      (size_t idx) { return m_buf[idx]; }
-
-    /**
-     * Assign operator = puts next char to the packet. Several
-     * assign operators put one by one several chars.
-     */
-    IPacket &operator=        (char chr){ put(chr); return *this; }
 
 private:
     friend class        ProtoHd;
