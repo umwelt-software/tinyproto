@@ -285,6 +285,10 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
 
 static int hdlc_put( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
 {
+    if ( !len )
+    {
+        return TINY_ERR_INVALID_DATA;
+    }
     // Check if TX thread is ready to accept new data
     if ( tiny_events_wait( &handle->events, TX_ACCEPT_BIT, EVENT_BITS_CLEAR, timeout ) == 0 )
     {

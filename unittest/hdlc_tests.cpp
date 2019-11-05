@@ -52,6 +52,14 @@ TEST(HDLC, crc_mismatch)
     CHECK_EQUAL( TINY_ERR_WRONG_CRC, result );
 }
 
+TEST(HDLC, zero_len_not_allowed)
+{
+    FakeConnection conn;
+    TinyHdlcHelper   helper1( &conn.endpoint1(), nullptr, nullptr, 1024, HDLC_CRC_32 );
+    uint8_t buff[2];
+    CHECK_EQUAL( TINY_ERR_INVALID_DATA, helper1.send( buff, 0, 100 ) );
+}
+
 TEST(HDLC, crc8)
 {
     const char *txbuf = "This is CRC8 check";

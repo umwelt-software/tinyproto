@@ -250,6 +250,7 @@ int hdlc_run_tx( hdlc_handle_t handle );
  * @return TINY_ERR_FAILED if generic error happens
  *         TINY_ERR_BUSY if TX queue is busy with another frame.
  *         TINY_ERR_TIMEOUT if send operation cannot be completed in specified time.
+ *         TINY_ERR_INVALID_DATA if len is zero.
  *         TINY_SUCCESS if data is successfully sent
  * @warning buffer with data must be available all the time until
  *          data are actually sent to tx hw channel. That is if you use

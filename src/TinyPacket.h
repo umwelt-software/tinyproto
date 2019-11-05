@@ -62,21 +62,21 @@ public:
     /**
      * Clears Packet state. Buffer and its size are preserved.
      */
-    inline void clear  ()              { m_len = 0; m_p = 0; }
+    void clear  ()              { m_len = 0; m_p = 0; }
 
     /**
      * Puts next byte to the packet. For example, after calling this method
      * twice: put(5), put(10), - the Packet will contain 5,10.
      * @param byte - data byte to put.
      */
-    inline void put    (uint8_t byte)  { m_buf[m_len++] = byte; }
+    void put    (uint8_t byte)  { m_buf[m_len++] = byte; }
 
     /**
      * Puts next char to the packet. For example, after calling this method
      * twice: put('a'), put('c'), - the Packet will contain 'ac'.
      * @param chr - character to put.
      */
-    inline void put    (char chr)      { put((uint8_t)chr); }
+    void put    (char chr)      { put((uint8_t)chr); }
 
     /**
      * Puts next 16-bit unsigned integer to the packet.
