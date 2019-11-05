@@ -160,7 +160,7 @@ TEST(FD, error_on_rej)
     CHECK_EQUAL( 2, helper1.rx_count() );
 }
 
-TEST(FD, switch_to_disconnected)
+TEST(FD, no_ka_switch_to_disconnected)
 {
     FakeConnection conn(32, 32);
     TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 4, 100 );
@@ -194,6 +194,34 @@ TEST(FD, switch_to_disconnected)
          CHECK_EQUAL( sizeof(sabm_request), len );
     }
     MEMCMP_EQUAL( sabm_request, buffer, sizeof(sabm_request) );
+}
+
+TEST(FD, resend_timeout)
+{
+    FakeConnection conn(128, 128);
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 4, 70 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 4, 70 );
+    conn.endpoint1().setTimeout( 30 );
+    conn.endpoint2().setTimeout( 30 );
+    helper1.run(true);
+    helper2.run(true);
+
+    // Consider FD use keep alive to keep connection during 50 milliseconds
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    // Stop remote side, and try to send something
+    helper2.stop();
+    conn.endpoint1().flush();
+    conn.endpoint2().flush();
+    helper1.send("#");
+    std::this_thread::sleep_for(std::chrono::milliseconds(70*2 + 100));
+    helper1.stop();
+    const uint8_t reconnect_dat[] = { 0x7E, 0xFF, 0x00, '#', 0xA6, 0x13, 0x7E, // 1-st attempt
+                                      0x7E, 0xFF, 0x00, '#', 0xA6, 0x13, 0x7E, // 2-nd attempt (1st retry)
+                                      0x7E, 0xFF, 0x00, '#', 0xA6, 0x13, 0x7E, // 3-rd attempt (2nd retry)
+                                      0x7E, 0xFF, 0x3F, 0xF3, 0x39, 0x7E }; // Attempt to reconnect (SABM)
+    uint8_t buffer[64]{};
+    conn.endpoint2().read( buffer, sizeof(buffer) );
+    MEMCMP_EQUAL( reconnect_dat, buffer, sizeof(reconnect_dat) );
 }
 
 TEST(FD, singlethread_basic)
