@@ -89,3 +89,4 @@ all: library
 clean:
 	rm -rf $(BLD)
 	rm -rf $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda)
+	rm -rf gmon.out
