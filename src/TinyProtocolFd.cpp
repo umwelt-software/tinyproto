@@ -40,10 +40,6 @@ void IProtoFd::onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int
 void IProtoFd::begin(write_block_cb_t writecb,
                      read_block_cb_t readcb)
 {
-    if ( !m_bufferSize )
-    {
-        return;
-    }
     tiny_fd_init_t        init{};
     init.write_func       = writecb;
     init.read_func        = readcb;
