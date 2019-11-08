@@ -43,8 +43,10 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
         hdlc_info->crc_type = HDLC_CRC_16;
 #elif defined(CONFIG_ENABLE_FCS32)
         hdlc_info->crc_type = HDLC_CRC_32;
-#elif defined(CONFIG_ENABLE_FCS8)
+#elif defined(CONFIG_ENABLE_CHECKSUM)
         hdlc_info->crc_type = HDLC_CRC_8;
+#else
+        hdlc_info->crc_type = 0;
 #endif
     }
     else if ( hdlc_info->crc_type == HDLC_CRC_OFF )
@@ -518,21 +520,22 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
             {
                 int temp = handle->rx.state( handle, &data, result );
                 if ( temp > 0 ) result -= temp;
+                if ( temp < 0 ) break;
             } while (result > 0);
             if ( handle->rx.state == hdlc_read_end )
             {
                 result = handle->rx.state( handle, &data, result );
             }
+            // Check for RX_DATA_READY_BIT without timeout. If frame is ready - exit
+            uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, EVENT_BITS_CLEAR, 0 );
+            if ( bits )
+            {
+                result = handle->rx.data - (uint8_t *)handle->rx_buf;
+                break;
+            }
         }
-        if ( result < 0 )
+        else if ( result < 0 )
         {
-            break;
-        }
-        // Check for RX_DATA_READY_BIT without timeout. If frame is ready - exit
-        uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, EVENT_BITS_CLEAR, 0 );
-        if ( bits )
-        {
-            result = handle->rx.data - (uint8_t *)handle->rx_buf;
             break;
         }
         // Check if we need to exit on timeout

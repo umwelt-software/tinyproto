@@ -60,6 +60,8 @@ typedef struct
     read_block_cb_t     read_func;
     /// user-specific data
     void               *user_data;
+    /// CRC type to use
+    hdlc_crc_t          crc_type;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     hdlc_struct_t       _hdlc;
     uint8_t             _received;

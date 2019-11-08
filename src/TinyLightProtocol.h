@@ -188,7 +188,7 @@ public:
     bool enableCrc32    ();
 
 private:
-    STinyLightData       m_data;
+    STinyLightData       m_data{};
 
     hdlc_crc_t           m_crc = HDLC_CRC_DEFAULT;
 };

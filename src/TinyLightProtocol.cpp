@@ -35,7 +35,7 @@ namespace Tiny
 void ProtoLight::begin(write_block_cb_t writecb,
                   read_block_cb_t readcb)
 {
-    m_data._hdlc.crc_type = m_crc;
+    m_data.crc_type = m_crc;
     tiny_light_init(&m_data, writecb, readcb, this);
 }
 
@@ -79,7 +79,7 @@ void ProtoLight::enableCrc(hdlc_crc_t crc)
 
 bool ProtoLight::enableCheckSum()
 {
-#if defined(CONFIG_ENABLE_FCS8)
+#if defined(CONFIG_ENABLE_CHECKSUM)
     m_crc = HDLC_CRC_8;
     return true;
 #else

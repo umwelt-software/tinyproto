@@ -84,7 +84,7 @@ int tiny_light_init(void *handle,
     ((STinyLightData *)handle)->_hdlc.send_tx = write_func_cb;
     ((STinyLightData *)handle)->_hdlc.rx_buf = NULL;
     ((STinyLightData *)handle)->_hdlc.rx_buf_size = 0;
-    ((STinyLightData *)handle)->_hdlc.crc_type = HDLC_CRC_OFF;
+    ((STinyLightData *)handle)->_hdlc.crc_type = ((STinyLightData *)handle)->crc_type;
 
     ((STinyLightData *)handle)->user_data = pdata;
     ((STinyLightData *)handle)->read_func = read_func;
