@@ -35,6 +35,8 @@
 #include <time.h>
 
 #define DEBUG_SERIAL 0
+#define DEBUG_SERIAL_TX DEBUG_SERIAL
+#define DEBUG_SERIAL_RX DEBUG_SERIAL
 
 static int handleToFile(SerialHandle handle)
 {
@@ -128,12 +130,13 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
            .fd = handleToFile(hPort),
            .events = POLLOUT | POLLWRNORM
     };
+write_poll:
     ret = poll(&fds, 1, 100);
     if (ret < 0)
     {
         if ( errno == EINTR )
         {
-            ret = 0;
+            goto write_poll;
         }
         return ret;
     }
@@ -148,7 +151,7 @@ int SerialSend(SerialHandle hPort, const void *buf, int len)
     }
     if (ret > 0)
     {
-#if DEBUG_SERIAL == 1
+#if DEBUG_SERIAL_TX == 1
         struct timespec s;
         clock_gettime( CLOCK_MONOTONIC, &s );
         for (int i=0; i<ret; i++) printf("%08llu: TX: 0x%02X '%c'\n",
@@ -168,16 +171,18 @@ int SerialReceive(SerialHandle hPort, void *buf, int len)
            .fd = handleToFile(hPort),
            .events = POLLIN | POLLRDNORM
     };
-    int ret = poll(&fds, 1, 100);
+    int ret;
+read_poll:
+    ret = poll(&fds, 1, 100);
     if (ret < 0)
     {
         if ( errno == EINTR )
         {
-            ret = 0;
+            goto read_poll;
         }
         return ret;
     }
-    if (ret ==0 || !(fds.revents & (POLLIN | POLLRDNORM)))
+    if (ret == 0 || !(fds.revents & (POLLIN | POLLRDNORM)))
     {
         return 0;
     }
@@ -188,7 +193,7 @@ int SerialReceive(SerialHandle hPort, void *buf, int len)
     }
     if (ret > 0)
     {
-#if DEBUG_SERIAL == 1
+#if DEBUG_SERIAL_RX == 1
         struct timespec s;
         clock_gettime( CLOCK_MONOTONIC, &s );
         for (int i=0; i<ret; i++) printf("%08llu: RX: 0x%02X '%c'\n",

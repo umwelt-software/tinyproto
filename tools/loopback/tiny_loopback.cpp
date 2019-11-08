@@ -41,6 +41,7 @@ static int s_packetSize = 64;
 static int s_windowSize = 7;
 static bool s_terminate = false;
 static bool s_runTest = false;
+static bool s_isArduinoBoard = false;
 
 static int s_receivedBytes = 0;
 static int s_sentBytes = 0;
@@ -71,6 +72,7 @@ static void print_help()
     fprintf(stderr, "    -s, --size                 packet size: 64 (by default)\n");
     fprintf(stderr, "    -w, --window               window size: 7 (by default)\n");
     fprintf(stderr, "    -r, --run-test             run 15 seconds speed test\n");
+    fprintf(stderr, "    -a, --arduino-tty          delay test start by 2 seconds for Arduino ttyUSB interfaces\n");
 }
 
 static int parse_args(int argc, char *argv[])
@@ -129,6 +131,10 @@ static int parse_args(int argc, char *argv[])
         else if ((!strcmp(argv[i],"-r")) || (!strcmp(argv[i],"--run-test")))
         {
             s_runTest = true;
+        }
+        else if ((!strcmp(argv[i],"-a")) || (!strcmp(argv[i],"--arduino-tty")))
+        {
+            s_isArduinoBoard = true;
         }
         else if ((!strcmp(argv[i],"-t")) || (!strcmp(argv[i],"--protocol")))
         {
@@ -325,7 +331,12 @@ static int run_light(SerialHandle port)
     std::thread rxThread( [](Tiny::ProtoLight &proto)->void
     {
         Tiny::PacketD packet(s_packetSize + 4);
-        while (!s_terminate) { if (proto.read(packet) > 0) s_receivedBytes += packet.size(); }
+        while (!s_terminate) {
+            if (proto.read(packet) > 0) {
+               s_receivedBytes += packet.size();
+               if ( !s_runTest ) fprintf(stderr, "<<< Frame received payload len=%d\n", (int)packet.size() );
+            }
+        }
     }, std::ref(proto) );
 
     auto startTs = std::chrono::steady_clock::now();
@@ -345,6 +356,8 @@ static int run_light(SerialHandle port)
             else
             {
                 s_sentBytes += packet.size();
+                if ( !s_runTest )
+                    fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)packet.size());
             }
         }
         else
@@ -381,6 +394,10 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "Error opening serial port\n");
         return 1;
+    }
+    if ( s_isArduinoBoard )
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
     }
 
     int result = -1;
