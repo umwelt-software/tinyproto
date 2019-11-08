@@ -534,7 +534,7 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
                 break;
             }
         }
-        else if ( result < 0 )
+        if ( result < 0 )
         {
             break;
         }
