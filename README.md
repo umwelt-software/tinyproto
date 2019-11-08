@@ -114,17 +114,17 @@ void loop() {
  * Connect your Arduino board to PC
  * Run your sketch or tinylight_loopback
  * Compile tiny_loopback tool
- * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t light -g -c 8 -r`
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t light -g -c 8 -a -r`
 
  * Connect your Arduino board to PC
  * Run your sketch or tinyhd_loopback
  * Compile tiny_loopback tool
- * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t hd -c 8 -g -r`
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t hd -c 8 -g -a -r`
 
  * Connect your Arduino board to PC
  * Run your sketch or tinyfd_loopback
  * Compile tiny_loopback tool
- * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t fd -c 8 -w 3 -g -r`
+ * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t fd -c 8 -w 3 -g -a -r`
 
 For more information about this library, please, visit https://github.com/lexus2k/tinyproto.
 Doxygen documentation can be found at [github.io site](http://lexus2k.github.io/tinyproto).
