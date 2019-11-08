@@ -1,5 +1,12 @@
 == ver. 0.9.1 =======================================
-
+ - Fixed CRC8 bug with HDLC/Light protocol
+ - Added new API for keep alive timeout, auto-reconnect
+ - Fixed issues in TinyPacket
+ - Fix compilation for Windows Arduino IDE
+ - Removed sperf tool (use tiny_loopback)
+ - Fixed crc32 bug
+ - Improved HDLC logging
+ - Fixed C-compilation for avr gcc
 
 == ver. 0.9.0 =======================================
  - Initial full duplex implementation:
