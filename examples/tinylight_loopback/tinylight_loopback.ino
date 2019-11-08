@@ -27,6 +27,8 @@ void setup()
     Serial.begin(115200);
     /* Redirect all protocol communication to Serial0 UART */
     proto.beginToSerial();
+    /* Lets use 8-bit checksum, available on all platforms */
+    proto.enableCheckSum();
 }
 
 /* Specify buffer for packets to send and receive */

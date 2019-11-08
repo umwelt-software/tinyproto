@@ -35,7 +35,7 @@ void loop()
     {
         len = proto.read(inPacket);
         /* Wait 1000ms for any answer from remote side */
-        if (millis() - start >= 1000)
+        if ((unsigned long)(millis() - start) >= 1000)
         {
             break;
         }
