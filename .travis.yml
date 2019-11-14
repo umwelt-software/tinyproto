@@ -30,6 +30,9 @@ jobs:
         - cd extra/esp32_idf_prototest/components/tinyproto && ln -s ../../../../src && ln -s ../../../../component.mk
         - cd ../.. && make defconfig
         - make
+      cache:
+        directories:
+          - /home/travis/esp
     - stage: Check linux code
       script:
         - make
