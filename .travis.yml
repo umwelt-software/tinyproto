@@ -37,5 +37,5 @@ jobs:
         - make ARCH=avr
     - stage: Check esp code
       script:
-        - ./.travis/setup_esp_build_env.sh
+        - ./.travis/setup_esp_build_env.sh travis
 
