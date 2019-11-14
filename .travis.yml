@@ -4,8 +4,8 @@ os:
   - linux
 #  - windows
 language: cpp
-compiler:
-  - gcc
+# compiler:
+#  - gcc
 #  - clang
 
 addons:
@@ -36,7 +36,12 @@ jobs:
         directories:
           - /home/travis/esp
           - /home/travis/.espressif
-    - stage: Check linux code
+    - stage: Check clang linux code
+      compiler: clang
+      script:
+        - make
+    - stage: Check gcc linux code
+      compiler: gcc
       script:
         - make
         - make docs 1> /dev/null
