@@ -26,6 +26,7 @@ jobs:
     - stage: Check esp code
       script:
         - ./.travis/setup_esp_build_env.sh travis
+        - . ~/esp/esp-idf/export.sh
     - stage: Check linux code
       script:
         - make

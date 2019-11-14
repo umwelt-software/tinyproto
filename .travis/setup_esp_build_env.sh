@@ -2,9 +2,6 @@
 
 if [ -d ~/esp/esp-idf ]; then
     echo "ESP IDF is already installed"
-    cd ~/esp/esp-idf
-    chmod ugo+x ./export.sh
-    ./export.sh
     exit 0
 fi
 
@@ -19,5 +16,3 @@ cd ~/esp/esp-idf
 if [ "$1" = "travis" ]; then
     ./install.sh
 fi
-chmod ugo+x ./export.sh
-./export.sh
