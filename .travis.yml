@@ -27,6 +27,8 @@ jobs:
       script:
         - ./.travis/setup_esp_build_env.sh travis
         - . ~/esp/esp-idf/export.sh
+        - cd extra/esp32_idf_prototest/components/tinyproto && ln -s ../../../../src && ln -s ../../../../component.mk
+        - cd extra/esp32_idf_prototest && idf.py build
     - stage: Check linux code
       script:
         - make
@@ -35,7 +37,7 @@ jobs:
         - make clean
         - make EXTRA_CPPFLAGS="--coverage" check
       after_success:
-        - coveralls -b . --exclude docs --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
+        - coveralls -b . --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
     - stage: Check avr code
       script:
         - make ARCH=avr
