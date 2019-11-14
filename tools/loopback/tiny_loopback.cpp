@@ -184,9 +184,10 @@ static void onSendFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
 
 static int run_hd(SerialHandle port)
 {
-    uint8_t inBuffer[s_packetSize * 2]{};
+    uint8_t inBuffer[s_packetSize * 2];
     STinyHdInit init{};
     STinyHdData tiny{};
+    memset( inBuffer, 0, sizeof(inBuffer) );
     init.write_func       = serial_send;
     init.read_func        = serial_receive;
     init.pdata            = (void *)port;
