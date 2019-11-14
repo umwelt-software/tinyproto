@@ -28,7 +28,8 @@ jobs:
         - ./.travis/setup_esp_build_env.sh travis
         - . ~/esp/esp-idf/export.sh
         - cd extra/esp32_idf_prototest/components/tinyproto && ln -s ../../../../src && ln -s ../../../../component.mk
-        - cd ../.. && idf.py build
+        - cd ../.. && make defconfig
+        - make
     - stage: Check linux code
       script:
         - make
