@@ -35,6 +35,7 @@ jobs:
       cache:
         directories:
           - /home/travis/esp
+          - /home/travis/.espressif
     - stage: Check linux code
       script:
         - make
