@@ -23,6 +23,9 @@ jobs:
   allow_failures:
     - os: windows
   include:
+    - stage: Check esp code
+      script:
+        - ./.travis/setup_esp_build_env.sh travis
     - stage: Check linux code
       script:
         - make
@@ -35,7 +38,4 @@ jobs:
     - stage: Check avr code
       script:
         - make ARCH=avr
-    - stage: Check esp code
-      script:
-        - ./.travis/setup_esp_build_env.sh travis
 

@@ -1,15 +1,15 @@
 #!/bin/sh
 
-if [ d ~ /esp/esp-idf ]; then
+if [ -d ~/esp/esp-idf ]; then
     echo "ESP IDF is already installed"
     cd ~/esp/esp-idf
-    . export.sh
+    . ./export.sh
     exit 0
 fi
 
 if [ "$1" = "travis" ]; then
     echo "Installing packages..."
-    # sudo apt-get install git wget libncurses-dev flex bison gperf python python-pip python-setuptools python-serial python-click python-cryptography python-future python-pyparsing python-pyelftools cmake ninja-build ccache
+    # sudo apt-get install libncurses-dev flex bison gperf python python-pip python-setuptools python-serial python-click python-cryptography python-future python-pyparsing python-pyelftools cmake ninja-build ccache
 fi
 
 mkdir -p ~/esp
@@ -18,4 +18,4 @@ cd ~/esp/esp-idf
 if [ "$1" = "travis" ]; then
     ./install.sh
 fi
-. export.sh
+. ./export.sh
