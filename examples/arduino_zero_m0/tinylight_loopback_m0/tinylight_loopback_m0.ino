@@ -14,6 +14,9 @@
  * By default the sketch and tiny_loopback works as 115200 speed.
  */
 
+/* !!! WARNING !!! THIS SKETCH ONLY FOR ARDUINO ZERO/M0 !!! */
+
+#define HAVE_SERIALUSB
 #include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
@@ -22,13 +25,13 @@ Tiny::ProtoLight  proto;
 void setup()
 {
     /* No timeout, since we want non-blocking UART operations. */
-    Serial.setTimeout(10);
+    SerialUSB.setTimeout(10);
     /* Initialize serial protocol for test purposes */
-    Serial.begin(115200);
-    /* Redirect all protocol communication to Serial0 UART */
-    proto.beginToSerial();
+    SerialUSB.begin(115200);
     /* Lets use 8-bit checksum, available on all platforms */
     proto.enableCheckSum();
+    /* Redirect all protocol communication to SerialUSB UART */
+    proto.beginToSerialUSB();
 }
 
 /* Specify buffer for packets to send and receive */
@@ -36,7 +39,7 @@ Tiny::Packet<256> packet;
 
 void loop()
 {
-    if (Serial.available())
+    if (SerialUSB.available())
     {
         int len = proto.read( packet );
         if (len > 0)
