@@ -227,16 +227,18 @@ int hdlc_run_tx( hdlc_handle_t handle );
  * If multithread_mode is specificed for hdlc protocol, then
  * hdlc_send() function will wait for specified timeout until
  * some tx thread, implemented by application, completes sending
- * of the frame. If timeout happens, you may call hdlc_send()
- * second time, using NULL as data argument, but be careful, since
- * another thread may complete sending between two calls.
+ * of the frame. If timeout happens, but
+ * the frame is not sent still, hdlc level rejects sending of the frame.
+ * In this case the frame will be set partially, causing RX errors on
+ * other side. Please use reasonable timeout.
  *
  * If multithread_mode is disabled for hdlc protocol, then
  * hdlc_send() function will start frame sending immediately by
- * itself if TX line is not busy. In this case hdlc_send() will
+ * itself if TX line is not busy. hdlc_send() will
  * block until frame is sent or timeout. If timeout happens, but
- * the frame is not sent still, you need to call hdlc_send()
- * second time, but with data pameter specified as NULL.
+ * the frame is not sent still, hdlc level rejects sending of the frame.
+ * In this case the frame will be set partially, causing RX errors on
+ * other side. Please use reasonable timeout.
  *
  * If timeout is specified as 0, hdlc_send() function will not
  * wait or perform send operation, but only pass data pointer to
