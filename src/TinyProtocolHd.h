@@ -136,6 +136,20 @@ public:
     }
 #endif
 
+
+#ifdef HAVE_SERIALUSB
+    /**
+     * Initializes protocol internal variables and redirects
+     * communication through Arduino Serial1 connection (SerialUSB).
+     * @return None
+     */
+    inline void beginToSerialUSB()
+    {
+         begin([](void *p, const void *b, int s)->int { return SerialUSB.write((const char *)b, s); },
+               [](void *p, void *b, int s)->int { return SerialUSB.readBytes((char *)b, s); });
+    }
+#endif
+
 #endif
 
     /**
