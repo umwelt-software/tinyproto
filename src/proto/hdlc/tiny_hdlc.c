@@ -212,6 +212,15 @@ static int hdlc_send_crc( hdlc_handle_t handle )
     return result;
 }
 
+static void hdlc_send_terminate( hdlc_handle_t handle )
+{
+    LOG(TINY_LOG_INFO, "[HDLC:%p] hdlc_send_terminate HDLC send failed on timeout\n", handle);
+    tiny_events_clear( &handle->events, TX_DATA_READY_BIT );
+    handle->tx.state = hdlc_send_start;
+    handle->tx.escape = 0;
+    tiny_events_set( &handle->events, TX_ACCEPT_BIT );
+}
+
 static int hdlc_send_end( hdlc_handle_t handle )
 {
     LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send_end\n", handle);
@@ -267,6 +276,7 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
 
         if ( result < 0 )
         {
+            hdlc_send_terminate( handle );
             LOG(TINY_LOG_ERR, "[HDLC:%p] hdlc_run_tx_until_sent failed: %d\n", handle, result);
             break;
         }
@@ -278,6 +288,7 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
         }
         if ( (uint32_t)(tiny_millis() - ts) >= timeout && timeout != 0xFFFFFFFF )
         {
+            hdlc_send_terminate( handle );
             result = TINY_ERR_TIMEOUT;
             break;
         }
@@ -362,38 +373,40 @@ static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len )
 
 static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
 {
-    if (!len)
+    int result = 0;
+    while ( len > 0 )
     {
-        return 0;
-    }
-    uint8_t byte = data[0];
-    LOG(TINY_LOG_DEB, "[HDLC:%p] RX: %02X\n", handle, byte);
-    if ( byte == FLAG_SEQUENCE )
-    {
-        handle->rx.state = hdlc_read_end;
-        // Leave this byte for CRC check
-        return 1;
-    }
-    if ( byte == TINY_ESCAPE_CHAR )
-    {
-        handle->rx.escape = 1;
-        return 1;
-    }
-    if ( handle->rx.data - (uint8_t *)handle->rx_buf < handle->rx_buf_size )
-    {
-        if ( handle->rx.escape )
+        uint8_t byte = data[0];
+        LOG(TINY_LOG_DEB, "[HDLC:%p] RX: %02X\n", handle, byte);
+        if ( byte == FLAG_SEQUENCE )
         {
-            *handle->rx.data = byte ^ TINY_ESCAPE_BIT;
-            handle->rx.escape = 0;
+            handle->rx.state = hdlc_read_end;
+            result++;
+            break;
         }
-        else
+        if ( byte == TINY_ESCAPE_CHAR )
         {
-            *handle->rx.data = byte;
+            handle->rx.escape = 1;
         }
+        else if ( handle->rx.data - (uint8_t *)handle->rx_buf < handle->rx_buf_size )
+        {
+            if ( handle->rx.escape )
+            {
+                *handle->rx.data = byte ^ TINY_ESCAPE_BIT;
+                handle->rx.escape = 0;
+            }
+            else
+            {
+                *handle->rx.data = byte;
+            }
+            handle->rx.data++;
+            // LOG(TINY_LOG_DEB, "%02X\n", handle->rx.data[ handle->rx.len ]);
+        }
+        result++;
+        data++;
+        len--;
     }
-//    LOG(TINY_LOG_DEB, "%02X\n", handle->rx.data[ handle->rx.len ]);
-    handle->rx.data++;
-    return 1;
+    return result;
 }
 
 static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_bytes )
