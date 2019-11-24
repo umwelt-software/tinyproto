@@ -32,7 +32,10 @@ extern "C" {
 #include "proto/hal/tiny_types.h"
 
 #define FD_MIN_BUF_SIZE(mtu,window) (sizeof(tiny_fd_data_t) + \
-                                    (sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t) + mtu) * ( window + 1 ))
+                 (sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t) + mtu) * ( window + 1 ))
+
+#define FD_MTU_SIZE(bsize,window) ( (bsize - sizeof(tiny_fd_data_t)) / (window + 1) - \
+                 (sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t)) )
 
 typedef enum
 {
@@ -82,7 +85,7 @@ typedef struct
 {
     tiny_i_frame_info_t **i_frames;
     uint8_t max_i_frames;
-    uint8_t ns_offset;
+    uint8_t ns_queue_ptr;
 
     tiny_frame_info_t queue[TINY_FD_U_QUEUE_MAX_SIZE];
     uint8_t queue_ptr;
