@@ -1,4 +1,7 @@
-== ver. 0.9.1 =======================================
+== ver. 0.9.3 =======================================
+ - Fixed protocol for Arduino Zero/M0+
+
+== ver. 0.9.2 =======================================
  - Fixed CRC8 bug with HDLC/Light protocol
  - Added new API for keep alive timeout, auto-reconnect
  - Fixed issues in TinyPacket

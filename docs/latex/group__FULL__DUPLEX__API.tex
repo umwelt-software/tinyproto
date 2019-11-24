@@ -28,6 +28,8 @@ int \hyperlink{group__FULL__DUPLEX__API_gad31f944514aef01e27bc3ec67fdbe140}{tiny
 int \hyperlink{group__FULL__DUPLEX__API_ga490157ee98ea6148f99a5bb1f26c5f60}{tiny\+\_\+fd\+\_\+send} (\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, const void $\ast$buf, int len)
 \begin{DoxyCompactList}\small\item\em Sends userdata over full-\/duplex protocol. \end{DoxyCompactList}\item 
 int \hyperlink{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu} (int mtu, int max\+\_\+tx\+\_\+frames)
+\item 
+void \hyperlink{group__FULL__DUPLEX__API_gab86352107f707322e0ca15febf586cba}{tiny\+\_\+fd\+\_\+set\+\_\+ka\+\_\+timeout} (\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t} handle, uint32\+\_\+t keep\+\_\+alive)
 \end{DoxyCompactItemize}
 
 
@@ -178,3 +180,16 @@ Success result or error code\+:
 \item T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+D\+A\+T\+A\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE if user data are too big to fit in tx buffer. 
 \end{DoxyItemize}
 \end{DoxyReturn}
+\mbox{\Hypertarget{group__FULL__DUPLEX__API_gab86352107f707322e0ca15febf586cba}\label{group__FULL__DUPLEX__API_gab86352107f707322e0ca15febf586cba}} 
+\index{Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}!tiny\+\_\+fd\+\_\+set\+\_\+ka\+\_\+timeout@{tiny\+\_\+fd\+\_\+set\+\_\+ka\+\_\+timeout}}
+\index{tiny\+\_\+fd\+\_\+set\+\_\+ka\+\_\+timeout@{tiny\+\_\+fd\+\_\+set\+\_\+ka\+\_\+timeout}!Tiny Full Duplex A\+P\+I functions@{Tiny Full Duplex A\+P\+I functions}}
+\subsubsection{\texorpdfstring{tiny\+\_\+fd\+\_\+set\+\_\+ka\+\_\+timeout()}{tiny\_fd\_set\_ka\_timeout()}}
+{\footnotesize\ttfamily void tiny\+\_\+fd\+\_\+set\+\_\+ka\+\_\+timeout (\begin{DoxyParamCaption}\item[{\hyperlink{group__FULL__DUPLEX__API_ga91e6b79431fe38570fb102701ef0b7e8}{tiny\+\_\+fd\+\_\+handle\+\_\+t}}]{handle,  }\item[{uint32\+\_\+t}]{keep\+\_\+alive }\end{DoxyParamCaption})}
+
+Sets keep alive timeout in milliseconds. This timeout is used to send special RR frames, when no user data queued for sending. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & pointer to tiny\+\_\+fd\+\_\+handle\+\_\+t \\
+\hline
+{\em keep\+\_\+alive} & timeout in milliseconds \\
+\hline
+\end{DoxyParams}
