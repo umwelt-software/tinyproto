@@ -132,6 +132,13 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
             break;
         }
         //LOG("[%p] Confirming sent frames %d\n", handle, handle->frames.confirm_ns);
+        if ( handle->on_sent_cb )
+        {
+            uint8_t i = handle->frames.ns_queue_ptr;
+            tiny_mutex_unlock( &handle->frames.mutex );
+            handle->on_sent_cb( handle->user_data, 0, &handle->frames.i_frames[i]->user_payload, handle->frames.i_frames[i]->len );
+            tiny_mutex_lock( &handle->frames.mutex );
+        }
         handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & seq_bits_mask;
         handle->frames.ns_queue_ptr++;
         if ( handle->frames.ns_queue_ptr >= handle->frames.max_i_frames )
