@@ -37,6 +37,11 @@ void IProtoFd::onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int
     (reinterpret_cast<IProtoFd*>(handle))->onReceive(pdata, size);
 }
 
+void IProtoFd::onSendInternal(void *handle, uint16_t uid, uint8_t *pdata, int size)
+{
+    (reinterpret_cast<IProtoFd*>(handle))->onSend(pdata, size);
+}
+
 void IProtoFd::begin(write_block_cb_t writecb,
                      read_block_cb_t readcb)
 {
@@ -45,7 +50,7 @@ void IProtoFd::begin(write_block_cb_t writecb,
     init.read_func        = readcb;
     init.pdata            = this;
     init.on_frame_cb      = onReceiveInternal;
-//    init.on_sent_cb       = onTxFrame;
+    init.on_sent_cb       = onSendInternal;
     init.buffer           = m_buffer;
     init.buffer_size      = m_bufferSize;
     init.window_frames    = m_window;

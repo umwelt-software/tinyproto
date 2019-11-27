@@ -168,6 +168,7 @@ static int hdlc_send_data( hdlc_handle_t handle )
     }
     if ( handle->tx.len == 0 )
     {
+        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send_crc\n", handle);
         handle->tx.state = hdlc_send_crc;
     }
     return result;

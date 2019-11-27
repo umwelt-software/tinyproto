@@ -258,6 +258,8 @@ int hdlc_run_tx( hdlc_handle_t handle );
  *          data are actually sent to tx hw channel. That is if you use
  *          zero timeout, you need to use callback to understand, when buffer
  *          is not longer needed at hdlc level.
+ * @note TINY_ERR_BUSY and TINY_ERR_INVALID_DATA refer to putting new frame to TX
+ *       hdlc queue.
  */
 int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout );
 

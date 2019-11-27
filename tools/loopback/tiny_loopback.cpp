@@ -252,6 +252,13 @@ void onReceiveFrameFd(Tiny::IPacket &pkt)
     }
 }
 
+void onSendFrameFd(Tiny::IPacket &pkt)
+{
+    if ( !s_runTest )
+        fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)pkt.size() );
+    s_sentBytes += pkt.size();
+}
+
 static int serial_send_fd(void *p, const void *buf, int len)
 {
     return SerialSend(s_serialFd, buf, len);
@@ -274,6 +281,7 @@ static int run_fd(SerialHandle port)
     // But in loopback mode (!generator), we must resend frames from receiveCallback as soon as possible, use no timeout then
     proto.setSendTimeout( s_generatorEnabled ? 1000: 0 );
     proto.setReceiveCallback( onReceiveFrameFd );
+    proto.setSendCallback( onSendFrameFd );
     s_protoFd = &proto;
 
     proto.begin( serial_send_fd, serial_receive_fd );
@@ -293,10 +301,6 @@ static int run_fd(SerialHandle port)
             if ( proto.write( packet.data(), packet.size() ) < 0 )
             {
                 fprintf( stderr, "Failed to send packet\n" );
-            }
-            else
-            {
-                s_sentBytes += packet.size();
             }
         }
         else

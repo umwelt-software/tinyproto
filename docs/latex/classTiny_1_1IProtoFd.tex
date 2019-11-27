@@ -6,11 +6,12 @@
 
 
 
-Inheritance diagram for Tiny\+:\+:I\+Proto\+Fd\+:\nopagebreak
+Inheritance diagram for Tiny\+:\+:I\+Proto\+Fd\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=294pt]{classTiny_1_1IProtoFd__inherit__graph}
+\includegraphics[width=282pt]{classTiny_1_1IProtoFd__inherit__graph}
 \end{center}
 \end{figure}
 \subsection*{Public Member Functions}
@@ -39,6 +40,8 @@ int \hyperlink{classTiny_1_1IProtoFd_a37292eb5c9faf1be8c4850985e0ae2eb}{run\+\_\
 int \hyperlink{classTiny_1_1IProtoFd_a19be0bd5124009c7de051554841070b3}{run\+\_\+tx} (uint16\+\_\+t timeout=0)
 \item 
 void \hyperlink{classTiny_1_1IProtoFd_af41446f47a7c520ff8f9683e6ae45614}{disable\+Crc} ()
+\item 
+void \hyperlink{classTiny_1_1IProtoFd_a7dec2906051505034e91b503318a5563}{enable\+Crc} (\hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+crc\+\_\+t} crc)
 \item 
 bool \hyperlink{classTiny_1_1IProtoFd_a0f43402e86ea64f5c0154477d84b0c7c}{enable\+Check\+Sum} ()
 \item 
@@ -152,6 +155,17 @@ Disable C\+RC field in the protocol. If C\+RC field is O\+FF, then the frame loo
 Enables C\+RC 8-\/bit field in the protocol. This field contains sum of all data bytes in the packet. 8-\/bit field is supported by Nano version of Tiny library. \begin{DoxyReturn}{Returns}
 true if successful false in case of error. 
 \end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IProtoFd_a7dec2906051505034e91b503318a5563}\label{classTiny_1_1IProtoFd_a7dec2906051505034e91b503318a5563}} 
+\index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!enable\+Crc@{enable\+Crc}}
+\index{enable\+Crc@{enable\+Crc}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
+\subsubsection{\texorpdfstring{enable\+Crc()}{enableCrc()}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Proto\+Fd\+::enable\+Crc (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabb73b32d08d8e79eefe9385634a74bf7}{hdlc\+\_\+crc\+\_\+t}}]{crc }\end{DoxyParamCaption})}
+
+Enables C\+RC by specified bit-\/size. 8-\/bit is supported by Nano version of Tiny library. 
+\begin{DoxyParams}{Parameters}
+{\em crc} & crc type \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_a8b57afdb66434aa35409af34b04e1db9}\label{classTiny_1_1IProtoFd_a8b57afdb66434aa35409af34b04e1db9}} 
 \index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!enable\+Crc16@{enable\+Crc16}}
 \index{enable\+Crc16@{enable\+Crc16}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}

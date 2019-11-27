@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.9.0</span>
+   &#160;<span id="projectnumber">0.9.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -102,6 +102,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga490157ee98ea6148f99a5bb1f26c5f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga19789bea5b5acd68804773f0d6b0e3f7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FULL__DUPLEX__API.html#ga19789bea5b5acd68804773f0d6b0e3f7">tiny_fd_buffer_size_by_mtu</a> (int mtu, int max_tx_frames)</td></tr>
 <tr class="separator:ga19789bea5b5acd68804773f0d6b0e3f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab86352107f707322e0ca15febf586cba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FULL__DUPLEX__API.html#gab86352107f707322e0ca15febf586cba">tiny_fd_set_ka_timeout</a> (<a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a> handle, uint32_t keep_alive)</td></tr>
+<tr class="separator:gab86352107f707322e0ca15febf586cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Typedef Documentation</h2>
@@ -365,6 +367,41 @@ Functions</h2></td></tr>
 <li>TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer. </li>
 </ul>
 </dd></dl>
+
+</div>
+</div>
+<a id="gab86352107f707322e0ca15febf586cba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab86352107f707322e0ca15febf586cba">&#9670;&nbsp;</a></span>tiny_fd_set_ka_timeout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tiny_fd_set_ka_timeout </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>keep_alive</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets keep alive timeout in milliseconds. This timeout is used to send special RR frames, when no user data queued for sending. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>pointer to tiny_fd_handle_t </td></tr>
+    <tr><td class="paramname">keep_alive</td><td>timeout in milliseconds </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

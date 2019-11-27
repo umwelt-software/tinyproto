@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.9.0</span>
+   &#160;<span id="projectnumber">0.9.3</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -96,6 +96,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa040cbf16f9c074959fb410db6858b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af93e0591ca33137ad79ffb054953001c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#af93e0591ca33137ad79ffb054953001c">disableCrc</a> ()</td></tr>
 <tr class="separator:af93e0591ca33137ad79ffb054953001c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5232e938a70c64eb7fbb8908509cd3fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#a5232e938a70c64eb7fbb8908509cd3fa">enableCrc</a> (<a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a> crc)</td></tr>
+<tr class="separator:a5232e938a70c64eb7fbb8908509cd3fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7b4ef5a43c187f0d1915efe7450bc40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#ad7b4ef5a43c187f0d1915efe7450bc40">enableCheckSum</a> ()</td></tr>
 <tr class="separator:ad7b4ef5a43c187f0d1915efe7450bc40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a110b654e476691518790edcc5bf1bd80"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoLight.html#a110b654e476691518790edcc5bf1bd80">enableCrc16</a> ()</td></tr>
@@ -245,6 +247,30 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Enables CRC 8-bit field in the protocol. This field contains sum of all data bytes in the packet. 8-bit field is supported by Nano version of Tiny library. </p><dl class="section return"><dt>Returns</dt><dd>true if successful false in case of error. </dd></dl>
+
+</div>
+</div>
+<a id="a5232e938a70c64eb7fbb8908509cd3fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5232e938a70c64eb7fbb8908509cd3fa">&#9670;&nbsp;</a></span>enableCrc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tiny::ProtoLight::enableCrc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a>&#160;</td>
+          <td class="paramname"><em>crc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enables CRC by specified bit-size. 8-bit is supported by Nano version of Tiny library. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">crc</td><td>crc type </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

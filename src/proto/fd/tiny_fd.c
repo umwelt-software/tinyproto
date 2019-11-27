@@ -63,7 +63,7 @@ enum
 
 static const uint8_t seq_bits_mask = 0x07;
 
-#define i_queue_len(h) ((h->frames.last_ns - h->frames.confirm_ns) & seq_bits_mask)
+#define i_queue_len(h) ((uint8_t)(h->frames.last_ns - h->frames.confirm_ns) & seq_bits_mask)
 
 static int write_func_cb(void *user_data, const void *data, int len);
 static int on_frame_read(void *user_data, void *data, int len);
@@ -129,13 +129,20 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
         {
             // TODO: Out of sync
             LOG( TINY_LOG_CRIT, "[%p] Confirmation contains wrong N(r). Remote side is out of sync\n", handle);
-            return;
+            break;
         }
         //LOG("[%p] Confirming sent frames %d\n", handle, handle->frames.confirm_ns);
+        if ( handle->on_sent_cb )
+        {
+            uint8_t i = handle->frames.ns_queue_ptr;
+            tiny_mutex_unlock( &handle->frames.mutex );
+            handle->on_sent_cb( handle->user_data, 0, &handle->frames.i_frames[i]->user_payload, handle->frames.i_frames[i]->len );
+            tiny_mutex_lock( &handle->frames.mutex );
+        }
         handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & seq_bits_mask;
-        handle->frames.ns_offset++;
-        if ( handle->frames.ns_offset >= handle->frames.max_i_frames )
-            handle->frames.ns_offset -= handle->frames.max_i_frames;
+        handle->frames.ns_queue_ptr++;
+        if ( handle->frames.ns_queue_ptr >= handle->frames.max_i_frames )
+            handle->frames.ns_queue_ptr -= handle->frames.max_i_frames;
         handle->frames.retries = handle->retries;
         tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
     }
@@ -162,7 +169,7 @@ static void __resend_all_unconfirmed_frames( tiny_fd_handle_t handle, uint8_t co
             };
             // Send 2-byte header + 2 extra bytes
             __send_control_frame( handle, &frame, 4 );
-            return;
+            break;
         }
         handle->frames.next_ns = (handle->frames.next_ns - 1) & seq_bits_mask;
     }
@@ -182,7 +189,7 @@ static void __switch_to_connected_state( tiny_fd_handle_t handle )
         handle->frames.next_nr = 0;
         handle->frames.sent_nr = 0;
         handle->frames.sent_reject = 0;
-        handle->frames.ns_offset = 0;
+        handle->frames.ns_queue_ptr = 0;
         handle->frames.last_ka_ts = tiny_millis();
         tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
         tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
@@ -203,7 +210,7 @@ static void __switch_to_disconnected_state( tiny_fd_handle_t handle )
         handle->frames.next_nr = 0;
         handle->frames.sent_nr = 0;
         handle->frames.sent_reject = 0;
-        handle->frames.ns_offset = 0;
+        handle->frames.ns_queue_ptr = 0;
         tiny_events_clear( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
         LOG(TINY_LOG_INFO, "[%p] Disconnected\n", handle);
     }
@@ -425,10 +432,13 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->frames.i_frames = i_frames;
     protocol->frames.tx_buffer = tx_buffer;
     protocol->frames.max_i_frames = init->window_frames;
-    protocol->frames.mtu = ((uint8_t *)init->buffer + init->buffer_size - tx_buffer) / (init->window_frames + 1);
-    protocol->frames.rx_buffer = tx_buffer + protocol->frames.mtu * init->window_frames;
+    protocol->frames.mtu = FD_MTU_SIZE( init->buffer_size, init->window_frames );
     for (int i=0; i < init->window_frames; i++)
-        protocol->frames.i_frames[i] = (tiny_i_frame_info_t *)(i * protocol->frames.mtu + protocol->frames.tx_buffer);
+    {
+        protocol->frames.i_frames[i] = (tiny_i_frame_info_t *)tx_buffer;
+        tx_buffer += protocol->frames.mtu;
+    }
+    protocol->frames.rx_buffer = tx_buffer;
     tiny_mutex_create( &protocol->frames.mutex );
     tiny_events_create( &protocol->frames.events );
 
@@ -524,8 +534,9 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
     }
     else if ( handle->frames.next_ns != handle->frames.last_ns && handle->state == TINY_FD_STATE_CONNECTED_ABM )
     {
-        uint8_t i = ( handle->frames.next_ns - handle->frames.confirm_ns + handle->frames.ns_offset ) & seq_bits_mask;
-        if ( i >= handle->frames.max_i_frames ) i-= handle->frames.max_i_frames;
+        uint8_t i = ( ( handle->frames.next_ns - handle->frames.confirm_ns ) & seq_bits_mask ) +
+                        handle->frames.ns_queue_ptr;
+        while ( i >= handle->frames.max_i_frames ) i-= handle->frames.max_i_frames;
         data = (uint8_t *)&handle->frames.i_frames[i]->header;
         *len = handle->frames.i_frames[i]->len + sizeof(tiny_frame_header_t);
         handle->frames.i_frames[i]->header.address = 0xFF;
@@ -660,8 +671,8 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
         // Check if space is available
         if ( i_queue_len( handle ) < handle->frames.max_i_frames )
         {
-            uint8_t i = (handle->frames.last_ns - handle->frames.confirm_ns + handle->frames.ns_offset) & seq_bits_mask;
-            if ( i >= handle->frames.max_i_frames ) i -= handle->frames.max_i_frames;
+            uint8_t i = i_queue_len( handle ) + handle->frames.ns_queue_ptr;
+            while ( i >= handle->frames.max_i_frames ) i -= handle->frames.max_i_frames;
             handle->frames.i_frames[i]->len = len;
             memcpy( &handle->frames.i_frames[i]->user_payload, data, len );
             handle->frames.last_ns = (handle->frames.last_ns + 1) & seq_bits_mask;
@@ -678,13 +689,14 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
                 LOG( TINY_LOG_ERR, "[%p] I_QUEUE is full N(S)queue=%d, N(S)confirm=%d, N(S)next=%d\n",
                      handle, handle->frames.last_ns, handle->frames.confirm_ns, handle->frames.next_ns);
             }
+            result = TINY_SUCCESS;
         }
         else
         {
+            result = TINY_ERR_TIMEOUT;
             LOG( TINY_LOG_ERR, "[%p] Wrong flag FD_EVENT_I_QUEUE_FREE\n", handle);
         }
         tiny_mutex_unlock( &handle->frames.mutex );
-        result = TINY_SUCCESS;
     }
     else
     {

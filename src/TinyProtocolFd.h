@@ -236,6 +236,12 @@ public:
     void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr) { m_onReceive = on_receive; };
 
     /**
+     * Sets send callback for outgoing messages
+     * @param on_send user callback to process outgoing messages. The processing must be non-blocking
+     */
+    void setSendCallback(void (*on_send)(IPacket &pkt) = nullptr) { m_onSend = on_send; };
+
+    /**
      * Sets desired window size. Use this function only before begin() call.
      * window size is number of frames, which confirmation may be deferred for.
      * @param window window size, valid between 1 - 7 inclusively
@@ -263,6 +269,19 @@ protected:
         if ( m_onReceive ) m_onReceive( pkt );
     }
 
+    /**
+     * Method called by hdlc protocol upon sending next frame.
+     * Can be redefined in derived classes.
+     * @param pdata pointer to sent data
+     * @param size size of sent payload in bytes
+     */
+    virtual void onSend(uint8_t *pdata, int size)
+    {
+        IPacket pkt((char *)pdata, size);
+        pkt.m_len = size;
+        if ( m_onSend ) m_onSend( pkt );
+    }
+
 private:
     /** The variable contain protocol state */
     tiny_fd_handle_t    m_handle = nullptr;
@@ -284,9 +303,14 @@ private:
     /** Callback, when new frame is received */
     void              (*m_onReceive)(IPacket &pkt) = nullptr;
 
+    /** Callback, when new frame is sent */
+    void              (*m_onSend)(IPacket &pkt) = nullptr;
+
     /** Internal function */
     static void         onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
+    /** Internal function */
+    static void         onSendInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
 };
 
 /**
