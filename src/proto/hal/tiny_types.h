@@ -212,6 +212,17 @@ uint8_t tiny_events_wait(tiny_events_t *event, uint8_t bits,
                          uint8_t clear, uint32_t timeout);
 
 /**
+ * Checks specified bits.
+ * This API can be used in interrupt handlers
+ * @param event pointer to tiny_event_t variable.
+ * @param bits bits to wait for
+ * @param clear flags EVENT_BITS_CLEAR or EVENT_BITS_LEAVE
+ * @return 0 if no any of requested bits are set
+ *         list of bits from the input argument, which were set
+ */
+uint8_t tiny_events_check_int(tiny_events_t *event, uint8_t bits, uint8_t clear);
+
+/**
  * Sets bits for cross-platform event group object.
  * @param event pointer to tiny_event_t variable.
  * @param bits bits to set

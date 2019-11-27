@@ -53,7 +53,6 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
     {
         hdlc_info->crc_type = 0;
     }
-    tiny_mutex_create( &hdlc_info->send_mutex );
     tiny_events_create( &hdlc_info->events );
     tiny_events_set( &hdlc_info->events, TX_ACCEPT_BIT );
     // Must be last
@@ -72,7 +71,6 @@ int hdlc_close( hdlc_handle_t handle )
         }
     }
     tiny_events_destroy( &handle->events );
-    tiny_mutex_destroy( &handle->send_mutex );
     return 0;
 }
 
@@ -157,7 +155,7 @@ static int hdlc_send_data( hdlc_handle_t handle )
         uint8_t buf[1] = { handle->tx.escape ? ( handle->tx.data[0] ^ TINY_ESCAPE_BIT )
                                              : TINY_ESCAPE_CHAR };
         result = handle->send_tx( handle->user_data, buf, sizeof(buf) );
-        if ( result == 1 )
+        if ( result > 0 )
         {
             LOG(TINY_LOG_DEB, "[HDLC:%p] TX: %02X\n", handle, buf[0]);
             handle->tx.escape = !handle->tx.escape;
@@ -321,7 +319,6 @@ int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout
 {
     LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send (timeout = %u)\n", handle, timeout);
     int result = TINY_SUCCESS;
-    tiny_mutex_lock( &handle->send_mutex );
     if ( data != NULL )
     {
         result = hdlc_put( handle, data, len, timeout );
@@ -349,7 +346,6 @@ int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout
             LOG(TINY_LOG_DEB,"[HDLC:%p] hdlc_send timeout is zero, exiting\n", handle);
         }
     }
-    tiny_mutex_unlock( &handle->send_mutex );
     return result;
 }
 

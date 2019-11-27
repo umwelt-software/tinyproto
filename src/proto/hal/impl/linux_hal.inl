@@ -109,6 +109,11 @@ uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
     return locked;
 }
 
+uint8_t tiny_events_check_int(tiny_events_t *event, uint8_t bits, uint8_t clear)
+{
+    return tiny_events_wait(event, bits, clear, 0);
+}
+
 void tiny_events_set(tiny_events_t *events, uint8_t bits)
 {
     pthread_mutex_lock( &events->mutex );

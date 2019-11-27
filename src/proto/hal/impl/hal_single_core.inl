@@ -89,6 +89,17 @@ uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
     return locked;
 }
 
+uint8_t tiny_events_check_int(tiny_events_t *event, uint8_t bits, uint8_t clear)
+{
+    uint8_t locked;
+    ATOMIC_BLOCK
+    {
+        locked = *events;
+        if ( clear && (locked & bits) ) *events &= ~bits;
+    }
+    return locked;
+}
+
 void tiny_events_set(tiny_events_t *events, uint8_t bits)
 {
     ATOMIC_BLOCK
