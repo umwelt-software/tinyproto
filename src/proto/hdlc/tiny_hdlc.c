@@ -486,7 +486,6 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
 {
     int result = 0;
-//    do
     for (;;)
     {
         int temp_result = handle->rx.state( handle, (const uint8_t *)data, len );
@@ -505,7 +504,6 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
         len -= temp_result;
         result += temp_result;
     }
-    // while ( handle->rx.state == hdlc_read_end );
     return result;
 }
 

@@ -184,7 +184,7 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
  * Runs rx cycle until full frame received.
  *
  * @param handle handle to hdlc instance
- * @param readcb callback to read bytes from channel function
+ * @param readcb callback to read bytes from channel function, cannot be NULL
  * @param user_data user data to pass to readcb callback function
  * @param timeout timeout in milliseconds to wait for new frame.
  * @return

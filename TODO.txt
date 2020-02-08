@@ -1,4 +1,4 @@
- - Add recovering for FD protocol, if remote side do not respond correctly for a long time (relates to item above)
+ - Remove send_mutex from low level hdlc protocol. This will allow to use hdlc functions from interrupt handlers
  - Add buffer send operation like write in Linux
  - Implement Mingw32 support (partially implemented)
  - Implement MSVC support
