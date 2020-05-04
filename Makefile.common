@@ -54,7 +54,7 @@ ifeq ($(CONFIG_ENABLE_STATS),y)
 	CPPFLAGS += -DCONFIG_ENABLE_STATS
 endif
 
-.PHONY: clean library all install docs release
+.PHONY: all install docs release
 
 ####################### Compiling library #########################
 
