@@ -1,10 +1,51 @@
 CC=x86_64-w64-mingw32-gcc
 CXX=x86_64-w64-mingw32-gcc
 
-CPPFLAGS += -mwindows -m64
-#LDFLAGS += -Bstatic --whole-archive -static -lpthread
-TOOLS_EXT = .exe
-TOOLS_LDFLAGS = -static -lpthread
+CONFIG_ENABLE_FCS32 ?= y
+CONFIG_ENABLE_FCS16 ?= y
+CONFIG_ENABLE_CHECKSUM ?= y
+CONFIG_ENABLE_STATS ?= y
+CONFIG_FOR_WINDOWS_BUILD = y
 
-include Makefile.linux
+# ************* Common defines ********************
+CPPFLAGS += -I./tools/serial -fPIC -pthread -fexceptions -mwindows -m64 -mwin32 -D_WIN32
+CFLAGS += -D_WIN32
+LDFLAGS += -L. -lm -shared -Wl,--subsystem,windows -mwindows
+#TARGET_LIB ?= tinyprotocol.lib
+
+include Makefile.common
+# include Makefile.cpputest
+
+TOOLS_EXT = .exe
+TOOLS_LDFLAGS += -L$(BLD)/lib -l tinyprotocol -lm -lpthread  -Wl,--subsystem,windows -mwindows -static -lstdc++
+
+OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o \
+	tools/serial/serial_linux.o \
+	tools/serial/serial_win32.o
+
+.PHONY: clean release debug
+
+# Default build
+all: release
+
+release: tiny_loopback_release
+
+debug: tiny_loopback_debug
+
+tiny_loopback_release: $(OBJ_TINY_LOOPBACK) library
+	$(CXX) $(CPPFLAGS) -O3 -o $(BLD)/tiny_loopback$(TOOLS_EXT) $(OBJ_TINY_LOOPBACK) $(TOOLS_LDFLAGS)
+
+tiny_loopback_debug: $(OBJ_TINY_LOOPBACK) library
+	$(CXX) $(CPPFLAGS) -O0 -g -pg -o $(BLD)/tiny_loopback$(TOOLS_EXT) $(OBJ_TINY_LOOPBACK) $(TOOLS_LDFLAGS)
+
+clean: clean_tiny_loopback
+
+clean_tiny_loopback:
+ifdef CONFIG_FOR_WINDOWS_BUILD
+	del /F/Q/S tools\loopback\tiny_loopback.o \
+	tools\serial\serial_linux.o \
+	tools\serial\serial_win32.o
+else
+	rm -rf $(OBJ_TINY_LOOPBACK) $(OBJ_TINY_LOOPBACK:.o=.gcno) $(OBJ_TINY_LOOPBACK:.o=.gcda)
+endif
 

@@ -6,9 +6,9 @@ CONFIG_ENABLE_FCS16 ?= y
 CONFIG_ENABLE_CHECKSUM ?= y
 LOG_LEVEL ?=
 ifeq ($(ENABLE_LOGS),y)
-    ENABLE_HDLC_LOGS ?= y
-    ENABLE_HD_LOGS ?= y
-    ENABLE_FD_LOGS ?= y
+	ENABLE_HDLC_LOGS ?= y
+	ENABLE_HD_LOGS ?= y
+	ENABLE_FD_LOGS ?= y
 endif
 
 VERSION=0.8.0
@@ -16,77 +16,132 @@ VERSION=0.8.0
 CPPFLAGS += -I./src
 
 CFLAGS += -std=gnu99
-CPPFLAGS += -g -Os -Wall -Werror -ffunction-sections -fdata-sections $(EXTRA_CPPFLAGS)
+CPPFLAGS += -Os -Wall -Werror -ffunction-sections -fdata-sections $(EXTRA_CPPFLAGS)
 CXXFLAGS += -std=c++11
 
 ifneq ($(LOG_LEVEL),)
-    CPPFLAGS += -DTINY_LOG_LEVEL_DEFAULT=$(LOG_LEVEL)
+	CPPFLAGS += -DTINY_LOG_LEVEL_DEFAULT=$(LOG_LEVEL)
 endif
 
 ifeq ($(ENABLE_HDLC_LOGS),y)
-    CPPFLAGS += -DTINY_HDLC_DEBUG=1
-    ENABLE_DEBUG=y
+	CPPFLAGS += -DTINY_HDLC_DEBUG=1
+	ENABLE_DEBUG=y
 endif
 ifeq ($(ENABLE_HD_LOGS),y)
-    CPPFLAGS += -DTINY_HD_DEBUG=1
-    ENABLE_DEBUG=y
+	CPPFLAGS += -DTINY_HD_DEBUG=1
+	ENABLE_DEBUG=y
 endif
 ifeq ($(ENABLE_FD_LOGS),y)
-    CPPFLAGS += -DTINY_FD_DEBUG=1
-    ENABLE_DEBUG=y
+	CPPFLAGS += -DTINY_FD_DEBUG=1
+	ENABLE_DEBUG=y
 endif
 ifeq ($(ENABLE_DEBUG),y)
-    CPPFLAGS += -DTINY_DEBUG=1
+	CPPFLAGS += -DTINY_DEBUG=1
 endif
 ifeq ($(CONFIG_ENABLE_FCS32),y)
-    CPPFLAGS += -DCONFIG_ENABLE_FCS32
+	CPPFLAGS += -DCONFIG_ENABLE_FCS32
 endif
 
 ifeq ($(CONFIG_ENABLE_FCS16),y)
-    CPPFLAGS += -DCONFIG_ENABLE_FCS16
+	CPPFLAGS += -DCONFIG_ENABLE_FCS16
 endif
 
 ifeq ($(CONFIG_ENABLE_CHECKSUM),y)
-    CPPFLAGS += -DCONFIG_ENABLE_CHECKSUM
+	CPPFLAGS += -DCONFIG_ENABLE_CHECKSUM
 endif
 
 ifeq ($(CONFIG_ENABLE_STATS),y)
-    CPPFLAGS += -DCONFIG_ENABLE_STATS
+	CPPFLAGS += -DCONFIG_ENABLE_STATS
 endif
 
 .PHONY: clean library all install docs release
 
 ####################### Compiling library #########################
 
-TARGET_LIB = libtinyprotocol.a
+TARGET_LIB ?= libtinyprotocol.a
 
 OBJ_LIB += \
-        src/proto/crc/crc.o \
-        src/proto/light/tiny_light.o \
-        src/proto/hdlc/tiny_hdlc.o \
-        src/proto/fd/tiny_fd.o \
-        src/proto/half_duplex/tiny_hd.o \
-        src/proto/hal/tiny_list.o \
-        src/proto/hal/tiny_types.o \
-        src/proto/half_duplex/tiny_rq_pool.o \
-        src/TinyProtocolHd.o \
-        src/TinyProtocolFd.o \
-	src/TinyLightProtocol.o \
+		src/proto/crc/crc.o \
+		src/proto/light/tiny_light.o \
+		src/proto/hdlc/tiny_hdlc.o \
+		src/proto/fd/tiny_fd.o \
+		src/proto/half_duplex/tiny_hd.o \
+		src/proto/hal/tiny_list.o \
+		src/proto/hal/tiny_types.o \
+		src/proto/half_duplex/tiny_rq_pool.o \
+		src/TinyProtocolHd.o \
+		src/TinyProtocolFd.o \
+		src/TinyLightProtocol.o \
+
+prep:
+ifdef CONFIG_FOR_WINDOWS_BUILD
+	mkdir $(BLD)\lib $(BLD)\include
+else
+	mkdir -p $(BLD)/lib $(BLD)/include
+endif
 
 library: $(OBJ_LIB)
-	mkdir -p $(BLD)
-	$(AR) rcs $(BLD)/$(TARGET_LIB) $^
+	$(AR) rcs $(BLD)/lib/$(TARGET_LIB) $^
+
+copy_include:
+ifdef CONFIG_FOR_WINDOWS_BUILD
+	copy src\proto\crc\crc.h $(BLD)\include\ /y &\
+	copy src\proto\fd\tiny_fd.h $(BLD)\include\ /y &\
+	copy src\proto\fd\tiny_fd_int.h $(BLD)\include\ /y &\
+	copy src\proto\hal\tiny_list.h $(BLD)\include\ /y &\
+	copy src\proto\hal\tiny_types.h $(BLD)\include\ /y &\
+	copy src\proto\hal\tiny_debug.h $(BLD)\include\ /y &\
+	copy src\proto\half_duplex\tiny_hd.h $(BLD)\include\ /y &\
+	copy src\proto\half_duplex\tiny_rq_pool.h $(BLD)\include\ /y &\
+	copy src\proto\hdlc\tiny_hdlc.h $(BLD)\include\ /y &\
+	copy src\proto\light\tiny_light.h $(BLD)\include\ /y &\
+	copy src\TinyProtocolHd.h $(BLD)\include\ /y &\
+	copy src\TinyProtocolFd.h $(BLD)\include\ /y &\
+	copy src\TinyLightProtocol.h $(BLD)\include\ /y &\
+	copy src\TinyPacket.h $(BLD)\include\ /y &\
+	copy src\TinyProtocol.h $(BLD)\include\ /y 
+else
+	cp -rf src/proto/crc/crc.h \
+	src/proto/fd/tiny_fd.h \
+	src/proto/fd/tiny_fd_int.h \
+	src/proto/hal/tiny_list.h \
+	src/proto/hal/tiny_types.h \
+	src/proto/hal/tiny_debug.h \
+	src/proto/half_duplex/tiny_hd.h \
+	src/proto/half_duplex/tiny_rq_pool.h \
+	src/proto/hdlc/tiny_hdlc.h \
+	src/proto/light/tiny_light.h \
+	src/TinyProtocolHd.h \
+	src/TinyProtocolFd.h \
+	src/TinyLightProtocol.h \
+	src/TinyPacket.h \
+	src/TinyProtocol.h \
+	$(BLD)/include/
+endif
 
 install:
-	cp -r $(BLD)/$(TARGET_LIB) $(DESTDIR)/usr/lib/
-	cp -rf ./include/*.h $(DESTDIR)/usr/include/
+	cp -r $(BLD)/lib/$(TARGET_LIB) $(DESTDIR)/usr/lib/
+	cp -rf $(BLD)/include/*.h $(DESTDIR)/usr/include/
 
 docs:
 	doxygen doxygen.cfg
 
-all: library
+all: clean prep library copy_include
 
 clean:
-	rm -rf $(BLD)
-	rm -rf $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda)
-	rm -rf gmon.out
+ifdef CONFIG_FOR_WINDOWS_BUILD
+	del /F/Q/S src\proto\crc\crc.o \
+	src\proto\light\tiny_light.o \
+	src\proto\hdlc\tiny_hdlc.o \
+	src\proto\fd\tiny_fd.o \
+	src\proto\half_duplex\tiny_hd.o \
+	src\proto\hal\tiny_list.o \
+	src\proto\hal\tiny_types.o \
+	src\proto\half_duplex\tiny_rq_pool.o \
+	src\TinyProtocolHd.o \
+	src\TinyProtocolFd.o \
+	src\TinyLightProtocol.o & \
+	if exist $(BLD) rmdir /Q/S $(BLD) 
+else
+	rm -rf $(BLD) $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda) gmon.out
+endif
