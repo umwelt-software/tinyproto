@@ -42,9 +42,7 @@ clean: clean_tiny_loopback
 
 clean_tiny_loopback:
 ifdef CONFIG_FOR_WINDOWS_BUILD
-	del /F/Q/S tools\loopback\tiny_loopback.o \
-	tools\serial\serial_linux.o \
-	tools\serial\serial_win32.o
+	for /R .\tools\ %%G in (*.o) do del /F/Q/S %%G
 else
 	rm -rf $(OBJ_TINY_LOOPBACK) $(OBJ_TINY_LOOPBACK:.o=.gcno) $(OBJ_TINY_LOOPBACK:.o=.gcda)
 endif

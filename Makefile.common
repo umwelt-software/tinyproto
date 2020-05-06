@@ -75,73 +75,33 @@ OBJ_LIB += \
 
 prep:
 ifdef CONFIG_FOR_WINDOWS_BUILD
-	mkdir $(BLD)\lib $(BLD)\include
+	if not exist $(BLD)\lib mkdir $(BLD)\lib
 else
-	mkdir -p $(BLD)/lib $(BLD)/include
+	mkdir -p $(BLD)/lib
 endif
 
 library: $(OBJ_LIB)
 	$(AR) rcs $(BLD)/lib/$(TARGET_LIB) $^
 
-copy_include:
-ifdef CONFIG_FOR_WINDOWS_BUILD
-	copy src\proto\crc\crc.h $(BLD)\include\ /y &\
-	copy src\proto\fd\tiny_fd.h $(BLD)\include\ /y &\
-	copy src\proto\fd\tiny_fd_int.h $(BLD)\include\ /y &\
-	copy src\proto\hal\tiny_list.h $(BLD)\include\ /y &\
-	copy src\proto\hal\tiny_types.h $(BLD)\include\ /y &\
-	copy src\proto\hal\tiny_debug.h $(BLD)\include\ /y &\
-	copy src\proto\half_duplex\tiny_hd.h $(BLD)\include\ /y &\
-	copy src\proto\half_duplex\tiny_rq_pool.h $(BLD)\include\ /y &\
-	copy src\proto\hdlc\tiny_hdlc.h $(BLD)\include\ /y &\
-	copy src\proto\light\tiny_light.h $(BLD)\include\ /y &\
-	copy src\TinyProtocolHd.h $(BLD)\include\ /y &\
-	copy src\TinyProtocolFd.h $(BLD)\include\ /y &\
-	copy src\TinyLightProtocol.h $(BLD)\include\ /y &\
-	copy src\TinyPacket.h $(BLD)\include\ /y &\
-	copy src\TinyProtocol.h $(BLD)\include\ /y 
-else
-	cp -rf src/proto/crc/crc.h \
-	src/proto/fd/tiny_fd.h \
-	src/proto/fd/tiny_fd_int.h \
-	src/proto/hal/tiny_list.h \
-	src/proto/hal/tiny_types.h \
-	src/proto/hal/tiny_debug.h \
-	src/proto/half_duplex/tiny_hd.h \
-	src/proto/half_duplex/tiny_rq_pool.h \
-	src/proto/hdlc/tiny_hdlc.h \
-	src/proto/light/tiny_light.h \
-	src/TinyProtocolHd.h \
-	src/TinyProtocolFd.h \
-	src/TinyLightProtocol.h \
-	src/TinyPacket.h \
-	src/TinyProtocol.h \
-	$(BLD)/include/
-endif
-
 install:
-	cp -r $(BLD)/lib/$(TARGET_LIB) $(DESTDIR)/usr/lib/
-	cp -rf $(BLD)/include/*.h $(DESTDIR)/usr/include/
+ifdef CONFIG_FOR_WINDOWS_BUILD
+	if not exist $(BLD)\include mkdir $(BLD)\include &\
+	xcopy src bld\include /y /s &\
+	for /R .\bld\include %%G in (*) do ( if not %%~xG==.h del /F/Q/S %%G )
+else
+	mkdir -p $(BLD)/include &\
+	find ./src/ -name \*.h -exec cp --parents {} ./$(BLD)/include/ \;
+endif
 
 docs:
 	doxygen doxygen.cfg
 
-all: clean prep library copy_include
+all: prep library
 
 clean:
 ifdef CONFIG_FOR_WINDOWS_BUILD
-	del /F/Q/S src\proto\crc\crc.o \
-	src\proto\light\tiny_light.o \
-	src\proto\hdlc\tiny_hdlc.o \
-	src\proto\fd\tiny_fd.o \
-	src\proto\half_duplex\tiny_hd.o \
-	src\proto\hal\tiny_list.o \
-	src\proto\hal\tiny_types.o \
-	src\proto\half_duplex\tiny_rq_pool.o \
-	src\TinyProtocolHd.o \
-	src\TinyProtocolFd.o \
-	src\TinyLightProtocol.o & \
-	if exist $(BLD) rmdir /Q/S $(BLD) 
+	if exist $(BLD) rd $(BLD) /q /s &\
+	for /R .\src\ %%G in (*.o) do ( del /F/Q/S %%G )
 else
 	rm -rf $(BLD) $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda) gmon.out
 endif
