@@ -81,7 +81,7 @@ else
 endif
 
 library: prep $(OBJ_LIB)
-	$(AR) rcs $(BLD)/$(TARGET_LIB) $^
+	$(AR) rcs $(BLD)/$(TARGET_LIB) $(OBJ_LIB)
 
 install:
 ifdef CONFIG_FOR_WINDOWS_BUILD
