@@ -17,8 +17,8 @@ OBJ_UNIT_TEST = \
         unittest/hd_tests.o \
         unittest/fd_tests.o \
 
-unittest: $(OBJ_UNIT_TEST) library
-	$(CXX) $(CPPFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L$(BLD) -lm -pthread -ltinyprotocol -lCppUTest -lCppUTestExt
+unittest: $(OBJ_UNIT_TEST) prep library
+	$(CXX) $(CPPFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L$(BLD)/lib -lm -pthread -ltinyprotocol -lCppUTest -lCppUTestExt
 
 check: unittest
 	$(BLD)/unit_test
