@@ -1,5 +1,5 @@
 default: all
-DESTDIR ?=
+DESTDIR ?= .
 BLD ?= bld
 CONFIG_ENABLE_FCS32 ?= y
 CONFIG_ENABLE_FCS16 ?= y
@@ -91,7 +91,7 @@ ifdef CONFIG_FOR_WINDOWS_BUILD
 else
 	mkdir -p $(DESTDIR)/include $(DESTDIR)/lib
 	cp -r $(BLD)/$(TARGET_LIB) $(DESTDIR)/lib/
-	cd src && find ./ -name \*.h -exec cp --parents {} $(DESTDIR)/include/ \; && cd ..
+	DST=`realpath $(DESTDIR)` && cd src && find ./ -name \*.h -exec cp --parents {} $${DST}/include/ \; && cd ..
 endif
 
 docs:
