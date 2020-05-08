@@ -40,6 +40,11 @@ jobs:
       compiler: clang
       script:
         - make
+    - stage: Check mingw32 build
+      os: windows
+      compiler: gcc
+      script:
+        - make
     - stage: Check gcc linux code
       compiler: gcc
       script:
