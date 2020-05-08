@@ -17,7 +17,7 @@ include Makefile.common
 # include Makefile.cpputest
 
 TOOLS_EXT = .exe
-TOOLS_LDFLAGS += -L$(BLD)/lib -l tinyprotocol -lm -lpthread  -Wl,--subsystem,windows -mwindows -static -lstdc++
+TOOLS_LDFLAGS += -L$(BLD) -l tinyprotocol -lm -lpthread  -Wl,--subsystem,windows -mwindows -static -lstdc++
 
 OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o \
 	tools/serial/serial_linux.o \
