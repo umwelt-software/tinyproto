@@ -41,7 +41,7 @@ jobs:
       script:
         - make
         - make install DESTDIR=test_path
-        - ././travis/check_install.sh . test_path
+        - ./.travis/check_install.sh . test_path
     - stage: Check gcc linux code
       compiler: gcc
       script:
