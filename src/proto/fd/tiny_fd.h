@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -67,11 +67,11 @@ typedef struct tiny_fd_init_t_
 
     /**
      * buffer to store data during full-duplex protocol operating.
-     * The size should be TBD
+     * The size should be at least size returned by tiny_fd_buffer_size_by_mtu()
      */
     void             * buffer;
 
-    /// maximum input buffer size
+    /// maximum input buffer size, see tiny_fd_buffer_size_by_mtu()
     uint16_t           buffer_size;
 
     /**

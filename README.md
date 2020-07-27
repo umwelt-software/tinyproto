@@ -22,7 +22,11 @@ be built it for Windows. All you need is to implement callback for writing and
 reading bytes from communication line, and implement 2 application callback for incoming
 message event and outgoing message event. With this library you can easy communicate your Arduino with applications
 on PC and other boards. You don't need to think about data synchronization
-between points. No dynamic allocation of memory, so, it can be used on the systems with limited resources
+between points. No dynamic allocation of memory, so, it can be used on the systems with limited resources.
+TinyProto is based on RFC 1662, it implements the following frames:
+ * U-frames (SABM, UA)
+ * S-frames (REJ, RR)
+ * I-frames
 
 ## Key Features
 
