@@ -130,10 +130,10 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
 int SerialSend(SerialHandle hPort, const void *buf, int len)
 {
     int ret;
-    if ( tcdrain( handleToFile(hPort) ) < 0 )
+/*    if ( tcdrain( handleToFile(hPort) ) < 0 )
     {
         perror( "TCDRAIN" );
-    }
+    }*/
     struct pollfd fds = {
            .fd = handleToFile(hPort),
            .events = POLLOUT | POLLWRNORM
@@ -171,9 +171,9 @@ write_poll:
 //        syncfs( handleToFile(hPort) );
 //        fsync( handleToFile(hPort) );
 //        tcflush(handleToFile(hPort), TCOFLUSH);
+//        tcdrain( handleToFile(hPort) );
     }
 //    tcflush(handleToFile(hPort), TCOFLUSH);
-    tcdrain( handleToFile(hPort) );
     return ret;
 }
 
