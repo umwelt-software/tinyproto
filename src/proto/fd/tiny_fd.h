@@ -18,8 +18,8 @@
 */
 
 /**
- This is Tiny Half-Duplex protocol implementation for microcontrollers.
- It is built on top of Tiny Protocol (tiny_layer2.c)
+ This is Tiny Full-Duplex protocol implementation for microcontrollers.
+ It is built on top of Tiny Protocol (tiny_hdlc.c)
 
  @file
  @brief Tiny Protocol Full Duplex API

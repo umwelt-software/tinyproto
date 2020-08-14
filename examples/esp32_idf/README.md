@@ -13,7 +13,7 @@ You can use single ESP32 Dev board with PC tool.
 
 Registered full duplex speed with 2 ESP32 Dev boards over UART (running at 115200) is logged below.
 So, Tiny Protocol shows high channel utilization. However, payload transfer speed cannot be very close
-to UART baud rate because of start/stop bits, and hdlc full duplex overhead, which usually creates overhead
+to UART baud rate because of start/stop bits, and hdlc full duplex overhead, which is usually
 from 4 to 20 bytes for each payload buffer being transferred.
 
 ```.txt
