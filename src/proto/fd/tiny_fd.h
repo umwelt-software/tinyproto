@@ -60,9 +60,9 @@ typedef struct tiny_fd_init_t_
     read_block_cb_t    read_func;
     /// user data for block read/write functions
     void             * pdata;
-    /// callback function to process incoming frames
+    /// callback function to process incoming frames. Callback is called from tiny_fd_run_rx() context.
     on_frame_cb_t      on_frame_cb;
-    /// Callback to get notification of sent frames
+    /// Callback to get notification of sent frames. Callback is called from tiny_fd_run_tx() context.
     on_frame_cb_t      on_sent_cb;
 
     /**

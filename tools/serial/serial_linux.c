@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2019 (C) Alexey Dynda
+    Copyright 2017-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -63,6 +63,7 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
 {
     struct termios options;
     struct termios oldt;
+//    struct serial_struct serial;
 
     int fd = open( name, O_RDWR | O_NOCTTY | O_NONBLOCK );
     if (fd == -1)
@@ -108,7 +109,7 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     }
 
     options.c_cc[VMIN] = 0;
-    options.c_cc[VTIME] = 1;
+    options.c_cc[VTIME] = 1; // 100 ms
 
     // Set the new options for the port...
     if (tcsetattr(fd, TCSAFLUSH, &options) == -1)
@@ -116,6 +117,9 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
         close(fd);
         return INVALID_SERIAL;
     }
+/*    ioctl(fd, TIOCGSERIAL, &serial);
+    serial.xmit_fifo_size = 1;
+    ioctl(fd, TIOCSSERIAL, &serial);*/
 
     // Flush any buffered characters
     tcflush(fd, TCIOFLUSH);
@@ -126,6 +130,10 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
 int SerialSend(SerialHandle hPort, const void *buf, int len)
 {
     int ret;
+    if ( tcdrain( handleToFile(hPort) ) < 0 )
+    {
+        perror( "TCDRAIN" );
+    }
     struct pollfd fds = {
            .fd = handleToFile(hPort),
            .events = POLLOUT | POLLWRNORM
@@ -159,8 +167,13 @@ write_poll:
                                          (uint8_t)(((const char *)buf)[i]),
                                          ((const char *)buf)[i]);
 #endif
+//        fflush( handleToFile(hPort) );
+//        syncfs( handleToFile(hPort) );
+//        fsync( handleToFile(hPort) );
 //        tcflush(handleToFile(hPort), TCOFLUSH);
     }
+//    tcflush(handleToFile(hPort), TCOFLUSH);
+    tcdrain( handleToFile(hPort) );
     return ret;
 }
 

@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -85,11 +85,8 @@ typedef struct
 {
     tiny_i_frame_info_t **i_frames;
     uint8_t max_i_frames;
-    uint8_t ns_queue_ptr;
+    uint8_t head_ptr;
 
-    tiny_frame_info_t queue[TINY_FD_U_QUEUE_MAX_SIZE];
-    uint8_t queue_ptr;
-    uint8_t queue_len;
     uint8_t *rx_buffer;
     uint8_t *tx_buffer;
     int mtu;
@@ -101,6 +98,7 @@ typedef struct
     uint8_t next_ns; // next frame to be sent
     uint8_t confirm_ns; // next frame to be confirmed
     uint8_t last_ns; // next free frame in cycle buffer
+
     uint32_t last_i_ts; // last sent I-frame timestamp
     uint32_t last_ka_ts; // last keep alive timestamp
     uint8_t  ka_confirmed;
@@ -134,6 +132,12 @@ typedef struct tiny_fd_data_t
     uint8_t            retries;
     /// Information for frames being processed
     tiny_frames_info_t frames;
+    struct
+    {
+        tiny_frame_info_t queue[TINY_FD_U_QUEUE_MAX_SIZE];
+        uint8_t queue_ptr;
+        uint8_t queue_len;
+    } s_u_frames;
     /// user specific data
     void *             user_data;
 } tiny_fd_data_t;

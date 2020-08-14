@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -57,35 +57,117 @@
 enum
 {
     FD_EVENT_TX_SENDING = 0x01,
-    FD_EVENT_TX_DATA = 0x02,
-    FD_EVENT_I_QUEUE_FREE = 0x04,
+    FD_EVENT_TX_DATA_AVAILABLE = 0x02,
+    FD_EVENT_QUEUE_HAS_FREE_SLOTS = 0x04,
 };
 
 static const uint8_t seq_bits_mask = 0x07;
-
-#define i_queue_len(h) ((uint8_t)(h->frames.last_ns - h->frames.confirm_ns) & seq_bits_mask)
 
 static int write_func_cb(void *user_data, const void *data, int len);
 static int on_frame_read(void *user_data, void *data, int len);
 static int on_frame_sent(void *user_data, const void *data, int len);
 
 ///////////////////////////////////////////////////////////////////////////////
+// Helper functions
+///////////////////////////////////////////////////////////////////////////////
 
+static inline uint8_t __number_of_awaiting_tx_i_frames(tiny_fd_handle_t handle)
+{
+    return ((uint8_t)(handle->frames.last_ns - handle->frames.confirm_ns) & seq_bits_mask);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void __send_control_frame(tiny_fd_handle_t handle, const void *data, int len)
+static inline bool __has_unconfirmed_frames(tiny_fd_handle_t handle)
 {
-    if ( handle->frames.queue_len < TINY_FD_U_QUEUE_MAX_SIZE )
+    return ( handle->frames.confirm_ns != handle->frames.last_ns );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static inline bool __has_non_sent_i_frames(tiny_fd_handle_t handle)
+{
+    return ( handle->frames.last_ns != handle->frames.next_ns );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static inline bool __all_frames_are_sent(tiny_fd_handle_t handle)
+{
+    return ( handle->frames.last_ns == handle->frames.next_ns );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static inline uint32_t __time_passed_since_last_i_frame(tiny_fd_handle_t handle)
+{
+    return (uint32_t)(tiny_millis() - handle->frames.last_i_ts);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static inline uint32_t __time_passed_since_last_frame_received(tiny_fd_handle_t handle)
+{
+    return (uint32_t)(tiny_millis() - handle->frames.last_ka_ts);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static inline bool __has_non_sent_s_u_frames(tiny_fd_handle_t handle)
+{
+    return handle->s_u_frames.queue_len > 0;
+}
+
+static inline uint8_t __get_i_frame_to_send_index(tiny_fd_handle_t handle)
+{
+    return ( handle->frames.next_ns - handle->frames.confirm_ns ) & seq_bits_mask;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static bool __put_u_s_frame_to_tx_queue(tiny_fd_handle_t handle, const void *data, int len)
+{
+    if ( handle->s_u_frames.queue_len < TINY_FD_U_QUEUE_MAX_SIZE )
     {
-        uint8_t index = handle->frames.queue_ptr + handle->frames.queue_len;
+        uint8_t index = handle->s_u_frames.queue_ptr + handle->s_u_frames.queue_len;
         if ( index >= TINY_FD_U_QUEUE_MAX_SIZE ) index -= TINY_FD_U_QUEUE_MAX_SIZE;
-        handle->frames.queue[ index ].len = len;
-        memcpy( &handle->frames.queue[ index ].u_frame, data, len );
-        handle->frames.queue_len++;
-        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
-//        fprintf( stderr, "QUEUE PTR=%d, LEN=%d\n", handle->frames.queue_ptr, handle->frames.queue_len );
+        handle->s_u_frames.queue[ index ].len = len;
+        memcpy( &handle->s_u_frames.queue[ index ].u_frame, data, len );
+        handle->s_u_frames.queue_len++;
+        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
+//        fprintf( stderr, "QUEUE PTR=%d, LEN=%d\n", handle->s_u_frames.queue_ptr, handle->s_u_frames.queue_len );
+        return true;
     }
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static void __remove_u_s_frame_from_tx_queue( tiny_fd_handle_t handle )
+{
+    handle->s_u_frames.queue_ptr++; if ( handle->s_u_frames.queue_ptr >= TINY_FD_U_QUEUE_MAX_SIZE ) handle->s_u_frames.queue_ptr -= TINY_FD_U_QUEUE_MAX_SIZE;
+    handle->s_u_frames.queue_len--;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static bool __put_i_frame_to_tx_queue( tiny_fd_handle_t handle, const void *data, int len )
+{
+    uint8_t busy_slots = __number_of_awaiting_tx_i_frames( handle );
+    // Check if space is actually available
+    if ( busy_slots < handle->frames.max_i_frames )
+    {
+        uint8_t free_slot = busy_slots + handle->frames.head_ptr;
+        while ( free_slot >= handle->frames.max_i_frames )
+            free_slot -= handle->frames.max_i_frames;
+
+        handle->frames.i_frames[ free_slot ]->len = len;
+        memcpy( &handle->frames.i_frames[ free_slot ]->user_payload, data, len );
+        handle->frames.last_ns = (handle->frames.last_ns + 1) & seq_bits_mask;
+        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
+        return true;
+    }
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,7 +193,7 @@ static int __check_received_frame(tiny_fd_handle_t handle, uint8_t ns)
                 .header.control = HDLC_S_FRAME_BITS | HDLC_S_FRAME_TYPE_REJ | ( handle->frames.next_nr << 5 ),
             };
             handle->frames.sent_reject = 1;
-            __send_control_frame( handle, &frame, 2 );
+            __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
         }
         result = TINY_ERR_FAILED;
     }
@@ -134,17 +216,18 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
         //LOG("[%p] Confirming sent frames %d\n", handle, handle->frames.confirm_ns);
         if ( handle->on_sent_cb )
         {
-            uint8_t i = handle->frames.ns_queue_ptr;
+            uint8_t i = handle->frames.head_ptr;
             tiny_mutex_unlock( &handle->frames.mutex );
             handle->on_sent_cb( handle->user_data, 0, &handle->frames.i_frames[i]->user_payload, handle->frames.i_frames[i]->len );
             tiny_mutex_lock( &handle->frames.mutex );
         }
         handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & seq_bits_mask;
-        handle->frames.ns_queue_ptr++;
-        if ( handle->frames.ns_queue_ptr >= handle->frames.max_i_frames )
-            handle->frames.ns_queue_ptr -= handle->frames.max_i_frames;
+        handle->frames.head_ptr++;
+        if ( handle->frames.head_ptr >= handle->frames.max_i_frames )
+            handle->frames.head_ptr -= handle->frames.max_i_frames;
         handle->frames.retries = handle->retries;
-        tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
+        // Unblock tx queue to allow application to put new frames for sending
+        tiny_events_set( &handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS );
     }
     // LOG("[%p] N(S)=%d, N(R)=%d\n", handle, handle->frames.confirm_ns, handle->frames.next_nr);
 }
@@ -168,12 +251,12 @@ static void __resend_all_unconfirmed_frames( tiny_fd_handle_t handle, uint8_t co
                          ( handle->frames.next_ns << 1 ),
             };
             // Send 2-byte header + 2 extra bytes
-            __send_control_frame( handle, &frame, 4 );
+            __put_u_s_frame_to_tx_queue( handle, &frame, 4 );
             break;
         }
         handle->frames.next_ns = (handle->frames.next_ns - 1) & seq_bits_mask;
     }
-    tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+    tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -189,10 +272,10 @@ static void __switch_to_connected_state( tiny_fd_handle_t handle )
         handle->frames.next_nr = 0;
         handle->frames.sent_nr = 0;
         handle->frames.sent_reject = 0;
-        handle->frames.ns_queue_ptr = 0;
+        handle->frames.head_ptr = 0;
         handle->frames.last_ka_ts = tiny_millis();
-        tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
-        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+        tiny_events_set( &handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS );
+        tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
         LOG(TINY_LOG_INFO, "[%p] ABM connection is established\n", handle);
     }
 }
@@ -210,8 +293,8 @@ static void __switch_to_disconnected_state( tiny_fd_handle_t handle )
         handle->frames.next_nr = 0;
         handle->frames.sent_nr = 0;
         handle->frames.sent_reject = 0;
-        handle->frames.ns_queue_ptr = 0;
-        tiny_events_clear( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
+        handle->frames.head_ptr = 0;
+        tiny_events_clear( &handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS );
         LOG(TINY_LOG_INFO, "[%p] Disconnected\n", handle);
     }
 }
@@ -238,13 +321,13 @@ static int __on_i_frame_read( tiny_fd_handle_t handle, void *data, int len )
         // Decide whenever we need to send RR after user callback
         // Check if we need to send confirmations separately. If we have something to send, just skip RR S-frame.
         // Also at this point, since we received expected frame, sent_reject will be cleared to 0.
-        if ( handle->frames.next_ns == handle->frames.last_ns && handle->frames.sent_nr != handle->frames.next_nr )
+        if ( __all_frames_are_sent( handle ) && handle->frames.sent_nr != handle->frames.next_nr )
         {
             tiny_s_frame_info_t frame = {
                 .header.address = 0xFF,
                 .header.control = HDLC_S_FRAME_BITS | HDLC_S_FRAME_TYPE_RR | ( handle->frames.next_nr << 5 ),
             };
-            __send_control_frame( handle, &frame, 2 );
+            __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
         }
     }
     return result;
@@ -276,7 +359,7 @@ static int __on_s_frame_read( tiny_fd_handle_t handle, void *data, int len )
                     .header.address = 0xFF,
                     .header.control = HDLC_S_FRAME_BITS | HDLC_S_FRAME_TYPE_RR | ( handle->frames.next_nr << 5 ),
                 };
-                __send_control_frame( handle, &frame, 2 );
+                __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
             }
         }
     }
@@ -297,7 +380,7 @@ static int __on_u_frame_read( tiny_fd_handle_t handle, void *data, int len )
             .header.address = 0xFF,
             .header.control = HDLC_U_FRAME_TYPE_UA | HDLC_F_BIT | HDLC_U_FRAME_BITS,
         };
-        __send_control_frame( handle, &frame, 2 );
+        __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
         __switch_to_connected_state( handle );
     }
     else if ( type == HDLC_U_FRAME_TYPE_RSET )
@@ -350,7 +433,7 @@ static int on_frame_read(void *user_data, void *data, int len)
             .header.address = 0xFF,
             .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
         };
-        __send_control_frame( handle, &frame, 2 );
+        __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
     }
     else if ( (control & HDLC_I_FRAME_MASK) == HDLC_I_FRAME_BITS )
     {
@@ -376,18 +459,17 @@ static int on_frame_sent(void *user_data, const void *data, int len)
     if ( (control & HDLC_I_FRAME_MASK) == HDLC_I_FRAME_BITS )
     {
         // nothing to do
+        // we need to wait for confirmation from remote side
     }
     else if ( (control & HDLC_S_FRAME_MASK) == HDLC_S_FRAME_BITS )
     {
-        handle->frames.queue_ptr++; if ( handle->frames.queue_ptr >= TINY_FD_U_QUEUE_MAX_SIZE ) handle->frames.queue_ptr -= TINY_FD_U_QUEUE_MAX_SIZE;
-        handle->frames.queue_len--;
-//        fprintf( stderr, "QUEUE PTR=%d, LEN=%d\n", handle->frames.queue_ptr, handle->frames.queue_len );
+        __remove_u_s_frame_from_tx_queue( handle );
+//        fprintf( stderr, "QUEUE PTR=%d, LEN=%d\n", handle->s_u_frames.queue_ptr, handle->s_u_frames.queue_len );
     }
     else if ( (control & HDLC_U_FRAME_MASK) == HDLC_U_FRAME_BITS )
     {
-        handle->frames.queue_ptr++; if ( handle->frames.queue_ptr >= TINY_FD_U_QUEUE_MAX_SIZE ) handle->frames.queue_ptr -= TINY_FD_U_QUEUE_MAX_SIZE;
-        handle->frames.queue_len--;
-//        fprintf( stderr, "QUEUE PTR=%d, LEN=%d\n", handle->frames.queue_ptr, handle->frames.queue_len );
+        __remove_u_s_frame_from_tx_queue( handle );
+//        fprintf( stderr, "QUEUE PTR=%d, LEN=%d\n", handle->s_u_frames.queue_ptr, handle->s_u_frames.queue_len );
     }
     tiny_mutex_unlock( &handle->frames.mutex );
     tiny_events_clear( &handle->frames.events, FD_EVENT_TX_SENDING );
@@ -467,11 +549,12 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->state = TINY_FD_STATE_DISCONNECTED;
 
     // Request remote side for ABM
-    tiny_u_frame_info_t frame = {
+    // TODO: No need?
+/*    tiny_u_frame_info_t frame = {
         .header.address = 0xFF,
         .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
     };
-    __send_control_frame( *handle, &frame, 2 );
+    __put_u_s_frame_to_tx_queue( *handle, &frame, 2 ); */
     return TINY_SUCCESS;
 }
 
@@ -519,11 +602,12 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
     uint8_t *data = NULL;
     // Tx data available
     tiny_mutex_lock( &handle->frames.mutex );
-    if ( handle->frames.queue_len > 0 )
+    if ( __has_non_sent_s_u_frames( handle ) )
     {
         // clear queue only, when send is done, so for now, use pointer data for sending only
-        data = (uint8_t *)&handle->frames.queue[ handle->frames.queue_ptr ].u_frame;
-        *len = handle->frames.queue[ handle->frames.queue_ptr ].len;
+        data = (uint8_t *)&handle->s_u_frames.queue[ handle->s_u_frames.queue_ptr ].u_frame;
+        *len = handle->s_u_frames.queue[ handle->s_u_frames.queue_ptr ].len;
+
         #if TINY_FD_DEBUG
         if ( (data[1] & HDLC_U_FRAME_MASK) == HDLC_U_FRAME_BITS ) {
             LOG(TINY_LOG_INFO, "[%p] Sending U-Frame type=%02X\n", handle, data[1] & HDLC_U_FRAME_TYPE_MASK);
@@ -532,11 +616,11 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
         }
         #endif
     }
-    else if ( handle->frames.next_ns != handle->frames.last_ns && handle->state == TINY_FD_STATE_CONNECTED_ABM )
+    else if ( __has_non_sent_i_frames( handle ) && handle->state == TINY_FD_STATE_CONNECTED_ABM )
     {
-        uint8_t i = ( ( handle->frames.next_ns - handle->frames.confirm_ns ) & seq_bits_mask ) +
-                        handle->frames.ns_queue_ptr;
+        uint8_t i = __get_i_frame_to_send_index( handle ) +  handle->frames.head_ptr;
         while ( i >= handle->frames.max_i_frames ) i-= handle->frames.max_i_frames;
+
         data = (uint8_t *)&handle->frames.i_frames[i]->header;
         *len = handle->frames.i_frames[i]->len + sizeof(tiny_frame_header_t);
         handle->frames.i_frames[i]->header.address = 0xFF;
@@ -559,9 +643,9 @@ static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *le
 static void tiny_fd_connected_on_idle_timeout( tiny_fd_handle_t handle )
 {
     tiny_mutex_lock( &handle->frames.mutex );
-    if ( handle->frames.confirm_ns != handle->frames.last_ns &&
-         handle->frames.last_ns == handle->frames.next_ns &&
-         (uint32_t)(tiny_millis() - handle->frames.last_i_ts) >= handle->retry_timeout )
+    if ( __has_unconfirmed_frames( handle ) &&
+         __all_frames_are_sent( handle ) &&
+         __time_passed_since_last_i_frame( handle ) >= handle->retry_timeout )
     {
         // if sent frame was not confirmed due to noisy line
         if ( handle->frames.retries > 0 )
@@ -578,7 +662,7 @@ static void tiny_fd_connected_on_idle_timeout( tiny_fd_handle_t handle )
             __switch_to_disconnected_state( handle );
         }
     }
-    else if ((uint32_t)(tiny_millis() - handle->frames.last_ka_ts) > handle->ka_timeout )
+    else if ( __time_passed_since_last_frame_received( handle ) > handle->ka_timeout )
     {
         if ( !handle->frames.ka_confirmed )
         {
@@ -593,7 +677,7 @@ static void tiny_fd_connected_on_idle_timeout( tiny_fd_handle_t handle )
                 .header.control = HDLC_S_FRAME_BITS | HDLC_S_FRAME_TYPE_RR | ( handle->frames.next_nr << 5 ) | HDLC_P_BIT,
             };
             handle->frames.ka_confirmed = 0;
-            __send_control_frame( handle, &frame, 2 );
+            __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
         }
         handle->frames.last_ka_ts = tiny_millis();
     }
@@ -604,14 +688,15 @@ static void tiny_fd_connected_on_idle_timeout( tiny_fd_handle_t handle )
 
 static void tiny_fd_disconnected_on_idle_timeout( tiny_fd_handle_t handle )
 {
-    if ((uint32_t)(tiny_millis() - handle->frames.last_ka_ts) > handle->retry_timeout )
+    if ( __time_passed_since_last_frame_received( handle ) >= handle->retry_timeout )
     {
         LOG(TINY_LOG_ERR, "[%p] ABM connection is not established\n", handle);
+        // Try to establish ABM connection
         tiny_u_frame_info_t frame = {
             .header.address = 0xFF,
             .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
         };
-        __send_control_frame( handle, &frame, 2 );
+        __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
         handle->frames.last_ka_ts = tiny_millis();
     }
 }
@@ -635,13 +720,14 @@ int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
         result = hdlc_run_tx( &handle->_hdlc );
     }
     // Since no send operation is in progress, check if we have something to send
-    else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_DATA, EVENT_BITS_CLEAR, timeout ) )
+    else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE, EVENT_BITS_CLEAR, timeout ) )
     {
         int len = 0;
         uint8_t *data = tiny_fd_get_next_frame_to_send( handle, &len );
         if ( data != NULL )
         {
-            tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
+            // Force to check for new frame once again
+            tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
             tiny_events_set( &handle->frames.events, FD_EVENT_TX_SENDING );
             // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
             // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
@@ -665,24 +751,17 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
         result = TINY_ERR_DATA_TOO_LARGE;
     }
     // Wait until there is room for new frame
-    else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_I_QUEUE_FREE, EVENT_BITS_CLEAR, handle->send_timeout ) )
+    else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS, EVENT_BITS_CLEAR, handle->send_timeout ) )
     {
         tiny_mutex_lock( &handle->frames.mutex );
-        // Check if space is available
-        if ( i_queue_len( handle ) < handle->frames.max_i_frames )
+        // Check if space is actually available
+        if ( __put_i_frame_to_tx_queue(handle, data, len) )
         {
-            uint8_t i = i_queue_len( handle ) + handle->frames.ns_queue_ptr;
-            while ( i >= handle->frames.max_i_frames ) i -= handle->frames.max_i_frames;
-            handle->frames.i_frames[i]->len = len;
-            memcpy( &handle->frames.i_frames[i]->user_payload, data, len );
-            handle->frames.last_ns = (handle->frames.last_ns + 1) & seq_bits_mask;
-            tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA );
-
-            if ( i_queue_len( handle ) < handle->frames.max_i_frames )
+            if ( __number_of_awaiting_tx_i_frames( handle ) < handle->frames.max_i_frames )
             {
                 LOG( TINY_LOG_INFO, "[%p] I_QUEUE is N(S)queue=%d, N(S)confirm=%d, N(S)next=%d\n",
                      handle, handle->frames.last_ns, handle->frames.confirm_ns, handle->frames.next_ns);
-                tiny_events_set( &handle->frames.events, FD_EVENT_I_QUEUE_FREE );
+                tiny_events_set( &handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS );
             }
             else
             {
@@ -694,7 +773,7 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
         else
         {
             result = TINY_ERR_TIMEOUT;
-            LOG( TINY_LOG_ERR, "[%p] Wrong flag FD_EVENT_I_QUEUE_FREE\n", handle);
+            LOG( TINY_LOG_ERR, "[%p] Wrong flag FD_EVENT_QUEUE_HAS_FREE_SLOTS\n", handle);
         }
         tiny_mutex_unlock( &handle->frames.mutex );
     }

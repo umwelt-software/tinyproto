@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -36,6 +36,7 @@ enum class protocol_type_t: uint8_t
 static hdlc_crc_t s_crc = HDLC_CRC_8;
 static char *s_port = nullptr;
 static bool s_generatorEnabled = false;
+static bool s_loopbackMode = true;
 static protocol_type_t s_protocol = protocol_type_t::HD;
 static int s_packetSize = 64;
 static int s_windowSize = 7;
@@ -127,6 +128,7 @@ static int parse_args(int argc, char *argv[])
         else if ((!strcmp(argv[i],"-g")) || (!strcmp(argv[i],"--generator")))
         {
             s_generatorEnabled = true;
+            s_loopbackMode = !s_generatorEnabled;
         }
         else if ((!strcmp(argv[i],"-r")) || (!strcmp(argv[i],"--run-test")))
         {
@@ -285,8 +287,8 @@ static int run_fd(SerialHandle port)
     s_protoFd = &proto;
 
     proto.begin( serial_send_fd, serial_receive_fd );
-    std::thread rxThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_rx(100); }, std::ref(proto) );
-    std::thread txThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_tx(100); }, std::ref(proto) );
+    std::thread rxThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_rx(200); }, std::ref(proto) );
+    std::thread txThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_tx(200); }, std::ref(proto) );
 
     auto startTs = std::chrono::steady_clock::now();
     auto progressTs = startTs;
