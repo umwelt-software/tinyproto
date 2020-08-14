@@ -121,6 +121,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1bf1f5211ae3a49caf73ee3de3bb9247"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70aa7c85b5fe83513eebb63b803d5825"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a70aa7c85b5fe83513eebb63b803d5825">setReceiveCallback</a> (void(*on_receive)(<a class="el" href="classTiny_1_1IPacket.html">IPacket</a> &amp;pkt)=nullptr)</td></tr>
 <tr class="separator:a70aa7c85b5fe83513eebb63b803d5825"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3c8efc9a30ab547c5d575a8de0ef1e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#ac3c8efc9a30ab547c5d575a8de0ef1e5">setSendCallback</a> (void(*on_send)(<a class="el" href="classTiny_1_1IPacket.html">IPacket</a> &amp;pkt)=nullptr)</td></tr>
+<tr class="separator:ac3c8efc9a30ab547c5d575a8de0ef1e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adddcc24bf1ef40d39c944679a97c1ec4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#adddcc24bf1ef40d39c944679a97c1ec4">setWindowSize</a> (uint8_t window)</td></tr>
 <tr class="separator:adddcc24bf1ef40d39c944679a97c1ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2492655abda41d5b0fbda6f0e1c6badc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a2492655abda41d5b0fbda6f0e1c6badc">setSendTimeout</a> (uint16_t timeout)</td></tr>
@@ -130,6 +132,8 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a795b41c969708964cd4646580af1c3ab"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a795b41c969708964cd4646580af1c3ab">onReceive</a> (uint8_t *pdata, int size)</td></tr>
 <tr class="separator:a795b41c969708964cd4646580af1c3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd324920c1f35d378fb5153b51cd6561"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#acd324920c1f35d378fb5153b51cd6561">onSend</a> (uint8_t *pdata, int size)</td></tr>
+<tr class="separator:acd324920c1f35d378fb5153b51cd6561"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -481,6 +485,49 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
 
 </div>
 </div>
+<a id="acd324920c1f35d378fb5153b51cd6561"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd324920c1f35d378fb5153b51cd6561">&#9670;&nbsp;</a></span>onSend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Tiny::IProtoFd::onSend </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>pdata</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Method called by hdlc protocol upon sending next frame. Can be redefined in derived classes. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pdata</td><td>pointer to sent data </td></tr>
+    <tr><td class="paramname">size</td><td>size of sent payload in bytes </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a37292eb5c9faf1be8c4850985e0ae2eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a37292eb5c9faf1be8c4850985e0ae2eb">&#9670;&nbsp;</a></span>run_rx()</h2>
 
@@ -546,6 +593,38 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
 <p>Sets receive callback for incoming messages </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">on_receive</td><td>user callback to process incoming messages. The processing must be non-blocking </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac3c8efc9a30ab547c5d575a8de0ef1e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3c8efc9a30ab547c5d575a8de0ef1e5">&#9670;&nbsp;</a></span>setSendCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tiny::IProtoFd::setSendCallback </td>
+          <td>(</td>
+          <td class="paramtype">void(*)(<a class="el" href="classTiny_1_1IPacket.html">IPacket</a> &amp;pkt)&#160;</td>
+          <td class="paramname"><em>on_send</em> = <code>nullptr</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets send callback for outgoing messages </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">on_send</td><td>user callback to process outgoing messages. The processing must be non-blocking </td></tr>
   </table>
   </dd>
 </dl>

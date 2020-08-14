@@ -14,6 +14,7 @@ var searchData=
   ['tiny_5ferr_5fout_5fof_5fsync',['TINY_ERR_OUT_OF_SYNC',['../group__ERROR__FLAGS.html#gae1949de45d9c478830dad9c9b996193a',1,'tiny_types.h']]],
   ['tiny_5ferr_5ftimeout',['TINY_ERR_TIMEOUT',['../group__ERROR__FLAGS.html#gac9ba8076a1eb8613e8d1f07629ff0cd1',1,'tiny_types.h']]],
   ['tiny_5ferr_5fwrong_5fcrc',['TINY_ERR_WRONG_CRC',['../group__ERROR__FLAGS.html#ga618f7dd6cead76223e60300212712871',1,'tiny_types.h']]],
+  ['tiny_5fevents_5fcheck_5fint',['tiny_events_check_int',['../tiny__types_8h.html#a1a5a000a8914dc0992688738ef6a83c5',1,'tiny_types.h']]],
   ['tiny_5fevents_5fclear',['tiny_events_clear',['../tiny__types_8h.html#a478739391a83f06f56a5beaef649410c',1,'tiny_types.h']]],
   ['tiny_5fevents_5fcreate',['tiny_events_create',['../tiny__types_8h.html#a8f8dca30c01b01d94c80babecd4396a7',1,'tiny_types.h']]],
   ['tiny_5fevents_5fdestroy',['tiny_events_destroy',['../tiny__types_8h.html#a786fc845ce2ff24d7633d41e2524785c',1,'tiny_types.h']]],

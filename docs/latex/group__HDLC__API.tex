@@ -170,7 +170,7 @@ This function will return the following codes in error field\+:
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-number of processed bytes from specified data buffer. 
+number of processed bytes from specified data buffer. Never returns negative value 
 \end{DoxyReturn}
 \mbox{\Hypertarget{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}\label{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}} 
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read@{hdlc\+\_\+run\+\_\+rx\+\_\+until\+\_\+read}}
@@ -184,7 +184,7 @@ Runs rx cycle until full frame received.
 \begin{DoxyParams}{Parameters}
 {\em handle} & handle to hdlc instance \\
 \hline
-{\em readcb} & callback to read bytes from channel function \\
+{\em readcb} & callback to read bytes from channel function, cannot be N\+U\+LL \\
 \hline
 {\em user\+\_\+data} & user data to pass to readcb callback function \\
 \hline
@@ -226,9 +226,9 @@ negative value in case of error 0 if hw is busy, or no data is waiting for sendi
 
 Puts next frame for sending. This function is thread-\/safe. You may call it from parallel threads.
 
-If multithread\+\_\+mode is specificed for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will wait for specified timeout until some tx thread, implemented by application, completes sending of the frame. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be set partially, causing RX errors on other side. Please use reasonable timeout.
+If multithread\+\_\+mode is specificed for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will wait for specified timeout until some tx thread, implemented by application, completes sending of the frame. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be sent partially, causing RX errors on other side. Please use reasonable timeout.
 
-If multithread\+\_\+mode is disabled for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will start frame sending immediately by itself if TX line is not busy. \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} will block until frame is sent or timeout. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be set partially, causing RX errors on other side. Please use reasonable timeout.
+If multithread\+\_\+mode is disabled for hdlc protocol, then \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will start frame sending immediately by itself if TX line is not busy. \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} will block until frame is sent or timeout. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be sent partially, causing RX errors on other side. Please use reasonable timeout.
 
 If timeout is specified as 0, \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send()} function will not wait or perform send operation, but only pass data pointer to hdlc state machine. In this case, some other thread needs to or in the same thread you need to send data using \hyperlink{group__HDLC__API_gae31d921043b4f175603114c206b6b829}{hdlc\+\_\+run\+\_\+tx()}.
 

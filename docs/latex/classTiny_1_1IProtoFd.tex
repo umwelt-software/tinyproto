@@ -6,8 +6,7 @@
 
 
 
-Inheritance diagram for Tiny\+:\+:I\+Proto\+Fd\+:
-\nopagebreak
+Inheritance diagram for Tiny\+:\+:I\+Proto\+Fd\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -51,6 +50,8 @@ bool \hyperlink{classTiny_1_1IProtoFd_a1bf1f5211ae3a49caf73ee3de3bb9247}{enable\
 \item 
 void \hyperlink{classTiny_1_1IProtoFd_a70aa7c85b5fe83513eebb63b803d5825}{set\+Receive\+Callback} (void($\ast$on\+\_\+receive)(\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&pkt)=nullptr)
 \item 
+void \hyperlink{classTiny_1_1IProtoFd_ac3c8efc9a30ab547c5d575a8de0ef1e5}{set\+Send\+Callback} (void($\ast$on\+\_\+send)(\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&pkt)=nullptr)
+\item 
 void \hyperlink{classTiny_1_1IProtoFd_adddcc24bf1ef40d39c944679a97c1ec4}{set\+Window\+Size} (uint8\+\_\+t window)
 \item 
 void \hyperlink{classTiny_1_1IProtoFd_a2492655abda41d5b0fbda6f0e1c6badc}{set\+Send\+Timeout} (uint16\+\_\+t timeout)
@@ -59,6 +60,8 @@ void \hyperlink{classTiny_1_1IProtoFd_a2492655abda41d5b0fbda6f0e1c6badc}{set\+Se
 \begin{DoxyCompactItemize}
 \item 
 virtual void \hyperlink{classTiny_1_1IProtoFd_a795b41c969708964cd4646580af1c3ab}{on\+Receive} (uint8\+\_\+t $\ast$pdata, int size)
+\item 
+virtual void \hyperlink{classTiny_1_1IProtoFd_acd324920c1f35d378fb5153b51cd6561}{on\+Send} (uint8\+\_\+t $\ast$pdata, int size)
 \end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}
@@ -203,6 +206,19 @@ Method called by hdlc protocol upon receiving new frame. Can be redefined in der
 {\em size} & size of received payload in bytes \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IProtoFd_acd324920c1f35d378fb5153b51cd6561}\label{classTiny_1_1IProtoFd_acd324920c1f35d378fb5153b51cd6561}} 
+\index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!on\+Send@{on\+Send}}
+\index{on\+Send@{on\+Send}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
+\subsubsection{\texorpdfstring{on\+Send()}{onSend()}}
+{\footnotesize\ttfamily virtual void Tiny\+::\+I\+Proto\+Fd\+::on\+Send (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{pdata,  }\item[{int}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Method called by hdlc protocol upon sending next frame. Can be redefined in derived classes. 
+\begin{DoxyParams}{Parameters}
+{\em pdata} & pointer to sent data \\
+\hline
+{\em size} & size of sent payload in bytes \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_a37292eb5c9faf1be8c4850985e0ae2eb}\label{classTiny_1_1IProtoFd_a37292eb5c9faf1be8c4850985e0ae2eb}} 
 \index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!run\+\_\+rx@{run\+\_\+rx}}
 \index{run\+\_\+rx@{run\+\_\+rx}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
@@ -233,6 +249,17 @@ negative value in case of error
 Sets receive callback for incoming messages 
 \begin{DoxyParams}{Parameters}
 {\em on\+\_\+receive} & user callback to process incoming messages. The processing must be non-\/blocking \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTiny_1_1IProtoFd_ac3c8efc9a30ab547c5d575a8de0ef1e5}\label{classTiny_1_1IProtoFd_ac3c8efc9a30ab547c5d575a8de0ef1e5}} 
+\index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!set\+Send\+Callback@{set\+Send\+Callback}}
+\index{set\+Send\+Callback@{set\+Send\+Callback}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
+\subsubsection{\texorpdfstring{set\+Send\+Callback()}{setSendCallback()}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Proto\+Fd\+::set\+Send\+Callback (\begin{DoxyParamCaption}\item[{void($\ast$)(\hyperlink{classTiny_1_1IPacket}{I\+Packet} \&pkt)}]{on\+\_\+send = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets send callback for outgoing messages 
+\begin{DoxyParams}{Parameters}
+{\em on\+\_\+send} & user callback to process outgoing messages. The processing must be non-\/blocking \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_a2492655abda41d5b0fbda6f0e1c6badc}\label{classTiny_1_1IProtoFd_a2492655abda41d5b0fbda6f0e1c6badc}} 

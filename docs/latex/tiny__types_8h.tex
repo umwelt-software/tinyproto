@@ -7,16 +7,14 @@ Tiny protocol Types.
 
 {\ttfamily \#include \char`\"{}include/arduino\+\_\+hal.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
-Include dependency graph for tiny\+\_\+types.\+h\+:
-\nopagebreak
+Include dependency graph for tiny\+\_\+types.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=220pt]{tiny__types_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -93,6 +91,8 @@ void \hyperlink{tiny__types_8h_a8f8dca30c01b01d94c80babecd4396a7}{tiny\+\_\+even
 void \hyperlink{tiny__types_8h_a786fc845ce2ff24d7633d41e2524785c}{tiny\+\_\+events\+\_\+destroy} (tiny\+\_\+events\+\_\+t $\ast$events)
 \item 
 uint8\+\_\+t \hyperlink{tiny__types_8h_aa9f8404c92b31f6df4b2b929ad54588b}{tiny\+\_\+events\+\_\+wait} (tiny\+\_\+events\+\_\+t $\ast$event, uint8\+\_\+t bits, uint8\+\_\+t clear, uint32\+\_\+t timeout)
+\item 
+uint8\+\_\+t \hyperlink{tiny__types_8h_a1a5a000a8914dc0992688738ef6a83c5}{tiny\+\_\+events\+\_\+check\+\_\+int} (tiny\+\_\+events\+\_\+t $\ast$event, uint8\+\_\+t bits, uint8\+\_\+t clear)
 \item 
 void \hyperlink{tiny__types_8h_a7d57419d88bfa7496e9d743c7831590a}{tiny\+\_\+events\+\_\+set} (tiny\+\_\+events\+\_\+t $\ast$event, uint8\+\_\+t bits)
 \item 
@@ -180,6 +180,24 @@ the function must return negative value in case of error or number of bytes writ
 
 
 \subsection{Function Documentation}
+\mbox{\Hypertarget{tiny__types_8h_a1a5a000a8914dc0992688738ef6a83c5}\label{tiny__types_8h_a1a5a000a8914dc0992688738ef6a83c5}} 
+\index{tiny\+\_\+types.\+h@{tiny\+\_\+types.\+h}!tiny\+\_\+events\+\_\+check\+\_\+int@{tiny\+\_\+events\+\_\+check\+\_\+int}}
+\index{tiny\+\_\+events\+\_\+check\+\_\+int@{tiny\+\_\+events\+\_\+check\+\_\+int}!tiny\+\_\+types.\+h@{tiny\+\_\+types.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+events\+\_\+check\+\_\+int()}{tiny\_events\_check\_int()}}
+{\footnotesize\ttfamily uint8\+\_\+t tiny\+\_\+events\+\_\+check\+\_\+int (\begin{DoxyParamCaption}\item[{tiny\+\_\+events\+\_\+t $\ast$}]{event,  }\item[{uint8\+\_\+t}]{bits,  }\item[{uint8\+\_\+t}]{clear }\end{DoxyParamCaption})}
+
+Checks specified bits. This A\+PI can be used in interrupt handlers 
+\begin{DoxyParams}{Parameters}
+{\em event} & pointer to tiny\+\_\+event\+\_\+t variable. \\
+\hline
+{\em bits} & bits to wait for \\
+\hline
+{\em clear} & flags E\+V\+E\+N\+T\+\_\+\+B\+I\+T\+S\+\_\+\+C\+L\+E\+AR or E\+V\+E\+N\+T\+\_\+\+B\+I\+T\+S\+\_\+\+L\+E\+A\+VE \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if no any of requested bits are set list of bits from the input argument, which were set 
+\end{DoxyReturn}
 \mbox{\Hypertarget{tiny__types_8h_a478739391a83f06f56a5beaef649410c}\label{tiny__types_8h_a478739391a83f06f56a5beaef649410c}} 
 \index{tiny\+\_\+types.\+h@{tiny\+\_\+types.\+h}!tiny\+\_\+events\+\_\+clear@{tiny\+\_\+events\+\_\+clear}}
 \index{tiny\+\_\+events\+\_\+clear@{tiny\+\_\+events\+\_\+clear}!tiny\+\_\+types.\+h@{tiny\+\_\+types.\+h}}

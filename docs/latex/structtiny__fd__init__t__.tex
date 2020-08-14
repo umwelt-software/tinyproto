@@ -18,15 +18,15 @@ void $\ast$ \hyperlink{structtiny__fd__init__t___ac5e99328c76e8c11f98f1f9c911bde
 \begin{DoxyCompactList}\small\item\em user data for block read/write functions \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structtiny__fd__init__t___a437d94ac2f58ea83f510e0a35733f3a1}\label{structtiny__fd__init__t___a437d94ac2f58ea83f510e0a35733f3a1}} 
 \hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structtiny__fd__init__t___a437d94ac2f58ea83f510e0a35733f3a1}{on\+\_\+frame\+\_\+cb}
-\begin{DoxyCompactList}\small\item\em callback function to process incoming frames \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em callback function to process incoming frames. Callback is called from \hyperlink{group__FULL__DUPLEX__API_gad31f944514aef01e27bc3ec67fdbe140}{tiny\+\_\+fd\+\_\+run\+\_\+rx()} context. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structtiny__fd__init__t___ab256903ac157e22647dc37d4aee6a986}\label{structtiny__fd__init__t___ab256903ac157e22647dc37d4aee6a986}} 
 \hyperlink{tiny__types_8h_ad6bf709565b8aecb9e6ecf196f219d54}{on\+\_\+frame\+\_\+cb\+\_\+t} \hyperlink{structtiny__fd__init__t___ab256903ac157e22647dc37d4aee6a986}{on\+\_\+sent\+\_\+cb}
-\begin{DoxyCompactList}\small\item\em Callback to get notification of sent frames. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Callback to get notification of sent frames. Callback is called from \hyperlink{group__FULL__DUPLEX__API_ga601c9874a570331580856c1ea28f7914}{tiny\+\_\+fd\+\_\+run\+\_\+tx()} context. \end{DoxyCompactList}\item 
 void $\ast$ \hyperlink{structtiny__fd__init__t___a9a82b8c6c060dbc17022a0c902d436f2}{buffer}
 \item 
 \mbox{\Hypertarget{structtiny__fd__init__t___af76a7f851dc110e5c3f506f66ae91320}\label{structtiny__fd__init__t___af76a7f851dc110e5c3f506f66ae91320}} 
 uint16\+\_\+t \hyperlink{structtiny__fd__init__t___af76a7f851dc110e5c3f506f66ae91320}{buffer\+\_\+size}
-\begin{DoxyCompactList}\small\item\em maximum input buffer size \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em maximum input buffer size, see \hyperlink{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu()} \end{DoxyCompactList}\item 
 uint16\+\_\+t \hyperlink{structtiny__fd__init__t___ae6653af324c07711c4b20360760c3e3a}{send\+\_\+timeout}
 \item 
 uint16\+\_\+t \hyperlink{structtiny__fd__init__t___a54b9c689fba5aae8ccc0c29f05a159ca}{retry\+\_\+timeout}
@@ -49,7 +49,7 @@ This structure is used for initialization of Tiny Full Duplex protocol.
 \subsubsection{\texorpdfstring{buffer}{buffer}}
 {\footnotesize\ttfamily void$\ast$ tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+\+::buffer}
 
-buffer to store data during full-\/duplex protocol operating. The size should be T\+BD \mbox{\Hypertarget{structtiny__fd__init__t___ac69d819ccec020c8382eee492070a85a}\label{structtiny__fd__init__t___ac69d819ccec020c8382eee492070a85a}} 
+buffer to store data during full-\/duplex protocol operating. The size should be at least size returned by \hyperlink{group__FULL__DUPLEX__API_ga19789bea5b5acd68804773f0d6b0e3f7}{tiny\+\_\+fd\+\_\+buffer\+\_\+size\+\_\+by\+\_\+mtu()} \mbox{\Hypertarget{structtiny__fd__init__t___ac69d819ccec020c8382eee492070a85a}\label{structtiny__fd__init__t___ac69d819ccec020c8382eee492070a85a}} 
 \index{tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+@{tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+}!crc\+\_\+type@{crc\+\_\+type}}
 \index{crc\+\_\+type@{crc\+\_\+type}!tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+@{tiny\+\_\+fd\+\_\+init\+\_\+t\+\_\+}}
 \subsubsection{\texorpdfstring{crc\+\_\+type}{crc\_type}}

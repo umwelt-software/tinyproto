@@ -86,17 +86,17 @@ void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st
 <tr class="separator:ac5e99328c76e8c11f98f1f9c911bde6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a437d94ac2f58ea83f510e0a35733f3a1"><td class="memItemLeft" align="right" valign="top"><a id="a437d94ac2f58ea83f510e0a35733f3a1"></a>
 <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtiny__fd__init__t__.html#a437d94ac2f58ea83f510e0a35733f3a1">on_frame_cb</a></td></tr>
-<tr class="memdesc:a437d94ac2f58ea83f510e0a35733f3a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">callback function to process incoming frames <br /></td></tr>
+<tr class="memdesc:a437d94ac2f58ea83f510e0a35733f3a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">callback function to process incoming frames. Callback is called from <a class="el" href="group__FULL__DUPLEX__API.html#gad31f944514aef01e27bc3ec67fdbe140" title="runs rx processing for specified period of time. ">tiny_fd_run_rx()</a> context. <br /></td></tr>
 <tr class="separator:a437d94ac2f58ea83f510e0a35733f3a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab256903ac157e22647dc37d4aee6a986"><td class="memItemLeft" align="right" valign="top"><a id="ab256903ac157e22647dc37d4aee6a986"></a>
 <a class="el" href="tiny__types_8h.html#ad6bf709565b8aecb9e6ecf196f219d54">on_frame_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtiny__fd__init__t__.html#ab256903ac157e22647dc37d4aee6a986">on_sent_cb</a></td></tr>
-<tr class="memdesc:ab256903ac157e22647dc37d4aee6a986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to get notification of sent frames. <br /></td></tr>
+<tr class="memdesc:ab256903ac157e22647dc37d4aee6a986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to get notification of sent frames. Callback is called from <a class="el" href="group__FULL__DUPLEX__API.html#ga601c9874a570331580856c1ea28f7914" title="runs tx processing for specified period of time. ">tiny_fd_run_tx()</a> context. <br /></td></tr>
 <tr class="separator:ab256903ac157e22647dc37d4aee6a986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a82b8c6c060dbc17022a0c902d436f2"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtiny__fd__init__t__.html#a9a82b8c6c060dbc17022a0c902d436f2">buffer</a></td></tr>
 <tr class="separator:a9a82b8c6c060dbc17022a0c902d436f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af76a7f851dc110e5c3f506f66ae91320"><td class="memItemLeft" align="right" valign="top"><a id="af76a7f851dc110e5c3f506f66ae91320"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtiny__fd__init__t__.html#af76a7f851dc110e5c3f506f66ae91320">buffer_size</a></td></tr>
-<tr class="memdesc:af76a7f851dc110e5c3f506f66ae91320"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum input buffer size <br /></td></tr>
+<tr class="memdesc:af76a7f851dc110e5c3f506f66ae91320"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum input buffer size, see <a class="el" href="group__FULL__DUPLEX__API.html#ga19789bea5b5acd68804773f0d6b0e3f7">tiny_fd_buffer_size_by_mtu()</a> <br /></td></tr>
 <tr class="separator:af76a7f851dc110e5c3f506f66ae91320"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6653af324c07711c4b20360760c3e3a"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtiny__fd__init__t__.html#ae6653af324c07711c4b20360760c3e3a">send_timeout</a></td></tr>
 <tr class="separator:ae6653af324c07711c4b20360760c3e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,7 +123,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
         </tr>
       </table>
 </div><div class="memdoc">
-<p>buffer to store data during full-duplex protocol operating. The size should be TBD </p>
+<p>buffer to store data during full-duplex protocol operating. The size should be at least size returned by <a class="el" href="group__FULL__DUPLEX__API.html#ga19789bea5b5acd68804773f0d6b0e3f7">tiny_fd_buffer_size_by_mtu()</a> </p>
 
 </div>
 </div>

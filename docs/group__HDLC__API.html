@@ -297,7 +297,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>number of processed bytes from specified data buffer. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>number of processed bytes from specified data buffer. Never returns negative value </dd></dl>
 
 </div>
 </div>
@@ -342,7 +342,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handle</td><td>handle to hdlc instance </td></tr>
-    <tr><td class="paramname">readcb</td><td>callback to read bytes from channel function </td></tr>
+    <tr><td class="paramname">readcb</td><td>callback to read bytes from channel function, cannot be NULL </td></tr>
     <tr><td class="paramname">user_data</td><td>user data to pass to readcb callback function </td></tr>
     <tr><td class="paramname">timeout</td><td>timeout in milliseconds to wait for new frame. </td></tr>
   </table>
@@ -422,8 +422,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Puts next frame for sending. This function is thread-safe. You may call it from parallel threads.</p>
-<p>If multithread_mode is specificed for hdlc protocol, then <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will wait for specified timeout until some tx thread, implemented by application, completes sending of the frame. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be set partially, causing RX errors on other side. Please use reasonable timeout.</p>
-<p>If multithread_mode is disabled for hdlc protocol, then <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will start frame sending immediately by itself if TX line is not busy. <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> will block until frame is sent or timeout. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be set partially, causing RX errors on other side. Please use reasonable timeout.</p>
+<p>If multithread_mode is specificed for hdlc protocol, then <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will wait for specified timeout until some tx thread, implemented by application, completes sending of the frame. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be sent partially, causing RX errors on other side. Please use reasonable timeout.</p>
+<p>If multithread_mode is disabled for hdlc protocol, then <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will start frame sending immediately by itself if TX line is not busy. <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> will block until frame is sent or timeout. If timeout happens, but the frame is not sent still, hdlc level rejects sending of the frame. In this case the frame will be sent partially, causing RX errors on other side. Please use reasonable timeout.</p>
 <p>If timeout is specified as 0, <a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send()</a> function will not wait or perform send operation, but only pass data pointer to hdlc state machine. In this case, some other thread needs to or in the same thread you need to send data using <a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx()</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

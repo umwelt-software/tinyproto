@@ -205,6 +205,8 @@ Functions</h2></td></tr>
 <tr class="separator:a786fc845ce2ff24d7633d41e2524785c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9f8404c92b31f6df4b2b929ad54588b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#aa9f8404c92b31f6df4b2b929ad54588b">tiny_events_wait</a> (tiny_events_t *event, uint8_t bits, uint8_t clear, uint32_t timeout)</td></tr>
 <tr class="separator:aa9f8404c92b31f6df4b2b929ad54588b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a5a000a8914dc0992688738ef6a83c5"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a1a5a000a8914dc0992688738ef6a83c5">tiny_events_check_int</a> (tiny_events_t *event, uint8_t bits, uint8_t clear)</td></tr>
+<tr class="separator:a1a5a000a8914dc0992688738ef6a83c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d57419d88bfa7496e9d743c7831590a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a7d57419d88bfa7496e9d743c7831590a">tiny_events_set</a> (tiny_events_t *event, uint8_t bits)</td></tr>
 <tr class="separator:a7d57419d88bfa7496e9d743c7831590a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a478739391a83f06f56a5beaef649410c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tiny__types_8h.html#a478739391a83f06f56a5beaef649410c">tiny_events_clear</a> (tiny_events_t *event, uint8_t bits)</td></tr>
@@ -294,6 +296,49 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a1a5a000a8914dc0992688738ef6a83c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a5a000a8914dc0992688738ef6a83c5">&#9670;&nbsp;</a></span>tiny_events_check_int()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t tiny_events_check_int </td>
+          <td>(</td>
+          <td class="paramtype">tiny_events_t *&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>bits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>clear</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Checks specified bits. This API can be used in interrupt handlers </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>pointer to tiny_event_t variable. </td></tr>
+    <tr><td class="paramname">bits</td><td>bits to wait for </td></tr>
+    <tr><td class="paramname">clear</td><td>flags EVENT_BITS_CLEAR or EVENT_BITS_LEAVE </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if no any of requested bits are set list of bits from the input argument, which were set </dd></dl>
+
+</div>
+</div>
 <a id="a478739391a83f06f56a5beaef649410c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a478739391a83f06f56a5beaef649410c">&#9670;&nbsp;</a></span>tiny_events_clear()</h2>
 
