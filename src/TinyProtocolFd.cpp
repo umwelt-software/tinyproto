@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -81,6 +81,11 @@ int IProtoFd::write(IPacket &pkt)
 int IProtoFd::run_rx(uint16_t timeout)
 {
     return tiny_fd_run_rx( m_handle, timeout );
+}
+
+int IProtoFd::run_rx(const void *data, int len)
+{
+    return tiny_fd_on_rx_data( m_handle, data, len);
 }
 
 int IProtoFd::run_tx(uint16_t timeout)

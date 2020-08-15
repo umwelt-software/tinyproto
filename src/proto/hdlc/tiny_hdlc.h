@@ -182,6 +182,12 @@ void hdlc_reset( hdlc_handle_t handle );
  * passed to the function, then hdlc_run_rx() must be called later second
  * time with the pointer to and size of not processed bytes.
  *
+ * If you don't care about errors on RX line, it is allowed to ignore
+ * all error codes except TINY_ERR_FAILED, which means general failure.
+ *
+ * if hdlc_run_rx() returns 0 bytes processed, just call it once again.
+ * It is guaranteed, that at least second call will process bytes.
+ *
  * This function will return the following codes in error field:
  *   - TINY_ERR_DATA_TOO_LARGE if receiving data fails to fit incoming buffer
  *   - TINY_ERR_FAILED if generic failure happened

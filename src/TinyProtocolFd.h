@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -180,6 +180,14 @@ public:
      *         callback is called.
      */
     int run_rx(uint16_t timeout = 0);
+
+    /**
+     * Processes incoming rx data, specified by a user.
+     * @return TINY_SUCCESS
+     * @remark if Packet is receive during run execution
+     *         callback is called.
+     */
+    int run_rx(const void *data, int len);
 
     /**
      * Sends data to communcation channel.

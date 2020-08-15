@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -86,6 +86,12 @@ int TinyHelperFd::run_tx()
 
 int TinyHelperFd::run_rx()
 {
+    if ( m_alternate_read )
+    {
+        uint8_t buffer[16];
+        int len = read_data(this, buffer, sizeof(buffer));
+        tiny_fd_on_rx_data(m_handle, buffer, len);
+    }
     return tiny_fd_run_rx(m_handle, 10);
 }
 

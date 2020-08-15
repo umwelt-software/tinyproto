@@ -158,6 +158,21 @@ extern int tiny_fd_run_tx(tiny_fd_handle_t handle, uint16_t timeout);
 extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
 
 /**
+ * @brief runs rx bytes processing for specified buffer.
+ *
+ * Runs rx bytes processing for specified buffer.
+ * This is alternative method to run Full-duplex protocol for
+ * rx data. Use it, when you wish to control reading from hardware
+ * by yourself.
+ *
+ * @param handle handle of full-duplex protocol
+ * @param data pointer to data to process
+ * @param len length of data to process
+ * @return TINY_SUCCESS
+ */
+extern int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len);
+
+/**
  * @brief Sends userdata over full-duplex protocol.
  *
  * Sends userdata over full-duplex protocol. Note, that this command

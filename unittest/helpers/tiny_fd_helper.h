@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -42,7 +42,8 @@ public:
     int send(int count, const std::string &msg);
     int run_rx() override;
     int run_tx() override;
-    void set_ka_timeout(uint32_t timeout) { tiny_fd_set_ka_timeout( m_handle, timeout); };
+    void set_ka_timeout(uint32_t timeout) { tiny_fd_set_ka_timeout( m_handle, timeout); }
+    void set_alternate_read_method() { m_alternate_read = true; }
     using IBaseHelper<TinyHelperFd>::run;
 
     void wait_until_rx_count(int count, uint32_t timeout);
@@ -57,6 +58,7 @@ private:
     std::function<void(uint16_t,uint8_t*,int)>
                   m_onRxFrameCb;
     bool m_stop_sender = false;
+    bool m_alternate_read = false;
 
     static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
     static void   onTxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);

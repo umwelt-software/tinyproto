@@ -597,6 +597,20 @@ int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len)
+{
+    const uint8_t *ptr = (const uint8_t *)data;
+    while ( len )
+    {
+        int processed_bytes = hdlc_run_rx( &handle->_hdlc, ptr, len, NULL );
+        ptr += processed_bytes;
+        len -= processed_bytes;
+    }
+    return TINY_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *len )
 {
     uint8_t *data = NULL;

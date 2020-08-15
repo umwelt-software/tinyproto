@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -47,6 +47,29 @@ TEST(FD, multithread_basic_test)
     uint16_t     nsent = 0;
     TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr );
     TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr );
+    helper1.run(true); // tiny_fd_run_rx();
+    helper2.run(true);
+
+    // sent 200 small packets
+    for (nsent = 0; nsent < 200; nsent++)
+    {
+        uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
+        int result = helper2.send( txbuf, sizeof(txbuf) );
+        CHECK_EQUAL( TINY_SUCCESS, result );
+    }
+    // wait until last frame arrives
+    helper1.wait_until_rx_count( 200, 1000 );
+    CHECK_EQUAL( 200, helper1.rx_count() );
+}
+
+TEST(FD, multithread_alternate_read_test)
+{
+    FakeConnection conn;
+    uint16_t     nsent = 0;
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr );
+    helper1.set_alternate_read_method(); // tiny_fd_on_rx_data();
+    helper2.set_alternate_read_method();
     helper1.run(true);
     helper2.run(true);
 
