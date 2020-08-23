@@ -30,13 +30,17 @@ TinyProto is based on RFC 1662, it implements the following frames:
 
 ## Key Features
 
+Protocols, implemented by library:
+ * hdlc framing (hdlc_xxxx API, basis for light, half-duplex and full-duplex implementations)
+ * light (tiny_light_xxxx API, simplest API to use, doesn't support confirmation)
+ * half-duplex (tiny_hd_xxxx API, lightweight implementation of protocol with frame confirmation)
+ * full-duplex (tiny_fd_xxxx true RFC 1662 implementation, supports confirmation, frames retransmissions)
+
 Main features:
- * 4 protocol variants depending on your needs (basic hdlc, light, hd and fd)
  * Error detection (basic hdlc, hd and fd variants)
    * Simple 8-bit checksum (sum of bytes)
    * FCS16 (CCITT-16)
    * FCS32 (CCITT-32)
- * Frame transfer acknowledgement (hd and fd variants)
  * Frames of maximum 32K or 2G size (limit depends on platform).
  * Low SRAM consumption.
  * Low Flash consumption (features can be disabled and enabled at compilation time)
