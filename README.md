@@ -17,12 +17,10 @@
 ## Introduction
 
 Tiny Protocol is layer 2 protocol. It is intended to be used for the systems with
-small amount of resources. It is also can be compiled for desktop Linux system, and it can
-be built it for Windows. All you need is to implement callback for writing and
-reading bytes from communication line, and implement 2 application callback for incoming
-message event and outgoing message event. With this library you can easy communicate your Arduino with applications
-on PC and other boards. You don't need to think about data synchronization
-between points. No dynamic allocation of memory, so, it can be used on the systems with limited resources.
+low resources. It is also can be compiled for desktop Linux system, and it can
+be built it for Windows. Using this library you can easy implement data transfer between 2 microcontrollers
+or between microcontroller and pc. You don't need to think about data synchronization
+between points. The library use no dynamic allocation of memory.
 TinyProto is based on RFC 1662, it implements the following frames:
  * U-frames (SABM, UA)
  * S-frames (REJ, RR)
@@ -42,9 +40,9 @@ Main features:
    * FCS16 (CCITT-16)
    * FCS32 (CCITT-32)
  * Frames of maximum 32K or 2G size (limit depends on platform).
- * Low SRAM consumption.
- * Low Flash consumption (features can be disabled and enabled at compilation time)
- * No dynamic memory allocations (suitable for using on uC with limited resources or without memory manager)
+ * Low SRAM consumption (starts at 50 bytes).
+ * Low Flash consumption (starts at 1KiB, features can be disabled and enabled at compilation time)
+ * No dynamic memory allocation
  * Zero copy implementation (basic hdlc, light versions do not use copy operations)
  * Serial loopback tool for debug purposes and performance testing
 
@@ -54,7 +52,7 @@ Main features:
 
 ## Easy to use
 
-Using light variant of Tiny Protocol can look like this:
+Usage of light Tiny Protocol in C++ can look like this:
 ```.cpp
 Tiny::ProtoLight  proto;
 Tiny::Packet<256> packet;
@@ -68,7 +66,7 @@ Tiny::Packet<256> packet;
     }
 ```
 
-Example of using fd variant of Tiny Protocol is a little bit bigger, but it is still simple:
+Example of using full duplex Tiny Protocol in C++ is a little bit bigger, but it is still simple:
 ```.cpp
 Tiny::ProtoFd<FD_MIN_BUF_SIZE(64,4)>  proto;
 
