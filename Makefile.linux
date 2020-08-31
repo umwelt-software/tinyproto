@@ -17,9 +17,7 @@ TOOLS_EXT ?=
 include Makefile.common
 include Makefile.cpputest
 
-OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o \
-	tools/serial/serial_linux.o \
-	tools/serial/serial_win32.o
+OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o
 
 all: tiny_loopback
 
@@ -30,3 +28,11 @@ clean: clean_tiny_loopback
 
 clean_tiny_loopback:
 	rm -rf $(OBJ_TINY_LOOPBACK) $(OBJ_TINY_LOOPBACK:.o=.gcno) $(OBJ_TINY_LOOPBACK:.o=.gcda)
+
+cppcheck:
+	@cppcheck --force \
+	    --enable=warning,style,performance,portability \
+	    --suppress=information \
+	    -q -I ./src \
+	    --error-exitcode=1 src
+	@echo "[DONE]"

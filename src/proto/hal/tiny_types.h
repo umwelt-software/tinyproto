@@ -40,8 +40,10 @@ extern "C" {
 #include "include/linux_hal.h"
 #elif defined(__MINGW32__)
 #include "include/mingw32_hal.h"
+#elif defined(_WIN32)
+#include "include/win32_hal.h"
 #else
-#warning "Platform not supported. Multithread support is disabled"
+#info "Platform not supported. Multithread support is disabled"
 #include "include/no_platform_hal.h"
 #endif
 

@@ -543,7 +543,7 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->on_sent_cb = init->on_sent_cb;
     protocol->send_timeout = init->send_timeout;
     protocol->ka_timeout = 5000;
-    protocol->retry_timeout = init->retry_timeout ?: (protocol->send_timeout / (init->retries + 1));
+    protocol->retry_timeout = init->retry_timeout ? init->retry_timeout: (protocol->send_timeout / (init->retries + 1));
     protocol->retries = init->retries;
     protocol->frames.retries = init->retries;
     protocol->state = TINY_FD_STATE_DISCONNECTED;

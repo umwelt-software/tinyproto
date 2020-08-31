@@ -29,6 +29,8 @@
 #include "impl/linux_hal.inl"
 #elif defined(__MINGW32__)
 #include "impl/mingw32_hal.inl"
+#elif defined(_WIN32)
+#include "impl/win32_hal.inl"
 #else
 #warning "Platform not supported. Multithread support is disabled"
 #include "impl/no_platform_hal.inl"

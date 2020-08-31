@@ -17,13 +17,12 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "serial_api.h"
-
-#ifdef __linux__
+#include "proto/hal/tiny_serial.h"
 
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <termios.h>
 #include <errno.h>
 #include <string.h>
 #include <linux/serial.h>
@@ -38,28 +37,25 @@
 #define DEBUG_SERIAL_TX DEBUG_SERIAL
 #define DEBUG_SERIAL_RX DEBUG_SERIAL
 
-static int handleToFile(SerialHandle handle)
+static uint32_t bits_to_baud(uint32_t bits)
 {
-    return (int)handle;
+    if ( bits == 115200 ) return B115200;
+    if ( bits == 57600 ) return B57600;
+    if ( bits == 38400 ) return B38400;
+    return B9600;
 }
 
-static SerialHandle fileToHandle(int fd)
-{
-    SerialHandle handle = 0;
-    handle = (SerialHandle)fd;
-    return handle;
-}
 
-void CloseSerial(SerialHandle port)
+void tiny_serial_close(tiny_serial_handle_t port)
 {
-    if (handleToFile(port) >= 0)
+    if (port >= 0)
     {
-        close( handleToFile(port) );
+        close( port );
     }
 }
 
 
-SerialHandle OpenSerial(const char* name, uint32_t baud)
+tiny_serial_handle_t tiny_serial_open(const char* name, uint32_t baud)
 {
     struct termios options;
     struct termios oldt;
@@ -69,14 +65,14 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     if (fd == -1)
     {
         perror("ERROR: Failed to open serial device");
-        return INVALID_SERIAL;
+        return TINY_SERIAL_INVALID;
     }
     fcntl(fd, F_SETFL, O_RDWR);
 
     if (tcgetattr(fd, &oldt) == -1)
     {
         close(fd);
-        return INVALID_SERIAL;
+        return TINY_SERIAL_INVALID;
     }
     options = oldt;
     cfmakeraw(&options);
@@ -92,20 +88,20 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     options.c_cflag &= ~CRTSCTS;
     options.c_iflag &= ~(IXON | IXOFF | IXANY); // turn off s/w flow ctrl
 
-    if (cfsetspeed(&options, baud) == -1)
+    if (cfsetspeed(&options, bits_to_baud(baud)) == -1)
     {
         close(fd);
-        return INVALID_SERIAL;
+        return TINY_SERIAL_INVALID;
     }
-    if (cfsetospeed(&options, baud) == -1)
+    if (cfsetospeed(&options, bits_to_baud(baud)) == -1)
     {
         close(fd);
-        return INVALID_SERIAL;
+        return TINY_SERIAL_INVALID;
     }
-    if (cfsetispeed(&options, baud) == -1)
+    if (cfsetispeed(&options, bits_to_baud(baud)) == -1)
     {
         close(fd);
-        return INVALID_SERIAL;
+        return TINY_SERIAL_INVALID;
     }
 
     options.c_cc[VMIN] = 0;
@@ -115,7 +111,7 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     if (tcsetattr(fd, TCSAFLUSH, &options) == -1)
     {
         close(fd);
-        return INVALID_SERIAL;
+        return TINY_SERIAL_INVALID;
     }
 /*    ioctl(fd, TIOCGSERIAL, &serial);
     serial.xmit_fifo_size = 1;
@@ -124,18 +120,18 @@ SerialHandle OpenSerial(const char* name, uint32_t baud)
     // Flush any buffered characters
     tcflush(fd, TCIOFLUSH);
 
-    return fileToHandle(fd);
+    return fd;
 }
 
-int SerialSend(SerialHandle hPort, const void *buf, int len)
+int tiny_serial_send(tiny_serial_handle_t port, const void *buf, int len)
 {
     int ret;
-/*    if ( tcdrain( handleToFile(hPort) ) < 0 )
+/*    if ( tcdrain( port ) < 0 )
     {
         perror( "TCDRAIN" );
     }*/
     struct pollfd fds = {
-           .fd = handleToFile(hPort),
+           .fd = port,
            .events = POLLOUT | POLLWRNORM
     };
 write_poll:
@@ -152,7 +148,7 @@ write_poll:
     {
         return 0;
     }
-    ret = write(handleToFile(hPort), buf, len);
+    ret = write(port, buf, len);
     if ((ret < 0) && (errno == EAGAIN || errno == EINTR))
     {
         return 0;
@@ -167,21 +163,21 @@ write_poll:
                                          (uint8_t)(((const char *)buf)[i]),
                                          ((const char *)buf)[i]);
 #endif
-//        fflush( handleToFile(hPort) );
-//        syncfs( handleToFile(hPort) );
-//        fsync( handleToFile(hPort) );
-//        tcflush(handleToFile(hPort), TCOFLUSH);
-//        tcdrain( handleToFile(hPort) );
+//        fflush( port );
+//        syncfs( port );
+//        fsync( port );
+//        tcflush( port, TCOFLUSH);
+//        tcdrain( port );
     }
-//    tcflush(handleToFile(hPort), TCOFLUSH);
+//    tcflush(port, TCOFLUSH);
     return ret;
 }
 
 
-int SerialReceive(SerialHandle hPort, void *buf, int len)
+int tiny_serial_read(tiny_serial_handle_t port, void *buf, int len)
 {
     struct pollfd fds = {
-           .fd = handleToFile(hPort),
+           .fd = port,
            .events = POLLIN | POLLRDNORM
     };
     int ret;
@@ -199,7 +195,7 @@ read_poll:
     {
         return 0;
     }
-    ret = read(handleToFile(hPort), buf, len);
+    ret = read(port, buf, len);
     if ((ret < 0) && (errno == EAGAIN || errno == EINTR))
     {
         return 0;
@@ -218,4 +214,3 @@ read_poll:
     return ret;
 }
 
-#endif

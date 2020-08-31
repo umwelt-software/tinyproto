@@ -19,9 +19,7 @@ include Makefile.common
 TOOLS_EXT = .exe
 TOOLS_LDFLAGS += -L$(BLD) -l tinyprotocol -lm -lpthread  -Wl,--subsystem,windows -mwindows -static -lstdc++
 
-OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o \
-	tools/serial/serial_linux.o \
-	tools/serial/serial_win32.o
+OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o
 
 .PHONY: clean release debug
 
