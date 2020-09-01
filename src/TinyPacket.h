@@ -52,7 +52,7 @@ public:
      * @param size - size of the buffer to hold packet data
      * @note passed buffer must exist all lifecycle of the Packet object.
      */
-    IPacket(char *buf, size_t size)     { m_len = 0; m_size = size; m_buf = (uint8_t*)buf; m_p=0; }
+    IPacket(char *buf, size_t size)     { m_len = 0; m_size = static_cast<int>(size); m_buf = (uint8_t*)buf; m_p=0; }
 
     /**
      * Destroys the object
@@ -103,7 +103,7 @@ public:
      * @param str - string to put.
      */
     inline void put    (const char *str){ strncpy((char *)&m_buf[m_len], str, m_size - m_len);
-                                          m_len += strlen(str);
+                                          m_len += static_cast<int>(strlen(str));
                                           m_buf[m_len++] = 0; }
 
     /**
@@ -146,7 +146,7 @@ public:
      * Reads zero-terminated string from the packet.
      * @return zero-terminated string.
      */
-    inline char* getString   ()        { char *p = (char *)&m_buf[m_p]; m_p += strlen(p) + 1; return p; }
+    inline char* getString   ()        { char *p = (char *)&m_buf[m_p]; m_p += static_cast<int>(strlen(p)) + 1; return p; }
 
     /**
      * Returns size of payload data in the received packet.

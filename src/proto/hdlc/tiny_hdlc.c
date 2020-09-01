@@ -86,7 +86,7 @@ int hdlc_close( hdlc_handle_t handle )
         if ( handle->on_frame_sent )
         {
             handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
-                                   handle->tx.data - handle->tx.origin_data );
+                                   (int)(handle->tx.data - handle->tx.origin_data) );
         }
     }
     tiny_events_destroy( &handle->events );
@@ -254,7 +254,7 @@ static int hdlc_send_end( hdlc_handle_t handle )
         if ( handle->on_frame_sent )
         {
             handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
-                                   handle->tx.data - handle->tx.origin_data );
+                                   (int)(handle->tx.data - handle->tx.origin_data) );
         }
         tiny_events_set( &handle->events, TX_DATA_SENT_BIT );
         tiny_events_set( &handle->events, TX_ACCEPT_BIT );
@@ -436,7 +436,7 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
         return 0; // That's OK, we actually didn't process anything from user bytes
     }
     handle->rx.state = hdlc_read_start;
-    int len = handle->rx.data - (uint8_t *)handle->rx_buf;
+    int len = (int)(handle->rx.data - (uint8_t *)handle->rx_buf);
     if ( len > handle->rx_buf_size )
     {
         // Buffer size issue, too long packet
@@ -557,7 +557,7 @@ int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *
             uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, EVENT_BITS_CLEAR, 0 );
             if ( bits )
             {
-                result = handle->rx.data - (uint8_t *)handle->rx_buf;
+                result = (int)(handle->rx.data - (uint8_t *)handle->rx_buf);
                 break;
             }
         }

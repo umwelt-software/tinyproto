@@ -49,12 +49,20 @@ static int s_sentBytes = 0;
 
 static int serial_send(void *p, const void *buf, int len)
 {
+#ifdef __linux__
     return tiny_serial_send(reinterpret_cast<intptr_t>(p), buf, len);
+#else
+    return tiny_serial_send(reinterpret_cast<tiny_serial_handle_t>(p), buf, len);
+#endif
 }
 
 static int serial_receive(void *p, void *buf, int len)
 {
+#ifdef __linux__
     return tiny_serial_read(reinterpret_cast<intptr_t>(p), buf, len);
+#else
+    return tiny_serial_read(reinterpret_cast<tiny_serial_handle_t>(p), buf, len);
+#endif
 }
 
 static void print_help()
@@ -186,17 +194,17 @@ static void onSendFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
 
 static int run_hd(tiny_serial_handle_t port)
 {
-    uint8_t inBuffer[s_packetSize * 2];
+    uint8_t* inBuffer = new uint8_t[s_packetSize * 2];
     STinyHdInit init{};
     STinyHdData tiny{};
-    memset( inBuffer, 0, sizeof(inBuffer) );
+    memset( inBuffer, 0, s_packetSize * 2);
     init.write_func       = serial_send;
     init.read_func        = serial_receive;
     init.pdata            = reinterpret_cast<void *>(port);
     init.on_frame_cb      = onReceiveFrameHd;
     init.on_sent_cb       = onSendFrameHd;
     init.inbuf            = inBuffer;
-    init.inbuf_size       = sizeof(inBuffer);
+    init.inbuf_size       = s_packetSize * 2;
     init.timeout          = 100;
     init.crc_type         = s_crc;
     init.multithread_mode = 0;
@@ -232,6 +240,7 @@ static int run_hd(tiny_serial_handle_t port)
         }
     }
     tiny_hd_close(&tiny);
+    delete[] inBuffer;
     return 0;
 }
 

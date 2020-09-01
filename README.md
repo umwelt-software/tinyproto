@@ -9,6 +9,7 @@
   * [Supported platforms](#supported-platforms)
   * [Easy to use](#easy-to-use)
   * [Setting up](#setting-up)
+  * [How to buid](#how-to-build)
   * [Using tiny_loopback tool](#using-tiny_loopback-tool)
   * [License](#license)
 
@@ -85,6 +86,25 @@ void loop() {
     }
     proto.run_tx();
 }
+```
+
+## How to build
+
+### Linux
+```.txt
+make
+# === OR ===
+mkdir build
+cd build
+cmake ..
+make
+```
+
+### Windows
+```.txt
+mkdir build
+cd build
+cmake -G "Visual Studio 16 2019" -DEXAMPLES=ON ..
 ```
 
 ## Setting up

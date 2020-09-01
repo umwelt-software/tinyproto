@@ -17,7 +17,7 @@ TOOLS_EXT ?=
 include Makefile.common
 include Makefile.cpputest
 
-OBJ_TINY_LOOPBACK = tools/loopback/tiny_loopback.o
+OBJ_TINY_LOOPBACK = examples/linux/loopback/tiny_loopback.o
 
 all: tiny_loopback
 
