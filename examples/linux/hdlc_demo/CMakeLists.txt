@@ -4,11 +4,11 @@ file(GLOB_RECURSE SOURCE_FILES *.cpp *.c)
 
 if (NOT DEFINED COMPONENT_DIR)
 
-    project (tiny_loopback)
+    project (hdlc_demo)
 
-    add_executable(tiny_loopback ${SOURCE_FILES})
+    add_executable(hdlc_demo ${SOURCE_FILES})
 
-    target_link_libraries(tiny_loopback tinyproto)
+    target_link_libraries(hdlc_demo tinyproto)
 
     if (WIN32)
         find_package(Threads REQUIRED)
@@ -17,7 +17,6 @@ if (NOT DEFINED COMPONENT_DIR)
     elseif (UNIX)
         find_package(Threads REQUIRED)
         target_link_libraries(${PROJECT_NAME} Threads::Threads)
-#        target_link_libraries(tiny_loopback pthread)
     endif()
 
 else()

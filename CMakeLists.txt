@@ -15,6 +15,7 @@ if (NOT DEFINED COMPONENT_DIR)
 
     if (EXAMPLES)
         add_subdirectory(examples/linux/loopback)
+        add_subdirectory(examples/linux/hdlc_demo)
     endif()
 
 else()

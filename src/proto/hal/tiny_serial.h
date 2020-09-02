@@ -63,7 +63,7 @@ extern void tiny_serial_close(tiny_serial_handle_t port);
 /**
  * @brief Sends data over serial connection
  *
- * Sends data over serial connection.
+ * Sends data over serial connection with 100 ms timeout.
  * @param port handle to serial port
  * @param buf pointer to data buffer to send
  * @param len length of data to send
@@ -73,9 +73,22 @@ extern void tiny_serial_close(tiny_serial_handle_t port);
 extern int tiny_serial_send(tiny_serial_handle_t port, const void *buf, int len);
 
 /**
+ * @brief Sends data over serial connection
+ *
+ * Sends data over serial connection.
+ * @param port handle to serial port
+ * @param buf pointer to data buffer to send
+ * @param len length of data to send
+ * @param timeout_ms timeout in milliseconds to wait until data are sent
+ * @return negative value in case of error.
+ *         or number of bytes sent
+ */
+extern int tiny_serial_send_timeout(tiny_serial_handle_t port, const void *buf, int len, uint32_t timeout_ms);
+
+/**
  * @brief Receive data from serial connection
  *
- * Receive data from serial connection.
+ * Receive data from serial connection with 100ms timeout.
  * @param port handle to serial port
  * @param buf pointer to data buffer to read to
  * @param len maximum size of receive buffer
@@ -83,6 +96,20 @@ extern int tiny_serial_send(tiny_serial_handle_t port, const void *buf, int len)
  *         or number of bytes received
  */
 extern int tiny_serial_read(tiny_serial_handle_t port, void *buf, int len);
+
+/**
+ * @brief Receive data from serial connection
+ *
+ * Receive data from serial connection.
+ * @param port handle to serial port
+ * @param buf pointer to data buffer to read to
+ * @param len maximum size of receive buffer
+ * @param timeout_ms timeout in milliseconds to wait for incoming data
+ * @return negative value in case of error.
+ *         or number of bytes received
+ */
+extern int tiny_serial_read_timeout(tiny_serial_handle_t port, void *buf, int len, uint32_t timeout_ms);
+
 
 #ifdef __cplusplus
 }

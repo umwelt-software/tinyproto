@@ -138,6 +138,9 @@ typedef struct _hdlc_handle_t
     } rx;
     struct
     {
+        void *user_data;
+        uint8_t *out_buffer;
+        int out_buffer_len;
         const uint8_t *origin_data;
         const uint8_t *data;
         int len;
@@ -243,6 +246,12 @@ void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size);
  *         positive number of bytes passed to hw channel.
  */
 int hdlc_run_tx( hdlc_handle_t handle );
+
+/**
+ * If hdlc protocol has some data to send it will full data with
+ *
+ */
+int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len );
 
 /**
  * Puts next frame for sending. This function is thread-safe.
