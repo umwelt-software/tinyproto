@@ -19,21 +19,14 @@
 
 /**
  * This is example with single hdlc thread, which shows how to work with TinyProto
- * library in single loop architecture. Of course, in Linux environment such
- * implementation has disadvantages:
- *    - single TX and RX lines need to be processed in order, it is not possible
- *      to use blocking read/write operations. Or you can miss incoming data over
- *      serial connection
- *    - impossibility of blocking operations usage causes busy loop issues.
- *
- * This implementation is more suitable for implementing communication via SPI bus
+ * library in mutilthread mode. This example is suitable for heavy OS like Linux and
+ * Windows.
  */
 
 #include "proto/hal/tiny_serial.h"
 #include "proto/hdlc/tiny_hdlc.h"
 #include "TinyProtocol.h"
 #include <stdio.h>
-//#include <time.h>
 #include <cstring>
 #include <chrono>
 #include <thread>
@@ -79,32 +72,11 @@ static int on_frame_sent(void *user_data, const void *data, int len)
     return 0;
 }
 
-static void protocol_thread(tiny_serial_handle_t serial)
+static void protocol_tx_thread(tiny_serial_handle_t serial, hdlc_handle_t handle)
 {
-    uint8_t rx[4];
     uint8_t tx[4];
-    int rx_len = 0;
     int tx_len = 0;
     int tx_pos = 0;
-    int rx_pos = 0;
-
-    // Init hdlc protocol
-    hdlc_struct_t conf{};
-    conf.send_tx = nullptr;
-    conf.on_frame_read = on_frame_read;
-    conf.on_frame_sent = on_frame_sent;
-    conf.rx_buf = malloc( 1024 );
-    conf.rx_buf_size = 1024;
-    conf.crc_type = HDLC_CRC_16;
-    conf.user_data = nullptr;
-    conf.multithread_mode = 0;
-
-    hdlc_handle_t handle = hdlc_init( &conf );
-    if ( !handle )
-    {
-        fprintf(stderr, "Error initializing hdlc protocol\n");
-        return;
-    }
 
     // run infinite loop
     char * message = nullptr;
@@ -128,7 +100,7 @@ static void protocol_thread(tiny_serial_handle_t serial)
         }
         if ( tx_len )
         {
-            int result = tiny_serial_send_timeout( serial, tx + tx_pos, tx_len, 1);
+            int result = tiny_serial_send_timeout( serial, tx + tx_pos, tx_len, 100);
             if ( result < 0 )
             {
                  break;
@@ -136,9 +108,20 @@ static void protocol_thread(tiny_serial_handle_t serial)
             tx_pos += result;
             tx_len -= result;
         }
+    }
+}
+
+static void protocol_rx_thread(tiny_serial_handle_t serial, hdlc_handle_t handle)
+{
+    uint8_t rx[4];
+    int rx_len = 0;
+    int rx_pos = 0;
+
+    for(;;)
+    {
         if ( rx_len == 0 )
         {
-            int result = tiny_serial_read_timeout(serial, rx, sizeof(rx), 1);
+            int result = tiny_serial_read_timeout(serial, rx, sizeof(rx), 100);
             if ( result < 0 )
             {
                  break;
@@ -150,10 +133,6 @@ static void protocol_thread(tiny_serial_handle_t serial)
         rx_pos += result;
         rx_len -= result;
     }
-
-    hdlc_close( handle );
-
-    free( conf.rx_buf );
 }
 
 int main(int argc, char *argv[])
@@ -170,8 +149,28 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // Init hdlc protocol
+    hdlc_struct_t conf{};
+    conf.send_tx = nullptr;
+    conf.on_frame_read = on_frame_read;
+    conf.on_frame_sent = on_frame_sent;
+    conf.rx_buf = malloc( 1024 );
+    conf.rx_buf_size = 1024;
+    conf.crc_type = HDLC_CRC_16;
+    conf.user_data = nullptr;
+    conf.multithread_mode = 1;
+
+    hdlc_handle_t handle = hdlc_init( &conf );
+    if ( !handle )
+    {
+        tiny_serial_close( serial );
+        fprintf(stderr, "Error initializing hdlc protocol\n");
+        return 1;
+    }
+
     tiny_mutex_create( &queue_mutex );
-    std::thread  hdlc_thread( protocol_thread, serial );
+    std::thread  tx_thread( protocol_tx_thread, serial, handle );
+    std::thread  rx_thread( protocol_rx_thread, serial, handle );
     // Main program cycle
     for(;;)
     {
@@ -179,7 +178,12 @@ int main(int argc, char *argv[])
         send_message("Hello message");
     }
 
-    hdlc_thread.join();
+    tx_thread.join();
+    rx_thread.join();
+
+    hdlc_close( handle );
+    free( conf.rx_buf );
+
     tiny_mutex_destroy( &queue_mutex );
     tiny_serial_close(serial);
     return 0;
