@@ -302,6 +302,8 @@ static int hdlc_send_tx_internal( void *user_data, const void *data, int len )
     {
         handle->tx.out_buffer[0] = ptr[0];
         handle->tx.out_buffer_len--;
+        handle->tx.out_buffer++;
+        ptr++;
         sent++;
     }
     return sent;
@@ -309,6 +311,7 @@ static int hdlc_send_tx_internal( void *user_data, const void *data, int len )
 
 int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len )
 {
+    bool repeated_empty_data = false;
     handle->tx.out_buffer = (uint8_t *)data;
     handle->tx.out_buffer_len = len;
     while ( handle->tx.out_buffer_len )
@@ -316,7 +319,15 @@ int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len )
         int result = hdlc_run_tx( handle );
         if ( result <= 0 )
         {
-            break;
+            if ( repeated_empty_data )
+            {
+                break;
+            }
+            repeated_empty_data = true;
+        }
+        else
+        {
+            repeated_empty_data = false;
         }
     }
     return len - handle->tx.out_buffer_len;
@@ -549,7 +560,11 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
 {
     int result = 0;
-    for (;;)
+    if ( error )
+    {
+        *error = TINY_SUCCESS;
+    }
+    while ( len )
     {
         int temp_result = handle->rx.state( handle, (const uint8_t *)data, len );
         if ( temp_result <=0 )

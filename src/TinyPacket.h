@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2019 (C) Alexey Dynda
+    Copyright 2016-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -172,6 +172,7 @@ public:
     uint8_t &operator[]      (size_t idx) { return m_buf[idx]; }
 
 private:
+    friend class        ProtoHdlc;
     friend class        ProtoHd;
     friend class        IProtoFd;
     friend class        ProtoLight;

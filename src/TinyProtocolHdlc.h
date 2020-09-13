@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -27,7 +27,7 @@
 #pragma once
 
 #include "TinyPacket.h"
-#include "proto/fd/tiny_fd.h"
+#include "proto/hdlc/tiny_hdlc.h"
 
 #ifdef ARDUINO
 #   include <HardwareSerial.h>
@@ -38,35 +38,33 @@
 namespace Tiny {
 
 /**
- * @ingroup FULL_DUPLEX_API
+ * @ingroup HDLC_API
  * @{
  */
 
 
 /**
- *  IProtoFd class incapsulates Full Duplex Protocol functionality.
- *  Full Duplex version of the Protocol allows to send messages with
+ *  ProtoHdlc class incapsulates hdlc Protocol functionality.
+ *  hdlc version of the Protocol allows to send messages with
  *  confirmation.
  *  Remember that you may use always C-style API functions
  *  instead C++. Please refer to documentation.
  */
-class IProtoFd
+class ProtoHdlc
 {
 public:
-    friend class ProtoFdD;
     /**
-     * Initializes IProtoFd object
+     * Initializes ProtoHdlc object
      * @param buffer - buffer to store the frames being received.
      * @param bufferSize - size of the buffer
      */
-    IProtoFd(void * buffer,
-             int    bufferSize)
-         : m_buffer( (uint8_t *)buffer )
-         , m_bufferSize( bufferSize )
+    ProtoHdlc(void *buffer, int bufferSize)
+        : m_buffer( buffer )
+        , m_bufferSize( bufferSize )
     {
     }
 
-    virtual ~IProtoFd() = default;
+    virtual ~ProtoHdlc() = default;
 
     /**
      * Initializes protocol internal variables.
@@ -79,12 +77,10 @@ public:
     void begin          (write_block_cb_t writecb,
                          read_block_cb_t readcb);
 
-
     /**
      * Initializes protocol internal variables.
      * If you need to switch communication with other destination
      * point, you can call this method one again after calling end().
-     * Use this method if you want to control write and read data by yourself
      * @return None
      */
     void begin();
@@ -182,16 +178,6 @@ public:
     int  write(IPacket &pkt);
 
     /**
-     * Checks communcation channel for incoming messages.
-     * @return negative value in case of error
-     *         zero if nothing is read
-     *         positive - Packet is successfully received
-     * @remark if Packet is receive during run execution
-     *         callback is called.
-     */
-    int run_rx(uint16_t timeout = 0);
-
-    /**
      * Processes incoming rx data, specified by a user.
      * @return TINY_SUCCESS
      * @remark if Packet is receive during run execution
@@ -200,19 +186,12 @@ public:
     int run_rx(const void *data, int len);
 
     /**
-     * Sends data to communcation channel.
-     * @return negative value in case of error
+     * Generates data for tx channel
+     * @param data buffer to fill
+     * @param max_len length of buffer
+     * @return number of bytes generated
      */
-    int run_tx(uint16_t timeout = 0);
-
-    /**
-     * Force protocol to generate tx data for you.
-     * In this case you will need to send data to remote side by yourself.
-     * @param data buffer to fill with tx data
-     * @param max_size maximum size of the buffer
-     * @return number of bytes written to buffer
-     */
-    int run_tx(void *data, int max_size);
+    int run_tx(void *data, int max_len);
 
     /**
      * Disable CRC field in the protocol.
@@ -268,20 +247,6 @@ public:
      */
     void setSendCallback(void (*on_send)(IPacket &pkt) = nullptr) { m_onSend = on_send; };
 
-    /**
-     * Sets desired window size. Use this function only before begin() call.
-     * window size is number of frames, which confirmation may be deferred for.
-     * @param window window size, valid between 1 - 7 inclusively
-     * @warning if you use smallest window size, this can reduce throughput of the channel.
-     */
-    void setWindowSize(uint8_t window) { m_window = window; }
-
-    /**
-     * Sets send timeout in milliseconds.
-     * @param timeout timeout in milliseconds,
-     */
-    void setSendTimeout(uint16_t timeout) { m_sendTimeout = timeout; }
-
 protected:
     /**
      * Method called by hdlc protocol upon receiving new frame.
@@ -302,7 +267,7 @@ protected:
      * @param pdata pointer to sent data
      * @param size size of sent payload in bytes
      */
-    virtual void onSend(uint8_t *pdata, int size)
+    virtual void onSend(const uint8_t *pdata, int size)
     {
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
@@ -311,21 +276,15 @@ protected:
 
 private:
     /** The variable contain protocol state */
-    tiny_fd_handle_t    m_handle = nullptr;
+    hdlc_handle_t       m_handle = nullptr;
 
-    /** buffer to receive data to */
-    uint8_t             *m_buffer = nullptr;
+    hdlc_struct_t       m_data{};
 
-    hdlc_crc_t          m_crc = HDLC_CRC_DEFAULT;
+    void               *m_buffer = nullptr;
 
-    /** max buffer size */
     int                 m_bufferSize = 0;
 
-    /** Use 0-value timeout for small controllers as all operations should be non-blocking */
-    uint16_t            m_sendTimeout = 0;
-
-    /** Limit window to only 3 frames for small controllers by default */
-    uint8_t             m_window = 3;
+    hdlc_crc_t          m_crc = HDLC_CRC_DEFAULT;
 
     /** Callback, when new frame is received */
     void              (*m_onReceive)(IPacket &pkt) = nullptr;
@@ -334,39 +293,10 @@ private:
     void              (*m_onSend)(IPacket &pkt) = nullptr;
 
     /** Internal function */
-    static void         onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
+    static int         onReceiveInternal(void *handle, void *pdata, int size);
 
     /** Internal function */
-    static void         onSendInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
-};
-
-/**
- * This is class, which allocates buffers statically. Use it for systems with low resources.
- */
-template <int S>
-class ProtoFd: public IProtoFd
-{
-public:
-    ProtoFd(): IProtoFd( m_data, S ) {}
-private:
-    uint8_t m_data[S];
-};
-
-/**
- * This is special class for Full duplex protocol, which allocates buffers dynamically.
- * We need to have separate class for this, as on small microcontrollers dynamic allocation
- * in basic class increases flash consumption, even if dynamic memory is not used.
- */
-class ProtoFdD: public IProtoFd
-{
-public:
-    /**
-     * Creates instance of Full duplex protocol with dynamically allocated buffer.
-     * Use this class only on powerful microcontrollers.
-     */
-    ProtoFdD( int size ): IProtoFd( new uint8_t[size], size ) { }
-    ~ProtoFdD() { delete[] m_buffer; }
-private:
+    static int         onSendInternal(void *handle, const void *pdata, int size);
 };
 
 /**

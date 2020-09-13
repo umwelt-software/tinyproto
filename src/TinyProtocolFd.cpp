@@ -62,6 +62,11 @@ void IProtoFd::begin(write_block_cb_t writecb,
     tiny_fd_init( &m_handle, &init  );
 }
 
+void IProtoFd::begin()
+{
+    begin( nullptr, nullptr );
+}
+
 void IProtoFd::end()
 {
     if ( m_bufferSize == 0 ) return;
@@ -91,6 +96,11 @@ int IProtoFd::run_rx(const void *data, int len)
 int IProtoFd::run_tx(uint16_t timeout)
 {
     return tiny_fd_run_tx( m_handle, timeout );
+}
+
+int IProtoFd::run_tx(void *data, int max_size)
+{
+    return tiny_fd_get_tx_data( m_handle, data, max_size );
 }
 
 void IProtoFd::disableCrc()

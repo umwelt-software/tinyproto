@@ -142,8 +142,21 @@ extern void tiny_fd_close(tiny_fd_handle_t handle);
  *
  * @param handle handle of full-duplex protocol
  * @param timeout maximum timeout in milliseconds to perform tx operations
+ * @return TINY_ERR_TIMEOUT, or TINY_SUCCESS
  */
 extern int tiny_fd_run_tx(tiny_fd_handle_t handle, uint16_t timeout);
+
+/**
+ * @brief runs tx processing to fill specified buffer with data.
+ *
+ * Runs tx processing to fill specified buffer with data.
+ *
+ * @param handle handle of full-duplex protocol
+ * @param data pointer to buffer to fill with tx data
+ * @param len maximum size of specified buffer
+ * @return number of bytes written to specified buffer
+ */
+extern int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len );
 
 /**
  * @brief runs rx processing for specified period of time.

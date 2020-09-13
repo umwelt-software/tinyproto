@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2019 (C) Alexey Dynda
+    Copyright 2016-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -29,6 +29,7 @@
 
 #include "TinyPacket.h"
 #include "TinyLightProtocol.h"
+#include "TinyProtocolHdlc.h"
 #include "TinyProtocolHd.h"
 #include "TinyProtocolFd.h"
 

@@ -27,6 +27,9 @@ extern "C"
 {
 #endif
 
+/** Byte to fill gap between frames */
+#define TINY_HDLC_FILL_BYTE            0xFF
+
 /**
  * @defgroup HDLC_API Tiny HDLC protocol API functions
  * @{
@@ -249,7 +252,13 @@ int hdlc_run_tx( hdlc_handle_t handle );
 
 /**
  * If hdlc protocol has some data to send it will full data with
+ * This function returns either if no more data to send, or specified
+ * buffer is filled completely.
  *
+ * @param handle handle to hdlc instance
+ * @param data pointer to buffer to fill with data
+ * @param len length of specified buffer
+ * @return number of bytes written to specified buffer
  */
 int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len );
 
