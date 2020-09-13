@@ -17,11 +17,11 @@
 
 ## Introduction
 
-Tiny Protocol is layer 2 protocol. It is intended to be used for the systems with
-low resources. It is also can be compiled for desktop Linux system, and it can
-be built it for Windows. Using this library you can easy implement data transfer between 2 microcontrollers
-or between microcontroller and pc. You don't need to think about data synchronization
-between points. The library use no dynamic allocation of memory.
+Tiny Protocol is layer 2 protocol. It is intended to be used for the systems with low resources.
+It is also can be compiled for desktop Linux system, and it can be built it for Windows.
+Using this library you can easy implement data transfer between 2 microcontrollers or between microcontroller and pc via UART, SPI,
+I2C or any other communication channels.
+You don't need to think about data synchronization between points. The library use no dynamic allocation of memory.
 TinyProto is based on RFC 1662, it implements the following frames:
  * U-frames (SABM, UA)
  * S-frames (REJ, RR)
