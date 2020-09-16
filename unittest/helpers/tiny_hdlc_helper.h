@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -22,7 +22,7 @@
 #include <functional>
 #include <stdint.h>
 #include <thread>
-#include "fake_channel.h"
+#include "fake_endpoint.h"
 #include "proto/hdlc/tiny_hdlc.h"
 
 class TinyHdlcHelper: public IBaseHelper<TinyHdlcHelper>
@@ -30,7 +30,7 @@ class TinyHdlcHelper: public IBaseHelper<TinyHdlcHelper>
 private:
     hdlc_struct_t     m_handle;
 public:
-    TinyHdlcHelper(FakeChannel         * channel,
+    TinyHdlcHelper(FakeEndpoint         * endpoint,
                    const std::function<void(uint8_t*,int)> &onRxFrameCb = nullptr,
                    const std::function<void(uint8_t*,int)> &onTxFrameCb = nullptr,
                    int rx_buf_size = 1024,

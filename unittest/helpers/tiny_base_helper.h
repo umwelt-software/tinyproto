@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -24,12 +24,12 @@
 #include <thread>
 #include <atomic>
 #include "proto/half_duplex/tiny_hd.h"
-#include "fake_channel.h"
+#include "fake_endpoint.h"
 
 class BaseHelper
 {
 public:
-    BaseHelper(FakeChannel * channel,
+    BaseHelper(FakeEndpoint * endpoint,
                int rxBufferSize );
     virtual ~BaseHelper();
     virtual int run_rx() = 0;
@@ -37,7 +37,7 @@ public:
     int run(bool forked);
     void stop();
 protected:
-    FakeChannel * m_channel;
+    FakeEndpoint * m_endpoint;
     std::thread * m_receiveThread = nullptr;
     std::thread * m_sendThread = nullptr;
     std::atomic<bool> m_forceStop;
@@ -58,13 +58,13 @@ protected:
     {
         T *helper = reinterpret_cast<T*>(appdata);
         IBaseHelper<T> * base = helper;
-        return base->m_channel->read((uint8_t *)data, length);
+        return base->m_endpoint->read((uint8_t *)data, length);
     }
 
     static int write_data(void * appdata, const void * data, int length)
     {
         T *helper = reinterpret_cast<T*>(appdata);
         IBaseHelper<T> * base = helper;
-        return base->m_channel->write((const uint8_t *)data, length);
+        return base->m_endpoint->write((const uint8_t *)data, length);
     }
 };

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2019 (C) Alexey Dynda
+    Copyright 2017-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -19,11 +19,11 @@
 
 #include "tiny_hd_helper.h"
 
-TinyHelperHd::TinyHelperHd(FakeChannel * channel,
+TinyHelperHd::TinyHelperHd(FakeEndpoint * endpoint,
                            int rxBufferSize,
                            const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb,
                            bool  multithread_mode)
-    :IBaseHelper(channel, rxBufferSize)
+    :IBaseHelper(endpoint, rxBufferSize)
     ,m_onRxFrameCb(onRxFrameCb)
 {
     STinyHdInit   init = {0};

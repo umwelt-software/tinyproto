@@ -33,11 +33,13 @@ TEST_GROUP(FD)
     void setup()
     {
         // ...
+//        fprintf(stderr, "======== START =======\n" );
     }
 
     void teardown()
     {
         // ...
+//        fprintf(stderr, "======== END =======\n" );
     }
 };
 
@@ -95,7 +97,8 @@ TEST(FD, arduino_to_pc)
                           { if ( arduino.send(b, s) == TINY_ERR_TIMEOUT ) low_device_frames++; }, 4, 0 );
     conn.endpoint2().setTimeout( 0 );
     conn.endpoint2().disable();
-    conn.setSpeed( 115200 );
+    // TODO: Due to slow emulator
+    conn.setSpeed( 14400 );
     pc.run(true);
     pc.send( 100, "Generated frame. test in progress" );
     // Usually arduino starts later by 2 seconds due to reboot on UART-2-USB access, emulate al teast 100ms delay
@@ -117,8 +120,10 @@ TEST(FD, errors_on_tx_line)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 1000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 1000 );
+    // TODO: 9600 for now due to slow emulator
+    conn.setSpeed( 9600 );
     conn.line2().generate_error_every_n_byte( 200 );
     helper1.run(true);
     helper2.run(true);
@@ -141,8 +146,8 @@ TEST(FD, error_on_single_I_send)
     // TX2: U, U, I,
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 2000 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 2000 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 1000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 1000 );
     conn.line2().generate_single_error( 6 + 6 + 3 ); // Put error on I-frame
     helper1.run(true);
     helper2.run(true);
@@ -154,7 +159,7 @@ TEST(FD, error_on_single_I_send)
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 1, 2000 );
+    helper1.wait_until_rx_count( 1, 1000 );
     CHECK_EQUAL( 1, helper1.rx_count() );
 }
 
@@ -165,8 +170,8 @@ TEST(FD, error_on_rej)
     // TX2: U, U, I,
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 2000 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 2000 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 1000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 1000 );
     conn.line2().generate_single_error( 6 + 6 + 4 ); // Put error on first I-frame
     conn.line1().generate_single_error( 6 + 6 + 3 ); // Put error on S-frame REJ
     helper1.run(true);
@@ -179,7 +184,7 @@ TEST(FD, error_on_rej)
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 2, 2000 );
+    helper1.wait_until_rx_count( 2, 1000 );
     CHECK_EQUAL( 2, helper1.rx_count() );
 }
 

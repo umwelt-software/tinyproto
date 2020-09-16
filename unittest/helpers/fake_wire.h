@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017,2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <mutex>
 #include <list>
+#include <queue>
 #include <thread>
 #include <atomic>
 
@@ -48,16 +49,12 @@ private:
         int period;
         int count;
     } ErrorDesc;
-    int          m_writeptr = 0;
-    int          m_readptr = 0;
     std::mutex   m_readmutex{};
     std::mutex   m_writemutex{};
-    uint8_t      *m_readbuf = nullptr;
-    uint8_t      *m_writebuf = nullptr;
+    std::queue<uint8_t> m_readbuf;
+    std::queue<uint8_t> m_writebuf;
     int          m_readbuf_size = 0;
     int          m_writebuf_size = 0;
-    int          m_readlen = 0;
-    int          m_writelen = 0;
     std::list<ErrorDesc> m_errors;
     int          m_byte_counter = 0;
     bool         m_enabled = true;

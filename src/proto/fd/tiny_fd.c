@@ -229,6 +229,7 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
         // Unblock tx queue to allow application to put new frames for sending
         tiny_events_set( &handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS );
     }
+    LOG( TINY_LOG_DEB, "[%p] Last confirmed frame: %02X\n", handle, handle->frames.confirm_ns );
     // LOG("[%p] N(S)=%d, N(R)=%d\n", handle, handle->frames.confirm_ns, handle->frames.next_nr);
 }
 
@@ -256,6 +257,7 @@ static void __resend_all_unconfirmed_frames( tiny_fd_handle_t handle, uint8_t co
         }
         handle->frames.next_ns = (handle->frames.next_ns - 1) & seq_bits_mask;
     }
+    LOG(TINY_LOG_DEB, "[%p] N(s) is set to %02X\n", handle, handle->frames.next_ns );
     tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
 }
 
@@ -581,17 +583,27 @@ int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
 {
     uint16_t ts = tiny_millis();
     int result;
+    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle ENTER with timeout %u ms\n", handle, timeout);
     do
     {
         uint8_t data;
         result = handle->read_func( handle->user_data, &data, sizeof(data) );
         if ( result > 0 )
         {
-            while ( hdlc_run_rx( &handle->_hdlc, &data, sizeof(data), &result ) == 0 );
-            // For full duplex protocol consider we have retries
-            if ( result == TINY_ERR_WRONG_CRC ) result = TINY_SUCCESS;
+            int len;
+            do
+            {
+                len = hdlc_run_rx( &handle->_hdlc, &data, sizeof(data), &result );
+                // For full duplex protocol consider we have retries
+                if ( result == TINY_ERR_WRONG_CRC )
+                {
+                    LOG(TINY_LOG_WRN, "[%p] HDLC CRC sum mismatch\n", handle);
+                    result = TINY_SUCCESS;
+                }
+            } while ( len == 0);
         }
     } while ((uint16_t)(tiny_millis() - ts) < timeout);
+    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle EXIT\n", handle);
     return result;
 }
 
@@ -602,7 +614,12 @@ int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len)
     const uint8_t *ptr = (const uint8_t *)data;
     while ( len )
     {
-        int processed_bytes = hdlc_run_rx( &handle->_hdlc, ptr, len, NULL );
+        int error;
+        int processed_bytes = hdlc_run_rx( &handle->_hdlc, ptr, len, &error );
+        if ( error == TINY_ERR_WRONG_CRC )
+        {
+            LOG(TINY_LOG_WRN, "[%p] HDLC CRC sum mismatch\n", handle);
+        }
         ptr += processed_bytes;
         len -= processed_bytes;
     }

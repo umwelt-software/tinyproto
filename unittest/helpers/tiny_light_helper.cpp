@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -22,12 +22,12 @@
 
 uint32_t TinyLightHelper::s_handleOffset;
 
-TinyLightHelper::TinyLightHelper(FakeChannel * channel,
+TinyLightHelper::TinyLightHelper(FakeEndpoint * endpoint,
                                int rx_buf_size)
     : m_handle{}
 {
     s_handleOffset = (uint8_t *)this - (uint8_t *)(&m_handle);
-    m_channel = channel;
+    m_endpoint = endpoint;
 
     tiny_light_init(&m_handle, write_data, read_data, this);
 }
@@ -45,14 +45,14 @@ int TinyLightHelper::read(uint8_t *buf, int len)
 int TinyLightHelper::read_data(void * appdata, void * data, int length)
 {
     TinyLightHelper  *helper = reinterpret_cast<TinyLightHelper *>(appdata);
-    return helper->m_channel->read((uint8_t *)data, length);
+    return helper->m_endpoint->read((uint8_t *)data, length);
 }
 
 
 int TinyLightHelper::write_data(void * appdata, const void * data, int length)
 {
     TinyLightHelper *helper = reinterpret_cast<TinyLightHelper *>(appdata);
-    return helper->m_channel->write((const uint8_t *)data, length);
+    return helper->m_endpoint->write((const uint8_t *)data, length);
 }
 
 TinyLightHelper::~TinyLightHelper()

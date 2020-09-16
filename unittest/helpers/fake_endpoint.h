@@ -24,21 +24,21 @@
 #include "fake_wire.h"
 
 
-class FakeChannel
+class FakeEndpoint
 {
 public:
-    FakeChannel(FakeWire *tx, FakeWire *rx);
-    ~FakeChannel();
+    FakeEndpoint(FakeWire &tx, FakeWire &rx);
+    ~FakeEndpoint();
     int read(uint8_t * data, int length);
     int write(const uint8_t * data, int length);
 
     void setTimeout( int timeout_ms ) { m_timeout = timeout_ms; }
-    void disable() { m_rx->disable(); }
-    void enable()  { m_rx->enable(); }
-    void flush() { m_rx->flush(); }
+    void disable() { m_rx.disable(); }
+    void enable()  { m_rx.enable(); }
+    void flush() { m_rx.flush(); }
 private:
-    FakeWire * m_tx;
-    FakeWire * m_rx;
+    FakeWire &m_tx;
+    FakeWire &m_rx;
     std::mutex m_mutex;
     int m_timeout = 1000;
 };

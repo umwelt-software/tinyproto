@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -20,12 +20,12 @@
 #include "tiny_base_helper.h"
 #include "proto/hal/tiny_types.h"
 
-BaseHelper::BaseHelper(FakeChannel * channel,
+BaseHelper::BaseHelper(FakeEndpoint * endpoint,
                        int rxBufferSize)
     : m_forceStop(false)
 {
     m_buffer = new uint8_t[rxBufferSize];
-    m_channel = channel;
+    m_endpoint = endpoint;
 }
 
 int BaseHelper::run(bool forked)

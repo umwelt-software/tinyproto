@@ -25,13 +25,13 @@
 #include <thread>
 #include <atomic>
 #include "proto/fd/tiny_fd.h"
-#include "fake_channel.h"
+#include "fake_endpoint.h"
 
 
 class TinyHelperFd: public IBaseHelper<TinyHelperFd>
 {
 public:
-    TinyHelperFd(FakeChannel * channel,
+    TinyHelperFd(FakeEndpoint * endpoint,
                  int rxBufferSize,
                  const std::function<void( uint16_t,uint8_t*,int )> &onRxFrameCb = nullptr,
                  int window_frames = 7,

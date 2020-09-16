@@ -19,12 +19,12 @@
 
 #include "tiny_fd_helper.h"
 
-TinyHelperFd::TinyHelperFd(FakeChannel * channel,
+TinyHelperFd::TinyHelperFd(FakeEndpoint * endpoint,
                            int rxBufferSize,
                            const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb,
                            int window_frames,
                            int timeout)
-    :IBaseHelper(channel, rxBufferSize)
+    :IBaseHelper(endpoint, rxBufferSize)
     ,m_onRxFrameCb(onRxFrameCb)
 {
     tiny_fd_init_t   init{};
@@ -90,7 +90,7 @@ int TinyHelperFd::run_rx()
     {
         uint8_t buffer[16];
         int len = read_data(this, buffer, sizeof(buffer));
-        tiny_fd_on_rx_data(m_handle, buffer, len);
+        return tiny_fd_on_rx_data(m_handle, buffer, len);
     }
     return tiny_fd_run_rx(m_handle, 10);
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017,2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -26,13 +26,13 @@
 #include <thread>
 #include <atomic>
 #include "proto/half_duplex/tiny_hd.h"
-#include "fake_channel.h"
+#include "fake_endpoint.h"
 
 
 class TinyHelperHd: public IBaseHelper<TinyHelperHd>
 {
 public:
-    TinyHelperHd(FakeChannel * channel,
+    TinyHelperHd(FakeEndpoint * endpoint,
                  int rxBufferSize,
                  const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb = nullptr,
                  bool  multithread_mode = false);

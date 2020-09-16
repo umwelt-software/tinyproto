@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -36,7 +36,7 @@ void FakeConnection::TransferData()
         auto endTs = std::chrono::steady_clock::now();
         while ( startTs < endTs )
         {
-            startTs +=  std::chrono::microseconds( m_interval_us.load() ? : 1);
+            startTs +=  std::chrono::microseconds( m_interval_us.load() ? m_interval_us.load() : 1);
             bytes++;
         }
         m_line1.TransferData( bytes );

@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -20,7 +20,7 @@
 
 #include <functional>
 #include <stdint.h>
-#include "fake_channel.h"
+#include "fake_endpoint.h"
 #include "proto/light/tiny_light.h"
 
 class TinyLightHelper
@@ -28,14 +28,14 @@ class TinyLightHelper
 private:
     STinyLightData     m_handle;
 public:
-    TinyLightHelper(FakeChannel         * channel,
+    TinyLightHelper(FakeEndpoint         * endpoint,
                    int rx_buf_size = 1024 );
     ~TinyLightHelper();
     int send(uint8_t *buf, int len);
     int read(uint8_t *buf, int len);
 private:
     static uint32_t s_handleOffset;
-    FakeChannel * m_channel;
+    FakeEndpoint * m_endpoint;
 
     static int    read_data(void * appdata, void * data, int length);
     static int    write_data(void * appdata, const void * data, int length);

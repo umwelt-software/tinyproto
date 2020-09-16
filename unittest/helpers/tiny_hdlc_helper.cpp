@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -19,12 +19,12 @@
 
 #include "tiny_hdlc_helper.h"
 
-TinyHdlcHelper::TinyHdlcHelper(FakeChannel * channel,
+TinyHdlcHelper::TinyHdlcHelper(FakeEndpoint * endpoint,
                                const std::function<void(uint8_t*,int)> &onRxFrameCb,
                                const std::function<void(uint8_t*,int)> &onTxFrameCb,
                                int rx_buf_size,
                                hdlc_crc_t crc)
-    : IBaseHelper( channel, rx_buf_size )
+    : IBaseHelper( endpoint, rx_buf_size )
     , m_handle{}
     , m_onRxFrameCb(onRxFrameCb)
     , m_onTxFrameCb(onTxFrameCb)
@@ -48,7 +48,7 @@ int TinyHdlcHelper::send(uint8_t *buf, int len, int timeout)
 int TinyHdlcHelper::run_rx()
 {
     uint8_t byte;
-    while ( m_channel->read(&byte, 1) == 1 )
+    while ( m_endpoint->read(&byte, 1) == 1 )
     {
         int res, error;
         do

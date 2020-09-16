@@ -17,29 +17,29 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "fake_channel.h"
+#include "fake_endpoint.h"
 
 
-FakeChannel::FakeChannel(FakeWire *tx, FakeWire *rx)
-{
-    m_rx = rx;
-    m_tx = tx;
-}
-
-FakeChannel::~FakeChannel()
+FakeEndpoint::FakeEndpoint(FakeWire &tx, FakeWire &rx)
+   : m_tx(tx)
+   , m_rx(rx)
 {
 }
 
-
-int FakeChannel::read(uint8_t * data, int length)
+FakeEndpoint::~FakeEndpoint()
 {
-    return m_rx->read(data, length, m_timeout);
 }
 
 
-int FakeChannel::write(const uint8_t * data, int length)
+int FakeEndpoint::read(uint8_t * data, int length)
 {
-    return m_tx->write(data, length, m_timeout);
+    return m_rx.read(data, length, m_timeout);
+}
+
+
+int FakeEndpoint::write(const uint8_t * data, int length)
+{
+    return m_tx.write(data, length, m_timeout);
 }
 
 
