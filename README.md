@@ -96,7 +96,7 @@ make
 # === OR ===
 mkdir build
 cd build
-cmake ..
+cmake -DEXAMPLES=ON ..
 make
 ```
 
