@@ -29,7 +29,7 @@ jobs:
       script:
         - ./.travis/setup_esp_build_env.sh travis
         - . ~/esp/esp-idf/export.sh
-        - cd examples/esp32_idf/tinyfd_loopback/components/tinyproto && ln -s ../../../../../src && ln -s ../../../../../component.mk
+        - cd examples/esp32_idf/uart/tinyfd_loopback/components/tinyproto && ln -s ../../../../../../src && ln -s ../../../../../../component.mk
         - cd ../.. && make defconfig
         - make
       cache:
