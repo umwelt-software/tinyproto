@@ -21,79 +21,81 @@
 #include <stdio.h>
 #include <thread>
 
+enum
+{
+    EV_WR_ROOM_AVAIL = 0x01,
+    EV_RD_DATA_AVAIL = 0x02,
+    EV_TR_READY      = 0x04,
+};
+
+
 FakeWire::FakeWire(int readbuf_size, int writebuf_size)
     : m_readbuf{}
     , m_writebuf{}
     , m_readbuf_size( readbuf_size )
     , m_writebuf_size( writebuf_size )
 {
+    tiny_events_create( &m_events );
+    tiny_events_clear( &m_events, EV_RD_DATA_AVAIL );
+    tiny_events_set( &m_events, EV_WR_ROOM_AVAIL );
 }
 
 
 int FakeWire::read(uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    auto startTs = std::chrono::steady_clock::now();
-    do
+    if ( tiny_events_wait( &m_events, EV_RD_DATA_AVAIL, EVENT_BITS_CLEAR, timeout ) == 0 )
     {
-        m_readmutex.lock();
-        int len_to_copy = m_readbuf.size();
-        if ( len_to_copy > length - size ) len_to_copy = length - size;
-        while (len_to_copy--)
-        {
-            data[ size ] = m_readbuf.front();
-            m_readbuf.pop();
-            size++;
-        }
-        m_readmutex.unlock();
-        if ( size == length || timeout <= 0 ) break;
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
-        timeout-=5;
-    } while (std::chrono::steady_clock::now() - startTs <= std::chrono::milliseconds(timeout));
-    return size;
-}
-
-void FakeWire::reset()
-{
-    std::queue<uint8_t> empty;
-    std::queue<uint8_t> empty2;
-    std::swap( m_readbuf, empty );
-    std::swap( m_writebuf, empty2 );
-}
-
-void FakeWire::flush()
-{
+        return 0;
+    }
     m_readmutex.lock();
-    m_writemutex.lock();
-    reset();
-    m_writemutex.unlock();
+    while ( m_readbuf.size() && size < length )
+    {
+        data[ size ] = m_readbuf.front();
+        m_readbuf.pop();
+        size++;
+    }
+    if ( m_readbuf.size() )
+    {
+        tiny_events_set( &m_events, EV_RD_DATA_AVAIL );
+    }
     m_readmutex.unlock();
+    return size;
 }
 
 int FakeWire::write(const uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    auto startTs = std::chrono::steady_clock::now();
-    do
+    if ( tiny_events_wait( &m_events, EV_WR_ROOM_AVAIL, EVENT_BITS_CLEAR, timeout ) == 0 )
     {
-        m_writemutex.lock();
-        int len_to_copy = m_writebuf_size - m_writebuf.size();
-        if ( len_to_copy > length - size ) len_to_copy = length - size;
-        while (len_to_copy--)
-        {
-            m_writebuf.push(data[ size ]);
-            size++;
-        }
-        m_writemutex.unlock();
-        if ( size == length || timeout <= 0 ) break;
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
-        timeout-=5;
-    } while (std::chrono::steady_clock::now() - startTs <= std::chrono::milliseconds(timeout));
+        return 0;
+    }
+    m_writemutex.lock();
+    while ( m_writebuf.size() < (unsigned int)m_writebuf_size && size < length )
+    {
+        m_writebuf.push( data[ size ] );
+        size++;
+    }
+    if ( m_writebuf.size() < (unsigned int)m_writebuf_size )
+    {
+        tiny_events_set( &m_events, EV_WR_ROOM_AVAIL );
+    }
+    if ( size )
+    {
+        tiny_events_set( &m_events, EV_TR_READY );
+    }
+    m_writemutex.unlock();
     return size;
 }
 
 void FakeWire::TransferData(int bytes)
 {
+    bool room_avail = false;
+    bool data_avail = false;
+    if ( tiny_events_wait( &m_events, EV_TR_READY, EVENT_BITS_CLEAR, 0 ) == 0 )
+    {
+        return;
+    }
     m_readmutex.lock();
     m_writemutex.lock();
     while ( bytes-- && m_writebuf.size() )
@@ -114,6 +116,7 @@ void FakeWire::TransferData(int bytes)
                 }
             }
             m_readbuf.push( error_happened ? (m_writebuf.front() ^ 0x34 ) : m_writebuf.front() );
+            data_avail = true;
         }
         else
         {
@@ -124,11 +127,42 @@ void FakeWire::TransferData(int bytes)
             }
         }
         m_writebuf.pop();
+        room_avail = true;
     }
+    if ( m_writebuf.size() )
+    {
+        tiny_events_set( &m_events, EV_TR_READY );
+    }
+    m_writemutex.unlock();
+    m_readmutex.unlock();
+    if ( room_avail )
+    {
+        tiny_events_set( &m_events, EV_WR_ROOM_AVAIL );
+    }
+    if ( data_avail )
+    {
+        tiny_events_set( &m_events, EV_RD_DATA_AVAIL );
+    }
+}
+
+void FakeWire::reset()
+{
+    std::queue<uint8_t> empty;
+    std::queue<uint8_t> empty2;
+    std::swap( m_readbuf, empty );
+    std::swap( m_writebuf, empty2 );
+}
+
+void FakeWire::flush()
+{
+    m_readmutex.lock();
+    m_writemutex.lock();
+    reset();
     m_writemutex.unlock();
     m_readmutex.unlock();
 }
 
 FakeWire::~FakeWire()
 {
+    tiny_events_destroy( &m_events );
 }

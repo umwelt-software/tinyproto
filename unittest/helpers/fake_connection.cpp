@@ -32,13 +32,9 @@ void FakeConnection::TransferData()
     while (!m_stopped)
     {
         std::this_thread::sleep_for(std::chrono::microseconds(m_interval_us));
-        int bytes = 0;
         auto endTs = std::chrono::steady_clock::now();
-        while ( startTs < endTs )
-        {
-            startTs +=  std::chrono::microseconds( m_interval_us.load() ? m_interval_us.load() : 1);
-            bytes++;
-        }
+        int bytes = (endTs - startTs) / std::chrono::microseconds(m_interval_us);
+        startTs += bytes * std::chrono::microseconds(m_interval_us);
         m_line1.TransferData( bytes );
         m_line2.TransferData( bytes );
     }

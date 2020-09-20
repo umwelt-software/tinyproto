@@ -47,8 +47,8 @@ TEST(FD, multithread_basic_test)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
     helper1.run(true); // tiny_fd_run_rx();
     helper2.run(true);
 
@@ -60,7 +60,7 @@ TEST(FD, multithread_basic_test)
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 200, 1000 );
+    helper1.wait_until_rx_count( 200, 250 );
     CHECK_EQUAL( 200, helper1.rx_count() );
 }
 
@@ -68,8 +68,8 @@ TEST(FD, multithread_alternate_read_test)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
     helper1.set_alternate_read_method(); // tiny_fd_on_rx_data();
     helper2.set_alternate_read_method();
     helper1.run(true);
@@ -83,47 +83,50 @@ TEST(FD, multithread_alternate_read_test)
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 200, 1000 );
+    helper1.wait_until_rx_count( 200, 250 );
     CHECK_EQUAL( 200, helper1.rx_count() );
 }
 
 TEST(FD, arduino_to_pc)
 {
-    std::atomic<int> low_device_frames{};
-    FakeConnection conn( 4096, 32 ); // PC side has larger UART buffer: 4096
-    TinyHelperFd pc( &conn.endpoint1(), 4096, nullptr );
+    std::atomic<int> arduino_timedout_frames{};
+    FakeConnection conn( 4096, 32 ); // PC side has larger UART buffer: 4096, arduino side has small uart buffer
+    TinyHelperFd pc( &conn.endpoint1(), 4096, nullptr, 4, 400 );
     TinyHelperFd arduino( &conn.endpoint2(), tiny_fd_buffer_size_by_mtu(64,4),
-                          [&arduino, &low_device_frames](uint16_t,uint8_t*b,int s)->void
-                          { if ( arduino.send(b, s) == TINY_ERR_TIMEOUT ) low_device_frames++; }, 4, 0 );
+                          [&arduino, &arduino_timedout_frames](uint16_t,uint8_t*b,int s)->void
+                          { if ( arduino.send(b, s) == TINY_ERR_TIMEOUT ) arduino_timedout_frames++; }, 4, 0 );
     conn.endpoint2().setTimeout( 0 );
     conn.endpoint2().disable();
     // TODO: Due to slow emulator
-    conn.setSpeed( 14400 );
+    conn.setSpeed( 256000 );
     pc.run(true);
+    // sent 100 small packets from pc to arduino
     pc.send( 100, "Generated frame. test in progress" );
     // Usually arduino starts later by 2 seconds due to reboot on UART-2-USB access, emulate al teast 100ms delay
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     conn.endpoint2().enable();
-    // sent 200 small packets
-    auto startTs = std::chrono::steady_clock::now();
+    uint32_t start_ms = tiny_millis();
     do
     {
         arduino.run_rx();
         arduino.run_tx();
-    } while ( pc.rx_count() + low_device_frames != 100 && std::chrono::steady_clock::now() - startTs <= std::chrono::seconds(4) );
-    // Not lost bytes check for now, we admit, that FD hdlc can restransmit frames on bad lines
-//    CHECK_EQUAL( 0, conn.lostBytes() );
-    CHECK_EQUAL( 100 - low_device_frames, pc.rx_count() );
+        if ( static_cast<uint32_t>(tiny_millis() - start_ms) > 2000 ) break;
+    } while ( pc.tx_count() != 100 &&  pc.rx_count() + arduino_timedout_frames < 99 );
+    // it is allowed to miss several frames
+    if ( 98 - arduino_timedout_frames >  pc.rx_count() )
+    {
+        CHECK_EQUAL( 100 - arduino_timedout_frames,  pc.rx_count() );
+    }
 }
 
 TEST(FD, errors_on_tx_line)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 1000 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 1000 );
+    TinyHelperFd helper1( &conn.endpoint1(), 1024, nullptr, 7, 250 );
+    TinyHelperFd helper2( &conn.endpoint2(), 1024, nullptr, 7, 250 );
     // TODO: 9600 for now due to slow emulator
-    conn.setSpeed( 9600 );
+    conn.setSpeed( 14400 );
     conn.line2().generate_error_every_n_byte( 200 );
     helper1.run(true);
     helper2.run(true);
@@ -135,7 +138,7 @@ TEST(FD, errors_on_tx_line)
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 200, 1000 );
+    helper1.wait_until_rx_count( 200, 250 );
     CHECK_EQUAL( 200, helper1.rx_count() );
 }
 
@@ -146,8 +149,8 @@ TEST(FD, error_on_single_I_send)
     // TX2: U, U, I,
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 1000 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 1000 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
     conn.line2().generate_single_error( 6 + 6 + 3 ); // Put error on I-frame
     helper1.run(true);
     helper2.run(true);
@@ -159,7 +162,7 @@ TEST(FD, error_on_single_I_send)
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 1, 1000 );
+    helper1.wait_until_rx_count( 1, 250 );
     CHECK_EQUAL( 1, helper1.rx_count() );
 }
 
@@ -170,8 +173,8 @@ TEST(FD, error_on_rej)
     // TX2: U, U, I,
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 1000 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 1000 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
     conn.line2().generate_single_error( 6 + 6 + 4 ); // Put error on first I-frame
     conn.line1().generate_single_error( 6 + 6 + 3 ); // Put error on S-frame REJ
     helper1.run(true);
@@ -184,15 +187,15 @@ TEST(FD, error_on_rej)
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 2, 1000 );
+    helper1.wait_until_rx_count( 2, 250 );
     CHECK_EQUAL( 2, helper1.rx_count() );
 }
 
 TEST(FD, no_ka_switch_to_disconnected)
 {
     FakeConnection conn(32, 32);
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 4, 100 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 4, 100 );
+    TinyHelperFd helper1( &conn.endpoint1(), 1024, nullptr, 4, 100 );
+    TinyHelperFd helper2( &conn.endpoint2(), 1024, nullptr, 4, 100 );
     conn.endpoint1().setTimeout( 30 );
     conn.endpoint2().setTimeout( 30 );
     helper1.set_ka_timeout( 100 );
@@ -227,15 +230,15 @@ TEST(FD, no_ka_switch_to_disconnected)
 TEST(FD, resend_timeout)
 {
     FakeConnection conn(128, 128);
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 4, 70 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 4, 70 );
+    TinyHelperFd helper1( &conn.endpoint1(), 1024, nullptr, 4, 70 );
+    TinyHelperFd helper2( &conn.endpoint2(), 1024, nullptr, 4, 70 );
     conn.endpoint1().setTimeout( 30 );
     conn.endpoint2().setTimeout( 30 );
     helper1.run(true);
     helper2.run(true);
 
-    // Consider FD use keep alive to keep connection during 50 milliseconds
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    // During 100ms FD must establish connection to remote side
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     // Stop remote side, and try to send something
     helper2.stop();
     conn.endpoint1().flush();
