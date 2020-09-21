@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.9.3</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -80,8 +80,8 @@ Inheritance diagram for Tiny::IProtoFd:</div>
 <div class="dyncontent">
 <div class="center"><img src="classTiny_1_1IProtoFd__inherit__graph.png" border="0" usemap="#Tiny_1_1IProtoFd_inherit__map" alt="Inheritance graph"/></div>
 <map name="Tiny_1_1IProtoFd_inherit__map" id="Tiny_1_1IProtoFd_inherit__map">
-<area shape="rect" id="node2" href="classTiny_1_1ProtoFd.html" title="Tiny::ProtoFd\&lt; S \&gt;" alt="" coords="5,80,140,107"/>
-<area shape="rect" id="node3" href="classTiny_1_1ProtoFdD.html" title="Tiny::ProtoFdD" alt="" coords="164,80,275,107"/>
+<area shape="rect" id="node2" href="classTiny_1_1ProtoFd.html" title="Tiny::ProtoFd\&lt; S \&gt;" alt="" coords="5,80,149,107"/>
+<area shape="rect" id="node3" href="classTiny_1_1ProtoFdD.html" title="Tiny::ProtoFdD" alt="" coords="174,80,290,107"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -91,6 +91,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a65976c6faaf41504b7c15036edc054cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae4e613316866105c130d613ecb25dd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#aae4e613316866105c130d613ecb25dd4">begin</a> (<a class="el" href="tiny__types_8h.html#aafd634660bba76cace57a8f9b01e044d">write_block_cb_t</a> writecb, <a class="el" href="tiny__types_8h.html#a15bec127d9ee63658563d62e92b5261b">read_block_cb_t</a> readcb)</td></tr>
 <tr class="separator:aae4e613316866105c130d613ecb25dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33f836591bf981b484d495d678d02442"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a33f836591bf981b484d495d678d02442">begin</a> ()</td></tr>
+<tr class="separator:a33f836591bf981b484d495d678d02442"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cf42b4182e49dcde4862a768d07c811"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a1cf42b4182e49dcde4862a768d07c811">beginToSerial</a> ()</td></tr>
 <tr class="separator:a1cf42b4182e49dcde4862a768d07c811"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d41a0caae1d5e6808a441c821ed8927"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a7d41a0caae1d5e6808a441c821ed8927">beginToSerial1</a> ()</td></tr>
@@ -107,8 +109,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa822a1dec320e6edc70a84699371fe81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37292eb5c9faf1be8c4850985e0ae2eb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a37292eb5c9faf1be8c4850985e0ae2eb">run_rx</a> (uint16_t timeout=0)</td></tr>
 <tr class="separator:a37292eb5c9faf1be8c4850985e0ae2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab297fec86ef473612a745865403b4dd0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#ab297fec86ef473612a745865403b4dd0">run_rx</a> (const void *data, int len)</td></tr>
+<tr class="separator:ab297fec86ef473612a745865403b4dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19be0bd5124009c7de051554841070b3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a19be0bd5124009c7de051554841070b3">run_tx</a> (uint16_t timeout=0)</td></tr>
 <tr class="separator:a19be0bd5124009c7de051554841070b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5510f1f28ff72c709305826c96473ffb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a5510f1f28ff72c709305826c96473ffb">run_tx</a> (void *data, int max_size)</td></tr>
+<tr class="separator:a5510f1f28ff72c709305826c96473ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af41446f47a7c520ff8f9683e6ae45614"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#af41446f47a7c520ff8f9683e6ae45614">disableCrc</a> ()</td></tr>
 <tr class="separator:af41446f47a7c520ff8f9683e6ae45614"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dec2906051505034e91b503318a5563"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1IProtoFd.html#a7dec2906051505034e91b503318a5563">enableCrc</a> (<a class="el" href="group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7">hdlc_crc_t</a> crc)</td></tr>
@@ -189,7 +195,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="aae4e613316866105c130d613ecb25dd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae4e613316866105c130d613ecb25dd4">&#9670;&nbsp;</a></span>begin()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aae4e613316866105c130d613ecb25dd4">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,6 +227,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>None </dd></dl>
+
+</div>
+</div>
+<a id="a33f836591bf981b484d495d678d02442"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33f836591bf981b484d495d678d02442">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tiny::IProtoFd::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling <a class="el" href="classTiny_1_1IProtoFd.html#ad17e76d0ef7ea40838e51acc2498c482">end()</a>. Use this method if you want to control write and read data by yourself </p><dl class="section return"><dt>Returns</dt><dd>None </dd></dl>
 
 </div>
 </div>
@@ -529,7 +553,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
 </div>
 </div>
 <a id="a37292eb5c9faf1be8c4850985e0ae2eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37292eb5c9faf1be8c4850985e0ae2eb">&#9670;&nbsp;</a></span>run_rx()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a37292eb5c9faf1be8c4850985e0ae2eb">&#9670;&nbsp;</a></span>run_rx() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -548,8 +572,38 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
 
 </div>
 </div>
+<a id="ab297fec86ef473612a745865403b4dd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab297fec86ef473612a745865403b4dd0">&#9670;&nbsp;</a></span>run_rx() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Tiny::IProtoFd::run_rx </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Processes incoming rx data, specified by a user. </p><dl class="section return"><dt>Returns</dt><dd>TINY_SUCCESS </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>if <a class="el" href="classTiny_1_1Packet.html">Packet</a> is receive during run execution callback is called. </dd></dl>
+
+</div>
+</div>
 <a id="a19be0bd5124009c7de051554841070b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19be0bd5124009c7de051554841070b3">&#9670;&nbsp;</a></span>run_tx()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a19be0bd5124009c7de051554841070b3">&#9670;&nbsp;</a></span>run_tx() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -564,6 +618,42 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
       </table>
 </div><div class="memdoc">
 <p>Sends data to communcation channel. </p><dl class="section return"><dt>Returns</dt><dd>negative value in case of error </dd></dl>
+
+</div>
+</div>
+<a id="a5510f1f28ff72c709305826c96473ffb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5510f1f28ff72c709305826c96473ffb">&#9670;&nbsp;</a></span>run_tx() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Tiny::IProtoFd::run_tx </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>max_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Force protocol to generate tx data for you. In this case you will need to send data to remote side by yourself. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>buffer to fill with tx data </td></tr>
+    <tr><td class="paramname">max_size</td><td>maximum size of the buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of bytes written to buffer </dd></dl>
 
 </div>
 </div>
@@ -686,7 +776,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ProtoFdD</b></td></t
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets desired window size. Use this function only before <a class="el" href="classTiny_1_1IProtoFd.html#aae4e613316866105c130d613ecb25dd4">begin()</a> call. window size is number of frames, which confirmation may be deferred for. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sets desired window size. Use this function only before <a class="el" href="classTiny_1_1IProtoFd.html#a33f836591bf981b484d495d678d02442">begin()</a> call. window size is number of frames, which confirmation may be deferred for. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">window</td><td>window size, valid between 1 - 7 inclusively </td></tr>
   </table>

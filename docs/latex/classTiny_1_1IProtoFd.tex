@@ -6,11 +6,12 @@
 
 
 
-Inheritance diagram for Tiny\+:\+:I\+Proto\+Fd\+:\nopagebreak
+Inheritance diagram for Tiny\+:\+:I\+Proto\+Fd\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=282pt]{classTiny_1_1IProtoFd__inherit__graph}
+\includegraphics[width=294pt]{classTiny_1_1IProtoFd__inherit__graph}
 \end{center}
 \end{figure}
 \subsection*{Public Member Functions}
@@ -19,6 +20,8 @@ Inheritance diagram for Tiny\+:\+:I\+Proto\+Fd\+:\nopagebreak
 \hyperlink{classTiny_1_1IProtoFd_a65976c6faaf41504b7c15036edc054cf}{I\+Proto\+Fd} (void $\ast$buffer, int buffer\+Size)
 \item 
 void \hyperlink{classTiny_1_1IProtoFd_aae4e613316866105c130d613ecb25dd4}{begin} (\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t} writecb, \hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t} readcb)
+\item 
+void \hyperlink{classTiny_1_1IProtoFd_a33f836591bf981b484d495d678d02442}{begin} ()
 \item 
 void \hyperlink{classTiny_1_1IProtoFd_a1cf42b4182e49dcde4862a768d07c811}{begin\+To\+Serial} ()
 \item 
@@ -36,7 +39,11 @@ int \hyperlink{classTiny_1_1IProtoFd_aa822a1dec320e6edc70a84699371fe81}{write} (
 \item 
 int \hyperlink{classTiny_1_1IProtoFd_a37292eb5c9faf1be8c4850985e0ae2eb}{run\+\_\+rx} (uint16\+\_\+t timeout=0)
 \item 
+int \hyperlink{classTiny_1_1IProtoFd_ab297fec86ef473612a745865403b4dd0}{run\+\_\+rx} (const void $\ast$data, int len)
+\item 
 int \hyperlink{classTiny_1_1IProtoFd_a19be0bd5124009c7de051554841070b3}{run\+\_\+tx} (uint16\+\_\+t timeout=0)
+\item 
+int \hyperlink{classTiny_1_1IProtoFd_a5510f1f28ff72c709305826c96473ffb}{run\+\_\+tx} (void $\ast$data, int max\+\_\+size)
 \item 
 void \hyperlink{classTiny_1_1IProtoFd_af41446f47a7c520ff8f9683e6ae45614}{disable\+Crc} ()
 \item 
@@ -94,7 +101,7 @@ Initializes \hyperlink{classTiny_1_1IProtoFd}{I\+Proto\+Fd} object
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_aae4e613316866105c130d613ecb25dd4}\label{classTiny_1_1IProtoFd_aae4e613316866105c130d613ecb25dd4}} 
 \index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!begin@{begin}}
 \index{begin@{begin}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
-\subsubsection{\texorpdfstring{begin()}{begin()}}
+\subsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void Tiny\+::\+I\+Proto\+Fd\+::begin (\begin{DoxyParamCaption}\item[{\hyperlink{tiny__types_8h_aafd634660bba76cace57a8f9b01e044d}{write\+\_\+block\+\_\+cb\+\_\+t}}]{writecb,  }\item[{\hyperlink{tiny__types_8h_a15bec127d9ee63658563d62e92b5261b}{read\+\_\+block\+\_\+cb\+\_\+t}}]{readcb }\end{DoxyParamCaption})}
 
 Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1IProtoFd_ad17e76d0ef7ea40838e51acc2498c482}{end()}. 
@@ -105,6 +112,15 @@ Initializes protocol internal variables. If you need to switch communication wit
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IProtoFd_a33f836591bf981b484d495d678d02442}\label{classTiny_1_1IProtoFd_a33f836591bf981b484d495d678d02442}} 
+\index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!begin@{begin}}
+\index{begin@{begin}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
+\subsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Tiny\+::\+I\+Proto\+Fd\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initializes protocol internal variables. If you need to switch communication with other destination point, you can call this method one again after calling \hyperlink{classTiny_1_1IProtoFd_ad17e76d0ef7ea40838e51acc2498c482}{end()}. Use this method if you want to control write and read data by yourself \begin{DoxyReturn}{Returns}
 None 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_a1cf42b4182e49dcde4862a768d07c811}\label{classTiny_1_1IProtoFd_a1cf42b4182e49dcde4862a768d07c811}} 
@@ -222,7 +238,7 @@ Method called by hdlc protocol upon sending next frame. Can be redefined in deri
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_a37292eb5c9faf1be8c4850985e0ae2eb}\label{classTiny_1_1IProtoFd_a37292eb5c9faf1be8c4850985e0ae2eb}} 
 \index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!run\+\_\+rx@{run\+\_\+rx}}
 \index{run\+\_\+rx@{run\+\_\+rx}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
-\subsubsection{\texorpdfstring{run\+\_\+rx()}{run\_rx()}}
+\subsubsection{\texorpdfstring{run\+\_\+rx()}{run\_rx()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily int Tiny\+::\+I\+Proto\+Fd\+::run\+\_\+rx (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{timeout = {\ttfamily 0} }\end{DoxyParamCaption})}
 
 Checks communcation channel for incoming messages. \begin{DoxyReturn}{Returns}
@@ -231,14 +247,42 @@ negative value in case of error zero if nothing is read positive -\/ \hyperlink{
 \begin{DoxyRemark}{Remarks}
 if \hyperlink{classTiny_1_1Packet}{Packet} is receive during run execution callback is called. 
 \end{DoxyRemark}
+\mbox{\Hypertarget{classTiny_1_1IProtoFd_ab297fec86ef473612a745865403b4dd0}\label{classTiny_1_1IProtoFd_ab297fec86ef473612a745865403b4dd0}} 
+\index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!run\+\_\+rx@{run\+\_\+rx}}
+\index{run\+\_\+rx@{run\+\_\+rx}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
+\subsubsection{\texorpdfstring{run\+\_\+rx()}{run\_rx()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+I\+Proto\+Fd\+::run\+\_\+rx (\begin{DoxyParamCaption}\item[{const void $\ast$}]{data,  }\item[{int}]{len }\end{DoxyParamCaption})}
+
+Processes incoming rx data, specified by a user. \begin{DoxyReturn}{Returns}
+T\+I\+N\+Y\+\_\+\+S\+U\+C\+C\+E\+SS 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+if \hyperlink{classTiny_1_1Packet}{Packet} is receive during run execution callback is called. 
+\end{DoxyRemark}
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_a19be0bd5124009c7de051554841070b3}\label{classTiny_1_1IProtoFd_a19be0bd5124009c7de051554841070b3}} 
 \index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!run\+\_\+tx@{run\+\_\+tx}}
 \index{run\+\_\+tx@{run\+\_\+tx}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
-\subsubsection{\texorpdfstring{run\+\_\+tx()}{run\_tx()}}
+\subsubsection{\texorpdfstring{run\+\_\+tx()}{run\_tx()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily int Tiny\+::\+I\+Proto\+Fd\+::run\+\_\+tx (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{timeout = {\ttfamily 0} }\end{DoxyParamCaption})}
 
 Sends data to communcation channel. \begin{DoxyReturn}{Returns}
 negative value in case of error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTiny_1_1IProtoFd_a5510f1f28ff72c709305826c96473ffb}\label{classTiny_1_1IProtoFd_a5510f1f28ff72c709305826c96473ffb}} 
+\index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!run\+\_\+tx@{run\+\_\+tx}}
+\index{run\+\_\+tx@{run\+\_\+tx}!Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}}
+\subsubsection{\texorpdfstring{run\+\_\+tx()}{run\_tx()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int Tiny\+::\+I\+Proto\+Fd\+::run\+\_\+tx (\begin{DoxyParamCaption}\item[{void $\ast$}]{data,  }\item[{int}]{max\+\_\+size }\end{DoxyParamCaption})}
+
+Force protocol to generate tx data for you. In this case you will need to send data to remote side by yourself. 
+\begin{DoxyParams}{Parameters}
+{\em data} & buffer to fill with tx data \\
+\hline
+{\em max\+\_\+size} & maximum size of the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of bytes written to buffer 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classTiny_1_1IProtoFd_a70aa7c85b5fe83513eebb63b803d5825}\label{classTiny_1_1IProtoFd_a70aa7c85b5fe83513eebb63b803d5825}} 
 \index{Tiny\+::\+I\+Proto\+Fd@{Tiny\+::\+I\+Proto\+Fd}!set\+Receive\+Callback@{set\+Receive\+Callback}}
@@ -279,7 +323,7 @@ Sets send timeout in milliseconds.
 \subsubsection{\texorpdfstring{set\+Window\+Size()}{setWindowSize()}}
 {\footnotesize\ttfamily void Tiny\+::\+I\+Proto\+Fd\+::set\+Window\+Size (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{window }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Sets desired window size. Use this function only before \hyperlink{classTiny_1_1IProtoFd_aae4e613316866105c130d613ecb25dd4}{begin()} call. window size is number of frames, which confirmation may be deferred for. 
+Sets desired window size. Use this function only before \hyperlink{classTiny_1_1IProtoFd_a33f836591bf981b484d495d678d02442}{begin()} call. window size is number of frames, which confirmation may be deferred for. 
 \begin{DoxyParams}{Parameters}
 {\em window} & window size, valid between 1 -\/ 7 inclusively \\
 \hline

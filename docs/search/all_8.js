@@ -7,6 +7,7 @@ var searchData=
   ['hdlc_5fcrc_5fdefault',['HDLC_CRC_DEFAULT',['../group__HDLC__API.html#ggabb73b32d08d8e79eefe9385634a74bf7a5f34a095f94c39357e31badd2feb9426',1,'tiny_hdlc.h']]],
   ['hdlc_5fcrc_5foff',['HDLC_CRC_OFF',['../group__HDLC__API.html#ggabb73b32d08d8e79eefe9385634a74bf7a6ed874f871614e9de6358d678256a140',1,'tiny_hdlc.h']]],
   ['hdlc_5fcrc_5ft',['hdlc_crc_t',['../group__HDLC__API.html#gabb73b32d08d8e79eefe9385634a74bf7',1,'tiny_hdlc.h']]],
+  ['hdlc_5fget_5ftx_5fdata',['hdlc_get_tx_data',['../group__HDLC__API.html#gaaeece06ea6894a19402f76158e1d101d',1,'hdlc_get_tx_data(hdlc_handle_t handle, void *data, int len):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#gaaeece06ea6894a19402f76158e1d101d',1,'hdlc_get_tx_data(hdlc_handle_t handle, void *data, int len):&#160;tiny_hdlc.c']]],
   ['hdlc_5fhandle_5ft',['hdlc_handle_t',['../group__HDLC__API.html#gabeaf7578aed5279d3af891bd85a9f961',1,'tiny_hdlc.h']]],
   ['hdlc_5finit',['hdlc_init',['../group__HDLC__API.html#gaa41c388433273a76460ddfbaff0f8f5d',1,'hdlc_init(hdlc_struct_t *hdlc_info):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#gaa41c388433273a76460ddfbaff0f8f5d',1,'hdlc_init(hdlc_struct_t *hdlc_info):&#160;tiny_hdlc.c']]],
   ['hdlc_5freset',['hdlc_reset',['../group__HDLC__API.html#ga532836280097de1c8881df8336f21075',1,'hdlc_reset(hdlc_handle_t handle):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#ga532836280097de1c8881df8336f21075',1,'hdlc_reset(hdlc_handle_t handle):&#160;tiny_hdlc.c']]],

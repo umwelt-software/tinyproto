@@ -1,7 +1,7 @@
 <map id="src/TinyLightProtocol.h" name="src/TinyLightProtocol.h">
-<area shape="rect" id="node2" href="$TinyPacket_8h.html" title="Tiny protocol Arduino API. " alt="" coords="104,80,203,107"/>
-<area shape="rect" id="node5" href="$tiny__light_8h.html" title="Tiny Light protocol API. " alt="" coords="227,80,373,107"/>
-<area shape="rect" id="node6" href="$tiny__hdlc_8h_source.html" title="proto/hdlc/tiny_hdlc.h" alt="" coords="312,155,459,181"/>
-<area shape="rect" id="node7" href="$tiny__types_8h.html" title="Tiny protocol Types. " alt="" coords="201,229,348,256"/>
-<area shape="rect" id="node8" href="$arduino__hal_8h_source.html" title="include/arduino_hal.h" alt="" coords="153,304,297,331"/>
+<area shape="rect" id="node2" href="$TinyPacket_8h.html" title="Tiny protocol Arduino API. " alt="" coords="111,80,216,107"/>
+<area shape="rect" id="node5" href="$tiny__light_8h.html" title="Tiny Light protocol API. " alt="" coords="240,80,407,107"/>
+<area shape="rect" id="node6" href="$tiny__hdlc_8h_source.html" title="proto/hdlc/tiny_hdlc.h" alt="" coords="333,155,495,181"/>
+<area shape="rect" id="node7" href="$tiny__types_8h.html" title="Tiny protocol Types. " alt="" coords="212,229,376,256"/>
+<area shape="rect" id="node8" href="$arduino__hal_8h_source.html" title="include/arduino_hal.h" alt="" coords="164,304,325,331"/>
 </map>

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['hdlc_5fclose',['hdlc_close',['../group__HDLC__API.html#ga21d727583f0f4534c8e4688eafcec66f',1,'hdlc_close(hdlc_handle_t handle):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#ga21d727583f0f4534c8e4688eafcec66f',1,'hdlc_close(hdlc_handle_t handle):&#160;tiny_hdlc.c']]],
+  ['hdlc_5fget_5ftx_5fdata',['hdlc_get_tx_data',['../group__HDLC__API.html#gaaeece06ea6894a19402f76158e1d101d',1,'hdlc_get_tx_data(hdlc_handle_t handle, void *data, int len):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#gaaeece06ea6894a19402f76158e1d101d',1,'hdlc_get_tx_data(hdlc_handle_t handle, void *data, int len):&#160;tiny_hdlc.c']]],
   ['hdlc_5finit',['hdlc_init',['../group__HDLC__API.html#gaa41c388433273a76460ddfbaff0f8f5d',1,'hdlc_init(hdlc_struct_t *hdlc_info):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#gaa41c388433273a76460ddfbaff0f8f5d',1,'hdlc_init(hdlc_struct_t *hdlc_info):&#160;tiny_hdlc.c']]],
   ['hdlc_5freset',['hdlc_reset',['../group__HDLC__API.html#ga532836280097de1c8881df8336f21075',1,'hdlc_reset(hdlc_handle_t handle):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#ga532836280097de1c8881df8336f21075',1,'hdlc_reset(hdlc_handle_t handle):&#160;tiny_hdlc.c']]],
   ['hdlc_5frun_5frx',['hdlc_run_rx',['../group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c',1,'hdlc_run_rx(hdlc_handle_t handle, const void *data, int len, int *error):&#160;tiny_hdlc.c'],['../group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c',1,'hdlc_run_rx(hdlc_handle_t handle, const void *data, int len, int *error):&#160;tiny_hdlc.c']]],

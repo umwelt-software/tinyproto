@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.9.3</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -94,9 +94,15 @@ Functions</h2></td></tr>
 <tr class="memitem:ga601c9874a570331580856c1ea28f7914"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FULL__DUPLEX__API.html#ga601c9874a570331580856c1ea28f7914">tiny_fd_run_tx</a> (<a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a> handle, uint16_t timeout)</td></tr>
 <tr class="memdesc:ga601c9874a570331580856c1ea28f7914"><td class="mdescLeft">&#160;</td><td class="mdescRight">runs tx processing for specified period of time.  <a href="#ga601c9874a570331580856c1ea28f7914">More...</a><br /></td></tr>
 <tr class="separator:ga601c9874a570331580856c1ea28f7914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga047059c29688cfcbfd95584e5e435ad2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FULL__DUPLEX__API.html#ga047059c29688cfcbfd95584e5e435ad2">tiny_fd_get_tx_data</a> (<a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a> handle, void *data, int len)</td></tr>
+<tr class="memdesc:ga047059c29688cfcbfd95584e5e435ad2"><td class="mdescLeft">&#160;</td><td class="mdescRight">runs tx processing to fill specified buffer with data.  <a href="#ga047059c29688cfcbfd95584e5e435ad2">More...</a><br /></td></tr>
+<tr class="separator:ga047059c29688cfcbfd95584e5e435ad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad31f944514aef01e27bc3ec67fdbe140"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FULL__DUPLEX__API.html#gad31f944514aef01e27bc3ec67fdbe140">tiny_fd_run_rx</a> (<a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a> handle, uint16_t timeout)</td></tr>
 <tr class="memdesc:gad31f944514aef01e27bc3ec67fdbe140"><td class="mdescLeft">&#160;</td><td class="mdescRight">runs rx processing for specified period of time.  <a href="#gad31f944514aef01e27bc3ec67fdbe140">More...</a><br /></td></tr>
 <tr class="separator:gad31f944514aef01e27bc3ec67fdbe140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga894298485a7b0901a61863ef7c2632b4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FULL__DUPLEX__API.html#ga894298485a7b0901a61863ef7c2632b4">tiny_fd_on_rx_data</a> (<a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a> handle, const void *data, int len)</td></tr>
+<tr class="memdesc:ga894298485a7b0901a61863ef7c2632b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">runs rx bytes processing for specified buffer.  <a href="#ga894298485a7b0901a61863ef7c2632b4">More...</a><br /></td></tr>
+<tr class="separator:ga894298485a7b0901a61863ef7c2632b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga490157ee98ea6148f99a5bb1f26c5f60"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FULL__DUPLEX__API.html#ga490157ee98ea6148f99a5bb1f26c5f60">tiny_fd_send</a> (<a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a> handle, const void *buf, int len)</td></tr>
 <tr class="memdesc:ga490157ee98ea6148f99a5bb1f26c5f60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends userdata over full-duplex protocol.  <a href="#ga490157ee98ea6148f99a5bb1f26c5f60">More...</a><br /></td></tr>
 <tr class="separator:ga490157ee98ea6148f99a5bb1f26c5f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,6 +206,52 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga047059c29688cfcbfd95584e5e435ad2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga047059c29688cfcbfd95584e5e435ad2">&#9670;&nbsp;</a></span>tiny_fd_get_tx_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tiny_fd_get_tx_data </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>runs tx processing to fill specified buffer with data. </p>
+<p>Runs tx processing to fill specified buffer with data.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>handle of full-duplex protocol </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to buffer to fill with tx data </td></tr>
+    <tr><td class="paramname">len</td><td>maximum size of specified buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of bytes written to specified buffer </dd></dl>
+
+</div>
+</div>
 <a id="ga27fa59dffd1575419753beb35282bad5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga27fa59dffd1575419753beb35282bad5">&#9670;&nbsp;</a></span>tiny_fd_init()</h2>
 
@@ -237,6 +289,52 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>TINY_NO_ERROR in case of success. TINY_ERR_FAILED if init parameters are incorrect. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This function is not thread safe. </dd></dl>
+
+</div>
+</div>
+<a id="ga894298485a7b0901a61863ef7c2632b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga894298485a7b0901a61863ef7c2632b4">&#9670;&nbsp;</a></span>tiny_fd_on_rx_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tiny_fd_on_rx_data </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__FULL__DUPLEX__API.html#ga91e6b79431fe38570fb102701ef0b7e8">tiny_fd_handle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>runs rx bytes processing for specified buffer. </p>
+<p>Runs rx bytes processing for specified buffer. This is alternative method to run Full-duplex protocol for rx data. Use it, when you wish to control reading from hardware by yourself.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>handle of full-duplex protocol </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to data to process </td></tr>
+    <tr><td class="paramname">len</td><td>length of data to process </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_SUCCESS </dd></dl>
 
 </div>
 </div>
@@ -314,6 +412,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>TINY_ERR_TIMEOUT, or TINY_SUCCESS </dd></dl>
 
 </div>
 </div>

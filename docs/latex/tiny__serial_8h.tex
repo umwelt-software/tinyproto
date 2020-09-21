@@ -1,0 +1,169 @@
+\hypertarget{tiny__serial_8h}{}\section{src/proto/hal/tiny\+\_\+serial.h File Reference}
+\label{tiny__serial_8h}\index{src/proto/hal/tiny\+\_\+serial.\+h@{src/proto/hal/tiny\+\_\+serial.\+h}}
+
+
+Tiny U\+A\+RT serial A\+PI.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}serial/noplatform\+\_\+serial.\+h\char`\"{}}\newline
+Include dependency graph for tiny\+\_\+serial.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{tiny__serial_8h__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t} \hyperlink{tiny__serial_8h_aabc11e4315d2d2fa664fe5bb666acd7f}{tiny\+\_\+serial\+\_\+open} (const char $\ast$name, uint32\+\_\+t baud)
+\begin{DoxyCompactList}\small\item\em Opens serial port. \end{DoxyCompactList}\item 
+void \hyperlink{tiny__serial_8h_acceca82d586bc5927f0fdb445cb02363}{tiny\+\_\+serial\+\_\+close} (\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t} port)
+\begin{DoxyCompactList}\small\item\em Closes serial connection. \end{DoxyCompactList}\item 
+int \hyperlink{tiny__serial_8h_ae588ea1b6e3fda3783ed886e364e2051}{tiny\+\_\+serial\+\_\+send} (\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t} port, const void $\ast$buf, int len)
+\begin{DoxyCompactList}\small\item\em Sends data over serial connection. \end{DoxyCompactList}\item 
+int \hyperlink{tiny__serial_8h_af951caf8cb5871d8a85607f4478e5854}{tiny\+\_\+serial\+\_\+send\+\_\+timeout} (\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t} port, const void $\ast$buf, int len, uint32\+\_\+t timeout\+\_\+ms)
+\begin{DoxyCompactList}\small\item\em Sends data over serial connection. \end{DoxyCompactList}\item 
+int \hyperlink{tiny__serial_8h_a18aa3f4ae486d2c966bd2fe79ca0e3f0}{tiny\+\_\+serial\+\_\+read} (\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t} port, void $\ast$buf, int len)
+\begin{DoxyCompactList}\small\item\em Receive data from serial connection. \end{DoxyCompactList}\item 
+int \hyperlink{tiny__serial_8h_a4c995597ed592e4ded630213b7f08d37}{tiny\+\_\+serial\+\_\+read\+\_\+timeout} (\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t} port, void $\ast$buf, int len, uint32\+\_\+t timeout\+\_\+ms)
+\begin{DoxyCompactList}\small\item\em Receive data from serial connection. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Tiny U\+A\+RT serial A\+PI. 
+
+This is U\+A\+RT support implementation. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{tiny__serial_8h_acceca82d586bc5927f0fdb445cb02363}\label{tiny__serial_8h_acceca82d586bc5927f0fdb445cb02363}} 
+\index{tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}!tiny\+\_\+serial\+\_\+close@{tiny\+\_\+serial\+\_\+close}}
+\index{tiny\+\_\+serial\+\_\+close@{tiny\+\_\+serial\+\_\+close}!tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+serial\+\_\+close()}{tiny\_serial\_close()}}
+{\footnotesize\ttfamily void tiny\+\_\+serial\+\_\+close (\begin{DoxyParamCaption}\item[{\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t}}]{port }\end{DoxyParamCaption})}
+
+
+
+Closes serial connection. 
+
+Closes serial connection 
+\begin{DoxyParams}{Parameters}
+{\em port} & handle to serial port \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{tiny__serial_8h_aabc11e4315d2d2fa664fe5bb666acd7f}\label{tiny__serial_8h_aabc11e4315d2d2fa664fe5bb666acd7f}} 
+\index{tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}!tiny\+\_\+serial\+\_\+open@{tiny\+\_\+serial\+\_\+open}}
+\index{tiny\+\_\+serial\+\_\+open@{tiny\+\_\+serial\+\_\+open}!tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+serial\+\_\+open()}{tiny\_serial\_open()}}
+{\footnotesize\ttfamily \hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t} tiny\+\_\+serial\+\_\+open (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name,  }\item[{uint32\+\_\+t}]{baud }\end{DoxyParamCaption})}
+
+
+
+Opens serial port. 
+
+Opens serial port by name
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & path to the port to open For linux this can be /dev/tty\+O1, /dev/tty\+S1, /dev/tty\+U\+S\+B0, etc. For windows this can be C\+O\+M1, C\+O\+M2, etc. \\
+\hline
+{\em baud} & baud rate in bits \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valid serial handle or T\+I\+N\+Y\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+I\+N\+V\+A\+L\+ID in case of error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{tiny__serial_8h_a18aa3f4ae486d2c966bd2fe79ca0e3f0}\label{tiny__serial_8h_a18aa3f4ae486d2c966bd2fe79ca0e3f0}} 
+\index{tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}!tiny\+\_\+serial\+\_\+read@{tiny\+\_\+serial\+\_\+read}}
+\index{tiny\+\_\+serial\+\_\+read@{tiny\+\_\+serial\+\_\+read}!tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+serial\+\_\+read()}{tiny\_serial\_read()}}
+{\footnotesize\ttfamily int tiny\+\_\+serial\+\_\+read (\begin{DoxyParamCaption}\item[{\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t}}]{port,  }\item[{void $\ast$}]{buf,  }\item[{int}]{len }\end{DoxyParamCaption})}
+
+
+
+Receive data from serial connection. 
+
+Receive data from serial connection with 100ms timeout. 
+\begin{DoxyParams}{Parameters}
+{\em port} & handle to serial port \\
+\hline
+{\em buf} & pointer to data buffer to read to \\
+\hline
+{\em len} & maximum size of receive buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error. or number of bytes received 
+\end{DoxyReturn}
+\mbox{\Hypertarget{tiny__serial_8h_a4c995597ed592e4ded630213b7f08d37}\label{tiny__serial_8h_a4c995597ed592e4ded630213b7f08d37}} 
+\index{tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}!tiny\+\_\+serial\+\_\+read\+\_\+timeout@{tiny\+\_\+serial\+\_\+read\+\_\+timeout}}
+\index{tiny\+\_\+serial\+\_\+read\+\_\+timeout@{tiny\+\_\+serial\+\_\+read\+\_\+timeout}!tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+serial\+\_\+read\+\_\+timeout()}{tiny\_serial\_read\_timeout()}}
+{\footnotesize\ttfamily int tiny\+\_\+serial\+\_\+read\+\_\+timeout (\begin{DoxyParamCaption}\item[{\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t}}]{port,  }\item[{void $\ast$}]{buf,  }\item[{int}]{len,  }\item[{uint32\+\_\+t}]{timeout\+\_\+ms }\end{DoxyParamCaption})}
+
+
+
+Receive data from serial connection. 
+
+Receive data from serial connection. 
+\begin{DoxyParams}{Parameters}
+{\em port} & handle to serial port \\
+\hline
+{\em buf} & pointer to data buffer to read to \\
+\hline
+{\em len} & maximum size of receive buffer \\
+\hline
+{\em timeout\+\_\+ms} & timeout in milliseconds to wait for incoming data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error. or number of bytes received 
+\end{DoxyReturn}
+\mbox{\Hypertarget{tiny__serial_8h_ae588ea1b6e3fda3783ed886e364e2051}\label{tiny__serial_8h_ae588ea1b6e3fda3783ed886e364e2051}} 
+\index{tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}!tiny\+\_\+serial\+\_\+send@{tiny\+\_\+serial\+\_\+send}}
+\index{tiny\+\_\+serial\+\_\+send@{tiny\+\_\+serial\+\_\+send}!tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+serial\+\_\+send()}{tiny\_serial\_send()}}
+{\footnotesize\ttfamily int tiny\+\_\+serial\+\_\+send (\begin{DoxyParamCaption}\item[{\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t}}]{port,  }\item[{const void $\ast$}]{buf,  }\item[{int}]{len }\end{DoxyParamCaption})}
+
+
+
+Sends data over serial connection. 
+
+Sends data over serial connection with 100 ms timeout. 
+\begin{DoxyParams}{Parameters}
+{\em port} & handle to serial port \\
+\hline
+{\em buf} & pointer to data buffer to send \\
+\hline
+{\em len} & length of data to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error. or number of bytes sent 
+\end{DoxyReturn}
+\mbox{\Hypertarget{tiny__serial_8h_af951caf8cb5871d8a85607f4478e5854}\label{tiny__serial_8h_af951caf8cb5871d8a85607f4478e5854}} 
+\index{tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}!tiny\+\_\+serial\+\_\+send\+\_\+timeout@{tiny\+\_\+serial\+\_\+send\+\_\+timeout}}
+\index{tiny\+\_\+serial\+\_\+send\+\_\+timeout@{tiny\+\_\+serial\+\_\+send\+\_\+timeout}!tiny\+\_\+serial.\+h@{tiny\+\_\+serial.\+h}}
+\subsubsection{\texorpdfstring{tiny\+\_\+serial\+\_\+send\+\_\+timeout()}{tiny\_serial\_send\_timeout()}}
+{\footnotesize\ttfamily int tiny\+\_\+serial\+\_\+send\+\_\+timeout (\begin{DoxyParamCaption}\item[{\hyperlink{win32__serial_8h_af7196cefe9f93fd4b3f69e408588ed21}{tiny\+\_\+serial\+\_\+handle\+\_\+t}}]{port,  }\item[{const void $\ast$}]{buf,  }\item[{int}]{len,  }\item[{uint32\+\_\+t}]{timeout\+\_\+ms }\end{DoxyParamCaption})}
+
+
+
+Sends data over serial connection. 
+
+Sends data over serial connection. 
+\begin{DoxyParams}{Parameters}
+{\em port} & handle to serial port \\
+\hline
+{\em buf} & pointer to data buffer to send \\
+\hline
+{\em len} & length of data to send \\
+\hline
+{\em timeout\+\_\+ms} & timeout in milliseconds to wait until data are sent \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+negative value in case of error. or number of bytes sent 
+\end{DoxyReturn}

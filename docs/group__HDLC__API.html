@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Tiny protocol
-   &#160;<span id="projectnumber">0.9.3</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">Tiny communication protocol for microcontrollers</div>
   </td>
@@ -77,6 +77,8 @@ $(function() {
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__hdlc__handle__t.html">_hdlc_handle_t</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTiny_1_1ProtoHdlc.html">Tiny::ProtoHdlc</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -116,6 +118,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga73156f5cc3e59c3abb880d124de78f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae31d921043b4f175603114c206b6b829"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#gae31d921043b4f175603114c206b6b829">hdlc_run_tx</a> (<a class="el" href="group__HDLC__API.html#gabeaf7578aed5279d3af891bd85a9f961">hdlc_handle_t</a> handle)</td></tr>
 <tr class="separator:gae31d921043b4f175603114c206b6b829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaeece06ea6894a19402f76158e1d101d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#gaaeece06ea6894a19402f76158e1d101d">hdlc_get_tx_data</a> (<a class="el" href="group__HDLC__API.html#gabeaf7578aed5279d3af891bd85a9f961">hdlc_handle_t</a> handle, void *data, int len)</td></tr>
+<tr class="separator:gaaeece06ea6894a19402f76158e1d101d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8b5cc456927145cebd82b2b560a6fa10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__HDLC__API.html#ga8b5cc456927145cebd82b2b560a6fa10">hdlc_send</a> (<a class="el" href="group__HDLC__API.html#gabeaf7578aed5279d3af891bd85a9f961">hdlc_handle_t</a> handle, const void *data, int len, uint32_t timeout)</td></tr>
 <tr class="separator:ga8b5cc456927145cebd82b2b560a6fa10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -189,6 +193,50 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="gaaeece06ea6894a19402f76158e1d101d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaaeece06ea6894a19402f76158e1d101d">&#9670;&nbsp;</a></span>hdlc_get_tx_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int hdlc_get_tx_data </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__HDLC__API.html#gabeaf7578aed5279d3af891bd85a9f961">hdlc_handle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If hdlc protocol has some data to send it will full data with This function returns either if no more data to send, or specified buffer is filled completely.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>handle to hdlc instance </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to buffer to fill with data </td></tr>
+    <tr><td class="paramname">len</td><td>length of specified buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of bytes written to specified buffer </dd></dl>
 
 </div>
 </div>
@@ -282,6 +330,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Processes incoming data. Implementation of reading data from hw is user responsibility. If <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a> returns value less than size of data passed to the function, then <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a> must be called later second time with the pointer to and size of not processed bytes.</p>
+<p>If you don't care about errors on RX line, it is allowed to ignore all error codes except TINY_ERR_FAILED, which means general failure.</p>
+<p>if <a class="el" href="group__HDLC__API.html#ga911a3f1cb32dd6cadd00223e0097642c">hdlc_run_rx()</a> returns 0 bytes processed, just call it once again. It is guaranteed, that at least second call will process bytes.</p>
 <p>This function will return the following codes in error field:</p><ul>
 <li>TINY_ERR_DATA_TOO_LARGE if receiving data fails to fit incoming buffer</li>
 <li>TINY_ERR_FAILED if generic failure happened</li>

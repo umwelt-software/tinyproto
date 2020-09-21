@@ -9,6 +9,8 @@ low level H\+D\+LC protocol function -\/ only framing
 \begin{DoxyCompactItemize}
 \item 
 struct \hyperlink{struct__hdlc__handle__t}{\+\_\+hdlc\+\_\+handle\+\_\+t}
+\item 
+class \hyperlink{classTiny_1_1ProtoHdlc}{Tiny\+::\+Proto\+Hdlc}
 \end{DoxyCompactItemize}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
@@ -46,6 +48,8 @@ int \hyperlink{group__HDLC__API_gaf20d86bb10361096f507838394c624c7}{hdlc\+\_\+ru
 void \hyperlink{group__HDLC__API_ga73156f5cc3e59c3abb880d124de78f91}{hdlc\+\_\+set\+\_\+rx\+\_\+buffer} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle, void $\ast$data, int size)
 \item 
 int \hyperlink{group__HDLC__API_gae31d921043b4f175603114c206b6b829}{hdlc\+\_\+run\+\_\+tx} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle)
+\item 
+int \hyperlink{group__HDLC__API_gaaeece06ea6894a19402f76158e1d101d}{hdlc\+\_\+get\+\_\+tx\+\_\+data} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle, void $\ast$data, int len)
 \item 
 int \hyperlink{group__HDLC__API_ga8b5cc456927145cebd82b2b560a6fa10}{hdlc\+\_\+send} (\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t} handle, const void $\ast$data, int len, uint32\+\_\+t timeout)
 \end{DoxyCompactItemize}
@@ -110,6 +114,26 @@ Shutdowns all hdlc activity
 {\em handle} & handle to hdlc instance \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{group__HDLC__API_gaaeece06ea6894a19402f76158e1d101d}\label{group__HDLC__API_gaaeece06ea6894a19402f76158e1d101d}} 
+\index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+get\+\_\+tx\+\_\+data@{hdlc\+\_\+get\+\_\+tx\+\_\+data}}
+\index{hdlc\+\_\+get\+\_\+tx\+\_\+data@{hdlc\+\_\+get\+\_\+tx\+\_\+data}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
+\subsubsection{\texorpdfstring{hdlc\+\_\+get\+\_\+tx\+\_\+data()}{hdlc\_get\_tx\_data()}}
+{\footnotesize\ttfamily int hdlc\+\_\+get\+\_\+tx\+\_\+data (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{void $\ast$}]{data,  }\item[{int}]{len }\end{DoxyParamCaption})}
+
+If hdlc protocol has some data to send it will full data with This function returns either if no more data to send, or specified buffer is filled completely.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & handle to hdlc instance \\
+\hline
+{\em data} & pointer to buffer to fill with data \\
+\hline
+{\em len} & length of specified buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of bytes written to specified buffer 
+\end{DoxyReturn}
 \mbox{\Hypertarget{group__HDLC__API_gaa41c388433273a76460ddfbaff0f8f5d}\label{group__HDLC__API_gaa41c388433273a76460ddfbaff0f8f5d}} 
 \index{Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}!hdlc\+\_\+init@{hdlc\+\_\+init}}
 \index{hdlc\+\_\+init@{hdlc\+\_\+init}!Tiny H\+D\+L\+C protocol A\+P\+I functions@{Tiny H\+D\+L\+C protocol A\+P\+I functions}}
@@ -149,6 +173,10 @@ Resets hdlc state. Use this function, if hw error happened on tx or rx line, and
 {\footnotesize\ttfamily int hdlc\+\_\+run\+\_\+rx (\begin{DoxyParamCaption}\item[{\hyperlink{group__HDLC__API_gabeaf7578aed5279d3af891bd85a9f961}{hdlc\+\_\+handle\+\_\+t}}]{handle,  }\item[{const void $\ast$}]{data,  }\item[{int}]{len,  }\item[{int $\ast$}]{error }\end{DoxyParamCaption})}
 
 Processes incoming data. Implementation of reading data from hw is user responsibility. If \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx()} returns value less than size of data passed to the function, then \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx()} must be called later second time with the pointer to and size of not processed bytes.
+
+If you don\textquotesingle{}t care about errors on RX line, it is allowed to ignore all error codes except T\+I\+N\+Y\+\_\+\+E\+R\+R\+\_\+\+F\+A\+I\+L\+ED, which means general failure.
+
+if \hyperlink{group__HDLC__API_ga911a3f1cb32dd6cadd00223e0097642c}{hdlc\+\_\+run\+\_\+rx()} returns 0 bytes processed, just call it once again. It is guaranteed, that at least second call will process bytes.
 
 This function will return the following codes in error field\+:
 \begin{DoxyItemize}
