@@ -40,7 +40,7 @@ private:
     FakeWire &m_tx;
     FakeWire &m_rx;
     std::mutex m_mutex;
-    int m_timeout = 1000;
+    int m_timeout = 10;
 };
 
 

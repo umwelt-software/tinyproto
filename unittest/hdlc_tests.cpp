@@ -138,7 +138,7 @@ TEST(HDLC, arduino_to_pc)
 {
     uint8_t ardu_buffer[512];
     // PC side has a larger buffer
-    FakeConnection conn( 128, 32 );
+    FakeConnection conn( 4096, 64 );
     TinyHdlcHelper pc( &conn.endpoint1(), nullptr, nullptr, 512 );
     TinyHdlcHelper arduino( &conn.endpoint2(), [&ardu_buffer, &arduino](uint8_t *buf, int len)->void {
                                 memcpy( ardu_buffer, buf,len );
@@ -161,12 +161,14 @@ TEST(HDLC, arduino_to_pc)
         arduino.run_rx();
         arduino.run_tx();
         if ( static_cast<uint32_t>(tiny_millis() - startTs) > 2000 ) break;
-    } while (pc.tx_count() != 100 && arduino.tx_count() < 100 - tx_count);
+    } while (pc.tx_count() != 100 || arduino.tx_count() < 100 - tx_count);
 
     CHECK_EQUAL( 100, pc.tx_count() );
     if ( arduino.rx_count() < 97 - tx_count )
         CHECK_EQUAL( 100 - tx_count, arduino.rx_count() );
-    CHECK_EQUAL( arduino.rx_count(), arduino.tx_count() );
+    // Some frames can be lost on send due to very small tx buffer on arduino side
+    if ( arduino.rx_count() - 5 > arduino.tx_count() )
+        CHECK_EQUAL( arduino.rx_count(), arduino.tx_count() );
     if ( 95 - tx_count > pc.rx_count() )
         CHECK_EQUAL( arduino.tx_count(), pc.rx_count() );
     if ( conn.lostBytes() > 10 )

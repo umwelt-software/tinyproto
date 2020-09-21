@@ -90,15 +90,14 @@ TEST(FD, multithread_alternate_read_test)
 TEST(FD, arduino_to_pc)
 {
     std::atomic<int> arduino_timedout_frames{};
-    FakeConnection conn( 4096, 32 ); // PC side has larger UART buffer: 4096, arduino side has small uart buffer
+    FakeConnection conn( 4096, 64 ); // PC side has larger UART buffer: 4096, arduino side has small uart buffer
     TinyHelperFd pc( &conn.endpoint1(), 4096, nullptr, 4, 400 );
     TinyHelperFd arduino( &conn.endpoint2(), tiny_fd_buffer_size_by_mtu(64,4),
                           [&arduino, &arduino_timedout_frames](uint16_t,uint8_t*b,int s)->void
                           { if ( arduino.send(b, s) == TINY_ERR_TIMEOUT ) arduino_timedout_frames++; }, 4, 0 );
     conn.endpoint2().setTimeout( 0 );
     conn.endpoint2().disable();
-    // TODO: Due to slow emulator
-    conn.setSpeed( 256000 );
+    conn.setSpeed( 115200 );
     pc.run(true);
     // sent 100 small packets from pc to arduino
     pc.send( 100, "Generated frame. test in progress" );
@@ -112,8 +111,8 @@ TEST(FD, arduino_to_pc)
         arduino.run_tx();
         if ( static_cast<uint32_t>(tiny_millis() - start_ms) > 2000 ) break;
     } while ( pc.tx_count() != 100 &&  pc.rx_count() + arduino_timedout_frames < 99 );
-    // it is allowed to miss several frames
-    if ( 98 - arduino_timedout_frames >  pc.rx_count() )
+    // it is allowed to miss several frames due to arduino cycle completes before last messages are delivered
+    if ( 96 - arduino_timedout_frames >  pc.rx_count() )
     {
         CHECK_EQUAL( 100 - arduino_timedout_frames,  pc.rx_count() );
     }
@@ -149,21 +148,22 @@ TEST(FD, error_on_single_I_send)
     // TX2: U, U, I,
     FakeConnection conn;
     uint16_t     nsent = 0;
-    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
-    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
+    TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 1000 );
+    TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 1000 );
     conn.line2().generate_single_error( 6 + 6 + 3 ); // Put error on I-frame
     helper1.run(true);
     helper2.run(true);
 
-    for (nsent = 0; nsent < 1; nsent++)
+    // retransmissiomn must happen very quickly since FD detects out-of-order frames
+    for (nsent = 0; nsent < 2; nsent++)
     {
         uint8_t      txbuf[4] = { 0xAA, 0xFF, 0xCC, 0x66 };
         int result = helper2.send( txbuf, sizeof(txbuf) );
         CHECK_EQUAL( TINY_SUCCESS, result );
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count( 1, 250 );
-    CHECK_EQUAL( 1, helper1.rx_count() );
+    helper1.wait_until_rx_count( 2, 300 );
+    CHECK_EQUAL( 2, helper1.rx_count() );
 }
 
 TEST(FD, error_on_rej)

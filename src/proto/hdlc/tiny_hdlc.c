@@ -274,7 +274,7 @@ static int hdlc_send_end( hdlc_handle_t handle )
 
 int hdlc_run_tx( hdlc_handle_t handle )
 {
-    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_run_tx\n", handle);
+    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_run_tx ENTER\n", handle);
     int result = 0;
     for (;;)
     {
@@ -290,6 +290,7 @@ int hdlc_run_tx( hdlc_handle_t handle )
         result += temp_result;
 //        break;
     }
+    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_run_tx EXIT\n", handle);
     return result;
 }
 
@@ -564,7 +565,7 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
     {
         *error = TINY_SUCCESS;
     }
-    while ( len )
+    while ( len || handle->rx.state == hdlc_read_end )
     {
         int temp_result = handle->rx.state( handle, (const uint8_t *)data, len );
         if ( temp_result <=0 )

@@ -583,11 +583,12 @@ int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
 {
     uint16_t ts = tiny_millis();
     int result;
-    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle ENTER with timeout %u ms\n", handle, timeout);
+//    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle ENTER with timeout %u ms\n", handle, timeout);
     do
     {
         uint8_t data;
         result = handle->read_func( handle->user_data, &data, sizeof(data) );
+//        LOG(TINY_LOG_DEB, "[%p] FD run rx process data ENTER\n", handle);
         if ( result > 0 )
         {
             int len;
@@ -602,8 +603,9 @@ int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
                 }
             } while ( len == 0);
         }
+//        LOG(TINY_LOG_DEB, "[%p] FD run rx process data EXIT\n", handle);
     } while ((uint16_t)(tiny_millis() - ts) < timeout);
-    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle EXIT\n", handle);
+//    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle EXIT\n", handle);
     return result;
 }
 
@@ -719,7 +721,9 @@ static void tiny_fd_connected_on_idle_timeout( tiny_fd_handle_t handle )
 
 static void tiny_fd_disconnected_on_idle_timeout( tiny_fd_handle_t handle )
 {
-    if ( __time_passed_since_last_frame_received( handle ) >= handle->retry_timeout )
+    tiny_mutex_lock( &handle->frames.mutex );
+    if ( __time_passed_since_last_frame_received( handle ) >= handle->retry_timeout ||
+         __number_of_awaiting_tx_i_frames( handle ) > 0 )
     {
         LOG(TINY_LOG_ERR, "[%p] ABM connection is not established\n", handle);
         // Try to establish ABM connection
@@ -730,6 +734,7 @@ static void tiny_fd_disconnected_on_idle_timeout( tiny_fd_handle_t handle )
         __put_u_s_frame_to_tx_queue( handle, &frame, 2 );
         handle->frames.last_ka_ts = tiny_millis();
     }
+    tiny_mutex_unlock( &handle->frames.mutex );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
