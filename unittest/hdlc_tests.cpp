@@ -137,12 +137,16 @@ TEST(HDLC, send_receive)
 TEST(HDLC, arduino_to_pc)
 {
     uint8_t ardu_buffer[512];
+    int timed_out_frames = 0;
     // PC side has a larger buffer
     FakeConnection conn( 4096, 64 );
     TinyHdlcHelper pc( &conn.endpoint1(), nullptr, nullptr, 512 );
-    TinyHdlcHelper arduino( &conn.endpoint2(), [&ardu_buffer, &arduino](uint8_t *buf, int len)->void {
+    TinyHdlcHelper arduino( &conn.endpoint2(), [&ardu_buffer, &arduino, &timed_out_frames](uint8_t *buf, int len)->void {
                                 memcpy( ardu_buffer, buf,len );
-                                arduino.send( ardu_buffer, len, 0 );
+                                if ( arduino.send( ardu_buffer, len, 0 ) == TINY_ERR_BUSY )
+                                {
+                                    timed_out_frames++;
+                                }
                             }, nullptr, 512 );
     conn.setSpeed( 115200 );
     conn.endpoint2().setTimeout( 0 );
@@ -155,23 +159,33 @@ TEST(HDLC, arduino_to_pc)
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     conn.endpoint2().enable();
     uint32_t startTs = tiny_millis();
-    int tx_count = pc.tx_count();
+    int tx_count = pc.tx_count() + 1;
     do
     {
         arduino.run_rx();
         arduino.run_tx();
-        if ( static_cast<uint32_t>(tiny_millis() - startTs) > 2000 ) break;
-    } while (pc.tx_count() != 100 || arduino.tx_count() < 100 - tx_count);
+        if ( static_cast<uint32_t>(tiny_millis() - startTs) > 2000 )
+        {
+            FAIL("Timeout happened");
+            break;
+        }
+    } while (pc.tx_count() != 100 ||
+             arduino.rx_count() < ( (conn.lostBytes() ?  100 : 95) - tx_count ) ||
+             arduino.rx_count() > timed_out_frames + arduino.tx_count() ||
+             pc.rx_count() < arduino.tx_count() - (conn.lostBytes() ? 5: 0) );
 
     CHECK_EQUAL( 100, pc.tx_count() );
-    if ( arduino.rx_count() < 97 - tx_count )
+    if ( arduino.rx_count() < (conn.lostBytes() ?  100 : 95)  - tx_count )
         CHECK_EQUAL( 100 - tx_count, arduino.rx_count() );
     // Some frames can be lost on send due to very small tx buffer on arduino side
-    if ( arduino.rx_count() - 5 > arduino.tx_count() )
-        CHECK_EQUAL( arduino.rx_count(), arduino.tx_count() );
-    if ( 95 - tx_count > pc.rx_count() )
+    if ( arduino.rx_count() - timed_out_frames > arduino.tx_count() )
+    {
+        fprintf(stderr, "Lost bytes %d\n", conn.lostBytes() );
+        CHECK_EQUAL( arduino.rx_count() - timed_out_frames, arduino.tx_count() );
+    }
+    if ( arduino.tx_count() > pc.rx_count() + (conn.lostBytes() ? 5: 0) )
         CHECK_EQUAL( arduino.tx_count(), pc.rx_count() );
-    if ( conn.lostBytes() > 10 )
+    if ( conn.lostBytes() > 30 )
         CHECK_EQUAL( 0, conn.lostBytes() );
 }
 

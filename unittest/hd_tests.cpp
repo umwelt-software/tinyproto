@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017, 2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -47,8 +47,8 @@ TEST(HD, singlethread)
     const int msgnum = 2;
 
     FakeConnection conn;
-    conn.endpoint1().setTimeout( 100 );
-    conn.endpoint2().setTimeout( 100 );
+    conn.endpoint1().setTimeout( 10 );
+    conn.endpoint2().setTimeout( 10 );
     // Do not use multithread mode
     TinyHelperHd helper1( &conn.endpoint1(), bufsize, nullptr, true);
     TinyHelperHd helper2( &conn.endpoint2(), bufsize, nullptr, false );

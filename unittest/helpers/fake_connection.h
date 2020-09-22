@@ -46,7 +46,7 @@ private:
     FakeWire  m_line2{};
     FakeEndpoint m_endpoint1{m_line1, m_line2};
     FakeEndpoint m_endpoint2{m_line2, m_line1};
-    std::atomic<int>   m_interval_us{ 1000000 / (/*115200*/ 256000 / 8) };
+    std::atomic<int>   m_interval_us{ 1000000 / (/*115200*/ 512000 / 8) };
     std::atomic<bool>  m_stopped{ false };
     std::thread  m_line_thread;
 

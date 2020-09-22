@@ -112,7 +112,7 @@ TEST(FD, arduino_to_pc)
         if ( static_cast<uint32_t>(tiny_millis() - start_ms) > 2000 ) break;
     } while ( pc.tx_count() != 100 &&  pc.rx_count() + arduino_timedout_frames < 99 );
     // it is allowed to miss several frames due to arduino cycle completes before last messages are delivered
-    if ( 96 - arduino_timedout_frames >  pc.rx_count() )
+    if ( 95 - arduino_timedout_frames >  pc.rx_count() )
     {
         CHECK_EQUAL( 100 - arduino_timedout_frames,  pc.rx_count() );
     }
@@ -124,8 +124,6 @@ TEST(FD, errors_on_tx_line)
     uint16_t     nsent = 0;
     TinyHelperFd helper1( &conn.endpoint1(), 1024, nullptr, 7, 250 );
     TinyHelperFd helper2( &conn.endpoint2(), 1024, nullptr, 7, 250 );
-    // TODO: 9600 for now due to slow emulator
-    conn.setSpeed( 14400 );
     conn.line2().generate_error_every_n_byte( 200 );
     helper1.run(true);
     helper2.run(true);
