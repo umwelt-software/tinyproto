@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 (C) Alexey Dynda
+    Copyright 2017, 2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -31,6 +31,7 @@ public:
     ~FakeEndpoint();
     int read(uint8_t * data, int length);
     int write(const uint8_t * data, int length);
+    bool wait_until_rx_count(int count, int timeout);
 
     void setTimeout( int timeout_ms ) { m_timeout = timeout_ms; }
     void disable() { m_rx.disable(); }

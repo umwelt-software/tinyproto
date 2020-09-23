@@ -49,7 +49,8 @@ TEST(FD, multithread_basic_test)
     uint16_t     nsent = 0;
     TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
     TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
-    helper1.run(true); // tiny_fd_run_rx();
+    // Vaildation of tiny_fd_run_rx()
+    helper1.run(true);
     helper2.run(true);
 
     // sent 200 small packets
@@ -70,7 +71,8 @@ TEST(FD, multithread_alternate_read_test)
     uint16_t     nsent = 0;
     TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
     TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
-    helper1.set_alternate_read_method(); // tiny_fd_on_rx_data();
+    // Validation of tiny_fd_on_rx_data()
+    helper1.set_alternate_read_method();
     helper2.set_alternate_read_method();
     helper1.run(true);
     helper2.run(true);

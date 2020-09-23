@@ -189,3 +189,37 @@ TEST(HDLC, arduino_to_pc)
         CHECK_EQUAL( 0, conn.lostBytes() );
 }
 
+TEST(HDLC, single_receive)
+{
+    FakeConnection conn;
+    conn.endpoint1().setTimeout( 0 );
+    conn.endpoint2().setTimeout( 100 );
+    TinyHdlcHelper   helper2( &conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF );
+    uint32_t start_ts = tiny_millis();
+    const uint8_t frame[] = { 0x7E, 0x01, 0x02, 0x03, 0x7E };
+    conn.endpoint1().write( frame, sizeof(frame) );
+    helper2.run( true );
+    helper2.wait_until_rx_count(1, 10);
+    CHECK_EQUAL( 1, helper2.rx_count() );
+    if ( static_cast<uint32_t>(tiny_millis() - start_ts) > 50 )
+    {
+        FAIL("Timeout");
+    }
+}
+
+TEST(HDLC, single_send)
+{
+    FakeConnection conn;
+    conn.endpoint1().setTimeout( 0 );
+    conn.endpoint2().setTimeout( 10 );
+    TinyHdlcHelper   helper2( &conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF );
+    const uint8_t frame[] = { 0x7E, 0x01, 0x02, 0x03, 0x7E };
+    helper2.send( frame + 1, sizeof(frame) - 2, 100 );
+    if ( !conn.endpoint1().wait_until_rx_count( sizeof(frame), 10 ) )
+    {
+        FAIL("Timeout");
+    }
+    uint8_t data[ sizeof(frame) ]{};
+    conn.endpoint1().read( data, sizeof(data) );
+    MEMCMP_EQUAL( data, frame, sizeof(frame) );
+}

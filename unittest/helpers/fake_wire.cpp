@@ -40,6 +40,23 @@ FakeWire::FakeWire(int readbuf_size, int writebuf_size)
     tiny_events_set( &m_events, EV_WR_ROOM_AVAIL );
 }
 
+bool FakeWire::wait_until_rx_count(int count, int timeout )
+{
+    for(;;)
+    {
+        m_readmutex.lock();
+        int size = m_readbuf.size();
+        m_readmutex.unlock();
+        if ( size >= count )
+        {
+            return true;
+        }
+        tiny_sleep(1);
+        if ( !timeout ) break;
+        timeout--;
+    }
+    return false;
+}
 
 int FakeWire::read(uint8_t *data, int length, int timeout)
 {

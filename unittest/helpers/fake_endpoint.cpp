@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2019 (C) Alexey Dynda
+    Copyright 2017-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -42,4 +42,7 @@ int FakeEndpoint::write(const uint8_t * data, int length)
     return m_tx.write(data, length, m_timeout);
 }
 
-
+bool FakeEndpoint::wait_until_rx_count(int count, int timeout)
+{
+    return m_rx.wait_until_rx_count(count, timeout);
+}

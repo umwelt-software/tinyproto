@@ -39,7 +39,7 @@ TinyHdlcHelper::TinyHdlcHelper(FakeEndpoint * endpoint,
     hdlc_init( &m_handle );
 }
 
-int TinyHdlcHelper::send(uint8_t *buf, int len, int timeout)
+int TinyHdlcHelper::send(const uint8_t *buf, int len, int timeout)
 {
     int result = hdlc_send( &m_handle, (uint8_t *)buf, len, timeout );
     return result;
@@ -128,6 +128,11 @@ void TinyHdlcHelper::send(int count, const std::string &msg)
         m_stop_sender = false;
         m_sender_thread = new std::thread( MessageSenderStatic, this, count, msg );
     }
+}
+
+void TinyHdlcHelper::wait_until_rx_count(int count, uint32_t timeout)
+{
+    while ( m_rx_count != count && timeout-- ) usleep(1000);
 }
 
 TinyHdlcHelper::~TinyHdlcHelper()

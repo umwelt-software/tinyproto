@@ -36,13 +36,15 @@ public:
                    int rx_buf_size = 1024,
                    hdlc_crc_t crc = HDLC_CRC_16);
     ~TinyHdlcHelper();
-    int send(uint8_t *buf, int len, int timeout = 1000);
+    int send(const uint8_t *buf, int len, int timeout = 1000);
     void send(int count, const std::string &msg);
     int run_rx() override;
     int run_rx_until_read(int timeout = 1000);
     int run_tx() override;
     int rx_count() { return m_rx_count; }
     int tx_count() { return m_tx_count; }
+
+    void wait_until_rx_count(int count, uint32_t timeout);
 
     void setMcuMode() { m_tx_from_main = true; }
 private:

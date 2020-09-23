@@ -43,7 +43,7 @@ TEST_GROUP(HD)
 #if 1
 TEST(HD, singlethread)
 {
-    const int bufsize = 16;
+    const int bufsize = 32;
     const int msgnum = 2;
 
     FakeConnection conn;
@@ -64,7 +64,7 @@ TEST(HD, singlethread)
         int result = helper2.send_wait_ack( txbuf, 2 );
         CHECK_EQUAL( 2, result );
     }
-//    helper1.wait_until_rx_count( msgnum, 1000 );
+    helper1.wait_until_rx_count( msgnum, 10 );
     CHECK_EQUAL( msgnum, helper1.rx_count() );
 }
 #endif
@@ -72,7 +72,7 @@ TEST(HD, singlethread)
 #if 1
 TEST(HD, multithread)
 {
-    const int bufsize = 16;
+    const int bufsize = 32;
     const int msgnum = 2;
     FakeConnection conn;
     conn.endpoint1().setTimeout( 100 );
@@ -92,7 +92,7 @@ TEST(HD, multithread)
         int result = helper2.send_wait_ack( txbuf, 2 );
         CHECK_EQUAL( 2, result );
     }
-//    helper1.wait_until_rx_count( msgnum, 1000 );
+    helper1.wait_until_rx_count( msgnum, 10 );
     CHECK_EQUAL( 0, conn.lostBytes() );
     CHECK_EQUAL( msgnum, helper1.rx_count() );
 }
