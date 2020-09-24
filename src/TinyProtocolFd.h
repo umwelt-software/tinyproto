@@ -349,7 +349,7 @@ class ProtoFd: public IProtoFd
 public:
     ProtoFd(): IProtoFd( m_data, S ) {}
 private:
-    uint8_t m_data[S];
+    uint8_t m_data[S]{};
 };
 
 /**
@@ -364,7 +364,7 @@ public:
      * Creates instance of Full duplex protocol with dynamically allocated buffer.
      * Use this class only on powerful microcontrollers.
      */
-    ProtoFdD( int size ): IProtoFd( new uint8_t[size], size ) { }
+    explicit ProtoFdD( int size ): IProtoFd( new uint8_t[size], size ) { }
     ~ProtoFdD() { delete[] m_buffer; }
 private:
 };

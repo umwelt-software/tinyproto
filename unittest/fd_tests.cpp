@@ -215,7 +215,7 @@ TEST(FD, no_ka_switch_to_disconnected)
     // Run local endpoint again.
     helper1.run(true);
     // At this step, we should be in disconnected state, and should see SABM frames
-    // Sleep for 100 milliseconds to get at least one Keep Alive
+    // sleep for 100 milliseconds to get at least one Keep Alive
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     uint8_t buffer[32];
     int len = conn.endpoint2().read( buffer, sizeof(buffer) );

@@ -197,7 +197,7 @@ public:
     Packet(): IPacket(m_data, S) {}
 
 private:
-    char m_data[S];
+    char m_data[S]{};
 };
 
 /**
@@ -211,7 +211,7 @@ public:
      * Creates packet with dynamically allocated buffer.
      * @param size number of bytes to allocate for the packet buffer.
      */
-    PacketD(int size): IPacket((char *)(new uint8_t[size]), size) {}
+    explicit PacketD(int size): IPacket((char *)(new uint8_t[size]), size) {}
 
     ~PacketD() { delete[] (uint8_t *)data(); }
 
