@@ -106,7 +106,7 @@ void hdlc_reset( hdlc_handle_t handle )
     handle->rx.state = hdlc_read_start;
     handle->tx.data = NULL;
     handle->tx.state = hdlc_send_start;
-    tiny_events_clear( &handle->events, EVENT_BIS_ALL );
+    tiny_events_clear( &handle->events, EVENT_BITS_ALL );
     tiny_events_set( &handle->events, TX_ACCEPT_BIT );
 }
 

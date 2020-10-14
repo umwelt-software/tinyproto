@@ -23,7 +23,6 @@
 #include <stdint.h>
 #include <thread>
 #include <atomic>
-#include "proto/half_duplex/tiny_hd.h"
 #include "fake_endpoint.h"
 
 class BaseHelper

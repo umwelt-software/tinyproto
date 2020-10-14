@@ -45,6 +45,26 @@ extern "C" {
  *************************************************************/
 
 /**
+ * This structure contains captured statistics while the protocol
+ * sends and receives messages.
+ */
+typedef struct
+{
+    /// Number of bytes received out of frame bytes
+    uint32_t            oosyncBytes;
+    /// Number of payload bytes totally sent through the channel
+    uint32_t            bytesSent;
+    /// Number of payload bytes totally received through the channel
+    uint32_t            bytesReceived;
+    /// Number of frames, successfully sent through the channel
+    uint32_t            framesSent;
+    /// Number of frames, successfully received through the communication channel
+    uint32_t            framesReceived;
+    /// Number of broken frames received
+    uint32_t            framesBroken;
+} STinyStats;
+
+/**
  * This structure contains information about communication channel and its state.
  * \warning This is for internal use only, and should not be accessed directly from the application.
  */
