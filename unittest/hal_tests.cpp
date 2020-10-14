@@ -24,9 +24,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <arpa/inet.h>
-#include "proto/hal/tiny_types.h"
-#include "proto/hal/tiny_list.h"
-#include "proto/hal/tiny_debug.h"
+#include "hal/tiny_types.h"
+#include "hal/tiny_list.h"
+#include "hal/tiny_debug.h"
 #include "proto/crc/crc.h"
 
 

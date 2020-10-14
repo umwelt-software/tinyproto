@@ -23,7 +23,7 @@
  * Windows.
  */
 
-#include "proto/hal/tiny_serial.h"
+#include "hal/tiny_serial.h"
 #include "proto/hdlc/tiny_hdlc.h"
 #include "TinyProtocol.h"
 #include <stdio.h>

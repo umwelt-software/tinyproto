@@ -18,7 +18,7 @@
 */
 #pragma once
 
-#include "proto/hal/tiny_types.h"
+#include "hal/tiny_types.h"
 #include <stdint.h>
 #include <stdbool.h>
 

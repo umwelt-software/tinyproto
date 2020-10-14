@@ -17,7 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "proto/hal/tiny_serial.h"
+#include "hal/tiny_serial.h"
 
 #include <stdio.h>
 #include <unistd.h>

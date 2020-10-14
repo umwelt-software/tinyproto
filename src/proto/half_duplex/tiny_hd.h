@@ -33,7 +33,7 @@ extern "C" {
 
 #include <stdint.h>
 #include "proto/hdlc/tiny_hdlc.h"
-#include "proto/hal/tiny_types.h"
+#include "hal/tiny_types.h"
 
 /**
  * @defgroup HALF_DUPLEX_API Tiny Half Duplex API functions

@@ -19,7 +19,7 @@
 
 #include "tiny_hdlc.h"
 #include "proto/crc/crc.h"
-#include "proto/hal/tiny_debug.h"
+#include "hal/tiny_debug.h"
 
 #include <stddef.h>
 

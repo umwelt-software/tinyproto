@@ -66,9 +66,9 @@ OBJ_LIB += \
         src/proto/hdlc/tiny_hdlc.o \
         src/proto/fd/tiny_fd.o \
         src/proto/half_duplex/tiny_hd.o \
-        src/proto/hal/tiny_list.o \
-        src/proto/hal/tiny_types.o \
-        src/proto/hal/tiny_serial.o \
+        src/hal/tiny_list.o \
+        src/hal/tiny_types.o \
+        src/hal/tiny_serial.o \
         src/proto/half_duplex/tiny_rq_pool.o \
         src/TinyProtocolHdlc.o \
         src/TinyProtocolHd.o \

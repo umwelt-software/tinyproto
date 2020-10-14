@@ -17,7 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "proto/hal/tiny_types.h"
+#include "hal/tiny_types.h"
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
 {

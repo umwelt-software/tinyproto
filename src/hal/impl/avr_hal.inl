@@ -22,7 +22,7 @@
 #endif
 // TODO: <util/atomic.h>
 
-#include "proto/hal/tiny_types.h"
+#include "hal/tiny_types.h"
 #include <avr/interrupt.h>
 #include <util/delay.h>
 

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <stdint.h>
-#include "proto/hal/tiny_types.h"
 
 #ifdef __cplusplus
 extern "C" {

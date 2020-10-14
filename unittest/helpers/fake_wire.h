@@ -26,7 +26,7 @@
 #include <queue>
 #include <thread>
 #include <atomic>
-#include "proto/hal/tiny_types.h"
+#include "hal/tiny_types.h"
 
 class FakeWire
 {

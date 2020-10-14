@@ -23,8 +23,8 @@
 extern "C" {
 #endif
 
-#include "proto/hal/tiny_types.h"
-#include "proto/hal/tiny_list.h"
+#include "hal/tiny_types.h"
+#include "hal/tiny_list.h"
 
 enum
 {

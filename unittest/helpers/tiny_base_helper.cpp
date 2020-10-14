@@ -18,7 +18,7 @@
  */
 
 #include "tiny_base_helper.h"
-#include "proto/hal/tiny_types.h"
+#include "hal/tiny_types.h"
 
 BaseHelper::BaseHelper(FakeEndpoint * endpoint,
                        int rxBufferSize)
