@@ -17,16 +17,16 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _FAKE_WIRE_H_
-#define _FAKE_WIRE_H_
+#pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <mutex>
 #include <list>
 #include <queue>
 #include <thread>
 #include <atomic>
-#include "hal/tiny_types.h"
+
+#include "semaphore_helper.h"
 
 class FakeWire
 {
@@ -52,7 +52,9 @@ private:
         int period;
         int count;
     } ErrorDesc;
-    tiny_events_t m_events;
+    BinarySemaphore m_dataavail{0};
+    BinarySemaphore m_roomavail{1};
+    BinarySemaphore m_transavail{0};
     std::mutex   m_readmutex{};
     std::mutex   m_writemutex{};
     std::queue<uint8_t> m_readbuf;
@@ -68,6 +70,3 @@ private:
 
     friend class FakeConnection;
 };
-
-
-#endif /* _FAKE_WIRE_H_ */

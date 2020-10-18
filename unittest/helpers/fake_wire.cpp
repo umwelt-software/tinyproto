@@ -18,8 +18,9 @@
  */
 
 #include "fake_wire.h"
-#include <stdio.h>
+#include <cstdio>
 #include <thread>
+#include <chrono>
 
 enum
 {
@@ -35,9 +36,6 @@ FakeWire::FakeWire(int readbuf_size, int writebuf_size)
     , m_readbuf_size( readbuf_size )
     , m_writebuf_size( writebuf_size )
 {
-    tiny_events_create( &m_events );
-    tiny_events_clear( &m_events, EV_RD_DATA_AVAIL );
-    tiny_events_set( &m_events, EV_WR_ROOM_AVAIL );
 }
 
 bool FakeWire::wait_until_rx_count(int count, int timeout )
@@ -51,7 +49,7 @@ bool FakeWire::wait_until_rx_count(int count, int timeout )
         {
             return true;
         }
-        tiny_sleep(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         if ( !timeout ) break;
         timeout--;
     }
@@ -61,7 +59,7 @@ bool FakeWire::wait_until_rx_count(int count, int timeout )
 int FakeWire::read(uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    if ( tiny_events_wait( &m_events, EV_RD_DATA_AVAIL, EVENT_BITS_CLEAR, timeout ) == 0 )
+    if ( !m_dataavail.try_acquire_for( std::chrono::milliseconds(timeout) ) )
     {
         return 0;
     }
@@ -74,7 +72,7 @@ int FakeWire::read(uint8_t *data, int length, int timeout)
     }
     if ( m_readbuf.size() )
     {
-        tiny_events_set( &m_events, EV_RD_DATA_AVAIL );
+        m_dataavail.release();
     }
     m_readmutex.unlock();
     return size;
@@ -83,7 +81,7 @@ int FakeWire::read(uint8_t *data, int length, int timeout)
 int FakeWire::write(const uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    if ( tiny_events_wait( &m_events, EV_WR_ROOM_AVAIL, EVENT_BITS_CLEAR, timeout ) == 0 )
+    if ( !m_roomavail.try_acquire_for( std::chrono::milliseconds(timeout) ) )
     {
         return 0;
     }
@@ -95,11 +93,11 @@ int FakeWire::write(const uint8_t *data, int length, int timeout)
     }
     if ( m_writebuf.size() < (unsigned int)m_writebuf_size )
     {
-        tiny_events_set( &m_events, EV_WR_ROOM_AVAIL );
+        m_roomavail.release();
     }
     if ( size )
     {
-        tiny_events_set( &m_events, EV_TR_READY );
+        m_transavail.release();
     }
     m_writemutex.unlock();
     return size;
@@ -109,7 +107,7 @@ void FakeWire::TransferData(int bytes)
 {
     bool room_avail = false;
     bool data_avail = false;
-    if ( tiny_events_wait( &m_events, EV_TR_READY, EVENT_BITS_CLEAR, 0 ) == 0 )
+    if ( !m_transavail.try_acquire() )
     {
         return;
     }
@@ -148,17 +146,17 @@ void FakeWire::TransferData(int bytes)
     }
     if ( m_writebuf.size() )
     {
-        tiny_events_set( &m_events, EV_TR_READY );
+        m_transavail.release();
     }
     m_writemutex.unlock();
     m_readmutex.unlock();
     if ( room_avail )
     {
-        tiny_events_set( &m_events, EV_WR_ROOM_AVAIL );
+        m_roomavail.release();
     }
     if ( data_avail )
     {
-        tiny_events_set( &m_events, EV_RD_DATA_AVAIL );
+        m_dataavail.release();
     }
 }
 
@@ -181,5 +179,4 @@ void FakeWire::flush()
 
 FakeWire::~FakeWire()
 {
-    tiny_events_destroy( &m_events );
 }
