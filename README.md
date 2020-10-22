@@ -1,6 +1,7 @@
 ![Tiny Protocol](.travis/tinylogo.svg)<br>
 [![Build Status](https://travis-ci.org/lexus2k/tinyproto.svg?branch=master)](https://travis-ci.org/lexus2k/tinyproto)
 [![Coverage Status](https://coveralls.io/repos/github/lexus2k/tinyproto/badge.svg?branch=master)](https://coveralls.io/github/lexus2k/tinyproto?branch=master)
+[![Documentation](https://codedocs.xyz/lexus2k/tinyproto.svg)](https://codedocs.xyz/lexus2k/tinyproto/)
 
 [tocstart]: # (toc start)
 
@@ -153,7 +154,7 @@ cmake -G "Visual Studio 16 2019" -DEXAMPLES=ON ..
  * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t fd -c 8 -w 3 -g -a -r`
 
 For more information about this library, please, visit https://github.com/lexus2k/tinyproto.
-Doxygen documentation can be found at [github.io site](http://lexus2k.github.io/tinyproto).
+Doxygen documentation can be found at [Codedocs xyz site](https://codedocs.xyz/lexus2k/tinyproto).
 If you found any problem or have any idea, please, report to Issues section.
 
 ## License
