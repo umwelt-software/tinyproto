@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -39,7 +39,7 @@ inline static int _iSetPrimask(int priMask)
 void tiny_sleep(uint32_t ms)
 {
     // No support for sleep
-    return 0;
+    return;
 }
 
 uint32_t tiny_millis()
