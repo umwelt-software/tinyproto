@@ -28,8 +28,8 @@ TinyHelperFd::TinyHelperFd(FakeEndpoint * endpoint,
     ,m_onRxFrameCb(onRxFrameCb)
 {
     tiny_fd_init_t   init{};
-    init.write_func       = write_data;
-    init.read_func        = read_data;
+//    init.write_func       = write_data;
+//    init.read_func        = read_data;
     init.pdata            = this;
     init.on_frame_cb      = onRxFrame;
     init.on_sent_cb       = onTxFrame;
@@ -81,18 +81,26 @@ int TinyHelperFd::send(int count, const std::string &msg)
 
 int TinyHelperFd::run_tx()
 {
-    return tiny_fd_run_tx(m_handle, 10);
+    uint8_t buf[16];
+    int len = tiny_fd_get_tx_data(m_handle, buf, sizeof(buf));
+    uint8_t *ptr = buf;
+    while (len > 0)
+    {
+        int i = write_data(this, ptr, len);
+        if ( i > 0 )
+        {
+            len -= i;
+            ptr += i;
+        }
+    }
+    return 0;
 }
 
 int TinyHelperFd::run_rx()
 {
-    if ( m_alternate_read )
-    {
-        uint8_t buffer[16];
-        int len = read_data(this, buffer, sizeof(buffer));
-        return tiny_fd_on_rx_data(m_handle, buffer, len);
-    }
-    return tiny_fd_run_rx(m_handle, 10);
+    uint8_t buffer[16];
+    int len = read_data(this, buffer, sizeof(buffer));
+    return tiny_fd_on_rx_data(m_handle, buffer, len);
 }
 
 void TinyHelperFd::wait_until_rx_count(int count, uint32_t timeout)

@@ -19,7 +19,7 @@
 
 /**
  This is Tiny Full-Duplex protocol implementation for microcontrollers.
- It is built on top of Tiny Protocol (tiny_hdlc.c)
+ It is built on top of Tiny Protocol (tiny_hdlc2.c)
 
  @file
  @brief Tiny Protocol Full Duplex API
@@ -33,7 +33,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/crc/crc.h"
 #include "hal/tiny_types.h"
 
 /**
@@ -54,10 +54,6 @@ typedef struct tiny_fd_data_t *tiny_fd_handle_t;
  */
 typedef struct tiny_fd_init_t_
 {
-    /// callback function to write bytes to the physical channel
-    write_block_cb_t   write_func;
-    /// callback function to read bytes from the physical channel
-    read_block_cb_t    read_func;
     /// user data for block read/write functions
     void             * pdata;
     /// callback function to process incoming frames. Callback is called from tiny_fd_run_rx() context.
@@ -131,22 +127,6 @@ extern int tiny_fd_init(tiny_fd_handle_t *handle,
 extern void tiny_fd_close(tiny_fd_handle_t handle);
 
 /**
- * @brief runs tx processing for specified period of time.
- *
- * Runs tx processing for specified period of time.
- * After timeout happens, the function returns. If you need it to
- * run in non-blocking mode, please use timeout 0 ms.
- *
- * @warning this function actually sends data to the communication channel. tiny_fd_send()
- *            puts data to queue, but doesn't really send them.
- *
- * @param handle handle of full-duplex protocol
- * @param timeout maximum timeout in milliseconds to perform tx operations
- * @return TINY_ERR_TIMEOUT, or TINY_SUCCESS
- */
-extern int tiny_fd_run_tx(tiny_fd_handle_t handle, uint16_t timeout);
-
-/**
  * @brief runs tx processing to fill specified buffer with data.
  *
  * Runs tx processing to fill specified buffer with data.
@@ -157,18 +137,6 @@ extern int tiny_fd_run_tx(tiny_fd_handle_t handle, uint16_t timeout);
  * @return number of bytes written to specified buffer
  */
 extern int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len );
-
-/**
- * @brief runs rx processing for specified period of time.
- *
- * Runs rx processing for specified period of time.
- * After timeout happens, the function returns. If you need it to
- * run in non-blocking mode, please using timeout 0 ms.
- *
- * @param handle handle of full-duplex protocol
- * @param timeout maximum timeout in milliseconds to perform rx operations
- */
-extern int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout);
 
 /**
  * @brief runs rx bytes processing for specified buffer.

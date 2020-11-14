@@ -215,7 +215,7 @@ TEST(HDLC, single_send)
     TinyHdlcHelper   helper2( &conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF );
     const uint8_t frame[] = { 0x7E, 0x01, 0x02, 0x03, 0x7E };
     helper2.send( frame + 1, sizeof(frame) - 2, 100 );
-    if ( !conn.endpoint1().wait_until_rx_count( sizeof(frame), 10 ) )
+    if ( !conn.endpoint1().wait_until_rx_count( sizeof(frame), 50 ) )
     {
         FAIL("Timeout");
     }

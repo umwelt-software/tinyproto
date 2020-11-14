@@ -72,89 +72,10 @@ public:
      * Initializes protocol internal variables.
      * If you need to switch communication with other destination
      * point, you can call this method one again after calling end().
-     * @param writecb - write function to some physical channel
-     * @param readcb  - read function from some physical channel
-     * @return None
-     */
-    void begin          (write_block_cb_t writecb,
-                         read_block_cb_t readcb);
-
-
-    /**
-     * Initializes protocol internal variables.
-     * If you need to switch communication with other destination
-     * point, you can call this method one again after calling end().
      * Use this method if you want to control write and read data by yourself
      * @return None
      */
     void begin();
-
-#ifdef ARDUINO
-    /**
-     * Initializes protocol internal variables and redirects
-     * communication through Arduino Serial connection (Serial).
-     * @return None
-     */
-    inline void beginToSerial()
-    {
-         begin([](void *p, const void *b, int s)->int { return Serial.write((const uint8_t *)b, s); },
-               [](void *p, void *b, int s)->int { return Serial.readBytes((uint8_t *)b, s); });
-    }
-
-#ifdef HAVE_HWSERIAL1
-    /**
-     * Initializes protocol internal variables and redirects
-     * communication through Arduino Serial1 connection (Serial1).
-     * @return None
-     */
-    inline void beginToSerial1()
-    {
-         begin([](void *p, const void *b, int s)->int { return Serial1.write((const uint8_t *)b, s); },
-               [](void *p, void *b, int s)->int { return Serial1.readBytes((uint8_t *)b, s); });
-    }
-#endif
-
-#ifdef HAVE_HWSERIAL2
-    /**
-     * Initializes protocol internal variables and redirects
-     * communication through Arduino Serial2 connection (Serial2).
-     * @return None
-     */
-    inline void beginToSerial2()
-    {
-         begin([](void *p, const void *b, int s)->int { return Serial2.write((const uint8_t *)b, s); },
-               [](void *p, void *b, int s)->int { return Serial2.readBytes((uint8_t *)b, s); });
-    }
-#endif
-
-#ifdef HAVE_HWSERIAL3
-    /**
-     * Initializes protocol internal variables and redirects
-     * communication through Arduino Serial3 connection (Serial3).
-     * @return None
-     */
-    inline void beginToSerial3()
-    {
-         begin([](void *p, const void *b, int s)->int { return Serial3.write((const uint8_t *)b, s); },
-               [](void *p, void *b, int s)->int { return Serial3.readBytes((uint8_t *)b, s); });
-    }
-#endif
-
-
-#ifdef HAVE_SERIALUSB
-    /**
-     * Initializes protocol internal variables and redirects
-     * communication through Arduino Serial1 connection (SerialUSB).
-     * @return None
-     */
-    inline void beginToSerialUSB()
-    {
-         begin([](void *p, const void *b, int s)->int { return SerialUSB.write((const char *)b, s); },
-               [](void *p, void *b, int s)->int { return SerialUSB.readBytes((char *)b, s); });
-    }
-#endif
-
-#endif
 
     /**
      * Resets protocol state.
@@ -180,16 +101,6 @@ public:
      *         positive - Packet is successfully sent
      */
     int  write(IPacket &pkt);
-
-    /**
-     * Checks communcation channel for incoming messages.
-     * @return negative value in case of error
-     *         zero if nothing is read
-     *         positive - Packet is successfully received
-     * @remark if Packet is receive during run execution
-     *         callback is called.
-     */
-    int run_rx(uint16_t timeout = 0);
 
     /**
      * Processes incoming rx data, specified by a user.

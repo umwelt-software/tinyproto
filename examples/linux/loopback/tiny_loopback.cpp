@@ -270,16 +270,6 @@ void onSendFrameFd(Tiny::IPacket &pkt)
     s_sentBytes += pkt.size();
 }
 
-static int serial_send_fd(void *p, const void *buf, int len)
-{
-    return tiny_serial_send(s_serialFd, buf, len);
-}
-
-static int serial_receive_fd(void *p, void *buf, int len)
-{
-    return tiny_serial_read(s_serialFd, buf, len);
-}
-
 static int run_fd(tiny_serial_handle_t port)
 {
     s_serialFd = port;
@@ -295,9 +285,21 @@ static int run_fd(tiny_serial_handle_t port)
     proto.setSendCallback( onSendFrameFd );
     s_protoFd = &proto;
 
-    proto.begin( serial_send_fd, serial_receive_fd );
-    std::thread rxThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_rx(200); }, std::ref(proto) );
-    std::thread txThread( [](Tiny::ProtoFdD &proto)->void { while (!s_terminate) proto.run_tx(200); }, std::ref(proto) );
+    proto.begin();
+    std::thread rxThread( [](Tiny::ProtoFdD &proto)->void {
+        while (!s_terminate) {
+            char buf[1];
+            int len = tiny_serial_read(s_serialFd, &buf, sizeof(buf));
+            proto.run_rx(buf, len);
+        }
+    }, std::ref(proto) );
+    std::thread txThread( [](Tiny::ProtoFdD &proto)->void {
+        while (!s_terminate) {
+            char buf[1];
+            int len = proto.run_tx(buf, sizeof(buf));
+            tiny_serial_send(s_serialFd, buf, len);
+        }
+    }, std::ref(proto) );
 
     auto startTs = std::chrono::steady_clock::now();
     auto progressTs = startTs;
@@ -343,7 +345,8 @@ static int run_light(tiny_serial_handle_t port)
     Tiny::ProtoLight proto;
     proto.enableCrc( s_crc );
 
-    proto.begin( serial_send_fd, serial_receive_fd );
+    proto.begin( [](void *a, const void *b, int c)->int { return tiny_serial_send(s_serialFd,b,c); },
+                 [](void *a, void *b, int c)->int { return tiny_serial_read(s_serialFd,b,c); } );
     std::thread rxThread( [](Tiny::ProtoLight &proto)->void
     {
         Tiny::PacketD packet(s_packetSize + 4);

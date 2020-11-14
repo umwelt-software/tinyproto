@@ -42,12 +42,9 @@ void IProtoFd::onSendInternal(void *handle, uint16_t uid, uint8_t *pdata, int si
     (reinterpret_cast<IProtoFd*>(handle))->onSend(pdata, size);
 }
 
-void IProtoFd::begin(write_block_cb_t writecb,
-                     read_block_cb_t readcb)
+void IProtoFd::begin()
 {
     tiny_fd_init_t        init{};
-    init.write_func       = writecb;
-    init.read_func        = readcb;
     init.pdata            = this;
     init.on_frame_cb      = onReceiveInternal;
     init.on_sent_cb       = onSendInternal;
@@ -60,11 +57,6 @@ void IProtoFd::begin(write_block_cb_t writecb,
     init.crc_type         = m_crc;
 
     tiny_fd_init( &m_handle, &init  );
-}
-
-void IProtoFd::begin()
-{
-    begin( nullptr, nullptr );
 }
 
 void IProtoFd::end()
@@ -83,19 +75,9 @@ int IProtoFd::write(IPacket &pkt)
     return tiny_fd_send( m_handle, pkt.m_buf, pkt.m_len );
 }
 
-int IProtoFd::run_rx(uint16_t timeout)
-{
-    return tiny_fd_run_rx( m_handle, timeout );
-}
-
 int IProtoFd::run_rx(const void *data, int len)
 {
     return tiny_fd_on_rx_data( m_handle, data, len);
-}
-
-int IProtoFd::run_tx(uint16_t timeout)
-{
-    return tiny_fd_run_tx( m_handle, timeout );
 }
 
 int IProtoFd::run_tx(void *data, int max_size)
