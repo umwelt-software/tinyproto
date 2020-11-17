@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2019 (C) Alexey Dynda
+    Copyright 2017-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -26,7 +26,7 @@
 #ifndef _TINY_LIGHT_H_
 #define _TINY_LIGHT_H_
 
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc2/tiny_hdlc2.h"
 #include "hal/tiny_types.h"
 
 #ifdef __cplusplus
@@ -47,35 +47,11 @@ extern "C" {
 #define  LIGHT_BUF_SIZE (sizeof(uintptr_t) * 16)
 
 /**
- * This structure contains captured statistics while the protocol
- * sends and receives messages.
- */
-typedef struct
-{
-    /// Number of bytes received out of frame bytes
-    uint32_t            oosyncBytes;
-    /// Number of payload bytes totally sent through the channel
-    uint32_t            bytesSent;
-    /// Number of payload bytes totally received through the channel
-    uint32_t            bytesReceived;
-    /// Number of frames, successfully sent through the channel
-    uint32_t            framesSent;
-    /// Number of frames, successfully received through the communication channel
-    uint32_t            framesReceived;
-    /// Number of broken frames received
-    uint32_t            framesBroken;
-} STinyStats;
-
-/**
  * This structure contains information about communication channel and its state.
  * \warning This is for internal use only, and should not be accessed directly from the application.
  */
 typedef struct
 {
-#ifdef CONFIG_ENABLE_STATS
-    /// @see STinyStats
-    STinyStats          stat;
-#endif
     /// pointer to platform related write function
     write_block_cb_t    write_func;
     /// pointer to platform related read function
@@ -85,9 +61,8 @@ typedef struct
     /// CRC type to use
     hdlc_crc_t          crc_type;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    hdlc_struct_t       _hdlc;
-    uint8_t             _received;
-    uint8_t             _sent;
+    tiny_hdlc_handle_t  _hdlc;
+    int                 rx_len;
     uint8_t             buffer[LIGHT_BUF_SIZE];
 #endif
 } STinyLightData;
@@ -107,7 +82,7 @@ typedef struct
  * @return TINY_NO_ERROR or error code.
  * @remarks This function is not thread safe.
  */
-extern int tiny_light_init(void *handle,
+extern int tiny_light_init(STinyLightData *handle,
                            write_block_cb_t write_func,
                            read_block_cb_t read_func,
                            void *pdata);
@@ -120,7 +95,7 @@ extern int tiny_light_init(void *handle,
  * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
  * @remarks This function is not thread safe.
  */
-extern int tiny_light_close(void *handle);
+extern int tiny_light_close(STinyLightData *handle);
 
 /**
  * @brief sends frame with user payload to communication channel in blocking mode
@@ -136,7 +111,7 @@ extern int tiny_light_close(void *handle);
  * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
  * @remarks This function is thread safe.
  */
-extern int tiny_light_send(void *handle, const uint8_t *pbuf, int len);
+extern int tiny_light_send(STinyLightData *handle, const uint8_t *pbuf, int len);
 
 /**
  * @brief reads frame from the channel in blocking mode.
@@ -156,7 +131,7 @@ extern int tiny_light_send(void *handle, const uint8_t *pbuf, int len);
  *       to the function is too small to fit all.
  * @remarks This function is not thread safe.
  */
-extern int tiny_light_read(void *handle, uint8_t *pbuf, int len);
+extern int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len);
 
 /**
  * @brief returns lower level hdlc handle.
@@ -168,7 +143,7 @@ extern int tiny_light_read(void *handle, uint8_t *pbuf, int len);
  * @param handle - pointer to Tiny Light data.
  * @return hdlc handle or NULL
  */
-extern hdlc_handle_t tiny_light_get_hdlc(void *handle);
+extern tiny_hdlc_handle_t tiny_light_get_hdlc(STinyLightData *handle);
 
 /**
  * @}
