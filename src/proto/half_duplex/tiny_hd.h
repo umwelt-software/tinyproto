@@ -186,18 +186,6 @@ extern int tiny_hd_run_tx(STinyHdData * handle);
  */
 extern int tiny_send_wait_ack(STinyHdData *handle, void *buf, uint16_t len);
 
-#if 0
-static inline STinyData * hd_to_tiny(STinyHdData      * handle)
-{
-    return &handle->handle;
-}
-
-static inline STinyHdData * tiny_to_hd(STinyHdData * handle)
-{
-    return (STinyHdData *)handle;
-}
-#endif
-
 /**
  * @}
  */

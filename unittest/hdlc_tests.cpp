@@ -221,5 +221,5 @@ TEST(HDLC, single_send)
     }
     uint8_t data[ sizeof(frame) ]{};
     conn.endpoint1().read( data, sizeof(data) );
-    MEMCMP_EQUAL( data, frame, sizeof(frame) );
+    MEMCMP_EQUAL( frame, data, sizeof(frame) );
 }

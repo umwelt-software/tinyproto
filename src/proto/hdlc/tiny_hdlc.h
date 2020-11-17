@@ -19,6 +19,7 @@
 #pragma once
 
 #include "hal/tiny_types.h"
+#include "proto/hdlc2/tiny_hdlc2.h"
 #include "proto/crc/crc.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -70,7 +71,6 @@ typedef struct _hdlc_handle_t
      * @return user callback must return negative value in case of error
      *         or 0 value if packet is successfully processed.
      */
-
     int (*on_frame_read)(void *user_data, void *data, int len);
 
     /**
@@ -114,24 +114,10 @@ typedef struct _hdlc_handle_t
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     /** Parameters in DOXYGEN_SHOULD_SKIP_THIS section should not be modified by a user */
     tiny_events_t events;
-    struct
-    {
-        uint8_t *data;
-        int (*state)( struct _hdlc_handle_t *handle, const uint8_t *data, int len );
-        uint8_t escape;
-    } rx;
-    struct
-    {
-        void *user_data;
-        uint8_t *out_buffer;
-        int out_buffer_len;
-        const uint8_t *origin_data;
-        const uint8_t *data;
-        int len;
-        crc_t crc;
-        uint8_t escape;
-        int (*state)( struct _hdlc_handle_t *handle );
-    } tx;
+
+    tiny_hdlc_handle_t handle;
+
+    int rx_len;
 #endif
 } hdlc_struct_t, *hdlc_handle_t; ///< hdlc handle
 

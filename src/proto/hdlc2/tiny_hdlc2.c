@@ -59,10 +59,17 @@ static int tiny_hdlc_send_end( tiny_hdlc_handle_t handle );
 
 int tiny_hdlc_init( tiny_hdlc_handle_t * handle, tiny_hdlc_init_t *init )
 {
+    *handle = NULL;
+    if ( !init->buf || init->buf_size < sizeof(tiny_hdlc_data_t) )
+    {
+        LOG(TINY_LOG_ERR, "[HDLC] failed to init hdlc. buf=%p, size=%i (%i required)\n", init->buf, init->buf_size,
+            (int)sizeof(tiny_hdlc_data_t) );
+        return TINY_ERR_FAILED;
+    }
     *handle = (tiny_hdlc_handle_t)init->buf;
     (*handle)->rx_buf = (uint8_t *)init->buf + sizeof(tiny_hdlc_data_t);
     (*handle)->rx_buf_size = init->buf_size - sizeof(tiny_hdlc_data_t);
-    (*handle)->crc_type = init->crc_type;
+    (*handle)->crc_type = init->crc_type == HDLC_CRC_OFF ? 0: init->crc_type;
     (*handle)->on_frame_read = init->on_frame_read;
     (*handle)->on_frame_sent = init->on_frame_sent;
     (*handle)->user_data = init->user_data;
@@ -90,6 +97,7 @@ void tiny_hdlc_reset( tiny_hdlc_handle_t handle )
     handle->rx.state = tiny_hdlc_read_start;
     handle->tx.data = NULL;
     handle->tx.origin_data = NULL;
+    handle->tx.escape = 0;
     handle->tx.state = tiny_hdlc_send_start;
 }
 

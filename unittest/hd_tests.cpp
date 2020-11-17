@@ -43,7 +43,7 @@ TEST_GROUP(HD)
 #if 1
 TEST(HD, singlethread)
 {
-    const int bufsize = 32;
+    const int bufsize = 256;
     const int msgnum = 2;
 
     FakeConnection conn;
@@ -72,7 +72,7 @@ TEST(HD, singlethread)
 #if 1
 TEST(HD, multithread)
 {
-    const int bufsize = 32;
+    const int bufsize = 256;
     const int msgnum = 2;
     FakeConnection conn;
     conn.endpoint1().setTimeout( 100 );

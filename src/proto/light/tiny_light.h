@@ -44,6 +44,8 @@ extern "C" {
  *
  *************************************************************/
 
+#define  LIGHT_BUF_SIZE (sizeof(uintptr_t) * 16)
+
 /**
  * This structure contains captured statistics while the protocol
  * sends and receives messages.
@@ -86,6 +88,7 @@ typedef struct
     hdlc_struct_t       _hdlc;
     uint8_t             _received;
     uint8_t             _sent;
+    uint8_t             buffer[LIGHT_BUF_SIZE];
 #endif
 } STinyLightData;
 

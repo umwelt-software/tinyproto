@@ -82,8 +82,8 @@ int tiny_light_init(void *handle,
     ((STinyLightData *)handle)->_hdlc.on_frame_read = on_frame_read;
     ((STinyLightData *)handle)->_hdlc.on_frame_sent = on_frame_sent;
     ((STinyLightData *)handle)->_hdlc.send_tx = write_func_cb;
-    ((STinyLightData *)handle)->_hdlc.rx_buf = NULL;
-    ((STinyLightData *)handle)->_hdlc.rx_buf_size = 0;
+    ((STinyLightData *)handle)->_hdlc.rx_buf = &((STinyLightData *)handle)->buffer[0];
+    ((STinyLightData *)handle)->_hdlc.rx_buf_size = LIGHT_BUF_SIZE;
     ((STinyLightData *)handle)->_hdlc.crc_type = ((STinyLightData *)handle)->crc_type;
 
     ((STinyLightData *)handle)->user_data = pdata;
@@ -93,7 +93,10 @@ int tiny_light_init(void *handle,
 #ifdef CONFIG_ENABLE_STATS
     tiny_light_clear_stat((STinyLightData *)handle);
 #endif
-    hdlc_init( &((STinyLightData *)handle)->_hdlc );
+    if ( !hdlc_init( &((STinyLightData *)handle)->_hdlc ) )
+    {
+        return TINY_ERR_FAILED;
+    }
     return TINY_SUCCESS;
 }
 
