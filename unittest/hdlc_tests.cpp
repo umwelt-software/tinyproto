@@ -48,7 +48,11 @@ TEST(HDLC, crc_mismatch)
     TinyHdlcHelper   helper2( &conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_16 );
     int msg_size = strlen(txbuf) + 1;
     helper1.send( (uint8_t *)txbuf, msg_size, 100 );
-    int result = helper2.run_rx_until_read();
+    int result;
+    do
+    {
+        result = helper2.run(false);
+    } while ( result >= 0 );
     CHECK_EQUAL( TINY_ERR_WRONG_CRC, result );
 }
 
@@ -70,8 +74,8 @@ TEST(HDLC, crc8)
                               nullptr, 1024, HDLC_CRC_8 );
     int msg_size = strlen(txbuf) + 1;
     helper1.send( (uint8_t *)txbuf, msg_size, 100 );
-    int result = helper2.run_rx_until_read();
-    CHECK_EQUAL( msg_size, result );
+    helper2.wait_until_rx_count( 1, 100 );
+    CHECK_EQUAL( 1, helper2.rx_count() );
 }
 
 TEST(HDLC, crc16)
@@ -84,8 +88,8 @@ TEST(HDLC, crc16)
                               nullptr, 1024, HDLC_CRC_16 );
     int msg_size = strlen(txbuf) + 1;
     helper1.send( (uint8_t *)txbuf, msg_size, 100 );
-    int result = helper2.run_rx_until_read();
-    CHECK_EQUAL( msg_size, result );
+    helper2.wait_until_rx_count( 1, 100 );
+    CHECK_EQUAL( 1, helper2.rx_count() );
 }
 
 TEST(HDLC, crc32)
@@ -98,8 +102,8 @@ TEST(HDLC, crc32)
                               nullptr, 1024, HDLC_CRC_32 );
     int msg_size = strlen(txbuf) + 1;
     helper1.send( (uint8_t *)txbuf, msg_size, 100 );
-    int result = helper2.run_rx_until_read();
-    CHECK_EQUAL( msg_size, result );
+    helper2.wait_until_rx_count( 1, 100 );
+    CHECK_EQUAL( 1, helper2.rx_count() );
 }
 
 TEST(HDLC, send_receive)
@@ -126,8 +130,8 @@ TEST(HDLC, send_receive)
         int msg_size = strlen((char *)txbuf) + 1;
         int result = helper1.send( (uint8_t *)txbuf, msg_size, 100 );
         CHECK_EQUAL( TINY_SUCCESS, result );
-        result = helper2.run_rx_until_read();
-        CHECK_EQUAL( msg_size, result );
+        helper2.wait_until_rx_count( i+1, 100 );
+        CHECK_EQUAL( i+1, helper2.rx_count() );
     }
     CHECK_EQUAL( 0, conn.lostBytes() );
     CHECK_EQUAL( helper1.tx_count(), helper2.rx_count() );
@@ -199,7 +203,7 @@ TEST(HDLC, single_receive)
     const uint8_t frame[] = { 0x7E, 0x01, 0x02, 0x03, 0x7E };
     conn.endpoint1().write( frame, sizeof(frame) );
     helper2.run( true );
-    helper2.wait_until_rx_count(1, 10);
+    helper2.wait_until_rx_count(1, 50);
     CHECK_EQUAL( 1, helper2.rx_count() );
     if ( static_cast<uint32_t>(tiny_millis() - start_ts) > 50 )
     {

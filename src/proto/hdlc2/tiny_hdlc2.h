@@ -78,7 +78,8 @@ typedef struct
     int (*on_frame_sent)(void *user_data, const void *data, int len);
 
     /**
-     * Buffer to be used by hdlc level to receive data to
+     * Buffer to be used by hdlc level to receive data to.
+     * Use tiny_hdlc_get_buf_size() to calculate minimum buffer size.
      */
     void *buf;
 

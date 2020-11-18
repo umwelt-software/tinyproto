@@ -50,6 +50,8 @@ enum
 static int on_frame_read(void *user_data, void *data, int len);
 static int on_frame_sent(void *user_data, const void *data, int len);
 
+////////////////////////////////////////////////////////////////////////////////////////
+
 hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
 {
     tiny_hdlc_init_t init={};
@@ -72,12 +74,16 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
     return hdlc_info;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+
 int hdlc_close( hdlc_handle_t handle )
 {
     tiny_hdlc_close( handle->handle );
     tiny_events_destroy( &handle->events );
     return 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 void hdlc_reset( hdlc_handle_t handle )
 {
@@ -144,11 +150,14 @@ int hdlc_run_tx( hdlc_handle_t handle )
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
 
 int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len )
 {
     return tiny_hdlc_run_tx( handle->handle, data, len );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
 {
@@ -158,16 +167,16 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
     for(;;)
     {
         uint8_t buf[1];
-        int temp_result = tiny_hdlc_run_tx( handle->handle, buf, sizeof(buf) );
-        while ( temp_result > 0 )
+        int result = tiny_hdlc_run_tx( handle->handle, buf, sizeof(buf) );
+        while ( result > 0 )
         {
-            int temp = handle->send_tx( handle->user_data, buf, temp_result );
+            int temp = handle->send_tx( handle->user_data, buf, result );
             if ( temp < 0 )
             {
-                temp_result = temp;
+                result = temp;
                 break;
             }
-            temp_result -= temp;
+            result -= temp;
         }
 
         if ( result < 0 )
@@ -192,6 +201,8 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 static int hdlc_put( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
 {
     if ( !len )
@@ -210,6 +221,8 @@ static int hdlc_put( hdlc_handle_t handle, const void *data, int len, uint32_t t
     tiny_events_set( &handle->events, TX_DATA_READY_BIT );
     return TINY_SUCCESS;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
 {
@@ -267,52 +280,3 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
     return tiny_hdlc_run_rx( handle->handle, data, len, error );
 }
 
-void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size)
-{
-    handle->handle->rx_buf = data;
-    handle->handle->rx_buf_size = size;
-}
-
-int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout )
-{
-    uint16_t ts = tiny_millis();
-    int result = 0;
-    for(;;)
-    {
-        // Read single byte and process it
-        uint8_t data;
-        result = readcb( user_data, &data, sizeof(data) );
-        if ( result > 0 )
-        {
-            int err;
-            int temp = tiny_hdlc_run_rx( handle->handle, &data, result, &err );
-            if ( temp > 0 ) result -= temp;
-            if ( err < 0 )
-            {
-                result = err;
-            }
-            else
-            {
-                tiny_hdlc_run_rx( handle->handle, &data, 0, &result );
-            }
-            // Check for RX_DATA_READY_BIT without timeout. If frame is ready - exit
-            uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, EVENT_BITS_CLEAR, 0 );
-            if ( bits )
-            {
-                result = handle->rx_len;
-                break;
-            }
-        }
-        if ( result < 0 )
-        {
-            break;
-        }
-        // Check if we need to exit on timeout
-        if ( (uint16_t)(tiny_millis() - ts) >= timeout )
-        {
-            result = TINY_ERR_TIMEOUT;
-            break;
-        }
-    };
-    return result;
-}

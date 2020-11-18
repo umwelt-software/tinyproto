@@ -177,29 +177,6 @@ void hdlc_reset( hdlc_handle_t handle );
  */
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
 
-/**
- * Runs rx cycle until full frame received.
- *
- * @param handle handle to hdlc instance
- * @param readcb callback to read bytes from channel function, cannot be NULL
- * @param user_data user data to pass to readcb callback function
- * @param timeout timeout in milliseconds to wait for new frame.
- * @return
- *   - TINY_SUCCESS if operation completed successfully
- *   - TINY_ERR_FAILED if generic failure happened
- *   - TINY_ERR_TIMEOUT if operation cannot be completed in specified time.
- */
-int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout );
-
-/**
- * Sets new RX buffer for hdlc protocol. This function is not thread-safe.
- *
- * @param handle handle to hdlc instance
- * @param data pointer to rx buffer
- * @param size size of rx buffer in bytes
- */
-void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size);
-
 //------------------------ TX FUNCIONS ------------------------------
 
 /**

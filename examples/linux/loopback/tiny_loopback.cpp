@@ -18,7 +18,6 @@
 */
 
 #include "hal/tiny_serial.h"
-#include "proto/half_duplex/tiny_hd.h"
 #include "TinyProtocol.h"
 #include <stdio.h>
 #include <time.h>
@@ -28,7 +27,6 @@
 enum class protocol_type_t: uint8_t
 {
     HDLC = 0,
-    HD = 1,
     FD = 2,
     LIGHT = 3,
 };
@@ -37,7 +35,7 @@ static hdlc_crc_t s_crc = HDLC_CRC_8;
 static char *s_port = nullptr;
 static bool s_generatorEnabled = false;
 static bool s_loopbackMode = true;
-static protocol_type_t s_protocol = protocol_type_t::HD;
+static protocol_type_t s_protocol = protocol_type_t::FD;
 static int s_packetSize = 64;
 static int s_windowSize = 7;
 static bool s_terminate = false;
@@ -47,24 +45,6 @@ static bool s_isArduinoBoard = false;
 static int s_receivedBytes = 0;
 static int s_sentBytes = 0;
 
-static int serial_send(void *p, const void *buf, int len)
-{
-#ifdef __linux__
-    return tiny_serial_send(reinterpret_cast<intptr_t>(p), buf, len);
-#else
-    return tiny_serial_send(reinterpret_cast<tiny_serial_handle_t>(p), buf, len);
-#endif
-}
-
-static int serial_receive(void *p, void *buf, int len)
-{
-#ifdef __linux__
-    return tiny_serial_read(reinterpret_cast<intptr_t>(p), buf, len);
-#else
-    return tiny_serial_read(reinterpret_cast<tiny_serial_handle_t>(p), buf, len);
-#endif
-}
-
 static void print_help()
 {
     fprintf(stderr, "Usage: tiny_loopback -p <port> [-c <crc>]\n");
@@ -73,8 +53,7 @@ static void print_help()
     fprintf(stderr, "                               COM1, COM2 ...  for Windows\n");
     fprintf(stderr, "                               /dev/ttyS0, /dev/ttyS1 ...  for Linux\n");
     fprintf(stderr, "    -t <proto>, --protocol <proto> type of protocol to use\n");
-    fprintf(stderr, "                               hd - half duplex (default)\n");
-    fprintf(stderr, "                               fd - full duplex\n");
+    fprintf(stderr, "                               fd - full duplex (default)\n");
     fprintf(stderr, "                               light - full duplex\n");
     fprintf(stderr, "    -c <crc>, --crc <crc>      crc type: 0, 8, 16, 32\n");
     fprintf(stderr, "    -g, --generator            turn on packet generating\n");
@@ -149,8 +128,6 @@ static int parse_args(int argc, char *argv[])
         else if ((!strcmp(argv[i],"-t")) || (!strcmp(argv[i],"--protocol")))
         {
             if (++i >= argc ) return -1;
-            if (!strcmp(argv[i], "hd"))
-                s_protocol = protocol_type_t::HD;
             else if (!strcmp(argv[i], "fd"))
                 s_protocol = protocol_type_t::FD;
             else if (!strcmp(argv[i], "light"))
@@ -165,83 +142,6 @@ static int parse_args(int argc, char *argv[])
         return -1;
     }
     return i;
-}
-
-//=================================== HD ============================================
-
-static STinyHdData *s_protoHd = nullptr;
-
-static void onReceiveFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
-{
-    if ( !s_runTest )
-        fprintf(stderr, "<<< Frame received UID=%04X, payload len=%d\n", uid, size);
-    s_receivedBytes += size;
-    if ( !s_generatorEnabled )
-    {
-        if ( tiny_send_wait_ack( s_protoHd, pdata, size ) < 0 )
-        {
-            fprintf( stderr, "Failed to send packet\n" );
-        }
-    }
-}
-
-static void onSendFrameHd(void *handle, uint16_t uid, uint8_t *pdata, int size)
-{
-    if ( !s_runTest )
-        fprintf(stderr, ">>> Frame sent UID=%04X, payload len=%d\n", uid, size);
-    s_sentBytes += size;
-}
-
-static int run_hd(tiny_serial_handle_t port)
-{
-    uint8_t* inBuffer = new uint8_t[s_packetSize * 2];
-    STinyHdInit init{};
-    STinyHdData tiny{};
-    memset( inBuffer, 0, s_packetSize * 2);
-    init.write_func       = serial_send;
-    init.read_func        = serial_receive;
-    init.pdata            = reinterpret_cast<void *>(port);
-    init.on_frame_cb      = onReceiveFrameHd;
-    init.on_sent_cb       = onSendFrameHd;
-    init.inbuf            = inBuffer;
-    init.inbuf_size       = s_packetSize * 2;
-    init.timeout          = 100;
-    init.crc_type         = s_crc;
-    init.multithread_mode = 0;
-    /* Initialize tiny hd protocol */
-    tiny_hd_init( &tiny, &init  );
-    s_protoHd = &tiny;
-
-    auto startTs = std::chrono::steady_clock::now();
-    auto progressTs = startTs;
-
-    /* Run main cycle forever */
-    while (!s_terminate)
-    {
-        if (s_generatorEnabled)
-        {
-            Tiny::PacketD packet(s_packetSize);
-            packet.put("Generated frame");
-            if ( tiny_send_wait_ack(&tiny, packet.data(), packet.size()) < 0 )
-            {
-                fprintf( stderr, "Failed to send packet\n" );
-            }
-        }
-        tiny_hd_run( &tiny );
-        if ( s_runTest && s_generatorEnabled )
-        {
-            auto ts = std::chrono::steady_clock::now();
-            if (ts - startTs >= std::chrono::seconds(15)) s_terminate = true;
-            if (ts - progressTs >= std::chrono::seconds(1))
-            {
-                progressTs = ts;
-                fprintf(stderr, ".");
-            }
-        }
-    }
-    tiny_hd_close(&tiny);
-    delete[] inBuffer;
-    return 0;
 }
 
 //================================== FD ======================================
@@ -422,7 +322,6 @@ int main(int argc, char *argv[])
     int result = -1;
     switch (s_protocol)
     {
-        case protocol_type_t::HD: result = run_hd(hPort); break;
         case protocol_type_t::FD: result = run_fd(hPort); break;
         case protocol_type_t::LIGHT: result = run_light(hPort); break;
         default: fprintf(stderr, "Unknown protocol type"); break;
