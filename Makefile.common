@@ -7,7 +7,6 @@ CONFIG_ENABLE_CHECKSUM ?= y
 LOG_LEVEL ?=
 ifeq ($(ENABLE_LOGS),y)
     ENABLE_HDLC_LOGS ?= y
-    ENABLE_HD_LOGS ?= y
     ENABLE_FD_LOGS ?= y
 endif
 
@@ -25,10 +24,6 @@ endif
 
 ifeq ($(ENABLE_HDLC_LOGS),y)
     CPPFLAGS += -DTINY_HDLC_DEBUG=1
-    ENABLE_DEBUG=y
-endif
-ifeq ($(ENABLE_HD_LOGS),y)
-    CPPFLAGS += -DTINY_HD_DEBUG=1
     ENABLE_DEBUG=y
 endif
 ifeq ($(ENABLE_FD_LOGS),y)
