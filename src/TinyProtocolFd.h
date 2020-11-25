@@ -110,11 +110,15 @@ public:
      */
     int run_rx(const void *data, int len);
 
+    int run_rx(read_block_cb_t read_func);
+
     /**
      * Sends data to communcation channel.
      * @return negative value in case of error
      */
     int run_tx(uint16_t timeout = 0);
+
+    int run_tx(write_block_cb_t write_func);
 
     /**
      * Force protocol to generate tx data for you.

@@ -188,16 +188,12 @@ static int run_fd(tiny_serial_handle_t port)
     proto.begin();
     std::thread rxThread( [](Tiny::ProtoFdD &proto)->void {
         while (!s_terminate) {
-            char buf[1];
-            int len = tiny_serial_read(s_serialFd, &buf, sizeof(buf));
-            proto.run_rx(buf, len);
+            proto.run_rx( [](void *u, void *b, int s)->int { return tiny_serial_read(s_serialFd, b, s); } );
         }
     }, std::ref(proto) );
     std::thread txThread( [](Tiny::ProtoFdD &proto)->void {
         while (!s_terminate) {
-            char buf[1];
-            int len = proto.run_tx(buf, sizeof(buf));
-            tiny_serial_send(s_serialFd, buf, len);
+            proto.run_tx( [](void *u, const void *b, int s)->int { return tiny_serial_send(s_serialFd, b, s); } );
         }
     }, std::ref(proto) );
 

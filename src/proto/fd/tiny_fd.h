@@ -138,6 +138,8 @@ extern void tiny_fd_close(tiny_fd_handle_t handle);
  */
 extern int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len );
 
+extern int tiny_fd_run_tx(tiny_fd_handle_t handle, write_block_cb_t write_func);
+
 /**
  * @brief runs rx bytes processing for specified buffer.
  *
@@ -152,6 +154,8 @@ extern int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len );
  * @return TINY_SUCCESS
  */
 extern int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len);
+
+extern int tiny_fd_run_rx(tiny_fd_handle_t handle, read_block_cb_t read_func);
 
 /**
  * @brief Sends userdata over full-duplex protocol.

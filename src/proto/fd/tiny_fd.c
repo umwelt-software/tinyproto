@@ -585,6 +585,19 @@ int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+int tiny_fd_run_rx(tiny_fd_handle_t handle, read_block_cb_t read_func)
+{
+    uint8_t buf[4];
+    int len = read_func( handle->user_data, buf, sizeof(buf) );
+    if ( len <= 0 )
+    {
+        return len;
+    }
+    return tiny_fd_on_rx_data( handle, buf, len );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 static uint8_t *tiny_fd_get_next_frame_to_send( tiny_fd_handle_t handle, int *len )
 {
     uint8_t *data = NULL;
@@ -745,6 +758,30 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
         }
     }
     return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_run_tx(tiny_fd_handle_t handle, write_block_cb_t write_func)
+{
+    uint8_t buf[4];
+    int len = tiny_fd_get_tx_data( handle, buf, sizeof(buf) );
+    if ( len <= 0 )
+    {
+        return len;
+    }
+    uint8_t *ptr = buf;
+    while ( len )
+    {
+        int result = write_func( handle->user_data, ptr, len );
+        if ( result < 0 )
+        {
+            return result;
+        }
+        len -= result;
+        ptr += result;
+    }
+    return TINY_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

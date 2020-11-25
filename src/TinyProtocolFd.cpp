@@ -80,9 +80,19 @@ int IProtoFd::run_rx(const void *data, int len)
     return tiny_fd_on_rx_data( m_handle, data, len);
 }
 
+int IProtoFd::run_rx(read_block_cb_t read_func)
+{
+    return tiny_fd_run_rx( m_handle, read_func );
+}
+
 int IProtoFd::run_tx(void *data, int max_size)
 {
     return tiny_fd_get_tx_data( m_handle, data, max_size );
+}
+
+int IProtoFd::run_tx(write_block_cb_t write_func)
+{
+    return tiny_fd_run_tx( m_handle, write_func );
 }
 
 void IProtoFd::disableCrc()
