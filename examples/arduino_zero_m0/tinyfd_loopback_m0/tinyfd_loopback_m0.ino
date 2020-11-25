@@ -45,14 +45,14 @@ void setup()
     /* Lets process all incoming frames */
     proto.setReceiveCallback( onReceive );
     /* Redirect all protocol communication to SerialUSB UART */
-    proto.beginToSerialUSB();
+    proto.begin();
 }
 
 void loop()
 {
     if (SerialUSB.available())
     {
-        proto.run_rx();
+        proto.run_rx([](void *p, void *b, int s)->int { return SerialUSB.readBytes((char *)b, s); });
     }
-    proto.run_tx();
+    proto.run_tx([](void *p, const void *b, int s)->int { return SerialUSB.write((const char *)b, s); });
 }

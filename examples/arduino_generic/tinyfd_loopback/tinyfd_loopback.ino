@@ -41,14 +41,14 @@ void setup()
     /* Lets process all incoming frames */
     proto.setReceiveCallback( onReceive );
     /* Redirect all protocol communication to Serial0 UART */
-    proto.beginToSerial();
+    proto.begin();
 }
 
 void loop()
 {
     if (Serial.available())
     {
-        proto.run_rx();
+        proto.run_rx([](void *p, void *b, int s)->int { return Serial.readBytes((uint8_t *)b, s); });
     }
-    proto.run_tx();
+    proto.run_tx([](void *p, const void *b, int s)->int { return Serial.write((const uint8_t *)b, s); });
 }
