@@ -249,7 +249,15 @@ static int run_light(tiny_serial_handle_t port)
         while (!s_terminate) {
             if (proto.read(packet) > 0) {
                s_receivedBytes += packet.size();
-               if ( !s_runTest ) fprintf(stderr, "<<< Frame received payload len=%d\n", (int)packet.size() );
+               if ( !s_runTest )
+                   fprintf(stderr, "<<< Frame received payload len=%d\n", (int)packet.size() );
+               if ( !s_generatorEnabled )
+               {
+                   if ( proto.write( packet ) < 0 )
+                   {
+                       fprintf( stderr, "Failed to send packet\n" );
+                   }
+               }
             }
         }
     }, std::ref(proto) );

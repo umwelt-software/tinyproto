@@ -146,6 +146,7 @@ static int on_frame_read(void *user_data, void *data, int len)
 
 int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
 {
+    uint32_t ts = tiny_millis();
     int result = 0;
     handle->_hdlc->rx_buf = pbuf;
     handle->_hdlc->rx_buf_size = len;
@@ -165,6 +166,10 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
             tiny_hdlc_run_rx( handle->_hdlc, stream, 0, &result );
         }
         if ( result != TINY_SUCCESS )
+        {
+            break;
+        }
+        if ( (uint32_t)(tiny_millis() - ts) > 1000 )
         {
             break;
         }
