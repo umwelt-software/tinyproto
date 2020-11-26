@@ -26,6 +26,7 @@ if [ $? -ne 0 ]; then
     close_terminals_and_exit 1
 fi
 pkill tiny_loopback
+sleep 0.5
 
 # HD tests
 # Run sideB in listen/loopback mode
