@@ -124,7 +124,7 @@ int tiny_light_send(STinyLightData *handle, const uint8_t * pbuf, int len)
             if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
             {
                 tiny_hdlc_reset( handle->_hdlc, TINY_HDLC_RESET_TX_ONLY );
-                result = 0;
+                result = TINY_ERR_TIMEOUT;
                 break;
             }
         } while (result < stream_len);
@@ -179,7 +179,7 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
         if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
         {
             tiny_hdlc_reset( handle->_hdlc, TINY_HDLC_RESET_RX_ONLY );
-            result = 0;
+            result = TINY_ERR_TIMEOUT;
             break;
         }
     } while ( handle->rx_len == 0 );
