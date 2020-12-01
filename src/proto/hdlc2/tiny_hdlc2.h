@@ -41,6 +41,13 @@ extern "C"
  *          framing only according to RFC 1662: 0x7E, 0x7D, 0x20 (ISO Standard 3309-1979).
  */
 
+typedef enum
+{
+    TINY_HDLC_RESET_BOTH    = 0x00,
+    TINY_HDLC_RESET_TX_ONLY = 0x01,
+    TINY_HDLC_RESET_RX_ONLY = 0x02,
+} tiny_hdlc_reset_flags_t;
+
 struct tiny_hdlc_data_t;
 
 typedef struct tiny_hdlc_data_t *tiny_hdlc_handle_t;
@@ -122,8 +129,9 @@ int tiny_hdlc_close( tiny_hdlc_handle_t handle );
  * line, and this requires hardware change, and cancelling current operation.
  *
  * @param handle handle to hdlc instance
+ * @flags TINY_HDLC_RESET_TX_ONLY, TINY_HDLC_RESET_RX_ONLY, TINY_HDLC_RESET_BOTH
  */
-void tiny_hdlc_reset( tiny_hdlc_handle_t handle );
+void tiny_hdlc_reset( tiny_hdlc_handle_t handle, uint8_t flags );
 
 //------------------------ RX FUNCIONS ------------------------------
 

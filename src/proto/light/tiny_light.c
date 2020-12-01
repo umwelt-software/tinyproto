@@ -107,6 +107,7 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 
 int tiny_light_send(STinyLightData *handle, const uint8_t * pbuf, int len)
 {
+    uint32_t ts = tiny_millis();
     int result = TINY_SUCCESS;
     tiny_hdlc_put( handle->_hdlc, pbuf, len );
     while ( handle->_hdlc->tx.origin_data )
@@ -119,6 +120,12 @@ int tiny_light_send(STinyLightData *handle, const uint8_t * pbuf, int len)
             if ( result < 0 )
             {
                 return result;
+            }
+            if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
+            {
+                tiny_hdlc_reset( handle->_hdlc, TINY_HDLC_RESET_TX_ONLY );
+                result = 0;
+                break;
             }
         } while (result < stream_len);
     }
@@ -169,8 +176,10 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
         {
             break;
         }
-        if ( (uint32_t)(tiny_millis() - ts) > 1000 )
+        if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
         {
+            tiny_hdlc_reset( handle->_hdlc, TINY_HDLC_RESET_RX_ONLY );
+            result = 0;
             break;
         }
     } while ( handle->rx_len == 0 );

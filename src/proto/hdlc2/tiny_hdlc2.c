@@ -75,7 +75,7 @@ int tiny_hdlc_init( tiny_hdlc_handle_t * handle, tiny_hdlc_init_t *init )
     (*handle)->user_data = init->user_data;
 
     // Must be last
-    tiny_hdlc_reset( *handle );
+    tiny_hdlc_reset( *handle, TINY_HDLC_RESET_BOTH );
     return TINY_SUCCESS;
 }
 
@@ -92,13 +92,19 @@ int tiny_hdlc_close( tiny_hdlc_handle_t handle )
     return 0;
 }
 
-void tiny_hdlc_reset( tiny_hdlc_handle_t handle )
+void tiny_hdlc_reset( tiny_hdlc_handle_t handle, uint8_t flags )
 {
-    handle->rx.state = tiny_hdlc_read_start;
-    handle->tx.data = NULL;
-    handle->tx.origin_data = NULL;
-    handle->tx.escape = 0;
-    handle->tx.state = tiny_hdlc_send_start;
+    if ( flags != TINY_HDLC_RESET_TX_ONLY )
+    {
+        handle->rx.state = tiny_hdlc_read_start;
+    }
+    if ( flags != TINY_HDLC_RESET_RX_ONLY )
+    {
+        handle->tx.data = NULL;
+        handle->tx.origin_data = NULL;
+        handle->tx.escape = 0;
+        handle->tx.state = tiny_hdlc_send_start;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

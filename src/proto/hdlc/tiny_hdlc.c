@@ -87,7 +87,7 @@ int hdlc_close( hdlc_handle_t handle )
 
 void hdlc_reset( hdlc_handle_t handle )
 {
-    tiny_hdlc_reset( handle->handle );
+    tiny_hdlc_reset( handle->handle, TINY_HDLC_RESET_BOTH );
     tiny_events_clear( &handle->events, EVENT_BITS_ALL );
     tiny_events_set( &handle->events, TX_ACCEPT_BIT );
 }
@@ -110,7 +110,7 @@ static void hdlc_send_terminate( hdlc_handle_t handle )
 {
     LOG(TINY_LOG_INFO, "[HDLC:%p] hdlc_send_terminate HDLC send failed on timeout\n", handle);
     tiny_events_clear( &handle->events, TX_DATA_READY_BIT );
-    tiny_hdlc_reset( handle->handle );
+    tiny_hdlc_reset( handle->handle, TINY_HDLC_RESET_TX_ONLY );
     tiny_events_set( &handle->events, TX_ACCEPT_BIT );
 }
 
