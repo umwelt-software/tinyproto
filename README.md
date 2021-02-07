@@ -1,3 +1,5 @@
+This branch to rework hdlc lowest level to allow using without any platform abstraction.
+
 ![Tiny Protocol](.travis/tinylogo.svg)<br>
 [![Build Status](https://travis-ci.com/lexus2k/tinyproto.svg?branch=master)](https://travis-ci.com/lexus2k/tinyproto)
 [![Coverage Status](https://coveralls.io/repos/github/lexus2k/tinyproto/badge.svg?branch=master)](https://coveralls.io/github/lexus2k/tinyproto?branch=master)
