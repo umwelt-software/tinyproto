@@ -31,6 +31,7 @@ TinyProto is based on RFC 1662, it implements the following frames:
 ## Key Features
 
 Protocols, implemented by library:
+ * Hot connection plug/unplug
  * hdlc framing (hdlc_xxxx API, basis for light, half-duplex and full-duplex implementations)
  * light (tiny_light_xxxx API, simplest API to use, doesn't support confirmation)
  * half-duplex (tiny_hd_xxxx API, lightweight implementation of protocol with frame confirmation)
