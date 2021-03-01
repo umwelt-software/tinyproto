@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <thread>
 #include "fake_endpoint.h"
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc/high_level/hdlc.h"
 
 class TinyHdlcHelper: public IBaseHelper<TinyHdlcHelper>
 {

@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -32,36 +32,38 @@ extern "C"
 #define TINY_HDLC_FILL_BYTE            0xFF
 
 /**
- * @defgroup HDLC_API Tiny HDLC protocol API functions
+ * @defgroup HDLC_LOW_LEVEL_API Tiny HDLC protocol API functions
  * @{
  *
- * @brief low level HDLC protocol function - only framing
+ * @brief low level HDLC protocol implementation
  *
  * @details this group implements low level HDLC functions, which implement
  *          framing only according to RFC 1662: 0x7E, 0x7D, 0x20 (ISO Standard 3309-1979).
+ *          hdlc_ll functions do not use any synchronization, mutexes, etc. Thus low level
+ *          implementation is completely platform independent.
  */
 
 typedef enum
 {
-    TINY_HDLC_RESET_BOTH    = 0x00,
-    TINY_HDLC_RESET_TX_ONLY = 0x01,
-    TINY_HDLC_RESET_RX_ONLY = 0x02,
-} tiny_hdlc_reset_flags_t;
+    HDLC_LL_RESET_BOTH    = 0x00,
+    HDLC_LL_RESET_TX_ONLY = 0x01,
+    HDLC_LL_RESET_RX_ONLY = 0x02,
+} hdlc_ll_reset_flags_t;
 
-struct tiny_hdlc_data_t;
+struct hdlc_ll_data_t;
 
-typedef struct tiny_hdlc_data_t *tiny_hdlc_handle_t;
+typedef struct hdlc_ll_data_t *hdlc_ll_handle_t;
 
 /**
  * Structure describes configuration of lowest HDLC level
- * Initialize this structure by 0 before passing to tiny_hdlc_init()
+ * Initialize this structure by 0 before passing to hdlc_ll_init()
  * function.
  */
 typedef struct
 {
     /**
      * User-defined callback, which is called when new packet arrives from hw
-     * channel. The context of this callback is context, where tiny_hdlc_run_rx() is
+     * channel. The context of this callback is context, where hdlc_ll_run_rx() is
      * called from.
      * @param user_data user-defined data
      * @param data pointer to received data
@@ -74,7 +76,7 @@ typedef struct
 
     /**
      * User-defined callback, which is called when the packet is sent to TX
-     * channel. The context of this callback is context, where tiny_hdlc_run_tx() is
+     * channel. The context of this callback is context, where hdlc_ll_run_tx() is
      * called from.
      * @param user_data user-defined data
      * @param data pointer to sent data
@@ -86,7 +88,7 @@ typedef struct
 
     /**
      * Buffer to be used by hdlc level to receive data to.
-     * Use tiny_hdlc_get_buf_size() to calculate minimum buffer size.
+     * Use hdlc_ll_get_buf_size() to calculate minimum buffer size.
      */
     void *buf;
 
@@ -104,47 +106,47 @@ typedef struct
 
     /** User data, which will be passed to user-defined callback as first argument */
     void *user_data;
-} tiny_hdlc_init_t;
+} hdlc_ll_init_t;
 
 //------------------------ GENERIC FUNCIONS ------------------------------
 
 /**
  * Initializes hdlc level and returns hdlc handle or NULL in case of error.
  *
- * @param init pointer to tiny_hdlc_struct_t structure, which defines user-specific configuration
+ * @param init pointer to hdlc_ll_struct_t structure, which defines user-specific configuration
  * @return -1 if error
  *          0 if success
  */
-int tiny_hdlc_init( tiny_hdlc_handle_t *handle, tiny_hdlc_init_t *init );
+int hdlc_ll_init( hdlc_ll_handle_t *handle, hdlc_ll_init_t *init );
 
 /**
  * Shutdowns all hdlc activity
  *
  * @param handle handle to hdlc instance
  */
-int tiny_hdlc_close( tiny_hdlc_handle_t handle );
+int hdlc_ll_close( hdlc_ll_handle_t handle );
 
 /**
  * Resets hdlc state. Use this function, if hw error happened on tx or rx
  * line, and this requires hardware change, and cancelling current operation.
  *
  * @param handle handle to hdlc instance
- * @flags TINY_HDLC_RESET_TX_ONLY, TINY_HDLC_RESET_RX_ONLY, TINY_HDLC_RESET_BOTH
+ * @flags HDLC_LL_RESET_TX_ONLY, HDLC_LL_RESET_RX_ONLY, HDLC_LL_RESET_BOTH
  */
-void tiny_hdlc_reset( tiny_hdlc_handle_t handle, uint8_t flags );
+void hdlc_ll_reset( hdlc_ll_handle_t handle, uint8_t flags );
 
 //------------------------ RX FUNCIONS ------------------------------
 
 /**
  * Processes incoming data. Implementation of reading data from hw is user
- * responsibility. If tiny_hdlc_run_rx() returns value less than size of data
- * passed to the function, then tiny_hdlc_run_rx() must be called later second
+ * responsibility. If hdlc_ll_run_rx() returns value less than size of data
+ * passed to the function, then hdlc_ll_run_rx() must be called later second
  * time with the pointer to and size of not processed bytes.
  *
  * If you don't care about errors on RX line, it is allowed to ignore
  * all error codes except TINY_ERR_FAILED, which means general failure.
  *
- * if tiny_hdlc_run_rx() returns 0 bytes processed, just call it once again.
+ * if hdlc_ll_run_rx() returns 0 bytes processed, just call it once again.
  * It is guaranteed, that at least second call will process bytes.
  *
  * This function will return the following codes in error field:
@@ -161,7 +163,7 @@ void tiny_hdlc_reset( tiny_hdlc_handle_t handle, uint8_t flags );
  * @return number of processed bytes from specified data buffer.
  *         Never returns negative value
  */
-int tiny_hdlc_run_rx( tiny_hdlc_handle_t handle, const void *data, int len, int *error );
+int hdlc_ll_run_rx( hdlc_ll_handle_t handle, const void *data, int len, int *error );
 
 //------------------------ TX FUNCIONS ------------------------------
 
@@ -175,14 +177,14 @@ int tiny_hdlc_run_rx( tiny_hdlc_handle_t handle, const void *data, int len, int 
  * @param len length of specified buffer
  * @return number of bytes written to specified buffer
  */
-int tiny_hdlc_run_tx( tiny_hdlc_handle_t handle, void *data, int len );
+int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len );
 
 /**
  * Puts next frame for sending.
  *
- * tiny_hdlc_put() function will not wait or perform send operation, but only pass data pointer to
+ * hdlc_ll_put() function will not wait or perform send operation, but only pass data pointer to
  * hdlc state machine. In this case, some other thread needs to
- * or in the same thread you need to send data using tiny_hdlc_get_tx_data().
+ * or in the same thread you need to send data using hdlc_ll_get_tx_data().
  *
  * @param handle handle to hdlc instance
  * @param data pointer to new data to send (can be NULL is you need to retry sending)
@@ -197,9 +199,14 @@ int tiny_hdlc_run_tx( tiny_hdlc_handle_t handle, void *data, int len );
  * @note TINY_ERR_BUSY and TINY_ERR_INVALID_DATA refer to putting new frame to TX
  *       hdlc queue.
  */
-int tiny_hdlc_put( tiny_hdlc_handle_t handle, const void *data, int len );
+int hdlc_ll_put( hdlc_ll_handle_t handle, const void *data, int len );
 
-int tiny_hdlc_get_buf_size( int max_frame_size );
+/**
+ * Returns minimum buffer size, required to hold hdlc low level data for desired payload size.
+ * @param max_frame_size size of desired max payload in bytes
+ * @return size of the buffer required
+ */
+int hdlc_ll_get_buf_size( int max_frame_size );
 
 /**
  * @}

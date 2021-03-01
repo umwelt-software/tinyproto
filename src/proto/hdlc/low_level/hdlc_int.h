@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -29,7 +29,7 @@ extern "C"
 #endif
 
 /**
- * @defgroup HDLC_API Tiny HDLC protocol API functions
+ * @defgroup HDLC_LOW_LEVEL_API Tiny HDLC low level protocol API functions
  * @{
  *
  * @brief low level HDLC protocol function - only framing
@@ -40,14 +40,14 @@ extern "C"
 
 /**
  * Structure describes configuration of lowest HDLC level
- * Initialize this structure by 0 before passing to tiny_hdlc_init()
+ * Initialize this structure by 0 before passing to hdlc_ll_init()
  * function.
  */
-typedef struct tiny_hdlc_data_t
+typedef struct hdlc_ll_data_t
 {
     /**
      * User-defined callback, which is called when new packet arrives from hw
-     * channel. The context of this callback is context, where tiny_hdlc_run_rx() is
+     * channel. The context of this callback is context, where hdlc_ll_run_rx() is
      * called from.
      * @param user_data user-defined data
      * @param data pointer to received data
@@ -60,7 +60,7 @@ typedef struct tiny_hdlc_data_t
 
     /**
      * User-defined callback, which is called when the packet is sent to TX
-     * channel. The context of this callback is context, where tiny_hdlc_run_tx() is
+     * channel. The context of this callback is context, where hdlc_ll_run_tx() is
      * called from.
      * @param user_data user-defined data
      * @param data pointer to sent data
@@ -95,7 +95,7 @@ typedef struct tiny_hdlc_data_t
     struct
     {
         uint8_t *data;
-        int (*state)( tiny_hdlc_handle_t handle, const uint8_t *data, int len );
+        int (*state)( hdlc_ll_handle_t handle, const uint8_t *data, int len );
         uint8_t escape;
     } rx;
     struct
@@ -107,10 +107,10 @@ typedef struct tiny_hdlc_data_t
         int len;
         crc_t crc;
         uint8_t escape;
-        int (*state)( tiny_hdlc_handle_t handle );
+        int (*state)( hdlc_ll_handle_t handle );
     } tx;
 #endif
-} tiny_hdlc_data_t;
+} hdlc_ll_data_t;
 
 
 #ifdef __cplusplus

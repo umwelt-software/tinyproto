@@ -27,7 +27,7 @@
 #pragma once
 
 #include "TinyPacket.h"
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc/high_level/hdlc.h"
 
 #ifdef ARDUINO
 #   include <HardwareSerial.h>

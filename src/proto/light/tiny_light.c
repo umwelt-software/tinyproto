@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2020 (C) Alexey Dynda
+    Copyright 2017-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -18,7 +18,7 @@
  */
 
 #include "tiny_light.h"
-#include "proto/hdlc2/tiny_hdlc2_int.h"
+#include "proto/hdlc/low_level/hdlc_int.h"
 #include <stddef.h>
 
 #ifdef CONFIG_ENABLE_STATS
@@ -63,7 +63,7 @@ int tiny_light_init(STinyLightData *handle,
     {
         return TINY_ERR_FAILED;
     }
-    tiny_hdlc_init_t init={};
+    hdlc_ll_init_t init={};
     init.user_data = handle;
     init.on_frame_read = on_frame_read;
     init.on_frame_sent = on_frame_sent;
@@ -75,7 +75,7 @@ int tiny_light_init(STinyLightData *handle,
     handle->read_func = read_func;
     handle->write_func = write_func;
 
-    return tiny_hdlc_init( &handle->_hdlc, &init );
+    return hdlc_ll_init( &handle->_hdlc, &init );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ int tiny_light_close(STinyLightData *handle)
     {
         return TINY_ERR_FAILED;
     }
-    tiny_hdlc_close( handle->_hdlc );
+    hdlc_ll_close( handle->_hdlc );
     return TINY_SUCCESS;
 }
 
@@ -109,11 +109,11 @@ int tiny_light_send(STinyLightData *handle, const uint8_t * pbuf, int len)
 {
     uint32_t ts = tiny_millis();
     int result = TINY_SUCCESS;
-    tiny_hdlc_put( handle->_hdlc, pbuf, len );
+    hdlc_ll_put( handle->_hdlc, pbuf, len );
     while ( handle->_hdlc->tx.origin_data )
     {
         uint8_t stream[1];
-        int stream_len = tiny_hdlc_run_tx( handle->_hdlc, stream, sizeof(stream) );
+        int stream_len = hdlc_ll_run_tx( handle->_hdlc, stream, sizeof(stream) );
         do
         {
             result = handle->write_func( handle->user_data, stream, stream_len );
@@ -123,7 +123,7 @@ int tiny_light_send(STinyLightData *handle, const uint8_t * pbuf, int len)
             }
             if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
             {
-                tiny_hdlc_reset( handle->_hdlc, TINY_HDLC_RESET_TX_ONLY );
+                hdlc_ll_reset( handle->_hdlc, HDLC_LL_RESET_TX_ONLY );
                 result = TINY_ERR_TIMEOUT;
                 break;
             }
@@ -167,10 +167,10 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
             result = stream_len;
             break;
         }
-        tiny_hdlc_run_rx( handle->_hdlc, stream, stream_len, &result );
+        hdlc_ll_run_rx( handle->_hdlc, stream, stream_len, &result );
         if ( result == TINY_SUCCESS )
         {
-            tiny_hdlc_run_rx( handle->_hdlc, stream, 0, &result );
+            hdlc_ll_run_rx( handle->_hdlc, stream, 0, &result );
         }
         if ( result != TINY_SUCCESS )
         {
@@ -178,7 +178,7 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
         }
         if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
         {
-            tiny_hdlc_reset( handle->_hdlc, TINY_HDLC_RESET_RX_ONLY );
+            hdlc_ll_reset( handle->_hdlc, HDLC_LL_RESET_RX_ONLY );
             result = TINY_ERR_TIMEOUT;
             break;
         }
@@ -192,7 +192,7 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-tiny_hdlc_handle_t tiny_light_get_hdlc(STinyLightData *handle)
+hdlc_ll_handle_t tiny_light_get_hdlc(STinyLightData *handle)
 {
     return handle->_hdlc;
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -19,7 +19,7 @@
 #pragma once
 
 #include "hal/tiny_types.h"
-#include "proto/hdlc2/tiny_hdlc2.h"
+#include "proto/hdlc/low_level/hdlc.h"
 #include "proto/crc/crc.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -29,16 +29,13 @@ extern "C"
 {
 #endif
 
-/** Byte to fill gap between frames */
-#define TINY_HDLC_FILL_BYTE            0xFF
-
 /**
  * @defgroup HDLC_API Tiny HDLC protocol API functions
  * @{
  *
- * @brief low level HDLC protocol function - only framing
+ * @brief high level HDLC protocol implementation
  *
- * @details this group implements low level HDLC functions, which implement
+ * @details this group implements high level HDLC functions, which implement
  *          framing only according to RFC 1662: 0x7E, 0x7D, 0x20 (ISO Standard 3309-1979).
  */
 
@@ -115,7 +112,7 @@ typedef struct _hdlc_handle_t
     /** Parameters in DOXYGEN_SHOULD_SKIP_THIS section should not be modified by a user */
     tiny_events_t events;
 
-    tiny_hdlc_handle_t handle;
+    hdlc_ll_handle_t handle;
 
     int rx_len;
 #endif

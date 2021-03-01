@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2020 (C) Alexey Dynda
+    Copyright 2017-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -26,7 +26,7 @@
 #ifndef _TINY_LIGHT_H_
 #define _TINY_LIGHT_H_
 
-#include "proto/hdlc2/tiny_hdlc2.h"
+#include "proto/hdlc/low_level/hdlc.h"
 #include "hal/tiny_types.h"
 
 #ifdef __cplusplus
@@ -61,7 +61,7 @@ typedef struct
     /// CRC type to use
     hdlc_crc_t          crc_type;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    tiny_hdlc_handle_t  _hdlc;
+    hdlc_ll_handle_t  _hdlc;
     int                 rx_len;
     uint8_t             buffer[LIGHT_BUF_SIZE];
 #endif
@@ -143,7 +143,7 @@ extern int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len);
  * @param handle - pointer to Tiny Light data.
  * @return hdlc handle or NULL
  */
-extern tiny_hdlc_handle_t tiny_light_get_hdlc(STinyLightData *handle);
+extern hdlc_ll_handle_t tiny_light_get_hdlc(STinyLightData *handle);
 
 /**
  * @}

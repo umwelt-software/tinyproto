@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,9 +17,9 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tiny_hdlc.h"
+#include "proto/hdlc/high_level/hdlc.h"
 #include "proto/crc/crc.h"
-#include "proto/hdlc2/tiny_hdlc2_int.h"
+#include "proto/hdlc/low_level/hdlc_int.h"
 #include "hal/tiny_debug.h"
 
 #include <stddef.h>
@@ -54,14 +54,14 @@ static int on_frame_sent(void *user_data, const void *data, int len);
 
 hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
 {
-    tiny_hdlc_init_t init={};
+    hdlc_ll_init_t init={};
     init.crc_type = hdlc_info->crc_type;
     init.on_frame_read = on_frame_read;
     init.on_frame_sent = on_frame_sent;
     init.buf = hdlc_info->rx_buf;
     init.buf_size = hdlc_info->rx_buf_size;
     init.user_data = hdlc_info;
-    int err = tiny_hdlc_init( &hdlc_info->handle, &init );
+    int err = hdlc_ll_init( &hdlc_info->handle, &init );
     if ( err != TINY_SUCCESS )
     {
         return NULL;
@@ -78,7 +78,7 @@ hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
 
 int hdlc_close( hdlc_handle_t handle )
 {
-    tiny_hdlc_close( handle->handle );
+    hdlc_ll_close( handle->handle );
     tiny_events_destroy( &handle->events );
     return 0;
 }
@@ -87,7 +87,7 @@ int hdlc_close( hdlc_handle_t handle )
 
 void hdlc_reset( hdlc_handle_t handle )
 {
-    tiny_hdlc_reset( handle->handle, TINY_HDLC_RESET_BOTH );
+    hdlc_ll_reset( handle->handle, HDLC_LL_RESET_BOTH );
     tiny_events_clear( &handle->events, EVENT_BITS_ALL );
     tiny_events_set( &handle->events, TX_ACCEPT_BIT );
 }
@@ -110,7 +110,7 @@ static void hdlc_send_terminate( hdlc_handle_t handle )
 {
     LOG(TINY_LOG_INFO, "[HDLC:%p] hdlc_send_terminate HDLC send failed on timeout\n", handle);
     tiny_events_clear( &handle->events, TX_DATA_READY_BIT );
-    tiny_hdlc_reset( handle->handle, TINY_HDLC_RESET_TX_ONLY );
+    hdlc_ll_reset( handle->handle, HDLC_LL_RESET_TX_ONLY );
     tiny_events_set( &handle->events, TX_ACCEPT_BIT );
 }
 
@@ -124,7 +124,7 @@ int hdlc_run_tx( hdlc_handle_t handle )
     for (;;)
     {
         uint8_t buf[1];
-        int temp_result = tiny_hdlc_run_tx( handle->handle, buf, sizeof(buf) );
+        int temp_result = hdlc_ll_run_tx( handle->handle, buf, sizeof(buf) );
         while ( temp_result > 0 )
         {
             int temp = handle->send_tx( handle->user_data, buf, temp_result );
@@ -154,7 +154,7 @@ int hdlc_run_tx( hdlc_handle_t handle )
 
 int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len )
 {
-    return tiny_hdlc_run_tx( handle->handle, data, len );
+    return hdlc_ll_run_tx( handle->handle, data, len );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
     for(;;)
     {
         uint8_t buf[1];
-        int result = tiny_hdlc_run_tx( handle->handle, buf, sizeof(buf) );
+        int result = hdlc_ll_run_tx( handle->handle, buf, sizeof(buf) );
         while ( result > 0 )
         {
             int temp = handle->send_tx( handle->user_data, buf, result );
@@ -215,7 +215,7 @@ static int hdlc_put( hdlc_handle_t handle, const void *data, int len, uint32_t t
         LOG(TINY_LOG_WRN, "[HDLC:%p] hdlc_put FAILED\n", handle);
         return TINY_ERR_TIMEOUT;
     }
-    tiny_hdlc_put( handle->handle, data, len );
+    hdlc_ll_put( handle->handle, data, len );
     LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_put SUCCESS\n", handle);
     // Indicate that now we have something to send
     tiny_events_set( &handle->events, TX_DATA_READY_BIT );
@@ -277,6 +277,6 @@ static int on_frame_read(void *user_data, void *data, int len)
 
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
 {
-    return tiny_hdlc_run_rx( handle->handle, data, len, error );
+    return hdlc_ll_run_rx( handle->handle, data, len, error );
 }
 

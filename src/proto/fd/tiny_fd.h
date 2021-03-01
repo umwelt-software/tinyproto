@@ -19,7 +19,7 @@
 
 /**
  This is Tiny Full-Duplex protocol implementation for microcontrollers.
- It is built on top of Tiny Protocol (tiny_hdlc2.c)
+ It is built on top of Tiny Protocol (hdlc/low_level/hdlc.c)
 
  @file
  @brief Tiny Protocol Full Duplex API

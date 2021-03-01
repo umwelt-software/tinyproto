@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -525,15 +525,15 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     tiny_mutex_create( &protocol->frames.mutex );
     tiny_events_create( &protocol->frames.events );
 
-    tiny_hdlc_init_t _init = {};
+    hdlc_ll_init_t _init = {};
     _init.on_frame_read = on_frame_read;
     _init.on_frame_sent = on_frame_sent;
     _init.user_data = *handle;
     _init.buf = protocol->frames.rx_buffer;
-    _init.buf_size = tiny_hdlc_get_buf_size( protocol->frames.mtu );
+    _init.buf_size = hdlc_ll_get_buf_size( protocol->frames.mtu );
     _init.crc_type = init->crc_type;
 
-    tiny_hdlc_init( &protocol->_hdlc, &_init );
+    hdlc_ll_init( &protocol->_hdlc, &_init );
 
     protocol->user_data = init->pdata;
     protocol->on_frame_cb = init->on_frame_cb;
@@ -559,7 +559,7 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
 
 void tiny_fd_close(tiny_fd_handle_t  handle)
 {
-    tiny_hdlc_close( handle->_hdlc );
+    hdlc_ll_close( handle->_hdlc );
     tiny_events_destroy( &handle->frames.events );
     tiny_mutex_destroy( &handle->frames.mutex );
 }
@@ -572,7 +572,7 @@ int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len)
     while ( len )
     {
         int error;
-        int processed_bytes = tiny_hdlc_run_rx( handle->_hdlc, ptr, len, &error );
+        int processed_bytes = hdlc_ll_run_rx( handle->_hdlc, ptr, len, &error );
         if ( error == TINY_ERR_WRONG_CRC )
         {
             LOG(TINY_LOG_WRN, "[%p] HDLC CRC sum mismatch\n", handle);
@@ -725,7 +725,7 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
         // Check if send on hdlc level operation is in progress and do some work
         if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_SENDING, EVENT_BITS_LEAVE, 0 ) )
         {
-            generated_data = tiny_hdlc_run_tx( handle->_hdlc, ((uint8_t *)data) + result, len - result );
+            generated_data = hdlc_ll_run_tx( handle->_hdlc, ((uint8_t *)data) + result, len - result );
         }
         // Since no send operation is in progress, check if we have something to send
         else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE, EVENT_BITS_CLEAR, 0 ) )
@@ -740,7 +740,7 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
                 // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
                 // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
                 // send data.
-                tiny_hdlc_put( handle->_hdlc, data, len );
+                hdlc_ll_put( handle->_hdlc, data, len );
             }
         }
         result += generated_data;

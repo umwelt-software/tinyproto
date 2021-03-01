@@ -160,7 +160,7 @@ If you found any problem or have any idea, please, report to Issues section.
 
 ## License
 
-Copyright 2016-2020 (C) Alexey Dynda
+Copyright 2016-2021 (C) Alexey Dynda
 
 This file is part of Tiny Protocol Library.
 

@@ -4,8 +4,8 @@ COMPONENT_ADD_INCLUDEDIRS := ./src
 COMPONENT_SRCDIRS := ./src \
                      ./src/proto \
                      ./src/hal \
-                     ./src/proto/hdlc \
-                     ./src/proto/hdlc2 \
+                     ./src/proto/hdlc/high_level \
+                     ./src/proto/hdlc/low_level \
                      ./src/proto/fd \
                      ./src/proto/light \
                      ./src/proto/crc \

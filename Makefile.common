@@ -58,8 +58,8 @@ TARGET_LIB ?= libtinyprotocol.a
 OBJ_LIB += \
         src/proto/crc/crc.o \
         src/proto/light/tiny_light.o \
-        src/proto/hdlc/tiny_hdlc.o \
-        src/proto/hdlc2/tiny_hdlc2.o \
+        src/proto/hdlc/high_level/hdlc.o \
+        src/proto/hdlc/low_level/hdlc.o \
         src/proto/fd/tiny_fd.o \
         src/hal/tiny_list.o \
         src/hal/tiny_types.o \
