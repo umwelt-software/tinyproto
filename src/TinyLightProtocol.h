@@ -146,7 +146,7 @@ public:
      *         zero if nothing is sent
      *         positive - Packet is successfully sent
      */
-    int  write          (IPacket &pkt);
+    int  write          (const IPacket &pkt);
 
     /**
      * Reads packet from communication channel.

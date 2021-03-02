@@ -730,9 +730,9 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
         // Since no send operation is in progress, check if we have something to send
         else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE, EVENT_BITS_CLEAR, 0 ) )
         {
-            int len = 0;
-            uint8_t *data = tiny_fd_get_next_frame_to_send( handle, &len );
-            if ( data != NULL )
+            int frame_len = 0;
+            uint8_t *frame_data = tiny_fd_get_next_frame_to_send( handle, &frame_len );
+            if ( frame_data != NULL )
             {
                 // Force to check for new frame once again
                 tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
@@ -740,7 +740,7 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
                 // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
                 // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
                 // send data.
-                hdlc_ll_put( handle->_hdlc, data, len );
+                hdlc_ll_put( handle->_hdlc, frame_data, frame_len );
             }
         }
         result += generated_data;

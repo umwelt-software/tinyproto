@@ -167,7 +167,7 @@ static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
     for(;;)
     {
         uint8_t buf[1];
-        int result = hdlc_ll_run_tx( handle->handle, buf, sizeof(buf) );
+        result = hdlc_ll_run_tx( handle->handle, buf, sizeof(buf) );
         while ( result > 0 )
         {
             int temp = handle->send_tx( handle->user_data, buf, result );

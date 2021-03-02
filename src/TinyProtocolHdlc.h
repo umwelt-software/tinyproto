@@ -98,7 +98,7 @@ public:
      *         zero if nothing is sent
      *         positive - should be equal to size parameter
      */
-    int  write(char* buf, int size);
+    int  write(const char* buf, int size);
 
     /**
      * Sends packet over communication channel.
@@ -108,7 +108,7 @@ public:
      *         zero if nothing is sent
      *         positive - Packet is successfully sent
      */
-    int  write(IPacket &pkt);
+    int  write(const IPacket &pkt);
 
     /**
      * Processes incoming rx data, specified by a user.

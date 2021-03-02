@@ -54,7 +54,7 @@ int ProtoLight::read(char *buf, int size)
     return tiny_light_read(&m_data, (uint8_t*)buf, size);
 }
 
-int ProtoLight::write(IPacket &pkt)
+int ProtoLight::write(const IPacket &pkt)
 {
     return tiny_light_send(&m_data, pkt.m_buf, pkt.m_len) > 0;
 }

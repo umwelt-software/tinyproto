@@ -65,12 +65,12 @@ void IProtoFd::end()
     tiny_fd_close( m_handle );
 }
 
-int IProtoFd::write(char* buf, int size)
+int IProtoFd::write(const char* buf, int size)
 {
     return tiny_fd_send( m_handle, buf, size );
 }
 
-int IProtoFd::write(IPacket &pkt)
+int IProtoFd::write(const IPacket &pkt)
 {
     return tiny_fd_send( m_handle, pkt.m_buf, pkt.m_len );
 }

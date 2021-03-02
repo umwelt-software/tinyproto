@@ -70,12 +70,12 @@ void ProtoHdlc::end()
     hdlc_close( m_handle );
 }
 
-int ProtoHdlc::write(char* buf, int size)
+int ProtoHdlc::write(const char* buf, int size)
 {
     return hdlc_send( m_handle, buf, size, 0 );
 }
 
-int ProtoHdlc::write(IPacket &pkt)
+int ProtoHdlc::write(const IPacket &pkt)
 {
     return write( (char *)pkt.m_buf, pkt.m_len );
 }
