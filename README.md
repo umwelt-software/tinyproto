@@ -76,23 +76,26 @@ Example of using full duplex Tiny Protocol in C++ is a little bit bigger, but it
 Tiny::ProtoFd<FD_MIN_BUF_SIZE(64,4)>  proto;
 
 void onReceive(Tiny::IPacket &pkt) {
+    // Process message here, you can do with the message, what you need
+    // Let's send it back to the sender ;)
     if ( proto.write(pkt) == TINY_ERR_TIMEOUT ) {
         // Do what you need to do if looping back failed on timeout.
         // But never use blocking operations inside callback
     }
 }
 ...
+// Here we say FD protocol object, which callback to call once new msg is received
 proto.setReceiveCallback( onReceive );
 ...
 void loop() {
     if (Serial.available()) {
         uint8_t byte = Serial.read();
-        proto.run_rx( &byte, 1 ); // protocol parses data received from the channel
+        proto.run_rx( &byte, 1 ); // run FD protocol parser to process data received from the channel
     }
     uint8_t byte;
-    if ( proto.run_tx( &byte, 1 ) == 1 ) // protocol fills buffer with data to send to the channel
+    if ( proto.run_tx( &byte, 1 ) == 1 ) // FD protocol fills buffer with data, we need to send to the channel
     {
-        while ( Serial.write( byte ) == 0 );
+        while ( Serial.write( byte ) == 0 ); // Just send the data
     }
 }
 ```
