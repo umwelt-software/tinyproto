@@ -10,7 +10,7 @@ ifeq ($(ENABLE_LOGS),y)
     ENABLE_FD_LOGS ?= y
 endif
 
-VERSION=0.8.0
+VERSION=0.99.0
 
 CPPFLAGS += -I./src
 

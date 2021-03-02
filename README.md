@@ -1,4 +1,3 @@
-This branch to rework hdlc lowest level to allow using without any platform abstraction.
 
 ![Tiny Protocol](.travis/tinylogo.svg)<br>
 [![Build Status](https://travis-ci.com/lexus2k/tinyproto.svg?branch=master)](https://travis-ci.com/lexus2k/tinyproto)
@@ -20,6 +19,9 @@ This branch to rework hdlc lowest level to allow using without any platform abst
 
 ## Introduction
 
+If you want to get stable code, please, refer to [stable branch](https://github.com/lexus2k/tinyproto/tree/stable).
+HD (half duplex) protocol is removed from this version. If you need it, please refer to stable branch.
+
 Tiny Protocol is layer 2 protocol. It is intended to be used for the systems with low resources.
 It is also can be compiled for desktop Linux system, and it can be built it for Windows.
 Using this library you can easy implement data transfer between 2 microcontrollers or between microcontroller and pc via UART, SPI,
@@ -38,15 +40,14 @@ Protocols, implemented by library:
  * full-duplex (tiny_fd_xxxx true RFC 1662 implementation, supports confirmation, frames retransmissions)
 
 Main features:
- * Error detection (basic hdlc, hd and fd variants)
+ * Error detection (low level, high level hdlc and full duplex (fd) protocols)
    * Simple 8-bit checksum (sum of bytes)
    * FCS16 (CCITT-16)
    * FCS32 (CCITT-32)
- * Frames of maximum 32K or 2G size (limit depends on platform).
+ * Frames of maximum 32K or 2G size (payload limit depends on platform).
  * Low SRAM consumption (starts at 50 bytes).
  * Low Flash consumption (starts at 1KiB, features can be disabled and enabled at compilation time)
- * No dynamic memory allocation
- * Zero copy implementation (basic hdlc, light versions do not use copy operations)
+ * No dynamic memory allocation!
  * Serial loopback tool for debug purposes and performance testing
 
 ## Supported platforms
@@ -143,11 +144,6 @@ cmake -G "Visual Studio 16 2019" -DEXAMPLES=ON ..
  * Run your sketch or tinylight_loopback
  * Compile tiny_loopback tool
  * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t light -g -c 8 -a -r`
-
- * Connect your Arduino board to PC
- * Run your sketch or tinyhd_loopback
- * Compile tiny_loopback tool
- * Run tiny_loopback tool: `./bld/tiny_loopback -p /dev/ttyUSB0 -t hd -c 8 -g -a -r`
 
  * Connect your Arduino board to PC
  * Run your sketch or tinyfd_loopback

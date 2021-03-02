@@ -67,7 +67,7 @@ void tx_task(void *arg)
 {
     for (;;)
     {
-        proto.run_tx([](void *p, void *b, int s)->int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 10); });
+        proto.run_tx([](void *p, const void *b, int s)->int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 10); });
     }
     vTaskDelete( NULL );
 }
@@ -76,7 +76,7 @@ void rx_task(void *arg)
 {
     for (;;)
     {
-        proto.run_rx([](void *p, const void *b, int s)->int { return uart_write_bytes(UART_NUM_1, (const char *)b, s); });
+        proto.run_rx([](void *p, void *b, int s)->int { return uart_write_bytes(UART_NUM_1, (const char *)b, s); });
     }
     vTaskDelete( NULL );
 }
