@@ -64,11 +64,6 @@ int TinyHdlcHelper::run_rx()
     return 0;
 }
 
-int TinyHdlcHelper::run_rx_until_read(int timeout)
-{
-    return hdlc_run_rx_until_read( &m_handle, read_data, this, timeout );
-}
-
 int TinyHdlcHelper::run_tx()
 {
     if ( m_tx_from_main )
@@ -132,7 +127,15 @@ void TinyHdlcHelper::send(int count, const std::string &msg)
 
 void TinyHdlcHelper::wait_until_rx_count(int count, uint32_t timeout)
 {
-    while ( m_rx_count != count && timeout-- ) usleep(1000);
+    while ( m_rx_count != count && timeout-- )
+    {
+        if ( !m_receiveThread )
+        {
+            int err = run_rx();
+            if ( err < 0 ) break;
+        }
+        usleep(1000);
+    }
 }
 
 TinyHdlcHelper::~TinyHdlcHelper()

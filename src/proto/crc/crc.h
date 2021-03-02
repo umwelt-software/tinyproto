@@ -47,6 +47,27 @@ uint32_t crc32_byte(uint32_t crc, uint8_t data);
 uint32_t crc32(uint32_t crc, const uint8_t *buf, int size);
 #endif
 
+/// \cond
+#ifdef CONFIG_ENABLE_FCS32
+    typedef uint32_t crc_t;
+#else
+    typedef uint16_t crc_t;
+#endif
+/// \endcond
+
+/**
+ * HDLC CRC options, available
+ */
+typedef enum
+{
+    HDLC_CRC_DEFAULT = 0, ///< If default is specified HDLC will auto select CRC option
+    HDLC_CRC_8 = 8,       ///< Simple sum of all bytes in user payload
+    HDLC_CRC_16 = 16,     ///< CCITT-16
+    HDLC_CRC_32 = 32,     ///< CCITT-32
+    HDLC_CRC_OFF = 0xFF,  ///< Disable CRC field
+} hdlc_crc_t;
+
+
 #ifdef __cplusplus
 }
 #endif

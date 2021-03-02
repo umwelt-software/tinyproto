@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <thread>
 #include "fake_endpoint.h"
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc/high_level/hdlc.h"
 
 class TinyHdlcHelper: public IBaseHelper<TinyHdlcHelper>
 {
@@ -39,7 +39,6 @@ public:
     int send(const uint8_t *buf, int len, int timeout = 1000);
     void send(int count, const std::string &msg);
     int run_rx() override;
-    int run_rx_until_read(int timeout = 1000);
     int run_tx() override;
     int rx_count() { return m_rx_count; }
     int tx_count() { return m_tx_count; }

@@ -65,15 +65,13 @@ TEST(FD, multithread_basic_test)
     CHECK_EQUAL( 200, helper1.rx_count() );
 }
 
-TEST(FD, multithread_alternate_read_test)
+TEST(FD, multithread_read_test)
 {
     FakeConnection conn;
     uint16_t     nsent = 0;
     TinyHelperFd helper1( &conn.endpoint1(), 4096, nullptr, 7, 250 );
     TinyHelperFd helper2( &conn.endpoint2(), 4096, nullptr, 7, 250 );
     // Validation of tiny_fd_on_rx_data()
-    helper1.set_alternate_read_method();
-    helper2.set_alternate_read_method();
     helper1.run(true);
     helper2.run(true);
 

@@ -30,7 +30,7 @@
  */
 
 #include "hal/tiny_serial.h"
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc/high_level/hdlc.h"
 #include "TinyProtocol.h"
 #include <stdio.h>
 //#include <time.h>

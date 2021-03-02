@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,7 +17,8 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tiny_hdlc.h"
+#include "hdlc.h"
+#include "hdlc_int.h"
 #include "proto/crc/crc.h"
 #include "hal/tiny_debug.h"
 
@@ -46,48 +47,39 @@ enum
     RX_DATA_READY_BIT = 0x08,
 };
 
-static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len );
-static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len );
-static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len );
+static int hdlc_ll_read_start( hdlc_ll_handle_t handle, const uint8_t *data, int len );
+static int hdlc_ll_read_data( hdlc_ll_handle_t handle, const uint8_t *data, int len );
+static int hdlc_ll_read_end( hdlc_ll_handle_t handle, const uint8_t *data, int len );
 
-static int hdlc_send_start( hdlc_handle_t handle );
-static int hdlc_send_data( hdlc_handle_t handle );
-static int hdlc_send_tx_internal( void *user_data, const void *data, int len );
-static int hdlc_send_crc( hdlc_handle_t handle );
-static int hdlc_send_end( hdlc_handle_t handle );
+static int hdlc_ll_send_start( hdlc_ll_handle_t handle );
+static int hdlc_ll_send_data( hdlc_ll_handle_t handle );
+static int hdlc_ll_send_tx_internal( hdlc_ll_handle_t handle, const void *data, int len );
+static int hdlc_ll_send_crc( hdlc_ll_handle_t handle );
+static int hdlc_ll_send_end( hdlc_ll_handle_t handle );
 
-hdlc_handle_t hdlc_init( hdlc_struct_t *hdlc_info )
+int hdlc_ll_init( hdlc_ll_handle_t * handle, hdlc_ll_init_t *init )
 {
-    if ( hdlc_info->crc_type == HDLC_CRC_DEFAULT )
+    *handle = NULL;
+    if ( !init->buf || init->buf_size < sizeof(hdlc_ll_data_t) )
     {
-#if defined(CONFIG_ENABLE_FCS16)
-        hdlc_info->crc_type = HDLC_CRC_16;
-#elif defined(CONFIG_ENABLE_FCS32)
-        hdlc_info->crc_type = HDLC_CRC_32;
-#elif defined(CONFIG_ENABLE_CHECKSUM)
-        hdlc_info->crc_type = HDLC_CRC_8;
-#else
-        hdlc_info->crc_type = 0;
-#endif
+        LOG(TINY_LOG_ERR, "[HDLC] failed to init hdlc. buf=%p, size=%i (%i required)\n", init->buf, init->buf_size,
+            (int)sizeof(hdlc_ll_data_t) );
+        return TINY_ERR_FAILED;
     }
-    else if ( hdlc_info->crc_type == HDLC_CRC_OFF )
-    {
-        hdlc_info->crc_type = 0;
-    }
-    tiny_events_create( &hdlc_info->events );
-    tiny_events_set( &hdlc_info->events, TX_ACCEPT_BIT );
-    hdlc_info->tx.user_data = hdlc_info->user_data;
-    if ( !hdlc_info->send_tx )
-    {
-        hdlc_info->send_tx = hdlc_send_tx_internal;
-        hdlc_info->tx.user_data = hdlc_info;
-    }
+    *handle = (hdlc_ll_handle_t)init->buf;
+    (*handle)->rx_buf = (uint8_t *)init->buf + sizeof(hdlc_ll_data_t);
+    (*handle)->rx_buf_size = init->buf_size - sizeof(hdlc_ll_data_t);
+    (*handle)->crc_type = init->crc_type == HDLC_CRC_OFF ? 0: init->crc_type;
+    (*handle)->on_frame_read = init->on_frame_read;
+    (*handle)->on_frame_sent = init->on_frame_sent;
+    (*handle)->user_data = init->user_data;
+
     // Must be last
-    hdlc_reset( hdlc_info );
-    return hdlc_info;
+    hdlc_ll_reset( *handle, HDLC_LL_RESET_BOTH );
+    return TINY_SUCCESS;
 }
 
-int hdlc_close( hdlc_handle_t handle )
+int hdlc_ll_close( hdlc_ll_handle_t handle )
 {
     if ( handle->tx.data )
     {
@@ -97,26 +89,30 @@ int hdlc_close( hdlc_handle_t handle )
                                    (int)(handle->tx.data - handle->tx.origin_data) );
         }
     }
-    tiny_events_destroy( &handle->events );
     return 0;
 }
 
-void hdlc_reset( hdlc_handle_t handle )
+void hdlc_ll_reset( hdlc_ll_handle_t handle, uint8_t flags )
 {
-    handle->rx.state = hdlc_read_start;
-    handle->tx.data = NULL;
-    handle->tx.state = hdlc_send_start;
-    tiny_events_clear( &handle->events, EVENT_BITS_ALL );
-    tiny_events_set( &handle->events, TX_ACCEPT_BIT );
+    if ( flags != HDLC_LL_RESET_TX_ONLY )
+    {
+        handle->rx.state = hdlc_ll_read_start;
+    }
+    if ( flags != HDLC_LL_RESET_RX_ONLY )
+    {
+        handle->tx.data = NULL;
+        handle->tx.origin_data = NULL;
+        handle->tx.escape = 0;
+        handle->tx.state = hdlc_ll_send_start;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-static int hdlc_send_start( hdlc_handle_t handle )
+static int hdlc_ll_send_start( hdlc_ll_handle_t handle )
 {
     // Do not clear data ready bit here in case if 0x7F is failed to be sent
-    int bits = tiny_events_wait( &handle->events, TX_DATA_READY_BIT, EVENT_BITS_LEAVE, 0 );
-    if ( bits == 0 )
+    if ( !handle->tx.origin_data )
     {
         LOG(TINY_LOG_DEB, "[HDLC:%p] SENDING START NO DATA READY\n", handle);
         return 0;
@@ -140,23 +136,23 @@ static int hdlc_send_start( hdlc_handle_t handle )
     }
 
     uint8_t buf[1] = { FLAG_SEQUENCE };
-    int result = handle->send_tx( handle->tx.user_data, buf, sizeof(buf) );
+    int result = hdlc_ll_send_tx_internal( handle, buf, sizeof(buf) );
     if ( result == 1 )
     {
-        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send_data\n", handle);
+        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_send_data\n", handle);
         LOG(TINY_LOG_DEB, "[HDLC:%p] TX: %02X\n", handle, buf[0]);
-        handle->tx.state = hdlc_send_data;
+        handle->tx.state = hdlc_ll_send_data;
         handle->tx.escape = 0;
     }
     return result;
 }
 
-static int hdlc_send_data( hdlc_handle_t handle )
+static int hdlc_ll_send_data( hdlc_ll_handle_t handle )
 {
     if ( handle->tx.len == 0 )
     {
-        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send_crc\n", handle);
-        handle->tx.state = hdlc_send_crc;
+        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_send_crc\n", handle);
+        handle->tx.state = hdlc_ll_send_crc;
         return 0;
     }
     int pos = 0;
@@ -169,7 +165,7 @@ static int hdlc_send_data( hdlc_handle_t handle )
     int result = 0;
     if ( pos )
     {
-        result = handle->send_tx( handle->tx.user_data, handle->tx.data, pos );
+        result = hdlc_ll_send_tx_internal( handle, handle->tx.data, pos );
         if ( result > 0 )
         {
             #if TINY_HDLC_DEBUG
@@ -183,7 +179,7 @@ static int hdlc_send_data( hdlc_handle_t handle )
     {
         uint8_t buf[1] = { handle->tx.escape ? ( handle->tx.data[0] ^ TINY_ESCAPE_BIT )
                                              : TINY_ESCAPE_CHAR };
-        result = handle->send_tx( handle->tx.user_data, buf, sizeof(buf) );
+        result = hdlc_ll_send_tx_internal( handle, buf, sizeof(buf) );
         if ( result > 0 )
         {
             LOG(TINY_LOG_DEB, "[HDLC:%p] TX: %02X\n", handle, buf[0]);
@@ -197,25 +193,25 @@ static int hdlc_send_data( hdlc_handle_t handle )
     }
     if ( handle->tx.len == 0 )
     {
-        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send_crc\n", handle);
-        handle->tx.state = hdlc_send_crc;
+        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_send_crc\n", handle);
+        handle->tx.state = hdlc_ll_send_crc;
     }
     return result;
 }
 
-static int hdlc_send_crc( hdlc_handle_t handle )
+static int hdlc_ll_send_crc( hdlc_ll_handle_t handle )
 {
     int result = 1;
     if ( handle->tx.len == (uint8_t)handle->crc_type )
     {
-        handle->tx.state = hdlc_send_end;
+        handle->tx.state = hdlc_ll_send_end;
     }
     else
     {
         uint8_t byte = handle->tx.crc >> handle->tx.len;
         if ( byte != TINY_ESCAPE_CHAR && byte != FLAG_SEQUENCE )
         {
-            result = handle->send_tx( handle->tx.user_data, &byte, sizeof(byte) );
+            result = hdlc_ll_send_tx_internal( handle, &byte, sizeof(byte) );
             if ( result == 1 )
             {
                 LOG(TINY_LOG_DEB, "[HDLC:%p] TX: %02X\n", handle, byte);
@@ -225,7 +221,7 @@ static int hdlc_send_crc( hdlc_handle_t handle )
         else
         {
             byte = handle->tx.escape ? ( byte ^ TINY_ESCAPE_BIT ) : TINY_ESCAPE_CHAR;
-            result = handle->send_tx( handle->tx.user_data, &byte, sizeof(byte) );
+            result = hdlc_ll_send_tx_internal( handle, &byte, sizeof(byte) );
             if ( result == 1 )
             {
                 LOG(TINY_LOG_DEB, "[HDLC:%p] TX: %02X\n", handle, byte);
@@ -240,63 +236,31 @@ static int hdlc_send_crc( hdlc_handle_t handle )
     return result;
 }
 
-static void hdlc_send_terminate( hdlc_handle_t handle )
+static int hdlc_ll_send_end( hdlc_ll_handle_t handle )
 {
-    LOG(TINY_LOG_INFO, "[HDLC:%p] hdlc_send_terminate HDLC send failed on timeout\n", handle);
-    tiny_events_clear( &handle->events, TX_DATA_READY_BIT );
-    handle->tx.state = hdlc_send_start;
-    handle->tx.escape = 0;
-    tiny_events_set( &handle->events, TX_ACCEPT_BIT );
-}
-
-static int hdlc_send_end( hdlc_handle_t handle )
-{
-    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send_end\n", handle);
+    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_send_end\n", handle);
     uint8_t buf[1] = { FLAG_SEQUENCE };
-    int result = handle->send_tx( handle->tx.user_data, buf, sizeof(buf) );
+    int result = hdlc_ll_send_tx_internal( handle, buf, sizeof(buf) );
     if ( result == 1 )
     {
         LOG(TINY_LOG_DEB, "[HDLC:%p] TX: %02X\n", handle, buf[0]);
-        LOG(TINY_LOG_INFO, "[HDLC:%p] hdlc_send_end HDLC send op successful\n", handle);
-        tiny_events_clear( &handle->events, TX_DATA_READY_BIT );
-        handle->tx.state = hdlc_send_start;
+        LOG(TINY_LOG_INFO, "[HDLC:%p] hdlc_ll_send_end HDLC send op successful\n", handle);
+        handle->tx.state = hdlc_ll_send_start;
         handle->tx.escape = 0;
+        int len = (int)(handle->tx.data - handle->tx.origin_data);
+        const void *ptr = handle->tx.origin_data;
+        handle->tx.origin_data = NULL;
+        handle->tx.data = NULL;
         if ( handle->on_frame_sent )
         {
-            handle->on_frame_sent( handle->user_data, handle->tx.origin_data,
-                                   (int)(handle->tx.data - handle->tx.origin_data) );
+            handle->on_frame_sent( handle->user_data, ptr, len );
         }
-        tiny_events_set( &handle->events, TX_DATA_SENT_BIT );
-        tiny_events_set( &handle->events, TX_ACCEPT_BIT );
     }
     return result;
 }
 
-int hdlc_run_tx( hdlc_handle_t handle )
+static int hdlc_ll_send_tx_internal( hdlc_ll_handle_t handle, const void *data, int len )
 {
-    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_run_tx ENTER\n", handle);
-    int result = 0;
-    for (;;)
-    {
-        int temp_result = handle->tx.state( handle );
-        if ( temp_result <=0 )
-        {
-            #if TINY_HDLC_DEBUG
-            if ( temp_result < 0 ) LOG(TINY_LOG_ERR, "[HDLC:%p] failed to run state with result: %d\n", handle, temp_result );
-            #endif
-            result = result ? result: temp_result;
-            break;
-        }
-        result += temp_result;
-//        break;
-    }
-    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_run_tx EXIT\n", handle);
-    return result;
-}
-
-static int hdlc_send_tx_internal( void *user_data, const void *data, int len )
-{
-    hdlc_handle_t handle = (hdlc_handle_t)user_data;
     const uint8_t *ptr = (const uint8_t *)data;
     int sent = 0;
     while ( len-- && handle->tx.out_buffer_len )
@@ -310,16 +274,33 @@ static int hdlc_send_tx_internal( void *user_data, const void *data, int len )
     return sent;
 }
 
-int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len )
+int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len )
 {
     bool repeated_empty_data = false;
     handle->tx.out_buffer = (uint8_t *)data;
     handle->tx.out_buffer_len = len;
     while ( handle->tx.out_buffer_len )
     {
-        int result = hdlc_run_tx( handle );
-        if ( result <= 0 )
+        int result = handle->tx.state( handle );
+        if ( result < 0 )
         {
+            #if TINY_HDLC_DEBUG
+            LOG(TINY_LOG_ERR, "[HDLC:%p] failed to run state with result: %d\n", handle, result );
+            #endif
+            /**
+             * Some error happened. For we do not pass error code to upper layer.
+             * Passing error code as the result of this function can confuse user code. So
+             * need some other way to do that
+             */
+            break;
+        }
+        else if ( result == 0 )
+        {
+            /**
+             * Some tx state functions may return zero result, just in case of switching between states.
+             * Exiting in this case can cause tx user buffer to be underfilled. To avoid that, just check
+             * twice to ensure that we do not have more data to send.
+             */
             if ( repeated_empty_data )
             {
                 break;
@@ -334,95 +315,29 @@ int hdlc_get_tx_data( hdlc_handle_t handle, void *data, int len )
     return len - handle->tx.out_buffer_len;
 }
 
-static int hdlc_run_tx_until_sent( hdlc_handle_t handle, uint32_t timeout )
+int hdlc_ll_put( hdlc_ll_handle_t handle, const void *data, int len )
 {
-    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_run_tx_until_sent\n", handle);
-    uint32_t ts = tiny_millis();
-    int result = 0;
-    for(;;)
-    {
-        result = handle->tx.state( handle );
-
-        if ( result < 0 )
-        {
-            hdlc_send_terminate( handle );
-            LOG(TINY_LOG_ERR, "[HDLC:%p] hdlc_run_tx_until_sent failed: %d\n", handle, result);
-            break;
-        }
-        uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, EVENT_BITS_CLEAR, 0 );
-        if  ( bits != 0 )
-        {
-            result = TINY_SUCCESS;
-            break;
-        }
-        if ( (uint32_t)(tiny_millis() - ts) >= timeout && timeout != 0xFFFFFFFF )
-        {
-            hdlc_send_terminate( handle );
-            result = TINY_ERR_TIMEOUT;
-            break;
-        }
-    };
-    return result;
-}
-
-static int hdlc_put( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
-{
-    if ( !len )
+    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_put\n", handle);
+    if ( !len || !data )
     {
         return TINY_ERR_INVALID_DATA;
     }
     // Check if TX thread is ready to accept new data
-    if ( tiny_events_wait( &handle->events, TX_ACCEPT_BIT, EVENT_BITS_CLEAR, timeout ) == 0 )
+    if ( handle->tx.origin_data )
     {
-        LOG(TINY_LOG_WRN, "[HDLC:%p] hdlc_put FAILED\n", handle);
-        return TINY_ERR_TIMEOUT;
+        LOG(TINY_LOG_WRN, "[HDLC:%p] hdlc_ll_put FAILED\n", handle);
+        return TINY_ERR_BUSY;
     }
-    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_put SUCCESS\n", handle);
+    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_put SUCCESS\n", handle);
     handle->tx.origin_data = data;
     handle->tx.data = data;
     handle->tx.len = len;
-    // Indicate that now we have something to send
-    tiny_events_set( &handle->events, TX_DATA_READY_BIT );
     return TINY_SUCCESS;
-}
-
-int hdlc_send( hdlc_handle_t handle, const void *data, int len, uint32_t timeout )
-{
-    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send (timeout = %u)\n", handle, timeout);
-    int result = TINY_SUCCESS;
-    if ( data != NULL )
-    {
-        result = hdlc_put( handle, data, len, timeout );
-        if ( result == TINY_ERR_TIMEOUT ) result = TINY_ERR_BUSY;
-    }
-    if ( result >= 0 && timeout)
-    {
-        if ( handle->multithread_mode )
-        {
-            LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_send waits for send operation completes (timeout = %u)\n", handle, timeout);
-            // in multithreaded mode we must wait, until Tx thread sends the data
-            uint8_t bits = tiny_events_wait( &handle->events, TX_DATA_SENT_BIT, EVENT_BITS_CLEAR, timeout );
-            result = bits == 0 ? TINY_ERR_TIMEOUT: TINY_SUCCESS;
-        }
-        else
-        {
-            // while in single thread mode we must send the data by ourselves
-            result = hdlc_run_tx_until_sent( handle, timeout );
-        }
-    }
-    else
-    {
-        if ( !timeout )
-        {
-            LOG(TINY_LOG_DEB,"[HDLC:%p] hdlc_send timeout is zero, exiting\n", handle);
-        }
-    }
-    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len )
+static int hdlc_ll_read_start( hdlc_ll_handle_t handle, const uint8_t *data, int len )
 {
     if ( !len )
     {
@@ -439,11 +354,11 @@ static int hdlc_read_start( hdlc_handle_t handle, const uint8_t *data, int len )
     LOG(TINY_LOG_DEB, "[HDLC:%p] RX: %02X\n", handle, data[0]);
     handle->rx.escape = 0;
     handle->rx.data = (uint8_t *)handle->rx_buf;
-    handle->rx.state = hdlc_read_data;
+    handle->rx.state = hdlc_ll_read_data;
     return 1;
 }
 
-static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
+static int hdlc_ll_read_data( hdlc_ll_handle_t handle, const uint8_t *data, int len )
 {
     int result = 0;
     while ( len > 0 )
@@ -452,7 +367,7 @@ static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
         LOG(TINY_LOG_DEB, "[HDLC:%p] RX: %02X\n", handle, byte);
         if ( byte == FLAG_SEQUENCE )
         {
-            handle->rx.state = hdlc_read_end;
+            handle->rx.state = hdlc_ll_read_end;
             result++;
             break;
         }
@@ -481,17 +396,17 @@ static int hdlc_read_data( hdlc_handle_t handle, const uint8_t *data, int len )
     return result;
 }
 
-static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_bytes )
+static int hdlc_ll_read_end( hdlc_ll_handle_t handle, const uint8_t *data, int len_bytes )
 {
     if ( handle->rx.data == handle->rx_buf )
     {
         // Impossible, maybe frame alignment is wrong, go to read data again
         LOG( TINY_LOG_WRN, "[HDLC:%p] RX: error in frame alignment, recovering...\n", handle);
         handle->rx.escape = 0;
-        handle->rx.state = hdlc_read_data;
+        handle->rx.state = hdlc_ll_read_data;
         return 0; // That's OK, we actually didn't process anything from user bytes
     }
-    handle->rx.state = hdlc_read_start;
+    handle->rx.state = hdlc_ll_read_start;
     int len = (int)(handle->rx.data - (uint8_t *)handle->rx_buf);
     if ( len > handle->rx_buf_size )
     {
@@ -553,19 +468,17 @@ static int hdlc_read_end( hdlc_handle_t handle, const uint8_t *data, int len_byt
     {
         handle->on_frame_read( handle->user_data, handle->rx_buf, len );
     }
-    // Set bit indicating that we have read and processed the frame
-    tiny_events_set( &handle->events, RX_DATA_READY_BIT );
     return TINY_SUCCESS;
 }
 
-int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
+int hdlc_ll_run_rx( hdlc_ll_handle_t handle, const void *data, int len, int *error )
 {
     int result = 0;
     if ( error )
     {
         *error = TINY_SUCCESS;
     }
-    while ( len || handle->rx.state == hdlc_read_end )
+    while ( len || handle->rx.state == hdlc_ll_read_end )
     {
         int temp_result = handle->rx.state( handle, (const uint8_t *)data, len );
         if ( temp_result <=0 )
@@ -574,9 +487,6 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
             {
                 *error = temp_result;
             }
-            // Just clear this bit, since the caller doesn't want to wait for any frame
-            // This bit is used only by hdlc_run_rx_until_read()
-            tiny_events_clear( &handle->events, RX_DATA_READY_BIT );
             break;
         }
         data=(uint8_t *)data + temp_result;
@@ -586,51 +496,8 @@ int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error )
     return result;
 }
 
-void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size)
-{
-    handle->rx_buf = data;
-    handle->rx_buf_size = size;
-}
 
-int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout )
+int hdlc_ll_get_buf_size( int max_frame_size )
 {
-    uint16_t ts = tiny_millis();
-    int result = 0;
-    for(;;)
-    {
-        // Read single byte and process it
-        uint8_t data;
-        result = readcb( user_data, &data, sizeof(data) );
-        if ( result > 0 )
-        {
-            do
-            {
-                int temp = handle->rx.state( handle, &data, result );
-                if ( temp > 0 ) result -= temp;
-                if ( temp < 0 ) break;
-            } while (result > 0);
-            if ( handle->rx.state == hdlc_read_end )
-            {
-                result = handle->rx.state( handle, &data, result );
-            }
-            // Check for RX_DATA_READY_BIT without timeout. If frame is ready - exit
-            uint8_t bits = tiny_events_wait( &handle->events, RX_DATA_READY_BIT, EVENT_BITS_CLEAR, 0 );
-            if ( bits )
-            {
-                result = (int)(handle->rx.data - (uint8_t *)handle->rx_buf);
-                break;
-            }
-        }
-        if ( result < 0 )
-        {
-            break;
-        }
-        // Check if we need to exit on timeout
-        if ( (uint16_t)(tiny_millis() - ts) >= timeout )
-        {
-            result = TINY_ERR_TIMEOUT;
-            break;
-        }
-    };
-    return result;
+    return max_frame_size + sizeof(hdlc_ll_data_t);
 }

@@ -30,11 +30,6 @@ library provides 4 different protocol implementations:
                  But, be careful since light version doesn't have any confirmation from remote side. At the same
                  time light version checks for checksum, and validates received data.
 
- * \ref HALF_DUPLEX_API This is simple implementation with ACK from remote side. It needs a little more
-                 memory than light version, but it is good still for small microcontrollers. The disadvantages
-                 of hd protocol is: it doesn't use official HDLC frame format, each frame being sent must be
-                 confirmed before sending next frame. This can cause slow down in communication.
-
  * \ref FULL_DUPLEX_API This is the heaviest protocol implementation in the library. For atmega controllers
                  it requires 7KiB of flash, and at least 700 bytes of RAM to operate with 64-byte length frames.
                  Unlike hd version, fd version of protocol is much faster, as it doesn't wait for confirmation
@@ -89,7 +84,7 @@ As for RX processes, your application code is responsible for reading data from 
 then all you need to do, is to pass received bytes to HDLC implementation for processing
 via hdlc_run_rx().
 
-All higher level protocols (\ref LIGHT_API, \ref HALF_DUPLEX_API, \ref FULL_DUPLEX_API)
+All higher level protocols (\ref LIGHT_API, \ref FULL_DUPLEX_API)
 needs 4 callback functions, defined by a user: read_func_cb() is added.
 The list of callbacks:
 

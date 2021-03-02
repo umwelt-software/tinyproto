@@ -35,7 +35,7 @@
 #include "driver/gpio.h"
 #include "esp_intr_alloc.h"
 
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc/high_level/hdlc.h"
 
 
 /*

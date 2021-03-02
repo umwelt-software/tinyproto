@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2019 (C) Alexey Dynda
+    Copyright 2017-2020 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -75,10 +75,10 @@ TEST(LIGHT, small_frames)
     uint8_t      rxbuf[3]{};
     txbuf[0]='T';
     int sent = helper1.send( txbuf, 1 );
-    CHECK_EQUAL( sent, 1 );
+    CHECK_EQUAL( 1, sent );
     int received = helper2.read( rxbuf, sizeof(rxbuf) );
-    CHECK_EQUAL( received, 1 );
-    CHECK_EQUAL( rxbuf[0], 'T' );
+    CHECK_EQUAL( 1, received );
+    CHECK_EQUAL( 'T', rxbuf[0] );
 }
 
 #endif

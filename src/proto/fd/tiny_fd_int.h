@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -28,13 +28,14 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc/low_level/hdlc.h"
+#include "proto/hdlc/low_level/hdlc_int.h"
 #include "hal/tiny_types.h"
 
-#define FD_MIN_BUF_SIZE(mtu,window) (sizeof(tiny_fd_data_t) + \
+#define FD_MIN_BUF_SIZE(mtu,window) (sizeof(tiny_fd_data_t) + sizeof(hdlc_ll_data_t) + \
                  (sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t) + mtu) * ( window + 1 ))
 
-#define FD_MTU_SIZE(bsize,window) ( (bsize - sizeof(tiny_fd_data_t)) / (window + 1) - \
+#define FD_MTU_SIZE(bsize,window) ( (bsize - sizeof(tiny_fd_data_t) - sizeof(hdlc_ll_data_t)) / (window + 1) - \
                  (sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t)) )
 
 typedef enum
@@ -111,13 +112,9 @@ typedef struct
 typedef struct tiny_fd_data_t
 {
     /// hdlc information
-    hdlc_struct_t     _hdlc;
+    hdlc_ll_handle_t _hdlc;
     /// state of hdlc protocol according to ISO & RFC
     tiny_fd_state_t    state;
-    /// callback function to write bytes to the physical channel
-    write_block_cb_t   write_func;
-    /// callback function to read bytes from the physical channel
-    read_block_cb_t    read_func;
     /// Callback to process received frames
     on_frame_cb_t      on_frame_cb;
     /// Callback to get notification of sent frames

@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -63,7 +63,6 @@ enum
 
 static const uint8_t seq_bits_mask = 0x07;
 
-static int write_func_cb(void *user_data, const void *data, int len);
 static int on_frame_read(void *user_data, void *data, int len);
 static int on_frame_sent(void *user_data, const void *data, int len);
 
@@ -526,21 +525,17 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     tiny_mutex_create( &protocol->frames.mutex );
     tiny_events_create( &protocol->frames.events );
 
-    protocol->_hdlc.send_tx = init->write_func ? write_func_cb: NULL;
-    protocol->_hdlc.on_frame_read = on_frame_read;
-    protocol->_hdlc.on_frame_sent = on_frame_sent;
-    protocol->_hdlc.user_data = *handle;
-    protocol->_hdlc.rx_buf = protocol->frames.rx_buffer;
-    protocol->_hdlc.rx_buf_size = protocol->frames.mtu;
-    protocol->_hdlc.crc_type = init->crc_type;
-    // Let's use single thread mode of hdlc, as high level full duplex will take care of multithread applications
-    protocol->_hdlc.multithread_mode = false;
+    hdlc_ll_init_t _init = {};
+    _init.on_frame_read = on_frame_read;
+    _init.on_frame_sent = on_frame_sent;
+    _init.user_data = *handle;
+    _init.buf = protocol->frames.rx_buffer;
+    _init.buf_size = hdlc_ll_get_buf_size( protocol->frames.mtu );
+    _init.crc_type = init->crc_type;
 
-    hdlc_init( &protocol->_hdlc );
+    hdlc_ll_init( &protocol->_hdlc, &_init );
 
     protocol->user_data = init->pdata;
-    protocol->read_func = init->read_func;
-    protocol->write_func = init->write_func;
     protocol->on_frame_cb = init->on_frame_cb;
     protocol->on_sent_cb = init->on_sent_cb;
     protocol->send_timeout = init->send_timeout;
@@ -564,49 +559,9 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
 
 void tiny_fd_close(tiny_fd_handle_t  handle)
 {
-    hdlc_close( &handle->_hdlc );
+    hdlc_ll_close( handle->_hdlc );
     tiny_events_destroy( &handle->frames.events );
     tiny_mutex_destroy( &handle->frames.mutex );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-static int write_func_cb(void *user_data, const void *data, int len)
-{
-    tiny_fd_handle_t handle = (tiny_fd_handle_t)user_data;
-    return handle->write_func( handle->user_data, data, len );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-int tiny_fd_run_rx(tiny_fd_handle_t handle, uint16_t timeout)
-{
-    uint16_t ts = tiny_millis();
-    int result;
-//    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle ENTER with timeout %u ms\n", handle, timeout);
-    do
-    {
-        uint8_t data;
-        result = handle->read_func( handle->user_data, &data, sizeof(data) );
-//        LOG(TINY_LOG_DEB, "[%p] FD run rx process data ENTER\n", handle);
-        if ( result > 0 )
-        {
-            int len;
-            do
-            {
-                len = hdlc_run_rx( &handle->_hdlc, &data, sizeof(data), &result );
-                // For full duplex protocol consider we have retries
-                if ( result == TINY_ERR_WRONG_CRC )
-                {
-                    LOG(TINY_LOG_WRN, "[%p] HDLC CRC sum mismatch\n", handle);
-                    result = TINY_SUCCESS;
-                }
-            } while ( len == 0);
-        }
-//        LOG(TINY_LOG_DEB, "[%p] FD run rx process data EXIT\n", handle);
-    } while ((uint16_t)(tiny_millis() - ts) < timeout);
-//    LOG(TINY_LOG_DEB, "[%p] FD run rx cycle EXIT\n", handle);
-    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -617,7 +572,7 @@ int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len)
     while ( len )
     {
         int error;
-        int processed_bytes = hdlc_run_rx( &handle->_hdlc, ptr, len, &error );
+        int processed_bytes = hdlc_ll_run_rx( handle->_hdlc, ptr, len, &error );
         if ( error == TINY_ERR_WRONG_CRC )
         {
             LOG(TINY_LOG_WRN, "[%p] HDLC CRC sum mismatch\n", handle);
@@ -626,6 +581,19 @@ int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len)
         len -= processed_bytes;
     }
     return TINY_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_run_rx(tiny_fd_handle_t handle, read_block_cb_t read_func)
+{
+    uint8_t buf[4];
+    int len = read_func( handle->user_data, buf, sizeof(buf) );
+    if ( len <= 0 )
+    {
+        return len;
+    }
+    return tiny_fd_on_rx_data( handle, buf, len );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -739,43 +707,6 @@ static void tiny_fd_disconnected_on_idle_timeout( tiny_fd_handle_t handle )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int tiny_fd_run_tx( tiny_fd_handle_t handle, uint16_t timeout )
-{
-    int result = TINY_ERR_TIMEOUT;
-    if ( handle->state == TINY_FD_STATE_CONNECTED_ABM )
-    {
-        tiny_fd_connected_on_idle_timeout( handle );
-    }
-    else
-    {
-        tiny_fd_disconnected_on_idle_timeout( handle );
-    }
-    // Check if send on hdlc level operation is in progress and do some work
-    if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_SENDING, EVENT_BITS_LEAVE, 0 ) )
-    {
-        result = hdlc_run_tx( &handle->_hdlc );
-    }
-    // Since no send operation is in progress, check if we have something to send
-    else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE, EVENT_BITS_CLEAR, timeout ) )
-    {
-        int len = 0;
-        uint8_t *data = tiny_fd_get_next_frame_to_send( handle, &len );
-        if ( data != NULL )
-        {
-            // Force to check for new frame once again
-            tiny_events_set( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE );
-            tiny_events_set( &handle->frames.events, FD_EVENT_TX_SENDING );
-            // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
-            // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
-            // send data.
-            result = hdlc_send( &handle->_hdlc, data, len, 0 /*timeout*/ );
-        }
-    }
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
 {
     bool repeat = true;
@@ -794,7 +725,7 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
         // Check if send on hdlc level operation is in progress and do some work
         if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_SENDING, EVENT_BITS_LEAVE, 0 ) )
         {
-            generated_data = hdlc_get_tx_data( &handle->_hdlc, ((uint8_t *)data) + result, len - result );
+            generated_data = hdlc_ll_run_tx( handle->_hdlc, ((uint8_t *)data) + result, len - result );
         }
         // Since no send operation is in progress, check if we have something to send
         else if ( tiny_events_wait( &handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE, EVENT_BITS_CLEAR, 0 ) )
@@ -809,7 +740,7 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
                 // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
                 // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
                 // send data.
-                hdlc_send( &handle->_hdlc, data, len, 0 );
+                hdlc_ll_put( handle->_hdlc, data, len );
             }
         }
         result += generated_data;
@@ -827,6 +758,30 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len )
         }
     }
     return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_run_tx(tiny_fd_handle_t handle, write_block_cb_t write_func)
+{
+    uint8_t buf[4];
+    int len = tiny_fd_get_tx_data( handle, buf, sizeof(buf) );
+    if ( len <= 0 )
+    {
+        return len;
+    }
+    uint8_t *ptr = buf;
+    while ( len )
+    {
+        int result = write_func( handle->user_data, ptr, len );
+        if ( result < 0 )
+        {
+            return result;
+        }
+        len -= result;
+        ptr += result;
+    }
+    return TINY_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -33,7 +33,7 @@
 #include "esp_spi_flash.h"
 #include "driver/gpio.h"
 
-#include "proto/hdlc/tiny_hdlc.h"
+#include "proto/hdlc/high_level/hdlc.h"
 
 
 /*

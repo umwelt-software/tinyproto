@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -19,6 +19,8 @@
 #pragma once
 
 #include "hal/tiny_types.h"
+#include "proto/hdlc/low_level/hdlc.h"
+#include "proto/crc/crc.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -27,38 +29,15 @@ extern "C"
 {
 #endif
 
-/** Byte to fill gap between frames */
-#define TINY_HDLC_FILL_BYTE            0xFF
-
 /**
  * @defgroup HDLC_API Tiny HDLC protocol API functions
  * @{
  *
- * @brief low level HDLC protocol function - only framing
+ * @brief high level HDLC protocol implementation
  *
- * @details this group implements low level HDLC functions, which implement
+ * @details this group implements high level HDLC functions, which implement
  *          framing only according to RFC 1662: 0x7E, 0x7D, 0x20 (ISO Standard 3309-1979).
  */
-
-/// \cond
-#ifdef CONFIG_ENABLE_FCS32
-    typedef uint32_t crc_t;
-#else
-    typedef uint16_t crc_t;
-#endif
-/// \endcond
-
-/**
- * HDLC CRC options, available
- */
-typedef enum
-{
-    HDLC_CRC_DEFAULT = 0, ///< If default is specified HDLC will auto select CRC option
-    HDLC_CRC_8 = 8,       ///< Simple sum of all bytes in user payload
-    HDLC_CRC_16 = 16,     ///< CCITT-16
-    HDLC_CRC_32 = 32,     ///< CCITT-32
-    HDLC_CRC_OFF = 0xFF,  ///< Disable CRC field
-} hdlc_crc_t;
 
 /**
  * Structure describes configuration of lowest HDLC level
@@ -89,7 +68,6 @@ typedef struct _hdlc_handle_t
      * @return user callback must return negative value in case of error
      *         or 0 value if packet is successfully processed.
      */
-
     int (*on_frame_read)(void *user_data, void *data, int len);
 
     /**
@@ -133,24 +111,10 @@ typedef struct _hdlc_handle_t
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     /** Parameters in DOXYGEN_SHOULD_SKIP_THIS section should not be modified by a user */
     tiny_events_t events;
-    struct
-    {
-        uint8_t *data;
-        int (*state)( struct _hdlc_handle_t *handle, const uint8_t *data, int len );
-        uint8_t escape;
-    } rx;
-    struct
-    {
-        void *user_data;
-        uint8_t *out_buffer;
-        int out_buffer_len;
-        const uint8_t *origin_data;
-        const uint8_t *data;
-        int len;
-        crc_t crc;
-        uint8_t escape;
-        int (*state)( struct _hdlc_handle_t *handle );
-    } tx;
+
+    hdlc_ll_handle_t handle;
+
+    int rx_len;
 #endif
 } hdlc_struct_t, *hdlc_handle_t; ///< hdlc handle
 
@@ -209,29 +173,6 @@ void hdlc_reset( hdlc_handle_t handle );
  *         Never returns negative value
  */
 int hdlc_run_rx( hdlc_handle_t handle, const void *data, int len, int *error );
-
-/**
- * Runs rx cycle until full frame received.
- *
- * @param handle handle to hdlc instance
- * @param readcb callback to read bytes from channel function, cannot be NULL
- * @param user_data user data to pass to readcb callback function
- * @param timeout timeout in milliseconds to wait for new frame.
- * @return
- *   - TINY_SUCCESS if operation completed successfully
- *   - TINY_ERR_FAILED if generic failure happened
- *   - TINY_ERR_TIMEOUT if operation cannot be completed in specified time.
- */
-int hdlc_run_rx_until_read( hdlc_handle_t handle, read_block_cb_t readcb, void *user_data, uint16_t timeout );
-
-/**
- * Sets new RX buffer for hdlc protocol. This function is not thread-safe.
- *
- * @param handle handle to hdlc instance
- * @param data pointer to rx buffer
- * @param size size of rx buffer in bytes
- */
-void hdlc_set_rx_buffer( hdlc_handle_t handle, void *data, int size);
 
 //------------------------ TX FUNCIONS ------------------------------
 
