@@ -34,13 +34,13 @@ TinyProto is based on RFC 1662, it implements the following frames:
 
 ## Key Features
 
-Protocols, implemented by library:
- * Hot plug/unplug support
- * hdlc framing (hdlc_ll_xxxx, hdlc_xxxx API)
- * light (tiny_light_xxxx API, simplest API to use, doesn't support confirmation)
- * full-duplex (tiny_fd_xxxx true RFC 1662 implementation, supports confirmation, frames retransmissions)
-
 Main features:
+ * Hot plug/unplug support
+ * Connection autorecover for Full duplex and Light protocols (with enabled crc)
+ * Platform independent hdlc framing implementation (hdlc low level API: hdlc_ll_xxxx)
+ * High level hdlc implementation for backward compatibility with previous releases (hdlc_xxxx API)
+ * Easy to use Light protcol (tiny_light_xxxx API, see examples)
+ * Full-duplex protocol (tiny_fd_xxxx true RFC 1662 implementation, supports confirmation, frames retransmissions)
  * Error detection (low level, high level hdlc and full duplex (fd) protocols)
    * Simple 8-bit checksum (sum of bytes)
    * FCS16 (CCITT-16)
@@ -48,12 +48,17 @@ Main features:
  * Frames of maximum 32K or 2G size (payload limit depends on platform).
  * Low SRAM consumption (starts at 50 bytes).
  * Low Flash consumption (starts at 1KiB, features can be disabled and enabled at compilation time)
- * No dynamic memory allocation!
- * Serial loopback tool for debug purposes and performance testing
+ * No dynamic memory allocation
+ * Special serial loopback tool for debug purposes and performance testing
 
 ## Supported platforms
 
  * Any platform, where C/C++ compiler is available (C99, C++11)
+
+For some platforms additional implementation of timing and mutex functions is required. See
+[Linux](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/linux_hal.inl) and
+[ESP32](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/esp32_hal.inl) examples in
+ [HAL abstraction layer](https://github.com/lexus2k/tinyproto/tree/master/src/hal).
 
 ## Easy to use
 
@@ -61,7 +66,13 @@ Usage of light Tiny Protocol in C++ can look like this:
 ```.cpp
 Tiny::ProtoLight  proto;
 Tiny::Packet<256> packet;
-...
+
+void setup() {
+    ...
+    proto.beginToSerial();
+}
+
+void loop() {
     if (Serial.available()) {
         int len = proto.read( packet );
         if (len > 0) {
@@ -69,6 +80,7 @@ Tiny::Packet<256> packet;
             proto.write( packet );
         }
     }
+}
 ```
 
 Example of using full duplex Tiny Protocol in C++ is a little bit bigger, but it is still simple:
@@ -83,10 +95,14 @@ void onReceive(Tiny::IPacket &pkt) {
         // But never use blocking operations inside callback
     }
 }
-...
-// Here we say FD protocol object, which callback to call once new msg is received
-proto.setReceiveCallback( onReceive );
-...
+
+void setup() {
+    ...
+    // Here we say FD protocol object, which callback to call once new msg is received
+    proto.setReceiveCallback( onReceive );
+    proto.begin();
+}
+
 void loop() {
     if (Serial.available()) {
         uint8_t byte = Serial.read();
@@ -118,6 +134,9 @@ mkdir build
 cd build
 cmake -G "Visual Studio 16 2019" -DEXAMPLES=ON ..
 ```
+
+### ESP32
+Just place the library to your project components folder.
 
 ## Setting up
 
