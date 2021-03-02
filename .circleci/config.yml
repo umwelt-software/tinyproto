@@ -90,4 +90,4 @@ workflows:
 #          context: github
           filters:
             branches:
-              only: circleci-project-setup
+              only: master
