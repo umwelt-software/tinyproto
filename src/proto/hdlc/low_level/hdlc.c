@@ -318,7 +318,7 @@ int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len )
 int hdlc_ll_put( hdlc_ll_handle_t handle, const void *data, int len )
 {
     LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_put\n", handle);
-    if ( !len || !data )
+    if ( !len || !data || !handle )
     {
         return TINY_ERR_INVALID_DATA;
     }

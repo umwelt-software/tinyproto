@@ -32,7 +32,7 @@ extern "C"
 #define TINY_HDLC_FILL_BYTE            0xFF
 
 /**
- * @defgroup HDLC_LOW_LEVEL_API Tiny HDLC protocol API functions
+ * @defgroup HDLC_LOW_LEVEL_API HDLC low level protocol API
  * @{
  *
  * @brief low level HDLC protocol implementation
@@ -187,7 +187,7 @@ int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len );
  * or in the same thread you need to send data using hdlc_ll_get_tx_data().
  *
  * @param handle handle to hdlc instance
- * @param data pointer to new data to send (can be NULL is you need to retry sending)
+ * @param data pointer to new data to send
  * @param len size of data to send in bytes
  * @return TINY_ERR_BUSY if TX queue is busy with another frame.
  *         TINY_ERR_INVALID_DATA if len is zero.
