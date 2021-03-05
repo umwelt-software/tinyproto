@@ -116,7 +116,7 @@ void loop() {
 }
 ```
 
-```.python
+```.py
 import tinyproto
 
 import tinyproto
