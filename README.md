@@ -116,6 +116,23 @@ void loop() {
 }
 ```
 
+```.python
+import tinyproto
+
+import tinyproto
+
+p = tinyproto.Hdlc()
+def on_read(a):
+    print("Received bytes: " + ','.join( [ "{:#x}".format(x) for x in a ] ) )
+
+# setup protocol
+p.on_read = on_read
+p.begin()
+
+# provide rx bytes to the protocol, obtained from hardware rx channel
+p.rx( bytearray([ 0x7E, 0xFF, 0x3F, 0xF3, 0x39, 0x7E  ]) )
+```
+
 ## How to build
 
 ### Linux
@@ -165,6 +182,10 @@ Just place the library to your project components folder.
    * Download sources from https://github.com/lexus2k/tinyproto
    * Install avr gcc compilers
    * Run `make ARCH=avr`
+
+ * Python
+   * Download sources from https://github.com/lexus2k/tinyproto
+   * Run `python setup.py install`
 
 ## Using tiny_loopback tool
 
