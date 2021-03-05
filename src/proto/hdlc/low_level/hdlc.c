@@ -287,7 +287,7 @@ int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len )
             #if TINY_HDLC_DEBUG
             LOG(TINY_LOG_ERR, "[HDLC:%p] failed to run state with result: %d\n", handle, result );
             #endif
-            /**
+            /*
              * Some error happened. For we do not pass error code to upper layer.
              * Passing error code as the result of this function can confuse user code. So
              * need some other way to do that
@@ -296,7 +296,7 @@ int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len )
         }
         else if ( result == 0 )
         {
-            /**
+            /*
              * Some tx state functions may return zero result, just in case of switching between states.
              * Exiting in this case can cause tx user buffer to be underfilled. To avoid that, just check
              * twice to ensure that we do not have more data to send.

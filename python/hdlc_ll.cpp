@@ -91,7 +91,7 @@ static int on_frame_read( void *user_data, void *data, int len )
     {
         PyObject *arg = PyByteArray_FromStringAndSize( (const char *)data, (Py_ssize_t)len );
         PyObject *temp = PyObject_CallFunctionObjArgs( self->on_frame_read, arg, NULL );
-        if ( PyLong_Check( temp ) )
+        if ( temp && PyLong_Check( temp ) )
         {
             result = PyLong_AsLong( temp );
         }
@@ -103,13 +103,34 @@ static int on_frame_read( void *user_data, void *data, int len )
 
 static int on_frame_sent( void *user_data, const void *data, int len )
 {
+    int result = 0;
     Hdlc *self = (Hdlc *)user_data;
-    if ( self->user_buffer.buf )
+    if ( self->on_frame_sent )
     {
-        PyBuffer_Release( &self->user_buffer );
-        self->user_buffer.buf = NULL;
+        PyObject *arg = PyByteArray_FromStringAndSize( (const char *)data, (Py_ssize_t)len );
+        // We can free Py_buffer user_buffer only after we constructed new PyObject with the data
+        if ( self->user_buffer.buf )
+        {
+            PyBuffer_Release( &self->user_buffer );
+            self->user_buffer.buf = NULL;
+        }
+        PyObject *temp = PyObject_CallFunctionObjArgs( self->on_frame_sent, arg, NULL );
+        if ( temp && PyLong_Check( temp ) )
+        {
+            result = PyLong_AsLong( temp );
+        }
+        Py_XDECREF( temp ); // Dereference result
+        Py_DECREF( arg );  // We do not need ByteArray anymore
     }
-    return 0;
+    else
+    {
+        if ( self->user_buffer.buf )
+        {
+            PyBuffer_Release( &self->user_buffer );
+            self->user_buffer.buf = NULL;
+        }
+    }
+    return result;
 }
 
 ////////////////////////////// METHODS
@@ -173,22 +194,28 @@ static PyObject *Hdlc_rx(Hdlc *self, PyObject *args)
     return PyLong_FromLong((long)result);
 }
 
-static PyObject *Hdlc_set_read_callback(Hdlc *self, PyObject *args)
+static PyObject *Hdlc_tx(Hdlc *self, PyObject *args)
 {
-    PyObject *callback = NULL;
-    if (!PyArg_ParseTuple(args, "O", &callback))
+    int result;
+    Py_buffer      buffer{};
+    if (!PyArg_ParseTuple(args, "|s*", &buffer))
     {
         return NULL;
     }
-    Py_INCREF(callback); // Hold on callback
-    if ( self->on_frame_read != NULL )
+    if ( buffer.buf == NULL )
     {
-         Py_DECREF( self->on_frame_read );
-         self->on_frame_read = NULL;
+        void * data = PyObject_Malloc( self->mtu );
+        result = hdlc_ll_run_tx( self->handle, data, self->mtu );
+        PyObject     * to_send = PyByteArray_FromStringAndSize( (const char *)data, result );
+        PyObject_Free( data );
+        return to_send;
     }
-    self->on_frame_read = callback;
-
-    Py_RETURN_NONE;
+    else
+    {
+        result = hdlc_ll_run_tx( self->handle, buffer.buf, buffer.len );
+        PyBuffer_Release( &buffer );
+        return PyLong_FromLong((long)result);
+    }
 }
 
 ///////////////////////////////// GETTERS SETTERS
@@ -237,6 +264,7 @@ static PyMethodDef Hdlc_methods[] =
     {"end", (PyCFunction)Hdlc_end, METH_NOARGS, "Stops Hdlc protocol"},
     {"put", (PyCFunction)Hdlc_put, METH_VARARGS, "Puts new message for sending"},
     {"rx", (PyCFunction)Hdlc_rx, METH_VARARGS, "Passes rx data"},
+    {"tx", (PyCFunction)Hdlc_tx, METH_VARARGS, "Fills specified buffer with tx data"},
     {NULL} /* Sentinel */
 };
 
