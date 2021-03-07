@@ -72,6 +72,7 @@ Refer to `tiny_hal_init()` function. To understand HAL implementation refer to
 [Linux](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/linux_hal.inl) and
 [ESP32](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/esp32_hal.inl) examples in
  [HAL abstraction layer](https://github.com/lexus2k/tinyproto/tree/master/src/hal).
+Do not forget to add TINY_CUSTOM_PLATFORM define to your compilation flags.
 
 ## Easy to use
 
