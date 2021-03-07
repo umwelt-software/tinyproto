@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -18,6 +18,7 @@
  */
 
 #include "tiny_hdlc_helper.h"
+#include <unistd.h>
 
 TinyHdlcHelper::TinyHdlcHelper(FakeEndpoint * endpoint,
                                const std::function<void(uint8_t*,int)> &onRxFrameCb,

@@ -10,6 +10,8 @@
   * [Key Features](#key-features)
   * [Supported platforms](#supported-platforms)
   * [Easy to use](#easy-to-use)
+  ** [Cpp](#cpp)
+  ** [Python](#python)
   * [Setting up](#setting-up)
   * [How to buid](#how-to-build)
   * [Using tiny_loopback tool](#using-tiny_loopback-tool)
@@ -55,12 +57,25 @@ Main features:
 
  * Any platform, where C/C++ compiler is available (C99, C++11)
 
-For some platforms additional implementation of timing and mutex functions is required. See
+| **Platform** | **Examples** |
+| :-------- |:---------|
+| ESP32 | [IDF](examples/esp32_idf) |
+| Cortex M0 | [Zero](examples/arduino_zero_m0) |
+| Linux | [Linux](examples/linux/loopback) |
+| Windows | [Win32](examples/win32/loopback) |
+| Other | Any platform with implemented HAL |
+
+### What if my platform is not yet supported?
+
+ That's not a problem. Just implement abstraction layer for your platform (timing and mutex functions).
+Refer to `tiny_hal_init()` function. To understand HAL implementation refer to
 [Linux](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/linux_hal.inl) and
 [ESP32](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/esp32_hal.inl) examples in
  [HAL abstraction layer](https://github.com/lexus2k/tinyproto/tree/master/src/hal).
 
 ## Easy to use
+
+### Cpp
 
 Usage of light Tiny Protocol in C++ can look like this:
 ```.cpp
@@ -115,6 +130,8 @@ void loop() {
     }
 }
 ```
+
+### Python
 
 ```.py
 import tinyproto

@@ -13,6 +13,7 @@ help:
 	@echo "        CONFIG_ENABLE_FCS16=<y/n>     Enable or disable FCS16 support"
 	@echo "        CONFIG_ENABLE_CHECKSUM=<y/n>  Enable or disable checksum support"
 	@echo "        EXAMPLES=<y/n>                Build examples"
+	@echo "        CUSTOM=<y/n>                  Do not build built-in HAL, use custom HAL implementation"
 	@echo "    debug options:"
 	@echo "        LOG_LEVEL=<1-5>               Set log level, 5 - max logs"
 	@echo "        ENABLE_LOGS=<y/n>             Enable or disable logging"

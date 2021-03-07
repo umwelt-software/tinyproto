@@ -1,6 +1,7 @@
 default: all
 DESTDIR ?= .
 BLD ?= bld
+CUSTOM ?= n
 CONFIG_ENABLE_FCS32 ?= y
 CONFIG_ENABLE_FCS16 ?= y
 CONFIG_ENABLE_CHECKSUM ?= y
@@ -20,6 +21,10 @@ CXXFLAGS += -std=c++11
 
 ifneq ($(LOG_LEVEL),)
     CPPFLAGS += -DTINY_LOG_LEVEL_DEFAULT=$(LOG_LEVEL)
+endif
+
+ifeq ($(CUSTOM),y)
+    CPPFLAGS += -DTINY_CUSTOM_PLATFORM=1
 endif
 
 ifeq ($(ENABLE_HDLC_LOGS),y)
