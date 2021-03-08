@@ -23,7 +23,7 @@
 
 void mutex_create_default(tiny_mutex_t *mutex)
 {
-    *mutex = 0;
+    *(uint8_t *)mutex = 0;
 }
 
 void mutex_destroy_default(tiny_mutex_t *mutex)
@@ -46,45 +46,39 @@ void mutex_lock_default(tiny_mutex_t *mutex)
 
 uint8_t mutex_try_lock_default(tiny_mutex_t *mutex)
 {
-    uint8_t locked = 0;
-    ATOMIC_BLOCK
-    {
-        locked = __sync_bool_compare_and_swap( mutex, 0, 1 );
-        locked = !!locked;
-    }
+    uint8_t locked = __sync_bool_compare_and_swap( (uint8_t *)mutex, 0, 1 );
+    locked = !!locked;
     return locked;
 }
 
 void mutex_unlock_default(tiny_mutex_t *mutex)
 {
-    ATOMIC_BLOCK
-    {
-        /*uint8_t result =*/ __sync_bool_compare_and_swap( mutex, 1, 0 );
-        // assert( result == 1 );
-    }
+    /*uint8_t result =*/ __sync_bool_compare_and_swap( (uint8_t *)mutex, 1, 0 );
+    // assert( result == 1 );
 }
 
 void events_create_default(tiny_events_t *events)
 {
-    *events = 0;
+    tiny_mutex_create( &events->mutex );
+    events->bits = 0;
 }
 
 void events_destroy_default(tiny_events_t *events)
 {
+    tiny_mutex_destroy( &events->mutex );
 }
 
 uint8_t events_wait_default(tiny_events_t *events, uint8_t bits,
                          uint8_t clear, uint32_t timeout)
 {
-    uint8_t locked;
+    uint8_t locked = 0;
     uint32_t ts = tiny_millis();
     do
     {
-        ATOMIC_BLOCK
-        {
-            locked = *events;
-            if ( clear && (locked & bits) ) *events &= ~bits;
-        }
+        tiny_mutex_lock( &events->mutex );
+        locked = events->bits;
+        if ( clear && (locked & bits) ) events->bits &= ~bits;
+        tiny_mutex_unlock( &events->mutex );
         if (!(locked & bits) && (uint32_t)(tiny_millis() - ts) >= timeout)
         {
             locked = 0;
@@ -99,28 +93,25 @@ uint8_t events_wait_default(tiny_events_t *events, uint8_t bits,
 uint8_t events_check_int_default(tiny_events_t *events, uint8_t bits, uint8_t clear)
 {
     uint8_t locked;
-    ATOMIC_BLOCK
-    {
-        locked = *events;
-        if ( clear && (locked & bits) ) *events &= ~bits;
-    }
+    tiny_mutex_lock( &events->mutex );
+    locked = events->bits;
+    if ( clear && (locked & bits) ) events->bits &= ~bits;
+    tiny_mutex_unlock( &events->mutex );
     return locked;
 }
 
 void events_set_default(tiny_events_t *events, uint8_t bits)
 {
-    ATOMIC_BLOCK
-    {
-        *events |= bits;
-    }
+    tiny_mutex_lock( &events->mutex );
+    events->bits |= bits;
+    tiny_mutex_unlock( &events->mutex );
 }
 
 void events_clear_default(tiny_events_t *events, uint8_t bits)
 {
-    ATOMIC_BLOCK
-    {
-        *events &= ~bits;
-    }
+    tiny_mutex_lock( &events->mutex );
+    events->bits &= ~bits;
+    tiny_mutex_unlock( &events->mutex );
 }
 
 void sleep_default(uint32_t ms)

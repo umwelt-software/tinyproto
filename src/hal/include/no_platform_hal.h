@@ -48,7 +48,13 @@ typedef uintptr_t tiny_mutex_t;
  * Events group type used by Tiny Protocol implementation.
  * The type declaration depends on platform.
  */
-typedef uintptr_t tiny_events_t;
+typedef struct
+{
+    /** Mutex object to protect bits */
+    tiny_mutex_t  mutex;
+    /** Current state of bits */
+    uint8_t       bits;
+} tiny_events_t;
 
 
 /**
