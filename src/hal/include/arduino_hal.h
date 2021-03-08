@@ -34,9 +34,9 @@
 #   define CONFIG_ENABLE_FCS16
 #endif
 
-#ifndef CONFIG_ENABLE_FCS32
-#   define CONFIG_ENABLE_FCS32
-#endif
+//#ifndef CONFIG_ENABLE_FCS32
+//#   define CONFIG_ENABLE_FCS32
+//#endif
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 

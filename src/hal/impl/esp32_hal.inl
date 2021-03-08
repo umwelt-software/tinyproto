@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -16,8 +16,6 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "hal/tiny_types.h"
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
 {

@@ -17,10 +17,6 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hal/tiny_types.h"
-
-#define ATOMIC_BLOCK
-
 void mutex_create_default(tiny_mutex_t *mutex)
 {
     *(uint8_t *)mutex = 0;

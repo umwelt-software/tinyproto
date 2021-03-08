@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -22,7 +22,6 @@
 #endif
 // TODO: <util/atomic.h>
 
-#include "hal/tiny_types.h"
 #include <avr/interrupt.h>
 #include <util/delay.h>
 

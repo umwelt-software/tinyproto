@@ -18,6 +18,7 @@
 */
 
 #include "tiny_types.h"
+#include "tiny_debug.h"
 
 #if defined(TINY_CUSTOM_PLATFORM)
 #include "impl/no_platform_hal.inl"
@@ -37,8 +38,6 @@
 #warning "Platform not supported. Multithread support is disabled"
 #include "impl/no_platform_hal.inl"
 #endif
-
-#include "tiny_debug.h"
 
 uint8_t g_tiny_log_level = TINY_LOG_LEVEL_DEFAULT;
 

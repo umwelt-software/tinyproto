@@ -18,10 +18,10 @@
 */
 
 /**
- This is Tiny protocol implementation for microcontrollers
+ This is Tiny HAL implementation for microcontrollers
 
  @file
- @brief Tiny protocol Types
+ @brief Tiny HAL Types
 */
 
 #pragma once
@@ -51,16 +51,8 @@ extern "C" {
 
 #include <stdint.h>
 
-/// \cond
-#ifdef CONFIG_ENABLE_FCS32
-    typedef uint32_t fcs_t;
-#else
-    typedef uint16_t fcs_t;
-#endif
-/// \endcond
-
 /**
- * @defgroup ERROR_FLAGS Return error codes for Tiny API functions
+ * @ingroup ERROR_CODES
  * @{
  */
 /// Tiny operation successful. Only tiny_send_start and tiny_read_start functions return this code
@@ -128,16 +120,21 @@ typedef int (*read_block_cb_t)(void *pdata, void *buffer, int size);
  * refer to tiny_set_callbacks
  * @param handle - handle of Tiny.
  * @param uid    - UID of the received frame or sent frame (if uids are enabled).
- * @param pdata  - data received over Tiny Protocol.
+ * @param pdata  - data received from the channel.
  * @param size   - size of data received.
  * @return None.
  * @see   tiny_set_callbacks
  */
 typedef void (*on_frame_cb_t)(void *handle, uint16_t uid, uint8_t *pdata, int size);
 
-#define EVENT_BITS_ALL   0xFF ///< All bits supported by tiny protocol HAL events
+#define EVENT_BITS_ALL   0xFF ///< All bits supported by tiny HAL events
 #define EVENT_BITS_CLEAR 1    ///< Flag, used in tiny_events_wait()
 #define EVENT_BITS_LEAVE 0    ///< Flag, used in tiny_events_wait()
+
+/**
+ * @ingroup MUTEX
+ * @{
+ */
 
 /**
  * Creates cross-platform mutex.
@@ -170,6 +167,13 @@ uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex);
  * @param mutex pointer to tiny_mutex_t variable.
  */
 void tiny_mutex_unlock(tiny_mutex_t *mutex);
+
+/** @} */
+
+/**
+ * @ingroup EVENTS
+ * @{
+ */
 
 /**
  * Creates cross platform event group object.
@@ -220,6 +224,13 @@ void tiny_events_set(tiny_events_t *event, uint8_t bits);
  */
 void tiny_events_clear(tiny_events_t *event, uint8_t bits);
 
+/** @} */
+
+/**
+ * @ingroup TIME
+ * @{
+ */
+
 /**
  * Sleeps for specified period in milliseconds.
  * @param ms time in milliseconds to sleep
@@ -230,6 +241,8 @@ void tiny_sleep(uint32_t ms);
  * Returns timestamp in milliseconds since system started up.
  */
 uint32_t tiny_millis();
+
+/** @} */
 
 /**
  * Sets logging level if tiny library is compiled with logs

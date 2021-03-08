@@ -1,5 +1,5 @@
 /*
-    Copyright 2017,2020 (C) Alexey Dynda
+    Copyright 2017,2020-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,13 +17,15 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "tiny_serial.h"
+
 #if defined(__linux__)
 
-#include "serial/linux_serial.impl"
+#include "serial/linux_serial.inl"
 
 #elif defined(_WIN32)
 
-#include "serial/win32_serial.impl"
+#include "serial/win32_serial.inl"
 
 #else
 

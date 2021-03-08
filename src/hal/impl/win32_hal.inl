@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -17,10 +17,6 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hal/tiny_types.h"
-
-//#include <pthread.h>
-//#include <unistd.h>
 #include <stdint.h>
 #include <errno.h>
 

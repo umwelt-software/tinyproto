@@ -1,5 +1,5 @@
 /*
-    Copyright 2017,2020 (C) Alexey Dynda
+    Copyright 2017,2020-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -28,6 +28,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @ingroup SERIAL
+ * @{
+ */
 
 #include <stdint.h>
 #if defined(__linux__)
@@ -109,6 +114,10 @@ extern int tiny_serial_read(tiny_serial_handle_t port, void *buf, int len);
  *         or number of bytes received
  */
 extern int tiny_serial_read_timeout(tiny_serial_handle_t port, void *buf, int len, uint32_t timeout_ms);
+
+/**
+ * @}
+ */
 
 
 #ifdef __cplusplus

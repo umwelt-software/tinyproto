@@ -19,7 +19,7 @@ Windows.
 
 Library API supports C-Style functions - the basic API, and C++ API, which provides
 high level easy to use classes. Please refer to documentation. Basically TinyProto
-library provides 4 different protocol implementations:
+library provides 3 different protocol implementations:
 
  * \ref HDLC_API This is basis, which all other protocols implementations are built on top of. Hdlc api provides
                  basic input/output operations, like FCS, escape sequencies, etc. There is
@@ -108,4 +108,29 @@ protocols need to read_func_cb to be defined:
 
 */
 
+// Groups definition
 
+/*!
+       \defgroup ERROR_CODES Error codes for Tiny API functions
+       Error codes for Tiny API functions
+*/
+
+/*!
+       \defgroup MUTEX Mutex API
+       Mutex API
+*/
+
+/*!
+       \defgroup EVENTS Event groups API
+       Event groups API
+*/
+
+/*!
+       \defgroup TIME Time-specific API
+       Time-specific API
+*/
+
+/*!
+       \defgroup SERIAL Serial port API
+       Serial port API
+*/

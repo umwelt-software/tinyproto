@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -48,7 +48,7 @@ enum
 #endif
 
 #if TINY_DEBUG
-#define TINY_LOG(lvl, fmt, ...)  { if (lvl < g_tiny_log_level) fprintf(stderr, "%08" PRIu32 " ms: "fmt, tiny_millis(), ##__VA_ARGS__); }
+#define TINY_LOG(lvl, fmt, ...)  { if (lvl < g_tiny_log_level) fprintf(stderr, "%08" PRIu32 " ms: " fmt, tiny_millis(), ##__VA_ARGS__); }
 #else
 #define TINY_LOG(...)
 #endif
