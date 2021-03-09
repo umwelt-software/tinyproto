@@ -119,13 +119,12 @@ typedef int (*read_block_cb_t)(void *pdata, void *buffer, int size);
  * on_frame_cb_t is a callback function, which is called every time new frame is received, or sent.
  * refer to tiny_set_callbacks
  * @param handle - handle of Tiny.
- * @param uid    - UID of the received frame or sent frame (if uids are enabled).
  * @param pdata  - data received from the channel.
  * @param size   - size of data received.
  * @return None.
  * @see   tiny_set_callbacks
  */
-typedef void (*on_frame_cb_t)(void *handle, uint16_t uid, uint8_t *pdata, int size);
+typedef void (*on_frame_cb_t)(void *handle, uint8_t *pdata, int size);
 
 #define EVENT_BITS_ALL   0xFF ///< All bits supported by tiny HAL events
 #define EVENT_BITS_CLEAR 1    ///< Flag, used in tiny_events_wait()

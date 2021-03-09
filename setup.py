@@ -27,10 +27,11 @@ tinyproto_module = Extension(
     'tinyproto',
     sources=source_files,
     include_dirs=['./src','./python'],
-    define_macros=[("MYDEF", None)],
+    define_macros=[("MYDEF", None), ("TINY_FD_DEBUG", 0), ("TINY_LOG_LEVEL_DEFAULT", 0)],
     library_dirs=[],
     libraries=["stdc++"],
-    language='c++', )
+    language='c++',
+)
 
 
 # It has also scripts argument to build
@@ -42,5 +43,8 @@ setup(
     license='LGPLv3',
     version='0.99.0',
     description='tinyproto module wrapper',
-    ext_modules=[tinyproto_module], )
+    package_dir = { "tinyproto": "./python" },
+    packages = ['tinyproto.wrappers'],
+    ext_modules=[tinyproto_module],
+)
 

@@ -256,10 +256,10 @@ private:
     void              (*m_onSend)(IPacket &pkt) = nullptr;
 
     /** Internal function */
-    static void         onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
+    static void         onReceiveInternal(void *handle, uint8_t *pdata, int size);
 
     /** Internal function */
-    static void         onSendInternal(void *handle, uint16_t uid, uint8_t *pdata, int size);
+    static void         onSendInternal(void *handle, uint8_t *pdata, int size);
 };
 
 /**

@@ -93,7 +93,7 @@ TEST(FD, arduino_to_pc)
     FakeConnection conn( 4096, 64 ); // PC side has larger UART buffer: 4096, arduino side has small uart buffer
     TinyHelperFd pc( &conn.endpoint1(), 4096, nullptr, 4, 400 );
     TinyHelperFd arduino( &conn.endpoint2(), tiny_fd_buffer_size_by_mtu(64,4),
-                          [&arduino, &arduino_timedout_frames](uint16_t,uint8_t*b,int s)->void
+                          [&arduino, &arduino_timedout_frames](uint8_t*b,int s)->void
                           { if ( arduino.send(b, s) == TINY_ERR_TIMEOUT ) arduino_timedout_frames++; }, 4, 0 );
     conn.endpoint2().setTimeout( 0 );
     conn.endpoint2().disable();

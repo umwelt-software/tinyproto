@@ -19,6 +19,7 @@
 
 #include <Python.h>
 #include "hdlc_ll.h"
+#include "fd.h"
 
 
 static PyObject *pants(PyObject *self, PyObject *args)
@@ -56,8 +57,15 @@ PyMODINIT_FUNC PyInit_tinyproto(void)
         return NULL;
     }
 
+    if (PyType_Ready(&FdType) < 0)
+    {
+        return NULL;
+    }
+
     Py_INCREF(&HdlcType);
     PyModule_AddObject(m, "Hdlc", (PyObject *)&HdlcType);
+    Py_INCREF(&FdType);
+    PyModule_AddObject(m, "Fd", (PyObject *)&FdType);
 
     return m;
 }

@@ -217,7 +217,7 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t nr)
         {
             uint8_t i = handle->frames.head_ptr;
             tiny_mutex_unlock( &handle->frames.mutex );
-            handle->on_sent_cb( handle->user_data, 0, &handle->frames.i_frames[i]->user_payload, handle->frames.i_frames[i]->len );
+            handle->on_sent_cb( handle->user_data, &handle->frames.i_frames[i]->user_payload, handle->frames.i_frames[i]->len );
             tiny_mutex_lock( &handle->frames.mutex );
         }
         handle->frames.confirm_ns = (handle->frames.confirm_ns + 1) & seq_bits_mask;
@@ -316,7 +316,7 @@ static int __on_i_frame_read( tiny_fd_handle_t handle, void *data, int len )
         if (handle->on_frame_cb)
         {
             tiny_mutex_unlock( &handle->frames.mutex );
-            handle->on_frame_cb( handle->user_data, 0, (uint8_t *)data + 2, len - 2 );
+            handle->on_frame_cb( handle->user_data, (uint8_t *)data + 2, len - 2 );
             tiny_mutex_lock( &handle->frames.mutex );
         }
         // Decide whenever we need to send RR after user callback
@@ -498,6 +498,11 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     if ( init->window_frames > 7 )
     {
         LOG(TINY_LOG_CRIT, "HDLC doesn't support more than 7-frames queue\n");
+        return TINY_ERR_INVALID_DATA;
+    }
+    if ( init->window_frames < 2 )
+    {
+        LOG(TINY_LOG_CRIT, "HDLC doesn't support less than 2-frames queue\n");
         return TINY_ERR_INVALID_DATA;
     }
     if ( !init->retry_timeout && !init->send_timeout )

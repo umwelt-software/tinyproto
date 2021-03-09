@@ -33,7 +33,7 @@ class TinyHelperFd: public IBaseHelper<TinyHelperFd>
 public:
     TinyHelperFd(FakeEndpoint * endpoint,
                  int rxBufferSize,
-                 const std::function<void( uint16_t,uint8_t*,int )> &onRxFrameCb = nullptr,
+                 const std::function<void( uint8_t*,int )> &onRxFrameCb = nullptr,
                  int window_frames = 7,
                  int timeout = -1);
     virtual ~TinyHelperFd();
@@ -54,12 +54,12 @@ private:
     int m_rx_count = 0;
     int m_tx_count = 0;
     std::thread * m_message_sender = nullptr;
-    std::function<void(uint16_t,uint8_t*,int)>
+    std::function<void(uint8_t*,int)>
                   m_onRxFrameCb;
     bool m_stop_sender = false;
 
-    static void   onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
-    static void   onTxFrame(void *handle, uint16_t uid, uint8_t * buf, int len);
+    static void   onRxFrame(void *handle, uint8_t * buf, int len);
+    static void   onTxFrame(void *handle, uint8_t * buf, int len);
     static void   MessageSender(TinyHelperFd *helper, int count, std::string message);
 };
 

@@ -21,5 +21,5 @@
 
 #include <Python.h>
 
-extern "C" PyTypeObject HdlcType;
+extern "C" PyTypeObject FdType;
 

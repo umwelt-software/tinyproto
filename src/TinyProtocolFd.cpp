@@ -32,12 +32,12 @@ namespace Tiny
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-void IProtoFd::onReceiveInternal(void *handle, uint16_t uid, uint8_t *pdata, int size)
+void IProtoFd::onReceiveInternal(void *handle, uint8_t *pdata, int size)
 {
     (reinterpret_cast<IProtoFd*>(handle))->onReceive(pdata, size);
 }
 
-void IProtoFd::onSendInternal(void *handle, uint16_t uid, uint8_t *pdata, int size)
+void IProtoFd::onSendInternal(void *handle, uint8_t *pdata, int size)
 {
     (reinterpret_cast<IProtoFd*>(handle))->onSend(pdata, size);
 }

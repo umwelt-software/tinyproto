@@ -22,7 +22,7 @@
 
 TinyHelperFd::TinyHelperFd(FakeEndpoint * endpoint,
                            int rxBufferSize,
-                           const std::function<void(uint16_t,uint8_t*,int)> &onRxFrameCb,
+                           const std::function<void(uint8_t*,int)> &onRxFrameCb,
                            int window_frames,
                            int timeout)
     :IBaseHelper(endpoint, rxBufferSize)
@@ -109,17 +109,17 @@ void TinyHelperFd::wait_until_rx_count(int count, uint32_t timeout)
     while ( m_rx_count != count && timeout-- ) usleep(1000);
 }
 
-void  TinyHelperFd::onRxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)
+void  TinyHelperFd::onRxFrame(void *handle, uint8_t * buf, int len)
 {
     TinyHelperFd * helper = reinterpret_cast<TinyHelperFd *>(handle);
     helper->m_rx_count++;
     if (helper->m_onRxFrameCb)
     {
-        helper->m_onRxFrameCb(uid, buf, len);
+        helper->m_onRxFrameCb(buf, len);
     }
 }
 
-void  TinyHelperFd::onTxFrame(void *handle, uint16_t uid, uint8_t * buf, int len)
+void  TinyHelperFd::onTxFrame(void *handle, uint8_t * buf, int len)
 {
     TinyHelperFd * helper = reinterpret_cast<TinyHelperFd *>(handle);
     helper->m_tx_count++;

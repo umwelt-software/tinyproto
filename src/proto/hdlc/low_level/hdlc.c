@@ -81,7 +81,7 @@ int hdlc_ll_init( hdlc_ll_handle_t * handle, hdlc_ll_init_t *init )
 
 int hdlc_ll_close( hdlc_ll_handle_t handle )
 {
-    if ( handle->tx.data )
+    if ( handle && handle->tx.data )
     {
         if ( handle->on_frame_sent )
         {
