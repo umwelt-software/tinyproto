@@ -44,6 +44,9 @@ extern "C" {
  *
  *************************************************************/
 
+/**
+ * This macro defines buffer size required for tiny light protocol
+ */
 #define  LIGHT_BUF_SIZE (sizeof(uintptr_t) * 16)
 
 /**

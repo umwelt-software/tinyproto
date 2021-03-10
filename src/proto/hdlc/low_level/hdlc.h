@@ -43,6 +43,9 @@ extern "C"
  *          implementation is completely platform independent.
  */
 
+/**
+ * Flags for hdlc_ll_reset function
+ */
 typedef enum
 {
     HDLC_LL_RESET_BOTH    = 0x00,
@@ -52,6 +55,7 @@ typedef enum
 
 struct hdlc_ll_data_t;
 
+/** Handle for HDLC low level protocol */
 typedef struct hdlc_ll_data_t *hdlc_ll_handle_t;
 
 /**
@@ -113,6 +117,7 @@ typedef struct
 /**
  * Initializes hdlc level and returns hdlc handle or NULL in case of error.
  *
+ * @param handle pointer to hdlc handle variable
  * @param init pointer to hdlc_ll_struct_t structure, which defines user-specific configuration
  * @return -1 if error
  *          0 if success
@@ -122,7 +127,7 @@ int hdlc_ll_init( hdlc_ll_handle_t *handle, hdlc_ll_init_t *init );
 /**
  * Shutdowns all hdlc activity
  *
- * @param handle handle to hdlc instance
+ * @param handle hdlc handle
  */
 int hdlc_ll_close( hdlc_ll_handle_t handle );
 
@@ -130,8 +135,8 @@ int hdlc_ll_close( hdlc_ll_handle_t handle );
  * Resets hdlc state. Use this function, if hw error happened on tx or rx
  * line, and this requires hardware change, and cancelling current operation.
  *
- * @param handle handle to hdlc instance
- * @flags HDLC_LL_RESET_TX_ONLY, HDLC_LL_RESET_RX_ONLY, HDLC_LL_RESET_BOTH
+ * @param handle hdlc handle
+ * @param flags HDLC_LL_RESET_TX_ONLY, HDLC_LL_RESET_RX_ONLY, HDLC_LL_RESET_BOTH
  */
 void hdlc_ll_reset( hdlc_ll_handle_t handle, uint8_t flags );
 
@@ -155,7 +160,7 @@ void hdlc_ll_reset( hdlc_ll_handle_t handle, uint8_t flags );
  *   - TINY_ERR_WRONG_CRC if crc field of incoming frame is incorrect
  *   - TINY_SUCCESS if operation completed successfully
  *
- * @param handle handle to hdlc instance
+ * @param handle hdlc handle
  * @param data pointer to incoming data to process
  * @param len size of received data in bytes
  * @param error pointer to store error code. If no error, 0 is returned.
@@ -172,7 +177,7 @@ int hdlc_ll_run_rx( hdlc_ll_handle_t handle, const void *data, int len, int *err
  * This function returns either if no more data to send, or specified
  * buffer is filled completely.
  *
- * @param handle handle to hdlc instance
+ * @param handle hdlc handle
  * @param data pointer to buffer to fill with data
  * @param len length of specified buffer
  * @return number of bytes written to specified buffer
@@ -186,7 +191,7 @@ int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len );
  * hdlc state machine. In this case, some other thread needs to
  * or in the same thread you need to send data using hdlc_ll_get_tx_data().
  *
- * @param handle handle to hdlc instance
+ * @param handle hdlc handle
  * @param data pointer to new data to send
  * @param len size of data to send in bytes
  * @return TINY_ERR_BUSY if TX queue is busy with another frame.

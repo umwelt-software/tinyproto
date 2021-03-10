@@ -31,14 +31,21 @@ stop = False
 def run_endpoint(endpoint, rx_queue, tx_queue):
     endpoint.begin()
 
-    while not stop:
-        data = endpoint.tx();
+    def read_func( max_size ):
+        bytes = []
+        while not rx_queue.empty() and max_size > 0:
+            bytes.append( rx_queue.get( block = True ) )
+            max_size -= 1
+        return bytearray( bytes )
+
+    def write_func( data ):
         for byte in data:
             tx_queue.put( byte, block = True, timeout = 0.1 )
-        bytes = []
-        while not rx_queue.empty():
-            bytes.append( rx_queue.get( block = True ) )
-        endpoint.rx( bytearray(bytes) )
+        return len( data )
+
+    while not stop:
+        endpoint.run_tx( write_func );
+        endpoint.run_rx( read_func )
 
     endpoint.end()
 

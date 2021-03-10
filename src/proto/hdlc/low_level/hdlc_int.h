@@ -29,7 +29,7 @@ extern "C"
 #endif
 
 /**
- * @defgroup HDLC_LOW_LEVEL_API Tiny HDLC low level protocol API functions
+ * @ingroup HDLC_LOW_LEVEL_API
  * @{
  *
  * @brief low level HDLC protocol function - only framing
@@ -112,6 +112,9 @@ typedef struct hdlc_ll_data_t
 #endif
 } hdlc_ll_data_t;
 
+/**
+ * @}
+ */
 
 #ifdef __cplusplus
 }

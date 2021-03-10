@@ -35,6 +35,9 @@ typedef struct
     void *buffer;
     PyObject *on_frame_sent;
     PyObject *on_frame_read;
+    PyObject *read_func;
+    PyObject *write_func;
+    int error_flag;
 } Fd;
 
 static PyMemberDef Fd_members[] =
@@ -47,11 +50,10 @@ static PyMemberDef Fd_members[] =
 
 static void Fd_dealloc(Fd *self)
 {
-    if ( self->on_frame_read != NULL )
-    {
-         Py_DECREF( self->on_frame_read );
-         self->on_frame_read = NULL;
-    }
+    Py_XDECREF( self->on_frame_read );
+    Py_XDECREF( self->on_frame_sent );
+    Py_XDECREF( self->read_func );
+    Py_XDECREF( self->write_func );
     Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
@@ -62,8 +64,11 @@ static int Fd_init(Fd *self, PyObject *args, PyObject *kwds)
     self->crc_type = HDLC_CRC_16;
     self->on_frame_sent = NULL;
     self->on_frame_read = NULL;
+    self->read_func = NULL;
+    self->write_func = NULL;
     self->mtu = 1500;
     self->window_size = 7;
+    self->error_flag = 0;
     return 0;
 }
 
@@ -132,7 +137,7 @@ static PyObject *Fd_end(Fd *self)
     Py_RETURN_NONE;
 }
 
-static PyObject *Fd_put(Fd *self, PyObject *args)
+static PyObject *Fd_send(Fd *self, PyObject *args)
 {
     Py_buffer      buffer{};
     if (!PyArg_ParseTuple(args, "s*", &buffer))
@@ -180,8 +185,107 @@ static PyObject *Fd_tx(Fd *self, PyObject *args)
     }
 }
 
+int write_func(void *user_data, const void *buffer, int size)
+{
+    int result = 0;
+    Fd *self = (Fd *)user_data;
+    if ( self->write_func )
+    {
+        PyObject *arg = PyByteArray_FromStringAndSize( (const char *)buffer, (Py_ssize_t)size );
+        PyObject *temp = PyObject_CallFunctionObjArgs( self->write_func, arg, NULL );
+        if ( !temp || !PyLong_Check( temp ) )
+        {
+            Py_XDECREF( temp ); // Dereference result
+            Py_DECREF( arg );  // We do not need ByteArray anymore
+            self->error_flag = 1;
+            return size;
+        }
+        result = PyLong_AsLong( temp );
+        Py_XDECREF( temp ); // Dereference result
+        Py_DECREF( arg );  // We do not need ByteArray anymore
+    }
+    return result;
+}
+
+static PyObject *Fd_run_tx(Fd *self, PyObject *args)
+{
+    int result = 0;
+    PyObject * cb = NULL;
+    if (!PyArg_ParseTuple(args, "O", &cb))
+    {
+        return NULL;
+    }
+    if ( !PyFunction_Check( cb ) )
+    {
+        return NULL;
+    }
+    Py_INCREF( cb );
+    self->write_func = cb;
+    result = tiny_fd_run_tx( self->handle, write_func );
+    Py_DECREF( cb );
+    self->write_func = NULL;
+    if ( self->error_flag )
+    {
+        return PyErr_Format( PyExc_RuntimeError, "Write function must return integer number of bytes written" );
+    }
+    return PyLong_FromLong((long)result);
+}
+
+int read_func(void *user_data, void *buffer, int size)
+{
+    int result = 0;
+    Fd *self = (Fd *)user_data;
+    if ( self->read_func )
+    {
+        PyObject *arg = PyLong_FromLong((long)size);
+        PyObject *temp = PyObject_CallFunctionObjArgs( self->read_func, arg, NULL );
+        if ( !temp || !PyObject_CheckBuffer( temp ) )
+        {
+            Py_XDECREF( temp ); // Dereference result
+            Py_DECREF( arg );  // We do not need ByteArray anymore
+            self->error_flag = 1;
+            return 0;
+        }
+        Py_buffer view;
+        if ( PyObject_GetBuffer( temp, &view, 0 ) >= 0 )
+        {
+            memcpy( buffer, view.buf, view.len );
+            result = view.len;
+            PyBuffer_Release( &view );
+        }
+        Py_XDECREF( temp ); // Dereference result
+        Py_DECREF( arg );
+    }
+    return result;
+}
+
+static PyObject *Fd_run_rx(Fd *self, PyObject *args)
+{
+    int result = 0;
+    PyObject * cb = NULL;
+    if (!PyArg_ParseTuple(args, "O", &cb))
+    {
+        return NULL;
+    }
+    if ( !PyFunction_Check( cb ) )
+    {
+        return NULL;
+    }
+    Py_INCREF( cb );
+    self->read_func = cb;
+    result = tiny_fd_run_rx( self->handle, read_func );
+    Py_DECREF( cb );
+    self->read_func = NULL;
+    if ( self->error_flag )
+    {
+        return PyErr_Format( PyExc_RuntimeError, "Read function must return bytearray with the bytes" );
+    }
+    return PyLong_FromLong((long)result);
+}
+
+
 /*
-oid tiny_fd_set_ka_timeout 	( 	tiny_fd_handle_t  	handle,
+void tiny_fd_set_ka_timeout 	( 	tiny_fd_handle_t  	handle,
 		uint32_t  	keep_alive
 	)
 */
@@ -230,9 +334,11 @@ static PyMethodDef Fd_methods[] =
 {
     {"begin", (PyCFunction)Fd_begin, METH_NOARGS, "Initializes Fd protocol"},
     {"end", (PyCFunction)Fd_end, METH_NOARGS, "Stops Fd protocol"},
-    {"put", (PyCFunction)Fd_put, METH_VARARGS, "Puts new message for sending"},
+    {"send", (PyCFunction)Fd_send, METH_VARARGS, "Sends new message to remote side"},
     {"rx", (PyCFunction)Fd_rx, METH_VARARGS, "Passes rx data"},
     {"tx", (PyCFunction)Fd_tx, METH_VARARGS, "Fills specified buffer with tx data"},
+    {"run_rx", (PyCFunction)Fd_run_rx, METH_VARARGS, "Reads data from user callback and parses them"},
+    {"run_tx", (PyCFunction)Fd_run_tx, METH_VARARGS, "Writes data to user callback"},
     {NULL} /* Sentinel */
 };
 
