@@ -479,20 +479,47 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+static int tiny_fd_calculate_mtu_size( int buffer_size, int window, hdlc_crc_t crc_type )
+{
+    return ( buffer_size
+             - sizeof(tiny_fd_data_t)
+             // RX overhead
+             - sizeof(hdlc_ll_data_t)
+             - sizeof(tiny_frame_header_t)
+             - get_crc_field_size( crc_type )
+             // TX overhead
+             - window * (   sizeof(tiny_i_frame_info_t *)
+                          + sizeof(tiny_i_frame_info_t)
+                          - sizeof(((tiny_i_frame_info_t *)0)->user_payload)
+                        )
+            ) / (window + 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 int tiny_fd_init(tiny_fd_handle_t      * handle,
                  tiny_fd_init_t        * init)
 {
+    *handle = NULL;
     if ( (0 == init->on_frame_cb) ||
          (0 == init->buffer) ||
          (0 == init->buffer_size) )
     {
         return TINY_ERR_FAILED;
     }
-    if ( init->buffer_size < tiny_fd_buffer_size_by_mtu( 4, init->window_frames )  )
+    if ( init->mtu == 0 )
     {
-        LOG(TINY_LOG_CRIT, "Too small buffer for FD HDLC %i < %i, recommended %i bytes\n", init->buffer_size,
-            tiny_fd_buffer_size_by_mtu( 4, init->window_frames ),
-            tiny_fd_buffer_size_by_mtu( 4, init->window_frames ) + 128 * init->window_frames );
+        init->mtu = tiny_fd_calculate_mtu_size( init->buffer_size, init->window_frames, init->crc_type );
+        if ( init->mtu < 1 )
+        {
+             LOG(TINY_LOG_CRIT, "Calculated mtu size is zero, no payload transfer is available\n");
+             return TINY_ERR_INVALID_DATA;
+        }
+    }
+    if ( init->buffer_size < tiny_fd_buffer_size_by_mtu_ex( init->mtu, init->window_frames, init->crc_type )  )
+    {
+        LOG(TINY_LOG_CRIT, "Too small buffer for FD protocol %i < %i\n", init->buffer_size,
+            tiny_fd_buffer_size_by_mtu_ex( init->mtu, init->window_frames, init->crc_type ) );
         return TINY_ERR_INVALID_DATA;
     }
     if ( init->window_frames > 7 )
@@ -512,33 +539,44 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     }
     memset(init->buffer, 0, init->buffer_size);
 
-    tiny_fd_data_t *protocol = init->buffer;
-    tiny_i_frame_info_t **i_frames = (tiny_i_frame_info_t **)((uint8_t *)protocol + sizeof(tiny_fd_data_t));
-    uint8_t *tx_buffer = (uint8_t *)i_frames + sizeof(tiny_i_frame_info_t *) * init->window_frames;
-
-    *handle = protocol;
-    protocol->frames.i_frames = i_frames;
-    protocol->frames.tx_buffer = tx_buffer;
+    uint8_t *ptr = (uint8_t *)init->buffer;
+    /* Lets locate main FD protocol data at the beginning of specified buffer */
+    tiny_fd_data_t *protocol = (tiny_fd_data_t *)ptr; ptr += sizeof(tiny_fd_data_t);
+    /* Next we need some space to hold pointers to tiny_i_frame_info_t records (window_frames pointers) */
+    protocol->frames.i_frames = (tiny_i_frame_info_t **)(ptr); ptr += sizeof(tiny_i_frame_info_t *) * init->window_frames;
     protocol->frames.max_i_frames = init->window_frames;
-    protocol->frames.mtu = FD_MTU_SIZE( init->buffer_size, init->window_frames );
+    protocol->frames.mtu = init->mtu;
+    /* Lets allocate memory for TX frames, we have <window_frames> TX frames */
     for (int i=0; i < init->window_frames; i++)
     {
-        protocol->frames.i_frames[i] = (tiny_i_frame_info_t *)tx_buffer;
-        tx_buffer += protocol->frames.mtu;
+        protocol->frames.i_frames[i] = (tiny_i_frame_info_t *)ptr;
+        /* We do not allocate space for CRC field since, it is calculated only during send operation by HDLC low level */
+        ptr += protocol->frames.mtu + sizeof(tiny_i_frame_info_t) \
+                                    - sizeof(((tiny_i_frame_info_t *)0)->user_payload);
     }
-    protocol->frames.rx_buffer = tx_buffer;
-    tiny_mutex_create( &protocol->frames.mutex );
-    tiny_events_create( &protocol->frames.events );
-
+    /* Lets allocate memory for HDLC low level protocol */
     hdlc_ll_init_t _init = {};
     _init.on_frame_read = on_frame_read;
     _init.on_frame_sent = on_frame_sent;
-    _init.user_data = *handle;
-    _init.buf = protocol->frames.rx_buffer;
-    _init.buf_size = hdlc_ll_get_buf_size( protocol->frames.mtu );
+    _init.user_data = protocol;
     _init.crc_type = init->crc_type;
+    _init.buf_size = hdlc_ll_get_buf_size_ex( protocol->frames.mtu
+                                              + sizeof(tiny_frame_header_t), init->crc_type );
+    _init.buf = ptr; ptr += _init.buf_size;
+    if ( ptr > (uint8_t *)init->buffer + init->buffer_size )
+    {
+        LOG(TINY_LOG_CRIT, "Out of provided memory: provided %i bytes, used %i bytes\n",
+                           init->buffer_size,
+                           (int)(ptr - (uint8_t *)init->buffer));
+        return TINY_ERR_INVALID_DATA;
+    }
 
-    hdlc_ll_init( &protocol->_hdlc, &_init );
+    int result = hdlc_ll_init( &protocol->_hdlc, &_init );
+    if ( result != TINY_SUCCESS )
+    {
+        LOG(TINY_LOG_CRIT, "HDLC low level initialization failed" );
+        return result;
+    }
 
     protocol->user_data = init->pdata;
     protocol->on_frame_cb = init->on_frame_cb;
@@ -549,6 +587,10 @@ int tiny_fd_init(tiny_fd_handle_t      * handle,
     protocol->retries = init->retries;
     protocol->frames.retries = init->retries;
     protocol->state = TINY_FD_STATE_DISCONNECTED;
+
+    tiny_mutex_create( &protocol->frames.mutex );
+    tiny_events_create( &protocol->frames.events );
+    *handle = protocol;
 
     // Request remote side for ABM
     // TODO: No need?
@@ -791,11 +833,12 @@ int tiny_fd_run_tx(tiny_fd_handle_t handle, write_block_cb_t write_func)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
+int tiny_fd_send_packet( tiny_fd_handle_t handle, const void *data, int len)
 {
     int result;
     LOG( TINY_LOG_DEB, "[%p] PUT frame\n", handle );
     // Check frame size againts mtu
+    // MTU doesn't include header and crc fields, only user payload
     if ( len > handle->frames.mtu )
     {
         LOG( TINY_LOG_ERR, "[%p] PUT frame error\n", handle );
@@ -838,9 +881,21 @@ int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int tiny_fd_buffer_size_by_mtu( int mtu, int window_frames )
+int tiny_fd_buffer_size_by_mtu( int mtu, int window )
 {
-    return FD_MIN_BUF_SIZE(mtu, window_frames);
+    return tiny_fd_buffer_size_by_mtu_ex( mtu, window, HDLC_CRC_16 );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_buffer_size_by_mtu_ex( int mtu, int window, hdlc_crc_t crc_type )
+{
+    return sizeof(tiny_fd_data_t) +
+           // RX side
+           hdlc_ll_get_buf_size_ex( mtu + sizeof(tiny_frame_header_t), crc_type ) +
+           // TX side
+           ( sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t) + mtu \
+                                           - sizeof(((tiny_i_frame_info_t *)0)->user_payload) ) * window;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -848,6 +903,32 @@ int tiny_fd_buffer_size_by_mtu( int mtu, int window_frames )
 void tiny_fd_set_ka_timeout( tiny_fd_handle_t handle, uint32_t keep_alive )
 {
     handle->ka_timeout = keep_alive;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_get_mtu(tiny_fd_handle_t handle)
+{
+    return handle->frames.mtu;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_send( tiny_fd_handle_t handle, const void *data, int len)
+{
+    const uint8_t *ptr = (const uint8_t *)data;
+    int left = len;
+    while ( left > 0 )
+    {
+        int size = left < handle->frames.mtu ? left : handle->frames.mtu;
+        int result = tiny_fd_send_packet( handle, ptr, size );
+        if ( result != TINY_SUCCESS )
+        {
+            break;
+        }
+        left -= result;
+    }
+    return left;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

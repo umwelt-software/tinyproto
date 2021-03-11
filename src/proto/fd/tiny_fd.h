@@ -101,6 +101,12 @@ typedef struct tiny_fd_init_t_
      * It is not mandatory to have the same window_frames value on both endpoints.
      */
     uint8_t            window_frames;
+
+    /**
+     * Maximum transmission unit in bytes. If this parameter is zero, the protocol
+     * will automatically calculate mtu based on buffer_size, window_frames.
+     */
+    int                mtu;
 } tiny_fd_init_t;
 
 /**
@@ -189,13 +195,17 @@ extern int tiny_fd_run_rx(tiny_fd_handle_t handle, read_block_cb_t read_func);
  *
  * Sends userdata over full-duplex protocol. Note, that this command
  * will return success, when data are copied to internal queue. That doesn't mean
- * that data physically sent, but they are enqueued for sending.
+ * that data are physically sent, but they are enqueued for sending.
+ *
+ * @important the maximum size of the allowed buffer to send is equal to mtu size set for
+ *            the protocol. If you want to send data larger than mtu size, please, use
+ *            tiny_fd_send() function.
  *
  * When timeout happens, the data were not actually enqueued. Call this function once again.
  * If TINY_ERR_DATA_TOO_LARGE is returned, try to send less data. If you don't want to care about
- * data size, please, use different function tiny_fd_write()..
+ * mtu size, please, use different function tiny_fd_send()..
  *
- * @param handle   pointer to tiny_fd_handle_t
+ * @param handle   tiny_fd_handle_t handle
  * @param buf      data to send
  * @param len      length of data to send
  *
@@ -205,14 +215,55 @@ extern int tiny_fd_run_rx(tiny_fd_handle_t handle, read_block_cb_t read_func);
  *         * TINY_ERR_FAILED       if request was cancelled, by tiny_fd_close() or other error happened.
  *         * TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
  */
-extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
+extern int tiny_fd_send_packet(tiny_fd_handle_t handle, const void *buf, int len);
 
 /**
  * Returns minimum required buffer size for specified parameters.
+ *
+ * @important This function calculates buffer requirements based on HDLC_CRC_16.
+ *
  * @param mtu size of desired user payload in bytes.
- * @param max_tx_frames maximum tx queue size of I-frames.
+ * @param window maximum tx queue size of I-frames.
  */
-extern int tiny_fd_buffer_size_by_mtu( int mtu, int max_tx_frames );
+extern int tiny_fd_buffer_size_by_mtu( int mtu, int window );
+
+/**
+ * Returns minimum required buffer size for specified parameters.
+ *
+ * @param mtu size of desired user payload in bytes.
+ * @param window maximum tx queue size of I-frames.
+ * @param crc_type crc type to be used with FD protocol
+ */
+extern int tiny_fd_buffer_size_by_mtu_ex( int mtu, int window, hdlc_crc_t crc_type );
+
+/**
+ * @brief returns max packet size in bytes.
+ *
+ * Returns max packet size in bytes.
+ *
+ * @param handle   tiny_fd_handle_t handle
+ * @return mtu size in bytes
+ * @see tiny_fd_send_packet
+ */
+extern int tiny_fd_get_mtu(tiny_fd_handle_t handle);
+
+/**
+ * @brief Sends userdata over full-duplex protocol.
+ *
+ * Sends userdata over full-duplex protocol. Note, that this function will try to send
+ * all data from buf. In success case it will return number of bytes sent, equal to len
+ * input parameter. But if timeout happens, it returns number of bytes actually enqueued.
+ *
+ * If you constantly get number of sent bytes less than expected, try to increase
+ * timeout value of the speed of used communication channel.
+ *
+ * @param handle   tiny_fd_handle_t handle
+ * @param buf      data to send
+ * @param len      length of data to send
+ *
+ * @return Number of bytes sent
+ */
+extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
 
 /**
  * Sets keep alive timeout in milliseconds. This timeout is used to send special RR

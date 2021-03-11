@@ -39,6 +39,11 @@ extern "C"
  */
 
 /**
+ * Macro calculating minimum buffer size required for specific packet size in bytes
+ */
+#define HDLC_MIN_BUF_SIZE(mtu, crc) ( sizeof(hdlc_ll_data_t) + (int)(crc) / 8 + (mtu) )
+
+/**
  * Structure describes configuration of lowest HDLC level
  * Initialize this structure by 0 before passing to hdlc_ll_init()
  * function.

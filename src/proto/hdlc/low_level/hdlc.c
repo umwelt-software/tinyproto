@@ -57,6 +57,8 @@ static int hdlc_ll_send_tx_internal( hdlc_ll_handle_t handle, const void *data, 
 static int hdlc_ll_send_crc( hdlc_ll_handle_t handle );
 static int hdlc_ll_send_end( hdlc_ll_handle_t handle );
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 int hdlc_ll_init( hdlc_ll_handle_t * handle, hdlc_ll_init_t *init )
 {
     *handle = NULL;
@@ -79,6 +81,8 @@ int hdlc_ll_init( hdlc_ll_handle_t * handle, hdlc_ll_init_t *init )
     return TINY_SUCCESS;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 int hdlc_ll_close( hdlc_ll_handle_t handle )
 {
     if ( handle && handle->tx.data )
@@ -91,6 +95,8 @@ int hdlc_ll_close( hdlc_ll_handle_t handle )
     }
     return 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 void hdlc_ll_reset( hdlc_ll_handle_t handle, uint8_t flags )
 {
@@ -147,6 +153,8 @@ static int hdlc_ll_send_start( hdlc_ll_handle_t handle )
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 static int hdlc_ll_send_data( hdlc_ll_handle_t handle )
 {
     if ( handle->tx.len == 0 )
@@ -199,6 +207,8 @@ static int hdlc_ll_send_data( hdlc_ll_handle_t handle )
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 static int hdlc_ll_send_crc( hdlc_ll_handle_t handle )
 {
     int result = 1;
@@ -236,6 +246,8 @@ static int hdlc_ll_send_crc( hdlc_ll_handle_t handle )
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 static int hdlc_ll_send_end( hdlc_ll_handle_t handle )
 {
     LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_send_end\n", handle);
@@ -259,6 +271,8 @@ static int hdlc_ll_send_end( hdlc_ll_handle_t handle )
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 static int hdlc_ll_send_tx_internal( hdlc_ll_handle_t handle, const void *data, int len )
 {
     const uint8_t *ptr = (const uint8_t *)data;
@@ -273,6 +287,8 @@ static int hdlc_ll_send_tx_internal( hdlc_ll_handle_t handle, const void *data, 
     }
     return sent;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len )
 {
@@ -314,6 +330,8 @@ int hdlc_ll_run_tx( hdlc_ll_handle_t handle, void *data, int len )
     }
     return len - handle->tx.out_buffer_len;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 int hdlc_ll_put( hdlc_ll_handle_t handle, const void *data, int len )
 {
@@ -358,6 +376,8 @@ static int hdlc_ll_read_start( hdlc_ll_handle_t handle, const uint8_t *data, int
     return 1;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 static int hdlc_ll_read_data( hdlc_ll_handle_t handle, const uint8_t *data, int len )
 {
     int result = 0;
@@ -395,6 +415,8 @@ static int hdlc_ll_read_data( hdlc_ll_handle_t handle, const uint8_t *data, int 
     }
     return result;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 static int hdlc_ll_read_end( hdlc_ll_handle_t handle, const uint8_t *data, int len_bytes )
 {
@@ -471,6 +493,8 @@ static int hdlc_ll_read_end( hdlc_ll_handle_t handle, const uint8_t *data, int l
     return TINY_SUCCESS;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 int hdlc_ll_run_rx( hdlc_ll_handle_t handle, const void *data, int len, int *error )
 {
     int result = 0;
@@ -496,8 +520,22 @@ int hdlc_ll_run_rx( hdlc_ll_handle_t handle, const void *data, int len, int *err
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
 
-int hdlc_ll_get_buf_size( int max_frame_size )
+int hdlc_ll_get_buf_size( int mtu )
 {
-    return max_frame_size + sizeof(hdlc_ll_data_t);
+    return get_crc_field_size( HDLC_CRC_32 ) +
+           sizeof(hdlc_ll_data_t) +
+           mtu;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+int hdlc_ll_get_buf_size_ex( int mtu, hdlc_crc_t crc_type )
+{
+    return get_crc_field_size( crc_type ) +
+           sizeof(hdlc_ll_data_t) +
+           mtu;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////

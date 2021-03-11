@@ -67,12 +67,12 @@ void IProtoFd::end()
 
 int IProtoFd::write(const char* buf, int size)
 {
-    return tiny_fd_send( m_handle, buf, size );
+    return tiny_fd_send_packet( m_handle, buf, size );
 }
 
 int IProtoFd::write(const IPacket &pkt)
 {
-    return tiny_fd_send( m_handle, pkt.m_buf, pkt.m_len );
+    return tiny_fd_send_packet( m_handle, pkt.m_buf, pkt.m_len );
 }
 
 int IProtoFd::run_rx(const void *data, int len)

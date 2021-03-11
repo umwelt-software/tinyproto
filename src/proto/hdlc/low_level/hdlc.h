@@ -208,10 +208,21 @@ int hdlc_ll_put( hdlc_ll_handle_t handle, const void *data, int len );
 
 /**
  * Returns minimum buffer size, required to hold hdlc low level data for desired payload size.
- * @param max_frame_size size of desired max payload in bytes
+ *
+ * @important This function calculates required buffer size based on CRC32
+ *
+ * @param mtu size of desired max payload in bytes
  * @return size of the buffer required
  */
-int hdlc_ll_get_buf_size( int max_frame_size );
+int hdlc_ll_get_buf_size( int mtu );
+
+/**
+ * Returns minimum buffer size, required to hold hdlc low level data for desired payload size.
+ *
+ * @param mtu size of desired max payload in bytes
+ * @return size of the buffer required
+ */
+int hdlc_ll_get_buf_size_ex( int mtu, hdlc_crc_t crc_type );
 
 /**
  * @}

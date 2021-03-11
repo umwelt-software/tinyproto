@@ -1,5 +1,5 @@
 /*
-    Copyright 2016 (C) Alexey Dynda
+    Copyright 2016, 2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -187,6 +187,13 @@ uint16_t chksum(uint16_t sum, const uint8_t* data, int data_length)
 #endif
 
 
-
+int get_crc_field_size(hdlc_crc_t crc_type)
+{
+    if ( crc_type == 0xFF )
+    {
+        return 0;
+    }
+    return (int)crc_type / 8;
+}
 
 

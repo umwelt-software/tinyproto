@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2019 (C) Alexey Dynda
+    Copyright 2016-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -67,6 +67,12 @@ typedef enum
     HDLC_CRC_OFF = 0xFF,  ///< Disable CRC field
 } hdlc_crc_t;
 
+/**
+ * returns crc field size in bytes
+ * @param crc_type crc type
+ * @return crc field size in bytes
+ */
+extern int get_crc_field_size(hdlc_crc_t crc_type);
 
 #ifdef __cplusplus
 }

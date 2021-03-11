@@ -142,8 +142,9 @@ static PyObject *Hdlc_begin(Hdlc *self)
     init.crc_type = self->crc_type;
     init.on_frame_read = on_frame_read;
     init.on_frame_sent = on_frame_sent;
-    init.buf_size = hdlc_ll_get_buf_size( self->mtu );
-    init.buf = malloc( init.buf_size );
+    init.buf_size = hdlc_ll_get_buf_size_ex( self->mtu, self->crc_type );
+    self->buffer = PyObject_Malloc( init.buf_size );
+    init.buf = self->buffer;
     int result = hdlc_ll_init( &self->handle, &init );
     return PyLong_FromLong((long)result);
 }
@@ -152,6 +153,8 @@ static PyObject *Hdlc_end(Hdlc *self)
 {
     hdlc_ll_close( self->handle );
     self->handle = NULL;
+    PyObject_Free( self->buffer );
+    self->buffer = NULL;
     Py_RETURN_NONE;
 }
 

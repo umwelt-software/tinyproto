@@ -119,13 +119,14 @@ static PyObject *Fd_begin(Fd *self)
     init.on_frame_cb = on_frame_read;
     init.on_sent_cb = on_frame_sent;
     init.crc_type = self->crc_type;
-    init.buffer_size = tiny_fd_buffer_size_by_mtu( self->mtu, self->window_size );
-    // TODO: Don't forget to free the memory
-    init.buffer = malloc( init.buffer_size );
+    init.buffer_size = tiny_fd_buffer_size_by_mtu_ex( self->mtu, self->window_size, init.crc_type );
+    self->buffer = PyObject_Malloc( init.buffer_size );
+    init.buffer = self->buffer;
     init.send_timeout = 1000;
     init.retry_timeout = 200;
     init.retries = 2;
     init.window_frames = self->window_size;
+    init.mtu = self->mtu;
     int result = tiny_fd_init( &self->handle, &init );
     return PyLong_FromLong((long)result);
 }
@@ -134,6 +135,8 @@ static PyObject *Fd_end(Fd *self)
 {
     tiny_fd_close( self->handle );
     self->handle = NULL;
+    PyObject_Free( self->buffer );
+    self->buffer = NULL;
     Py_RETURN_NONE;
 }
 
@@ -144,7 +147,7 @@ static PyObject *Fd_send(Fd *self, PyObject *args)
     {
         return NULL;
     }
-    int result = tiny_fd_send( self->handle, buffer.buf, buffer.len );
+    int result = tiny_fd_send_packet( self->handle, buffer.buf, buffer.len );
     PyBuffer_Release( &buffer );
     return PyLong_FromLong((long)result);
 }

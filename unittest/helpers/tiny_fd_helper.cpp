@@ -47,7 +47,7 @@ TinyHelperFd::TinyHelperFd(FakeEndpoint * endpoint,
 
 int TinyHelperFd::send(uint8_t *buf, int len)
 {
-    return tiny_fd_send(m_handle, buf, len);
+    return tiny_fd_send_packet(m_handle, buf, len);
 }
 
 void TinyHelperFd::MessageSender(TinyHelperFd *helper, int count, std::string msg)
