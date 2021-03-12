@@ -147,9 +147,9 @@ static int parse_args(int argc, char *argv[])
 //================================== FD ======================================
 
 tiny_serial_handle_t s_serialFd;
-Tiny::ProtoFdD *s_protoFd = nullptr;
+tinyproto::FdD *s_protoFd = nullptr;
 
-void onReceiveFrameFd(Tiny::IPacket &pkt)
+void onReceiveFrameFd(tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size() );
@@ -163,7 +163,7 @@ void onReceiveFrameFd(Tiny::IPacket &pkt)
     }
 }
 
-void onSendFrameFd(Tiny::IPacket &pkt)
+void onSendFrameFd(tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)pkt.size() );
@@ -173,7 +173,7 @@ void onSendFrameFd(Tiny::IPacket &pkt)
 static int run_fd(tiny_serial_handle_t port)
 {
     s_serialFd = port;
-    Tiny::ProtoFdD proto( tiny_fd_buffer_size_by_mtu( s_packetSize, s_windowSize ) );
+    tinyproto::FdD proto( tiny_fd_buffer_size_by_mtu( s_packetSize, s_windowSize ) );
     proto.enableCrc( s_crc );
     // Set window size to 4 frames. This should be the same value, used by other size
     proto.setWindowSize( s_windowSize );
@@ -186,12 +186,12 @@ static int run_fd(tiny_serial_handle_t port)
     s_protoFd = &proto;
 
     proto.begin();
-    std::thread rxThread( [](Tiny::ProtoFdD &proto)->void {
+    std::thread rxThread( [](tinyproto::FdD &proto)->void {
         while (!s_terminate) {
             proto.run_rx( [](void *u, void *b, int s)->int { return tiny_serial_read(s_serialFd, b, s); } );
         }
     }, std::ref(proto) );
-    std::thread txThread( [](Tiny::ProtoFdD &proto)->void {
+    std::thread txThread( [](tinyproto::FdD &proto)->void {
         while (!s_terminate) {
             proto.run_tx( [](void *u, const void *b, int s)->int { return tiny_serial_send(s_serialFd, b, s); } );
         }
@@ -205,7 +205,7 @@ static int run_fd(tiny_serial_handle_t port)
     {
         if (s_generatorEnabled)
         {
-            Tiny::PacketD packet(s_packetSize);
+            tinyproto::PacketD packet(s_packetSize);
             packet.put("Generated frame. test in progress");
             if ( proto.write( packet.data(), packet.size() ) < 0 )
             {
@@ -238,14 +238,14 @@ static int run_fd(tiny_serial_handle_t port)
 static int run_light(tiny_serial_handle_t port)
 {
     s_serialFd = port;
-    Tiny::ProtoLight proto;
+    tinyproto::Light proto;
     proto.enableCrc( s_crc );
 
     proto.begin( [](void *a, const void *b, int c)->int { return tiny_serial_send(s_serialFd,b,c); },
                  [](void *a, void *b, int c)->int { return tiny_serial_read(s_serialFd,b,c); } );
-    std::thread rxThread( [](Tiny::ProtoLight &proto)->void
+    std::thread rxThread( [](tinyproto::Light &proto)->void
     {
-        Tiny::PacketD packet(s_packetSize + 4);
+        tinyproto::PacketD packet(s_packetSize + 4);
         while (!s_terminate) {
             if (proto.read(packet) > 0) {
                s_receivedBytes += packet.size();
@@ -270,7 +270,7 @@ static int run_light(tiny_serial_handle_t port)
     {
         if (s_generatorEnabled)
         {
-            Tiny::PacketD packet(s_packetSize);
+            tinyproto::PacketD packet(s_packetSize);
             packet.put("Generated frame. test in progress");
             if ( proto.write( packet ) < 0 )
             {

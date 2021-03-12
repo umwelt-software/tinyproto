@@ -25,6 +25,7 @@
 #include <string.h>
 #include "helpers/tiny_hdlc_helper.h"
 #include "helpers/fake_connection.h"
+#include <TinyProtocolHdlc.h>
 
 
 TEST_GROUP(HDLC)
@@ -226,4 +227,17 @@ TEST(HDLC, single_send)
     uint8_t data[ sizeof(frame) ]{};
     conn.endpoint1().read( data, sizeof(data) );
     MEMCMP_EQUAL( frame, data, sizeof(frame) );
+}
+
+
+TEST(HDLC, hdlc_ll_missalignment)
+{
+    // Test to send 7E 7E XX XX 7E
+
+    // On frame sent is not defined
+}
+
+TEST(HDLC, hdlc_send_escape_chars)
+{
+    // Send escape 0x7E 0x7D
 }

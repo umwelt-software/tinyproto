@@ -15,7 +15,7 @@
  \subsection arduino_tiny_init Initialization
 
 @code{.cpp}
-Tiny::ProtoLight proto;
+tinyproto::Light proto;
 
 void setup()
 {
@@ -29,7 +29,7 @@ void setup()
 
 First variant: without using any helpers to work with data
 @code{.cpp}
-Tiny::ProtoLight proto;
+tinyproto::Light proto;
 
 /* The buffer must be defined globally */
 uint8_t g_buffer[16];
@@ -61,17 +61,17 @@ void loop()
 
 Second variant: with using special helper to pack the data being sent
 @code{.cpp}
-Tiny::Proto proto;
+tinyproto::Proto proto;
 
 /* The buffer must be defined globally */
-Tiny::Packet<16> packet;
+tinyproto::Packet<16> packet;
 
 void loop()
 {
     if (needToSend)
     {
         /* Create helper object to simplify packing of data being sent */
-        Tiny::Packet<16> packet;
+        tinyproto::Packet<16> packet;
 
         /* Pack data you want to send here */
         packet.put( "message" );
@@ -93,7 +93,7 @@ void loop()
  \subsection arduino_tiny_close Stopping communication
 
 @code{.cpp}
-Tiny::Proto proto;
+tinyproto::Proto proto;
 
 void loop()
 {

@@ -37,7 +37,7 @@
 
 #include <stdio.h>
 
-namespace Tiny {
+namespace tinyproto {
 
 /**
  * Describes packet entity and provides API methods to
@@ -172,10 +172,9 @@ public:
     uint8_t &operator[]      (size_t idx) { return m_buf[idx]; }
 
 private:
-    friend class        ProtoHdlc;
-    friend class        ProtoHd;
-    friend class        IProtoFd;
-    friend class        ProtoLight;
+    friend class        Hdlc;
+    friend class        IFd;
+    friend class        Light;
 
     uint8_t*            m_buf;
     int                 m_size;

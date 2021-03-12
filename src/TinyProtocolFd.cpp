@@ -27,22 +27,22 @@
 
 #include "TinyProtocolFd.h"
 
-namespace Tiny
+namespace tinyproto
 {
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-void IProtoFd::onReceiveInternal(void *handle, uint8_t *pdata, int size)
+void IFd::onReceiveInternal(void *handle, uint8_t *pdata, int size)
 {
-    (reinterpret_cast<IProtoFd*>(handle))->onReceive(pdata, size);
+    (reinterpret_cast<IFd*>(handle))->onReceive(pdata, size);
 }
 
-void IProtoFd::onSendInternal(void *handle, uint8_t *pdata, int size)
+void IFd::onSendInternal(void *handle, uint8_t *pdata, int size)
 {
-    (reinterpret_cast<IProtoFd*>(handle))->onSend(pdata, size);
+    (reinterpret_cast<IFd*>(handle))->onSend(pdata, size);
 }
 
-void IProtoFd::begin()
+void IFd::begin()
 {
     tiny_fd_init_t        init{};
     init.pdata            = this;
@@ -59,65 +59,65 @@ void IProtoFd::begin()
     tiny_fd_init( &m_handle, &init  );
 }
 
-void IProtoFd::end()
+void IFd::end()
 {
     if ( m_bufferSize == 0 ) return;
     tiny_fd_close( m_handle );
 }
 
-int IProtoFd::write(const char* buf, int size)
+int IFd::write(const char* buf, int size)
 {
     return tiny_fd_send_packet( m_handle, buf, size );
 }
 
-int IProtoFd::write(const IPacket &pkt)
+int IFd::write(const IPacket &pkt)
 {
     return tiny_fd_send_packet( m_handle, pkt.m_buf, pkt.m_len );
 }
 
-int IProtoFd::run_rx(const void *data, int len)
+int IFd::run_rx(const void *data, int len)
 {
     return tiny_fd_on_rx_data( m_handle, data, len);
 }
 
-int IProtoFd::run_rx(read_block_cb_t read_func)
+int IFd::run_rx(read_block_cb_t read_func)
 {
     return tiny_fd_run_rx( m_handle, read_func );
 }
 
-int IProtoFd::run_tx(void *data, int max_size)
+int IFd::run_tx(void *data, int max_size)
 {
     return tiny_fd_get_tx_data( m_handle, data, max_size );
 }
 
-int IProtoFd::run_tx(write_block_cb_t write_func)
+int IFd::run_tx(write_block_cb_t write_func)
 {
     return tiny_fd_run_tx( m_handle, write_func );
 }
 
-void IProtoFd::disableCrc()
+void IFd::disableCrc()
 {
     m_crc = HDLC_CRC_OFF;
 }
 
-void IProtoFd::enableCrc(hdlc_crc_t crc)
+void IFd::enableCrc(hdlc_crc_t crc)
 {
     m_crc = crc;
 }
 
-bool IProtoFd::enableCheckSum()
+bool IFd::enableCheckSum()
 {
     m_crc = HDLC_CRC_8;
     return true;
 }
 
-bool IProtoFd::enableCrc16()
+bool IFd::enableCrc16()
 {
     m_crc = HDLC_CRC_16;
     return true;
 }
 
-bool IProtoFd::enableCrc32()
+bool IFd::enableCrc32()
 {
     m_crc = HDLC_CRC_32;
     return true;

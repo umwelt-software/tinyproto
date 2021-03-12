@@ -36,7 +36,7 @@
 #   include <string.h>
 #endif
 
-namespace Tiny {
+namespace tinyproto {
 
 /**
  * @ingroup LIGHT_API
@@ -48,10 +48,10 @@ namespace Tiny {
  *  Remember that you may use always C-style API functions
  *  instead C++. Please refer to documentation.
  */
-class ProtoLight
+class Light
 {
 public:
-    inline ProtoLight(): m_data{} { }
+    inline Light(): m_data{} { }
 
     /**
      * Initializes protocol internal variables.

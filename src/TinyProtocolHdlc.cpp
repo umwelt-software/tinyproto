@@ -27,24 +27,24 @@
 
 #include "TinyProtocolHdlc.h"
 
-namespace Tiny
+namespace tinyproto
 {
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-int ProtoHdlc::onReceiveInternal(void *handle, void *pdata, int size)
+int Hdlc::onReceiveInternal(void *handle, void *pdata, int size)
 {
-    (reinterpret_cast<ProtoHdlc*>(handle))->onReceive((uint8_t *)pdata, size);
+    (reinterpret_cast<Hdlc*>(handle))->onReceive((uint8_t *)pdata, size);
     return 0;
 }
 
-int ProtoHdlc::onSendInternal(void *handle, const void *pdata, int size)
+int Hdlc::onSendInternal(void *handle, const void *pdata, int size)
 {
-    (reinterpret_cast<ProtoHdlc*>(handle))->onSend((const uint8_t *)pdata, size);
+    (reinterpret_cast<Hdlc*>(handle))->onSend((const uint8_t *)pdata, size);
     return 0;
 }
 
-void ProtoHdlc::begin(write_block_cb_t writecb,
+void Hdlc::begin(write_block_cb_t writecb,
                      read_block_cb_t readcb)
 {
     m_data.send_tx          = writecb;
@@ -59,60 +59,60 @@ void ProtoHdlc::begin(write_block_cb_t writecb,
     m_handle = hdlc_init( &m_data  );
 }
 
-void ProtoHdlc::begin()
+void Hdlc::begin()
 {
     begin(nullptr, nullptr);
 }
 
-void ProtoHdlc::end()
+void Hdlc::end()
 {
     if ( m_bufferSize == 0 ) return;
     hdlc_close( m_handle );
 }
 
-int ProtoHdlc::write(const char* buf, int size)
+int Hdlc::write(const char* buf, int size)
 {
     return hdlc_send( m_handle, buf, size, 0 );
 }
 
-int ProtoHdlc::write(const IPacket &pkt)
+int Hdlc::write(const IPacket &pkt)
 {
     return write( (char *)pkt.m_buf, pkt.m_len );
 }
 
-int ProtoHdlc::run_rx(const void *data, int len)
+int Hdlc::run_rx(const void *data, int len)
 {
     return hdlc_run_rx( m_handle, data, len, nullptr);
 }
 
-int ProtoHdlc::run_tx(void *data, int max_len)
+int Hdlc::run_tx(void *data, int max_len)
 {
     return hdlc_get_tx_data( m_handle, data, max_len );
 }
 
-void ProtoHdlc::disableCrc()
+void Hdlc::disableCrc()
 {
     m_crc = HDLC_CRC_OFF;
 }
 
-void ProtoHdlc::enableCrc(hdlc_crc_t crc)
+void Hdlc::enableCrc(hdlc_crc_t crc)
 {
     m_crc = crc;
 }
 
-bool ProtoHdlc::enableCheckSum()
+bool Hdlc::enableCheckSum()
 {
     m_crc = HDLC_CRC_8;
     return true;
 }
 
-bool ProtoHdlc::enableCrc16()
+bool Hdlc::enableCrc16()
 {
     m_crc = HDLC_CRC_16;
     return true;
 }
 
-bool ProtoHdlc::enableCrc32()
+bool Hdlc::enableCrc32()
 {
     m_crc = HDLC_CRC_32;
     return true;

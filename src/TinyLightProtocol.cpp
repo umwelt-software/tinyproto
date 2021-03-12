@@ -27,39 +27,39 @@
 
 #include "TinyLightProtocol.h"
 
-namespace Tiny
+namespace tinyproto
 {
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-void ProtoLight::begin(write_block_cb_t writecb,
+void Light::begin(write_block_cb_t writecb,
                   read_block_cb_t readcb)
 {
     m_data.crc_type = m_crc;
     tiny_light_init(&m_data, writecb, readcb, this);
 }
 
-void ProtoLight::end()
+void Light::end()
 {
     tiny_light_close(&m_data);
 }
 
-int ProtoLight::write(char* buf, int size)
+int Light::write(char* buf, int size)
 {
     return tiny_light_send(&m_data, (uint8_t*)buf, size);
 }
 
-int ProtoLight::read(char *buf, int size)
+int Light::read(char *buf, int size)
 {
     return tiny_light_read(&m_data, (uint8_t*)buf, size);
 }
 
-int ProtoLight::write(const IPacket &pkt)
+int Light::write(const IPacket &pkt)
 {
     return tiny_light_send(&m_data, pkt.m_buf, pkt.m_len) > 0;
 }
 
-int ProtoLight::read(IPacket &pkt)
+int Light::read(IPacket &pkt)
 {
     int len = tiny_light_read(&m_data, pkt.m_buf, pkt.m_size);
     pkt.m_p = 0;
@@ -67,17 +67,17 @@ int ProtoLight::read(IPacket &pkt)
     return len;
 }
 
-void ProtoLight::disableCrc()
+void Light::disableCrc()
 {
     m_crc = HDLC_CRC_OFF;
 }
 
-void ProtoLight::enableCrc(hdlc_crc_t crc)
+void Light::enableCrc(hdlc_crc_t crc)
 {
     m_crc = crc;
 }
 
-bool ProtoLight::enableCheckSum()
+bool Light::enableCheckSum()
 {
 #if defined(CONFIG_ENABLE_CHECKSUM)
     m_crc = HDLC_CRC_8;
@@ -87,7 +87,7 @@ bool ProtoLight::enableCheckSum()
 #endif
 }
 
-bool ProtoLight::enableCrc16()
+bool Light::enableCrc16()
 {
 #if defined(CONFIG_ENABLE_FCS16)
     m_crc = HDLC_CRC_16;
@@ -97,7 +97,7 @@ bool ProtoLight::enableCrc16()
 #endif
 }
 
-bool ProtoLight::enableCrc32()
+bool Light::enableCrc32()
 {
 #if defined(CONFIG_ENABLE_FCS32)
     m_crc = HDLC_CRC_32;
@@ -122,7 +122,7 @@ static int readFromSerial(void *p, void *b, int s)
 }
 
 
-void ProtoLight::beginToSerial()
+void Light::beginToSerial()
 {
     Serial.setTimeout( 100 );
     begin(writeToSerial, readFromSerial);

@@ -4,7 +4,7 @@
 #include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
-Tiny::ProtoLight  proto;
+tinyproto::Light  proto;
 
 void setup() {
     /* No timeout, since we want non-blocking UART operations */
@@ -18,11 +18,11 @@ void setup() {
 }
 
 /* Specify buffer for packets to send and receive */
-Tiny::Packet<32> inPacket;
+tinyproto::Packet<32> inPacket;
 
 void loop()
 {
-    Tiny::Packet<32> outPacket;
+    tinyproto::Packet<32> outPacket;
     /* Prepare data you want to send here - null-terminated string "DATA" */
     outPacket.put("DATA");
     /* Send packet over UART to other side */

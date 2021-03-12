@@ -35,7 +35,7 @@
 #   include <string.h>
 #endif
 
-namespace Tiny {
+namespace tinyproto {
 
 /**
  * @ingroup FULL_DUPLEX_API
@@ -44,29 +44,29 @@ namespace Tiny {
 
 
 /**
- *  IProtoFd class incapsulates Full Duplex Protocol functionality.
+ *  IFd class incapsulates Full Duplex Protocol functionality.
  *  Full Duplex version of the Protocol allows to send messages with
  *  confirmation.
  *  Remember that you may use always C-style API functions
  *  instead C++. Please refer to documentation.
  */
-class IProtoFd
+class IFd
 {
 public:
-    friend class ProtoFdD;
+    friend class FdD;
     /**
-     * Initializes IProtoFd object
+     * Initializes IFd object
      * @param buffer - buffer to store the frames being received.
      * @param bufferSize - size of the buffer
      */
-    IProtoFd(void * buffer,
+    IFd(void * buffer,
              int    bufferSize)
          : m_buffer( (uint8_t *)buffer )
          , m_bufferSize( bufferSize )
     {
     }
 
-    virtual ~IProtoFd() = default;
+    virtual ~IFd() = default;
 
     /**
      * Initializes protocol internal variables.
@@ -266,10 +266,10 @@ private:
  * This is class, which allocates buffers statically. Use it for systems with low resources.
  */
 template <int S>
-class ProtoFd: public IProtoFd
+class Fd: public IFd
 {
 public:
-    ProtoFd(): IProtoFd( m_data, S ) {}
+    Fd(): IFd( m_data, S ) {}
 private:
     uint8_t m_data[S]{};
 };
@@ -279,15 +279,15 @@ private:
  * We need to have separate class for this, as on small microcontrollers dynamic allocation
  * in basic class increases flash consumption, even if dynamic memory is not used.
  */
-class ProtoFdD: public IProtoFd
+class FdD: public IFd
 {
 public:
     /**
      * Creates instance of Full duplex protocol with dynamically allocated buffer.
      * Use this class only on powerful microcontrollers.
      */
-    explicit ProtoFdD( int size ): IProtoFd( new uint8_t[size], size ) { }
-    ~ProtoFdD() { delete[] m_buffer; }
+    explicit FdD( int size ): IFd( new uint8_t[size], size ) { }
+    ~FdD() { delete[] m_buffer; }
 private:
 };
 

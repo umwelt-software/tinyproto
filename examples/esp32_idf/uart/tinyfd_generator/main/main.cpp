@@ -37,20 +37,20 @@
 
 /* Creating protocol object is simple. Lets define 256 bytes as maximum. *
  * size for the packet and use 7 packets in outgoing queue.             */
-Tiny::ProtoFdD proto( tiny_fd_buffer_size_by_mtu( 256, WINDOW_SIZE ) );
+tinyproto::FdD proto( tiny_fd_buffer_size_by_mtu( 256, WINDOW_SIZE ) );
 
 uint32_t s_receivedBytes = 0;
 uint32_t s_receivedOverheadBytes = 0;
 uint32_t s_sentBytes = 0;
 uint32_t s_sentOverheadBytes = 0;
 
-void onReceive(Tiny::IPacket &pkt)
+void onReceive(tinyproto::IPacket &pkt)
 {
     s_receivedBytes += pkt.size();
     s_receivedOverheadBytes += /* ESCAPE */ 2 + /* CRC16 */ 2 + /* I header */ 2 ;
 }
 
-void onSendFrameFd(Tiny::IPacket &pkt)
+void onSendFrameFd(tinyproto::IPacket &pkt)
 {
     s_sentBytes += pkt.size();
     s_sentOverheadBytes += /* ESCAPE */ 2 + /* CRC16 */ 2 + /* I header */ 2 ;
@@ -117,7 +117,7 @@ void main_task(void *args)
 #endif
     auto startTs = std::chrono::steady_clock::now();
 
-    Tiny::PacketD packet(GENERATED_PACKET_SIZE);
+    tinyproto::PacketD packet(GENERATED_PACKET_SIZE);
     packet.put("Generated frame. test in progress");
 
     for(;;)

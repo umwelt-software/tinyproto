@@ -17,7 +17,7 @@
 #include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
-Tiny::ProtoLight  proto;
+tinyproto::Light  proto;
 
 void setup()
 {
@@ -32,7 +32,7 @@ void setup()
 }
 
 /* Specify buffer for packets to send and receive */
-Tiny::Packet<256> packet;
+tinyproto::Packet<256> packet;
 
 void loop()
 {

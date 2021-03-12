@@ -35,7 +35,7 @@
 #   include <string.h>
 #endif
 
-namespace Tiny {
+namespace tinyproto {
 
 /**
  * @ingroup HDLC_API
@@ -44,27 +44,27 @@ namespace Tiny {
 
 
 /**
- *  ProtoHdlc class incapsulates hdlc Protocol functionality.
+ *  Hdlc class incapsulates hdlc Protocol functionality.
  *  hdlc version of the Protocol allows to send messages with
  *  confirmation.
  *  Remember that you may use always C-style API functions
  *  instead C++. Please refer to documentation.
  */
-class ProtoHdlc
+class Hdlc
 {
 public:
     /**
-     * Initializes ProtoHdlc object
+     * Initializes Hdlc object
      * @param buffer - buffer to store the frames being received.
      * @param bufferSize - size of the buffer
      */
-    ProtoHdlc(void *buffer, int bufferSize)
+    Hdlc(void *buffer, int bufferSize)
         : m_buffer( buffer )
         , m_bufferSize( bufferSize )
     {
     }
 
-    virtual ~ProtoHdlc() = default;
+    virtual ~Hdlc() = default;
 
     /**
      * Initializes protocol internal variables.

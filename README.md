@@ -80,8 +80,8 @@ Do not forget to add TINY_CUSTOM_PLATFORM define to your compilation flags.
 
 Usage of light Tiny Protocol in C++ can look like this:
 ```.cpp
-Tiny::ProtoLight  proto;
-Tiny::Packet<256> packet;
+tinyproto::Light  proto;
+tinyproto::Packet<256> packet;
 
 void setup() {
     ...
@@ -101,9 +101,9 @@ void loop() {
 
 Example of using full duplex Tiny Protocol in C++ is a little bit bigger, but it is still simple:
 ```.cpp
-Tiny::ProtoFd<FD_MIN_BUF_SIZE(64,4)>  proto;
+tinyproto::Fd<FD_MIN_BUF_SIZE(64,4)>  proto;
 
-void onReceive(Tiny::IPacket &pkt) {
+void onReceive(tinyproto::IPacket &pkt) {
     // Process message here, you can do with the message, what you need
     // Let's send it back to the sender ;)
     if ( proto.write(pkt) == TINY_ERR_TIMEOUT ) {

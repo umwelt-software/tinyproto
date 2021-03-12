@@ -14,7 +14,7 @@
 #include <TinyProtocol.h>
 
 /* Creating protocol object is simple */
-Tiny::ProtoLight  proto;
+tinyproto::Light  proto;
 
 void setup() {
     /* No timeout, since we want non-blocking UART operations. */
@@ -28,7 +28,7 @@ void setup() {
 }
 
 /* Create special class, which simplifies the work with buffer */
-Tiny::Packet<16> g_packet;
+tinyproto::Packet<16> g_packet;
 
 void loop()
 {
