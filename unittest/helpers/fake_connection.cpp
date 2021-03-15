@@ -29,14 +29,13 @@ void FakeConnection::TransferDataStatic(FakeConnection *conn)
 void FakeConnection::TransferData()
 {
     auto startTs = std::chrono::steady_clock::now();
-    while (!m_stopped)
+    while ( !m_stopped )
     {
         std::this_thread::sleep_for(std::chrono::microseconds(m_interval_us));
         auto endTs = std::chrono::steady_clock::now();
         int bytes = (endTs - startTs) / std::chrono::microseconds(m_interval_us);
         startTs += bytes * std::chrono::microseconds(m_interval_us);
-        m_line1.TransferData( bytes );
-        m_line2.TransferData( bytes );
+        m_line1.TransferData(bytes);
+        m_line2.TransferData(bytes);
     }
 }
-

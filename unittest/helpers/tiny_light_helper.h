@@ -26,18 +26,18 @@
 class TinyLightHelper
 {
 private:
-    STinyLightData     m_handle;
+    STinyLightData m_handle;
+
 public:
-    TinyLightHelper(FakeEndpoint         * endpoint,
-                   int rx_buf_size = 1024 );
+    TinyLightHelper(FakeEndpoint *endpoint, int rx_buf_size = 1024);
     ~TinyLightHelper();
     int send(uint8_t *buf, int len);
     int read(uint8_t *buf, int len);
+
 private:
     static uint32_t s_handleOffset;
-    FakeEndpoint * m_endpoint;
+    FakeEndpoint *m_endpoint;
 
-    static int    read_data(void * appdata, void * data, int length);
-    static int    write_data(void * appdata, const void * data, int length);
+    static int read_data(void *appdata, void *data, int length);
+    static int write_data(void *appdata, const void *data, int length);
 };
-

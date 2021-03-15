@@ -27,15 +27,15 @@
  */
 
 #ifndef CONFIG_ENABLE_CHECKSUM
-#   define CONFIG_ENABLE_CHECKSUM
+#define CONFIG_ENABLE_CHECKSUM
 #endif
 
 #ifndef CONFIG_ENABLE_FCS16
-#   define CONFIG_ENABLE_FCS16
+#define CONFIG_ENABLE_FCS16
 #endif
 
 #ifndef CONFIG_ENABLE_FCS32
-#   define CONFIG_ENABLE_FCS32
+#define CONFIG_ENABLE_FCS32
 #endif
 
 /**
@@ -51,11 +51,10 @@ typedef uintptr_t tiny_mutex_t;
 typedef struct
 {
     /** Mutex object to protect bits */
-    tiny_mutex_t  mutex;
+    tiny_mutex_t mutex;
     /** Current state of bits */
-    uint8_t       bits;
+    uint8_t bits;
 } tiny_events_t;
-
 
 /**
  * Structure of HAL abstraction layer
@@ -90,8 +89,7 @@ typedef struct
      * Optional, but remember, default implementation relies on GCC built-in atomic functions
      * and tiny_sleep() implementation
      */
-    uint8_t (*events_wait)(tiny_events_t *events, uint8_t bits,
-                             uint8_t clear, uint32_t timeout);
+    uint8_t (*events_wait)(tiny_events_t *events, uint8_t bits, uint8_t clear, uint32_t timeout);
 
     /** Optional, but remember, default implementation relies on GCC built-in atomic functions */
     uint8_t (*events_check_int)(tiny_events_t *events, uint8_t bits, uint8_t clear);

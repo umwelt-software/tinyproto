@@ -23,15 +23,15 @@
 
 static tiny_mutex_t s_mutex;
 
-static uint16_t       s_uid = 0;
+static uint16_t s_uid = 0;
 
 void tiny_list_init(void)
 {
     static bool initialized = false;
-    if (!initialized)
+    if ( !initialized )
     {
         initialized = true;
-        tiny_mutex_create( &s_mutex );
+        tiny_mutex_create(&s_mutex);
     }
 }
 
@@ -40,18 +40,18 @@ void tiny_list_init(void)
 uint16_t tiny_list_add(list_element **head, list_element *element)
 {
     uint16_t uid;
-    tiny_mutex_lock( &s_mutex );
+    tiny_mutex_lock(&s_mutex);
 
     uid = s_uid++;
     element->pnext = *head;
     element->pprev = 0;
-    if (*head)
+    if ( *head )
     {
         (*head)->pprev = element;
     }
     *head = element;
 
-    tiny_mutex_unlock( &s_mutex );
+    tiny_mutex_unlock(&s_mutex);
     return uid & 0x0FFF;
 }
 
@@ -59,57 +59,55 @@ uint16_t tiny_list_add(list_element **head, list_element *element)
 
 void tiny_list_remove(list_element **head, list_element *element)
 {
-    tiny_mutex_lock( &s_mutex );
-    if (element == *head)
+    tiny_mutex_lock(&s_mutex);
+    if ( element == *head )
     {
         *head = element->pnext;
-        if (*head)
+        if ( *head )
         {
             (*head)->pprev = 0;
         }
     }
     else
     {
-        if (element->pprev)
+        if ( element->pprev )
         {
             element->pprev->pnext = element->pnext;
         }
-        if (element->pnext)
+        if ( element->pnext )
         {
             element->pnext->pprev = element->pprev;
         }
     }
     element->pprev = 0;
     element->pnext = 0;
-    tiny_mutex_unlock( &s_mutex );
+    tiny_mutex_unlock(&s_mutex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void tiny_list_clear(list_element **head)
 {
-    tiny_mutex_lock( &s_mutex );
+    tiny_mutex_lock(&s_mutex);
     *head = 0;
-    tiny_mutex_unlock( &s_mutex );
+    tiny_mutex_unlock(&s_mutex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void tiny_list_enumerate(list_element *head,
-                         uint8_t (*enumerate_func)(list_element *element, uint16_t data),
+void tiny_list_enumerate(list_element *head, uint8_t (*enumerate_func)(list_element *element, uint16_t data),
                          uint16_t data)
 {
-    tiny_mutex_lock( &s_mutex );
-    while (head)
+    tiny_mutex_lock(&s_mutex);
+    while ( head )
     {
-        if (!enumerate_func(head, data))
+        if ( !enumerate_func(head, data) )
         {
             break;
         }
         head = head->pnext;
     }
-    tiny_mutex_unlock( &s_mutex );
+    tiny_mutex_unlock(&s_mutex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-

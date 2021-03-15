@@ -20,16 +20,17 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <stdint.h>
 
-/// Unique port handle
-typedef int tiny_serial_handle_t;
+    /// Unique port handle
+    typedef int tiny_serial_handle_t;
 
 /** Invalid serial handle definition */
-#define TINY_SERIAL_INVALID  (-1)
+#define TINY_SERIAL_INVALID (-1)
 
 #ifdef __cplusplus
 }

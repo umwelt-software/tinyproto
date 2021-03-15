@@ -27,11 +27,11 @@
  */
 
 #ifndef CONFIG_ENABLE_CHECKSUM
-#   define CONFIG_ENABLE_CHECKSUM
+#define CONFIG_ENABLE_CHECKSUM
 #endif
 
 #ifndef CONFIG_ENABLE_FCS16
-#   define CONFIG_ENABLE_FCS16
+#define CONFIG_ENABLE_FCS16
 #endif
 
 //#ifndef CONFIG_ENABLE_FCS32
@@ -53,4 +53,3 @@ typedef uint8_t tiny_mutex_t;
 typedef uint8_t tiny_events_t;
 
 #endif
-

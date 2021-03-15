@@ -30,18 +30,18 @@
 #include "proto/hdlc/high_level/hdlc.h"
 
 #ifdef ARDUINO
-#   include <HardwareSerial.h>
+#include <HardwareSerial.h>
 #else
-#   include <string.h>
+#include <string.h>
 #endif
 
-namespace tinyproto {
+namespace tinyproto
+{
 
 /**
  * @ingroup HDLC_API
  * @{
  */
-
 
 /**
  *  Hdlc class incapsulates hdlc Protocol functionality.
@@ -59,8 +59,8 @@ public:
      * @param bufferSize - size of the buffer
      */
     Hdlc(void *buffer, int bufferSize)
-        : m_buffer( buffer )
-        , m_bufferSize( bufferSize )
+        : m_buffer(buffer)
+        , m_bufferSize(bufferSize)
     {
     }
 
@@ -74,8 +74,7 @@ public:
      * @param readcb  - read function from some physical channel
      * @return None
      */
-    void begin          (write_block_cb_t writecb,
-                         read_block_cb_t readcb);
+    void begin(write_block_cb_t writecb, read_block_cb_t readcb);
 
     /**
      * Initializes protocol internal variables.
@@ -98,7 +97,7 @@ public:
      *         zero if nothing is sent
      *         positive - should be equal to size parameter
      */
-    int  write(const char* buf, int size);
+    int write(const char *buf, int size);
 
     /**
      * Sends packet over communication channel.
@@ -108,7 +107,7 @@ public:
      *         zero if nothing is sent
      *         positive - Packet is successfully sent
      */
-    int  write(const IPacket &pkt);
+    int write(const IPacket &pkt);
 
     /**
      * Processes incoming rx data, specified by a user.
@@ -172,13 +171,19 @@ public:
      * Sets receive callback for incoming messages
      * @param on_receive user callback to process incoming messages. The processing must be non-blocking
      */
-    void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr) { m_onReceive = on_receive; };
+    void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr)
+    {
+        m_onReceive = on_receive;
+    };
 
     /**
      * Sets send callback for outgoing messages
      * @param on_send user callback to process outgoing messages. The processing must be non-blocking
      */
-    void setSendCallback(void (*on_send)(IPacket &pkt) = nullptr) { m_onSend = on_send; };
+    void setSendCallback(void (*on_send)(IPacket &pkt) = nullptr)
+    {
+        m_onSend = on_send;
+    };
 
 protected:
     /**
@@ -191,7 +196,8 @@ protected:
     {
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
-        if ( m_onReceive ) m_onReceive( pkt );
+        if ( m_onReceive )
+            m_onReceive(pkt);
     }
 
     /**
@@ -204,37 +210,37 @@ protected:
     {
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
-        if ( m_onSend ) m_onSend( pkt );
+        if ( m_onSend )
+            m_onSend(pkt);
     }
 
 private:
     /** The variable contain protocol state */
-    hdlc_handle_t       m_handle = nullptr;
+    hdlc_handle_t m_handle = nullptr;
 
-    hdlc_struct_t       m_data{};
+    hdlc_struct_t m_data{};
 
-    void               *m_buffer = nullptr;
+    void *m_buffer = nullptr;
 
-    int                 m_bufferSize = 0;
+    int m_bufferSize = 0;
 
-    hdlc_crc_t          m_crc = HDLC_CRC_DEFAULT;
+    hdlc_crc_t m_crc = HDLC_CRC_DEFAULT;
 
     /** Callback, when new frame is received */
-    void              (*m_onReceive)(IPacket &pkt) = nullptr;
+    void (*m_onReceive)(IPacket &pkt) = nullptr;
 
     /** Callback, when new frame is sent */
-    void              (*m_onSend)(IPacket &pkt) = nullptr;
+    void (*m_onSend)(IPacket &pkt) = nullptr;
 
     /** Internal function */
-    static int         onReceiveInternal(void *handle, void *pdata, int size);
+    static int onReceiveInternal(void *handle, void *pdata, int size);
 
     /** Internal function */
-    static int         onSendInternal(void *handle, const void *pdata, int size);
+    static int onSendInternal(void *handle, const void *pdata, int size);
 };
 
 /**
  * @}
  */
 
-} // Tiny namespace
-
+} // namespace tinyproto

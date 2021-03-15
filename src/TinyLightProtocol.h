@@ -31,12 +31,13 @@
 #include "proto/light/tiny_light.h"
 
 #ifdef ARDUINO
-#   include <HardwareSerial.h>
+#include <HardwareSerial.h>
 #else
-#   include <string.h>
+#include <string.h>
 #endif
 
-namespace tinyproto {
+namespace tinyproto
+{
 
 /**
  * @ingroup LIGHT_API
@@ -51,7 +52,10 @@ namespace tinyproto {
 class Light
 {
 public:
-    inline Light(): m_data{} { }
+    inline Light()
+        : m_data{}
+    {
+    }
 
     /**
      * Initializes protocol internal variables.
@@ -61,8 +65,7 @@ public:
      * @param readcb  - read function from some physical channel
      * @return None
      */
-    void begin          (write_block_cb_t writecb,
-                         read_block_cb_t readcb);
+    void begin(write_block_cb_t writecb, read_block_cb_t readcb);
 
 #ifdef ARDUINO
     /**
@@ -80,8 +83,8 @@ public:
      */
     inline void beginToSerial1()
     {
-         begin([](void *p, const void *b, int s)->int { return Serial1.write((const uint8_t *)b, s); },
-               [](void *p, void *b, int s)->int { return Serial1.readBytes((uint8_t *)b, s); });
+        begin([](void *p, const void *b, int s) -> int { return Serial1.write((const uint8_t *)b, s); },
+              [](void *p, void *b, int s) -> int { return Serial1.readBytes((uint8_t *)b, s); });
     }
 #endif
 
@@ -93,8 +96,8 @@ public:
      */
     inline void beginToSerial2()
     {
-         begin([](void *p, const void *b, int s)->int { return Serial2.write((const uint8_t *)b, s); },
-               [](void *p, void *b, int s)->int { return Serial2.readBytes((uint8_t *)b, s); });
+        begin([](void *p, const void *b, int s) -> int { return Serial2.write((const uint8_t *)b, s); },
+              [](void *p, void *b, int s) -> int { return Serial2.readBytes((uint8_t *)b, s); });
     }
 #endif
 
@@ -106,8 +109,8 @@ public:
      */
     inline void beginToSerialUSB()
     {
-         begin([](void *p, const void *b, int s)->int { return SerialUSB.write((const char *)b, s); },
-               [](void *p, void *b, int s)->int { return SerialUSB.readBytes((char *)b, s); });
+        begin([](void *p, const void *b, int s) -> int { return SerialUSB.write((const char *)b, s); },
+              [](void *p, void *b, int s) -> int { return SerialUSB.readBytes((char *)b, s); });
     }
 #endif
 
@@ -116,7 +119,7 @@ public:
     /**
      * Resets protocol state.
      */
-    void end            ();
+    void end();
 
     /**
      * Sends data block over communication channel.
@@ -126,7 +129,7 @@ public:
      *         zero if nothing is sent
      *         positive - should be equal to size parameter
      */
-    int  write          (char* buf, int size);
+    int write(char *buf, int size);
 
     /**
      * Reads data block from communication channel.
@@ -136,7 +139,7 @@ public:
      *         zero if nothing is read
      *         positive - number of bytes read from the channel
      */
-    int  read           (char* buf, int size);
+    int read(char *buf, int size);
 
     /**
      * Sends packet over communication channel.
@@ -146,7 +149,7 @@ public:
      *         zero if nothing is sent
      *         positive - Packet is successfully sent
      */
-    int  write          (const IPacket &pkt);
+    int write(const IPacket &pkt);
 
     /**
      * Reads packet from communication channel.
@@ -156,14 +159,14 @@ public:
      *         zero if nothing is read
      *         positive - Packet is successfully received
      */
-    int  read           (IPacket &pkt);
+    int read(IPacket &pkt);
 
     /**
      * Disable CRC field in the protocol.
      * If CRC field is OFF, then the frame looks like this:
      * 0x7E databytes 0x7E.
      */
-    void disableCrc     ();
+    void disableCrc();
 
     /**
      * Enables CRC by specified bit-size.
@@ -179,7 +182,7 @@ public:
      * @return true if successful
      *         false in case of error.
      */
-    bool enableCheckSum ();
+    bool enableCheckSum();
 
     /**
      * Enables CRC 16-bit field in the protocol. This field
@@ -188,7 +191,7 @@ public:
      * @return true if successful
      *         false in case of error.
      */
-    bool enableCrc16    ();
+    bool enableCrc16();
 
     /**
      * Enables CRC 32-bit field in the protocol. This field
@@ -198,18 +201,18 @@ public:
      * @return true if successful
      *         false in case of error.
      */
-    bool enableCrc32    ();
+    bool enableCrc32();
 
 private:
-    STinyLightData       m_data{};
+    STinyLightData m_data{};
 
-    hdlc_crc_t           m_crc = HDLC_CRC_DEFAULT;
+    hdlc_crc_t m_crc = HDLC_CRC_DEFAULT;
 };
 
 /**
  * @}
  */
 
-} // Tiny namespace
+} // namespace tinyproto
 
 #endif

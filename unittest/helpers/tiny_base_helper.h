@@ -28,43 +28,42 @@
 class BaseHelper
 {
 public:
-    BaseHelper(FakeEndpoint * endpoint,
-               int rxBufferSize );
+    BaseHelper(FakeEndpoint *endpoint, int rxBufferSize);
     virtual ~BaseHelper();
     virtual int run_rx() = 0;
     virtual int run_tx() = 0;
     int run(bool forked);
     void stop();
-protected:
-    FakeEndpoint * m_endpoint;
-    std::thread * m_receiveThread = nullptr;
-    std::thread * m_sendThread = nullptr;
-    std::atomic<bool> m_forceStop;
-    uint8_t     * m_buffer;
 
-    static void   receiveThread(BaseHelper *p);
+protected:
+    FakeEndpoint *m_endpoint;
+    std::thread *m_receiveThread = nullptr;
+    std::thread *m_sendThread = nullptr;
+    std::atomic<bool> m_forceStop;
+    uint8_t *m_buffer;
+
+    static void receiveThread(BaseHelper *p);
     void wait_until_rx_count(int count, uint32_t timeout);
-    static void   sendThread(BaseHelper *p);
+    static void sendThread(BaseHelper *p);
 };
 
-template <typename T>
-class IBaseHelper: public BaseHelper
+template <typename T> class IBaseHelper: public BaseHelper
 {
 public:
-     using BaseHelper::BaseHelper;
+    using BaseHelper::BaseHelper;
 
 protected:
-    static int read_data(void * appdata, void * data, int length)
+    static int read_data(void *appdata, void *data, int length)
     {
-        T *helper = reinterpret_cast<T*>(appdata);
-        IBaseHelper<T> * base = helper;
+        T *helper = reinterpret_cast<T *>(appdata);
+        IBaseHelper<T> *base = helper;
         return base->m_endpoint->read((uint8_t *)data, length);
     }
 
-    static int write_data(void * appdata, const void * data, int length)
+    static int write_data(void *appdata, const void *data, int length)
     {
-        T *helper = reinterpret_cast<T*>(appdata);
-        IBaseHelper<T> * base = helper;
+        T *helper = reinterpret_cast<T *>(appdata);
+        IBaseHelper<T> *base = helper;
         return base->m_endpoint->write((const uint8_t *)data, length);
     }
 };

@@ -19,11 +19,9 @@
 
 #include "tiny_light_helper.h"
 
-
 uint32_t TinyLightHelper::s_handleOffset;
 
-TinyLightHelper::TinyLightHelper(FakeEndpoint * endpoint,
-                               int rx_buf_size)
+TinyLightHelper::TinyLightHelper(FakeEndpoint *endpoint, int rx_buf_size)
     : m_handle{}
 {
     s_handleOffset = (uint8_t *)this - (uint8_t *)(&m_handle);
@@ -34,22 +32,21 @@ TinyLightHelper::TinyLightHelper(FakeEndpoint * endpoint,
 
 int TinyLightHelper::send(uint8_t *buf, int len)
 {
-    return tiny_light_send( &m_handle, buf, len );
+    return tiny_light_send(&m_handle, buf, len);
 }
 
 int TinyLightHelper::read(uint8_t *buf, int len)
 {
-    return tiny_light_read( &m_handle, buf, len );
+    return tiny_light_read(&m_handle, buf, len);
 }
 
-int TinyLightHelper::read_data(void * appdata, void * data, int length)
+int TinyLightHelper::read_data(void *appdata, void *data, int length)
 {
-    TinyLightHelper  *helper = reinterpret_cast<TinyLightHelper *>(appdata);
+    TinyLightHelper *helper = reinterpret_cast<TinyLightHelper *>(appdata);
     return helper->m_endpoint->read((uint8_t *)data, length);
 }
 
-
-int TinyLightHelper::write_data(void * appdata, const void * data, int length)
+int TinyLightHelper::write_data(void *appdata, const void *data, int length)
 {
     TinyLightHelper *helper = reinterpret_cast<TinyLightHelper *>(appdata);
     return helper->m_endpoint->write((const uint8_t *)data, length);
@@ -57,6 +54,5 @@ int TinyLightHelper::write_data(void * appdata, const void * data, int length)
 
 TinyLightHelper::~TinyLightHelper()
 {
-    tiny_light_close( &m_handle );
+    tiny_light_close(&m_handle);
 }
-

@@ -19,10 +19,9 @@
 
 #include "fake_endpoint.h"
 
-
 FakeEndpoint::FakeEndpoint(FakeWire &tx, FakeWire &rx)
-   : m_tx(tx)
-   , m_rx(rx)
+    : m_tx(tx)
+    , m_rx(rx)
 {
 }
 
@@ -30,14 +29,12 @@ FakeEndpoint::~FakeEndpoint()
 {
 }
 
-
-int FakeEndpoint::read(uint8_t * data, int length)
+int FakeEndpoint::read(uint8_t *data, int length)
 {
     return m_rx.read(data, length, m_timeout);
 }
 
-
-int FakeEndpoint::write(const uint8_t * data, int length)
+int FakeEndpoint::write(const uint8_t *data, int length)
 {
     return m_tx.write(data, length, m_timeout);
 }

@@ -21,43 +21,34 @@
 #include "hdlc_ll.h"
 #include "fd.h"
 
-
 static PyObject *pants(PyObject *self, PyObject *args)
 {
     int input;
-    if (!PyArg_ParseTuple(args, "i", &input)) {
+    if ( !PyArg_ParseTuple(args, "i", &input) )
+    {
         return NULL;
     }
 
     return PyLong_FromLong((long)input * (long)input);
 }
 
-static PyMethodDef tinyproto_methods[] =
-{
-    {"pants", pants, METH_VARARGS, "Returns a square of an integer."},
-    {NULL, NULL, 0, NULL}
-};
+static PyMethodDef tinyproto_methods[] = {{"pants", pants, METH_VARARGS, "Returns a square of an integer."},
+                                          {NULL, NULL, 0, NULL}};
 
-static struct PyModuleDef tinyproto_definition =
-{
-    PyModuleDef_HEAD_INIT,
-    "tinyproto",
-    "A Python tiny protocol module",
-    -1,
-    tinyproto_methods
-};
+static struct PyModuleDef tinyproto_definition = {PyModuleDef_HEAD_INIT, "tinyproto", "A Python tiny protocol module",
+                                                  -1, tinyproto_methods};
 
 PyMODINIT_FUNC PyInit_tinyproto(void)
 {
     Py_Initialize();
     PyObject *m = PyModule_Create(&tinyproto_definition);
 
-    if (PyType_Ready(&HdlcType) < 0)
+    if ( PyType_Ready(&HdlcType) < 0 )
     {
         return NULL;
     }
 
-    if (PyType_Ready(&FdType) < 0)
+    if ( PyType_Ready(&FdType) < 0 )
     {
         return NULL;
     }

@@ -26,29 +26,55 @@
 class FakeConnection
 {
 public:
-    FakeConnection(): m_line_thread( TransferDataStatic, this ) {}
-    FakeConnection(int p1_hw_size, int p2_hw_size):
-        m_line1(p1_hw_size, p2_hw_size),
-        m_line2(p2_hw_size, p1_hw_size),
-        m_line_thread( TransferDataStatic, this ) {};
-    ~FakeConnection() { m_stopped = true; m_line_thread.join(); }
+    FakeConnection()
+        : m_line_thread(TransferDataStatic, this)
+    {
+    }
+    FakeConnection(int p1_hw_size, int p2_hw_size)
+        : m_line1(p1_hw_size, p2_hw_size)
+        , m_line2(p2_hw_size, p1_hw_size)
+        , m_line_thread(TransferDataStatic, this){};
+    ~FakeConnection()
+    {
+        m_stopped = true;
+        m_line_thread.join();
+    }
 
-    FakeEndpoint& endpoint1() { return m_endpoint1; }
-    FakeEndpoint& endpoint2() { return m_endpoint2; }
+    FakeEndpoint &endpoint1()
+    {
+        return m_endpoint1;
+    }
+    FakeEndpoint &endpoint2()
+    {
+        return m_endpoint2;
+    }
 
-    FakeWire& line1() { return m_line1; }
-    FakeWire& line2() { return m_line2; }
+    FakeWire &line1()
+    {
+        return m_line1;
+    }
+    FakeWire &line2()
+    {
+        return m_line2;
+    }
 
-    void setSpeed( int bps ) { m_interval_us = 1000000 / (bps / 8); }
-    int lostBytes() { return m_line1.lostBytes() + m_line2.lostBytes(); }
+    void setSpeed(int bps)
+    {
+        m_interval_us = 1000000 / (bps / 8);
+    }
+    int lostBytes()
+    {
+        return m_line1.lostBytes() + m_line2.lostBytes();
+    }
+
 private:
-    FakeWire  m_line1{};
-    FakeWire  m_line2{};
+    FakeWire m_line1{};
+    FakeWire m_line2{};
     FakeEndpoint m_endpoint1{m_line1, m_line2};
     FakeEndpoint m_endpoint2{m_line2, m_line1};
-    std::atomic<int>   m_interval_us{ 1000000 / (/*115200*/ 512000 / 8) };
-    std::atomic<bool>  m_stopped{ false };
-    std::thread  m_line_thread;
+    std::atomic<int> m_interval_us{1000000 / (/*115200*/ 512000 / 8)};
+    std::atomic<bool> m_stopped{false};
+    std::thread m_line_thread;
 
     static void TransferDataStatic(FakeConnection *conn);
     void TransferData();

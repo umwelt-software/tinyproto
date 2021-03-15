@@ -28,36 +28,44 @@
 class TinyHdlcHelper: public IBaseHelper<TinyHdlcHelper>
 {
 private:
-    hdlc_struct_t     m_handle;
+    hdlc_struct_t m_handle;
+
 public:
-    TinyHdlcHelper(FakeEndpoint         * endpoint,
-                   const std::function<void(uint8_t*,int)> &onRxFrameCb = nullptr,
-                   const std::function<void(uint8_t*,int)> &onTxFrameCb = nullptr,
-                   int rx_buf_size = 1024,
+    TinyHdlcHelper(FakeEndpoint *endpoint, const std::function<void(uint8_t *, int)> &onRxFrameCb = nullptr,
+                   const std::function<void(uint8_t *, int)> &onTxFrameCb = nullptr, int rx_buf_size = 1024,
                    hdlc_crc_t crc = HDLC_CRC_16);
     ~TinyHdlcHelper();
     int send(const uint8_t *buf, int len, int timeout = 1000);
     void send(int count, const std::string &msg);
     int run_rx() override;
     int run_tx() override;
-    int rx_count() { return m_rx_count; }
-    int tx_count() { return m_tx_count; }
+    int rx_count()
+    {
+        return m_rx_count;
+    }
+    int tx_count()
+    {
+        return m_tx_count;
+    }
 
     void wait_until_rx_count(int count, uint32_t timeout);
 
-    void setMcuMode() { m_tx_from_main = true; }
+    void setMcuMode()
+    {
+        m_tx_from_main = true;
+    }
+
 private:
-    std::function<void(uint8_t*,int)> m_onRxFrameCb;
-    std::function<void(uint8_t*,int)> m_onTxFrameCb;
+    std::function<void(uint8_t *, int)> m_onRxFrameCb;
+    std::function<void(uint8_t *, int)> m_onTxFrameCb;
     bool m_stop_sender = false;
-    std::thread * m_sender_thread = nullptr;
+    std::thread *m_sender_thread = nullptr;
     int m_rx_count = 0;
     int m_tx_count = 0;
     bool m_tx_from_main = false;
 
-    static int    onRxFrame(void *handle, void * buf, int len);
-    static int    onTxFrame(void *handle, const void * buf, int len);
-    static void   MessageSenderStatic( TinyHdlcHelper * helper, int count, std::string msg );
-    void MessageSender( int count, std::string msg );
+    static int onRxFrame(void *handle, void *buf, int len);
+    static int onTxFrame(void *handle, const void *buf, int len);
+    static void MessageSenderStatic(TinyHdlcHelper *helper, int count, std::string msg);
+    void MessageSender(int count, std::string msg);
 };
-

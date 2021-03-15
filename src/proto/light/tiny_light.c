@@ -22,48 +22,45 @@
 #include <stddef.h>
 
 #ifdef CONFIG_ENABLE_STATS
-    #define STATS(x) x
+#define STATS(x) x
 #else
-    #define STATS(x)
+#define STATS(x)
 #endif
 
 /************************************************************
-*
-*  INTERNAL FRAME STRUCTURE
-*
-*   8     any len       8
-* | 7E |  USER DATA  | 7E |
-*
-* 7E is standard frame delimiter (commonly use on layer 2)
-* FCS is standard checksum. Refer to RFC1662 for example.
-* UID is reserved for future usage
-*************************************************************/
+ *
+ *  INTERNAL FRAME STRUCTURE
+ *
+ *   8     any len       8
+ * | 7E |  USER DATA  | 7E |
+ *
+ * 7E is standard frame delimiter (commonly use on layer 2)
+ * FCS is standard checksum. Refer to RFC1662 for example.
+ * UID is reserved for future usage
+ *************************************************************/
 
-#define FLAG_SEQUENCE            0x7E
-#define TINY_ESCAPE_CHAR         0x7D
-#define TINY_ESCAPE_BIT          0x20
+#define FLAG_SEQUENCE 0x7E
+#define TINY_ESCAPE_CHAR 0x7D
+#define TINY_ESCAPE_BIT 0x20
 
 //////////////////////////////////////////////////////////////////////////////
 
 /**************************************************************
-*
-*                 OPEN/CLOSE FUNCTIONS
-*
-***************************************************************/
+ *
+ *                 OPEN/CLOSE FUNCTIONS
+ *
+ ***************************************************************/
 
 static int on_frame_read(void *user_data, void *data, int len);
 static int on_frame_sent(void *user_data, const void *data, int len);
 
-int tiny_light_init(STinyLightData *handle,
-                    write_block_cb_t write_func,
-                    read_block_cb_t read_func,
-                    void *pdata)
+int tiny_light_init(STinyLightData *handle, write_block_cb_t write_func, read_block_cb_t read_func, void *pdata)
 {
-    if (!handle || !write_func || !read_func)
+    if ( !handle || !write_func || !read_func )
     {
         return TINY_ERR_FAILED;
     }
-    hdlc_ll_init_t init={};
+    hdlc_ll_init_t init = {};
     init.user_data = handle;
     init.on_frame_read = on_frame_read;
     init.on_frame_sent = on_frame_sent;
@@ -75,26 +72,26 @@ int tiny_light_init(STinyLightData *handle,
     handle->read_func = read_func;
     handle->write_func = write_func;
 
-    return hdlc_ll_init( &handle->_hdlc, &init );
+    return hdlc_ll_init(&handle->_hdlc, &init);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 int tiny_light_close(STinyLightData *handle)
 {
-    if (!handle)
+    if ( !handle )
     {
         return TINY_ERR_FAILED;
     }
-    hdlc_ll_close( handle->_hdlc );
+    hdlc_ll_close(handle->_hdlc);
     return TINY_SUCCESS;
 }
 
 /**************************************************************
-*
-*                 SEND FUNCTIONS
-*
-***************************************************************/
+ *
+ *                 SEND FUNCTIONS
+ *
+ ***************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -105,40 +102,40 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-int tiny_light_send(STinyLightData *handle, const uint8_t * pbuf, int len)
+int tiny_light_send(STinyLightData *handle, const uint8_t *pbuf, int len)
 {
     uint32_t ts = tiny_millis();
     int result = TINY_SUCCESS;
-    hdlc_ll_put( handle->_hdlc, pbuf, len );
+    hdlc_ll_put(handle->_hdlc, pbuf, len);
     while ( handle->_hdlc->tx.origin_data )
     {
         uint8_t stream[1];
-        int stream_len = hdlc_ll_run_tx( handle->_hdlc, stream, sizeof(stream) );
+        int stream_len = hdlc_ll_run_tx(handle->_hdlc, stream, sizeof(stream));
         do
         {
-            result = handle->write_func( handle->user_data, stream, stream_len );
+            result = handle->write_func(handle->user_data, stream, stream_len);
             if ( result < 0 )
             {
                 return result;
             }
             if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
             {
-                hdlc_ll_reset( handle->_hdlc, HDLC_LL_RESET_TX_ONLY );
+                hdlc_ll_reset(handle->_hdlc, HDLC_LL_RESET_TX_ONLY);
                 result = TINY_ERR_TIMEOUT;
                 break;
             }
-        } while (result < stream_len);
+        } while ( result < stream_len );
     }
-    return result >= 0 ? len: result;
+    return result >= 0 ? len : result;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
 
 /**************************************************************
-*
-*                 RECEIVE FUNCTIONS
-*
-***************************************************************/
+ *
+ *                 RECEIVE FUNCTIONS
+ *
+ ***************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -161,16 +158,16 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
     do
     {
         uint8_t stream[1];
-        int stream_len = handle->read_func( handle->user_data, stream, sizeof(stream) );
+        int stream_len = handle->read_func(handle->user_data, stream, sizeof(stream));
         if ( stream_len < 0 )
         {
             result = stream_len;
             break;
         }
-        hdlc_ll_run_rx( handle->_hdlc, stream, stream_len, &result );
+        hdlc_ll_run_rx(handle->_hdlc, stream, stream_len, &result);
         if ( result == TINY_SUCCESS )
         {
-            hdlc_ll_run_rx( handle->_hdlc, stream, 0, &result );
+            hdlc_ll_run_rx(handle->_hdlc, stream, 0, &result);
         }
         if ( result != TINY_SUCCESS )
         {
@@ -178,7 +175,7 @@ int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len)
         }
         if ( (uint32_t)(tiny_millis() - ts) >= 1000 )
         {
-            hdlc_ll_reset( handle->_hdlc, HDLC_LL_RESET_RX_ONLY );
+            hdlc_ll_reset(handle->_hdlc, HDLC_LL_RESET_RX_ONLY);
             result = TINY_ERR_TIMEOUT;
             break;
         }

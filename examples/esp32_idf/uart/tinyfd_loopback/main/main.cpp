@@ -50,7 +50,7 @@
 
 /* Creating protocol object is simple. Lets define 128 bytes as maximum. *
  * size for the packet and use 7 packets in outgoing queue.             */
-tinyproto::FdD proto( tiny_fd_buffer_size_by_mtu( 128, 7 ) );
+tinyproto::FdD proto(tiny_fd_buffer_size_by_mtu(128, 7));
 
 void onReceive(tinyproto::IPacket &pkt)
 {
@@ -70,11 +70,12 @@ void onReceive(tinyproto::IPacket &pkt)
 #if defined(TINY_MULTITHREAD)
 void tx_task(void *arg)
 {
-    for (;;)
+    for ( ;; )
     {
-        proto.run_tx( [](void *p, const void *b, int s)->int { return uart_write_bytes(UART_NUM_1, (const char *)b, s); } );
+        proto.run_tx(
+            [](void *p, const void *b, int s) -> int { return uart_write_bytes(UART_NUM_1, (const char *)b, s); });
     }
-    vTaskDelete( NULL );
+    vTaskDelete(NULL);
 }
 #endif
 
@@ -83,39 +84,41 @@ void main_task(void *args)
     uart_config_t uart_config = {
         .baud_rate = 115200,
         .data_bits = UART_DATA_8_BITS,
-        .parity    = UART_PARITY_DISABLE,
+        .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
         .rx_flow_ctrl_thresh = 0,
         .use_ref_tick = false,
-//        .source_clk = 0, // APB
+        //        .source_clk = 0, // APB
     };
     ESP_ERROR_CHECK(uart_param_config(UART_NUM_1, &uart_config));
-    ESP_ERROR_CHECK(uart_set_pin(UART_NUM_1, GPIO_NUM_4 /*TX*/, GPIO_NUM_5 /* RX */, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+    ESP_ERROR_CHECK(
+        uart_set_pin(UART_NUM_1, GPIO_NUM_4 /*TX*/, GPIO_NUM_5 /* RX */, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
     ESP_ERROR_CHECK(uart_driver_install(UART_NUM_1, BUF_SIZE * 2, 0, 0, NULL, 0));
 
     /* Lets use 16-bit checksum as ESP32 allows that */
     proto.enableCrc16();
     /* Lets use 7 frames window for outgoing messages */
-    proto.setWindowSize( 7 );
+    proto.setWindowSize(7);
     /* Lets process all incoming frames */
-    proto.setReceiveCallback( onReceive );
+    proto.setReceiveCallback(onReceive);
     /* Redirect all protocol communication to Serial0 UART */
     proto.begin();
 
 #if defined(TINY_MULTITHREAD)
-    xTaskCreate( tx_task, "tx_task", 2096, NULL, 1, NULL );
+    xTaskCreate(tx_task, "tx_task", 2096, NULL, 1, NULL);
 #endif
-    for(;;)
+    for ( ;; )
     {
 #if defined(TINY_MULTITHREAD)
-        proto.run_rx([](void *p, void *b, int s)->int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 10); });
+        proto.run_rx([](void *p, void *b, int s) -> int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 10); });
 #else
-        proto.run_rx([](void *p, void *b, int s)->int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 0); });
-        proto.run_tx([](void *p, const void *b, int s)->int { return uart_tx_chars(UART_NUM_1, (const char *)b, s); });
+        proto.run_rx([](void *p, void *b, int s) -> int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 0); });
+        proto.run_tx(
+            [](void *p, const void *b, int s) -> int { return uart_tx_chars(UART_NUM_1, (const char *)b, s); });
 #endif
     }
-    vTaskDelete( NULL );
+    vTaskDelete(NULL);
 }
 
 extern "C" void app_main(void)

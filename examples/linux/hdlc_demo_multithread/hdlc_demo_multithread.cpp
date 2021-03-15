@@ -36,24 +36,24 @@ static tiny_mutex_t queue_mutex;
 static std::queue<char *> queue{};
 static bool peek_next;
 
-static void send_message( const char *message )
+static void send_message(const char *message)
 {
-    tiny_mutex_lock( &queue_mutex );
-    char *msg = strdup( message );
-    queue.push( msg );
-    tiny_mutex_unlock( &queue_mutex );
+    tiny_mutex_lock(&queue_mutex);
+    char *msg = strdup(message);
+    queue.push(msg);
+    tiny_mutex_unlock(&queue_mutex);
 }
 
 static char *peek_message()
 {
-    tiny_mutex_lock( &queue_mutex );
+    tiny_mutex_lock(&queue_mutex);
     char *msg = nullptr;
     if ( queue.size() )
     {
         msg = queue.front();
         queue.pop();
     }
-    tiny_mutex_unlock( &queue_mutex );
+    tiny_mutex_unlock(&queue_mutex);
     return msg;
 }
 
@@ -79,17 +79,18 @@ static void protocol_tx_thread(tiny_serial_handle_t serial, hdlc_handle_t handle
     int tx_pos = 0;
 
     // run infinite loop
-    char * message = nullptr;
+    char *message = nullptr;
     peek_next = true;
-    for(;;)
+    for ( ;; )
     {
         if ( peek_next )
         {
-            if ( message ) free( message );
+            if ( message )
+                free(message);
             message = peek_message();
             if ( message )
             {
-                hdlc_send( handle, message, strlen(message), 0 );
+                hdlc_send(handle, message, strlen(message), 0);
                 peek_next = false;
             }
         }
@@ -100,10 +101,10 @@ static void protocol_tx_thread(tiny_serial_handle_t serial, hdlc_handle_t handle
         }
         if ( tx_len )
         {
-            int result = tiny_serial_send_timeout( serial, tx + tx_pos, tx_len, 100);
+            int result = tiny_serial_send_timeout(serial, tx + tx_pos, tx_len, 100);
             if ( result < 0 )
             {
-                 break;
+                break;
             }
             tx_pos += result;
             tx_len -= result;
@@ -117,14 +118,14 @@ static void protocol_rx_thread(tiny_serial_handle_t serial, hdlc_handle_t handle
     int rx_len = 0;
     int rx_pos = 0;
 
-    for(;;)
+    for ( ;; )
     {
         if ( rx_len == 0 )
         {
             int result = tiny_serial_read_timeout(serial, rx, sizeof(rx), 100);
             if ( result < 0 )
             {
-                 break;
+                break;
             }
             rx_len = result;
             rx_pos = 0;
@@ -154,25 +155,25 @@ int main(int argc, char *argv[])
     conf.send_tx = nullptr;
     conf.on_frame_read = on_frame_read;
     conf.on_frame_sent = on_frame_sent;
-    conf.rx_buf = malloc( 1024 );
+    conf.rx_buf = malloc(1024);
     conf.rx_buf_size = 1024;
     conf.crc_type = HDLC_CRC_16;
     conf.user_data = nullptr;
     conf.multithread_mode = 1;
 
-    hdlc_handle_t handle = hdlc_init( &conf );
+    hdlc_handle_t handle = hdlc_init(&conf);
     if ( !handle )
     {
-        tiny_serial_close( serial );
+        tiny_serial_close(serial);
         fprintf(stderr, "Error initializing hdlc protocol\n");
         return 1;
     }
 
-    tiny_mutex_create( &queue_mutex );
-    std::thread  tx_thread( protocol_tx_thread, serial, handle );
-    std::thread  rx_thread( protocol_rx_thread, serial, handle );
+    tiny_mutex_create(&queue_mutex);
+    std::thread tx_thread(protocol_tx_thread, serial, handle);
+    std::thread rx_thread(protocol_rx_thread, serial, handle);
     // Main program cycle
-    for(;;)
+    for ( ;; )
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         send_message("Hello message");
@@ -181,10 +182,10 @@ int main(int argc, char *argv[])
     tx_thread.join();
     rx_thread.join();
 
-    hdlc_close( handle );
-    free( conf.rx_buf );
+    hdlc_close(handle);
+    free(conf.rx_buf);
 
-    tiny_mutex_destroy( &queue_mutex );
+    tiny_mutex_destroy(&queue_mutex);
     tiny_serial_close(serial);
     return 0;
 }

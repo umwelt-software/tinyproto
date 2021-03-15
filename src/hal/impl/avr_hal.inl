@@ -37,20 +37,18 @@ inline static int _iSetPrimask(int priMask)
     return 0;
 }
 
-#define ATOMIC_BLOCK \
-     for(int mask = _iDisGetPrimask(), flag = 1;\
-         flag;\
-         flag = _iSetPrimask(mask))
+#define ATOMIC_BLOCK for ( int mask = _iDisGetPrimask(), flag = 1; flag; flag = _iSetPrimask(mask) )
 
 #include "hal_single_core.inl"
 
 void tiny_sleep(uint32_t ms)
 {
-    if (!ms) return;
+    if ( !ms )
+        return;
 #if defined(ARDUINO)
-    return delay( ms );
+    return delay(ms);
 #else
-    while (ms--)
+    while ( ms-- )
     {
         _delay_ms(1);
     }
@@ -65,5 +63,3 @@ uint32_t tiny_millis()
     return 0;
 #endif
 }
-
-

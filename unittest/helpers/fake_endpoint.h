@@ -23,26 +23,37 @@
 #include <stdint.h>
 #include "fake_wire.h"
 
-
 class FakeEndpoint
 {
 public:
     FakeEndpoint(FakeWire &tx, FakeWire &rx);
     ~FakeEndpoint();
-    int read(uint8_t * data, int length);
-    int write(const uint8_t * data, int length);
+    int read(uint8_t *data, int length);
+    int write(const uint8_t *data, int length);
     bool wait_until_rx_count(int count, int timeout);
 
-    void setTimeout( int timeout_ms ) { m_timeout = timeout_ms; }
-    void disable() { m_rx.disable(); }
-    void enable()  { m_rx.enable(); }
-    void flush() { m_rx.flush(); }
+    void setTimeout(int timeout_ms)
+    {
+        m_timeout = timeout_ms;
+    }
+    void disable()
+    {
+        m_rx.disable();
+    }
+    void enable()
+    {
+        m_rx.enable();
+    }
+    void flush()
+    {
+        m_rx.flush();
+    }
+
 private:
     FakeWire &m_tx;
     FakeWire &m_rx;
     std::mutex m_mutex;
     int m_timeout = 10;
 };
-
 
 #endif /* _FAKE_WIRE_H_ */

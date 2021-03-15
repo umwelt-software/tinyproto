@@ -20,29 +20,26 @@
 #include "tiny_fd_helper.h"
 #include <unistd.h>
 
-TinyHelperFd::TinyHelperFd(FakeEndpoint * endpoint,
-                           int rxBufferSize,
-                           const std::function<void(uint8_t*,int)> &onRxFrameCb,
-                           int window_frames,
-                           int timeout)
-    :IBaseHelper(endpoint, rxBufferSize)
-    ,m_onRxFrameCb(onRxFrameCb)
+TinyHelperFd::TinyHelperFd(FakeEndpoint *endpoint, int rxBufferSize,
+                           const std::function<void(uint8_t *, int)> &onRxFrameCb, int window_frames, int timeout)
+    : IBaseHelper(endpoint, rxBufferSize)
+    , m_onRxFrameCb(onRxFrameCb)
 {
-    tiny_fd_init_t   init{};
-//    init.write_func       = write_data;
-//    init.read_func        = read_data;
-    init.pdata            = this;
-    init.on_frame_cb      = onRxFrame;
-    init.on_sent_cb       = onTxFrame;
-    init.buffer           = m_buffer;
-    init.buffer_size      = rxBufferSize;
-    init.window_frames    = window_frames ? : 7;
-    init.send_timeout     = timeout < 0 ? 2000: timeout;
-    init.retry_timeout    = init.send_timeout ? (init.send_timeout / 2) : 200;
-    init.retries          = 2;
-    init.crc_type         = HDLC_CRC_16;
+    tiny_fd_init_t init{};
+    //    init.write_func       = write_data;
+    //    init.read_func        = read_data;
+    init.pdata = this;
+    init.on_frame_cb = onRxFrame;
+    init.on_sent_cb = onTxFrame;
+    init.buffer = m_buffer;
+    init.buffer_size = rxBufferSize;
+    init.window_frames = window_frames ?: 7;
+    init.send_timeout = timeout < 0 ? 2000 : timeout;
+    init.retry_timeout = init.send_timeout ? (init.send_timeout / 2) : 200;
+    init.retries = 2;
+    init.crc_type = HDLC_CRC_16;
 
-    tiny_fd_init( &m_handle, &init  );
+    tiny_fd_init(&m_handle, &init);
 }
 
 int TinyHelperFd::send(uint8_t *buf, int len)
@@ -52,15 +49,15 @@ int TinyHelperFd::send(uint8_t *buf, int len)
 
 void TinyHelperFd::MessageSender(TinyHelperFd *helper, int count, std::string msg)
 {
-    while (count-- && !helper->m_stop_sender)
+    while ( count-- && !helper->m_stop_sender )
     {
         helper->send((uint8_t *)msg.c_str(), msg.size());
     }
 }
 
-int TinyHelperFd::send( const std::string &message )
+int TinyHelperFd::send(const std::string &message)
 {
-    return send( (uint8_t *)message.c_str(), message.size() );
+    return send((uint8_t *)message.c_str(), message.size());
 }
 
 int TinyHelperFd::send(int count, const std::string &msg)
@@ -75,7 +72,7 @@ int TinyHelperFd::send(int count, const std::string &msg)
     if ( count != 0 )
     {
         m_stop_sender = false;
-        m_message_sender = new std::thread(MessageSender,this,count,msg);
+        m_message_sender = new std::thread(MessageSender, this, count, msg);
     }
     return 0;
 }
@@ -85,7 +82,7 @@ int TinyHelperFd::run_tx()
     uint8_t buf[16];
     int len = tiny_fd_get_tx_data(m_handle, buf, sizeof(buf));
     uint8_t *ptr = buf;
-    while (len > 0)
+    while ( len > 0 )
     {
         int i = write_data(this, ptr, len);
         if ( i > 0 )
@@ -106,22 +103,23 @@ int TinyHelperFd::run_rx()
 
 void TinyHelperFd::wait_until_rx_count(int count, uint32_t timeout)
 {
-    while ( m_rx_count != count && timeout-- ) usleep(1000);
+    while ( m_rx_count != count && timeout-- )
+        usleep(1000);
 }
 
-void  TinyHelperFd::onRxFrame(void *handle, uint8_t * buf, int len)
+void TinyHelperFd::onRxFrame(void *handle, uint8_t *buf, int len)
 {
-    TinyHelperFd * helper = reinterpret_cast<TinyHelperFd *>(handle);
+    TinyHelperFd *helper = reinterpret_cast<TinyHelperFd *>(handle);
     helper->m_rx_count++;
-    if (helper->m_onRxFrameCb)
+    if ( helper->m_onRxFrameCb )
     {
         helper->m_onRxFrameCb(buf, len);
     }
 }
 
-void  TinyHelperFd::onTxFrame(void *handle, uint8_t * buf, int len)
+void TinyHelperFd::onTxFrame(void *handle, uint8_t *buf, int len)
 {
-    TinyHelperFd * helper = reinterpret_cast<TinyHelperFd *>(handle);
+    TinyHelperFd *helper = reinterpret_cast<TinyHelperFd *>(handle);
     helper->m_tx_count++;
 }
 
@@ -130,6 +128,5 @@ TinyHelperFd::~TinyHelperFd()
     // stop sender thread
     send(0, "");
     stop();
-    tiny_fd_close( m_handle );
+    tiny_fd_close(m_handle);
 }
-

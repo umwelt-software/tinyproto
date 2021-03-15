@@ -26,21 +26,20 @@ enum
 {
     EV_WR_ROOM_AVAIL = 0x01,
     EV_RD_DATA_AVAIL = 0x02,
-    EV_TR_READY      = 0x04,
+    EV_TR_READY = 0x04,
 };
-
 
 FakeWire::FakeWire(int readbuf_size, int writebuf_size)
     : m_readbuf{}
     , m_writebuf{}
-    , m_readbuf_size( readbuf_size )
-    , m_writebuf_size( writebuf_size )
+    , m_readbuf_size(readbuf_size)
+    , m_writebuf_size(writebuf_size)
 {
 }
 
-bool FakeWire::wait_until_rx_count(int count, int timeout )
+bool FakeWire::wait_until_rx_count(int count, int timeout)
 {
-    for(;;)
+    for ( ;; )
     {
         m_readmutex.lock();
         int size = m_readbuf.size();
@@ -50,7 +49,8 @@ bool FakeWire::wait_until_rx_count(int count, int timeout )
             return true;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        if ( !timeout ) break;
+        if ( !timeout )
+            break;
         timeout--;
     }
     return false;
@@ -59,14 +59,14 @@ bool FakeWire::wait_until_rx_count(int count, int timeout )
 int FakeWire::read(uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    if ( !m_dataavail.try_acquire_for( std::chrono::milliseconds(timeout) ) )
+    if ( !m_dataavail.try_acquire_for(std::chrono::milliseconds(timeout)) )
     {
         return 0;
     }
     m_readmutex.lock();
     while ( m_readbuf.size() && size < length )
     {
-        data[ size ] = m_readbuf.front();
+        data[size] = m_readbuf.front();
         m_readbuf.pop();
         size++;
     }
@@ -81,14 +81,14 @@ int FakeWire::read(uint8_t *data, int length, int timeout)
 int FakeWire::write(const uint8_t *data, int length, int timeout)
 {
     int size = 0;
-    if ( !m_roomavail.try_acquire_for( std::chrono::milliseconds(timeout) ) )
+    if ( !m_roomavail.try_acquire_for(std::chrono::milliseconds(timeout)) )
     {
         return 0;
     }
     m_writemutex.lock();
     while ( m_writebuf.size() < (unsigned int)m_writebuf_size && size < length )
     {
-        m_writebuf.push( data[ size ] );
+        m_writebuf.push(data[size]);
         size++;
     }
     if ( m_writebuf.size() < (unsigned int)m_writebuf_size )
@@ -115,29 +115,28 @@ void FakeWire::TransferData(int bytes)
     m_writemutex.lock();
     while ( bytes-- && m_writebuf.size() )
     {
-        if ( m_readbuf.size() < (unsigned int)m_readbuf_size && m_enabled ) // If we don't have space or device not enabled, the data will be lost
+        if ( m_readbuf.size() < (unsigned int)m_readbuf_size &&
+             m_enabled ) // If we don't have space or device not enabled, the data will be lost
         {
             m_byte_counter++;
             bool error_happened = false;
-            for (auto& err: m_errors)
+            for ( auto &err : m_errors )
             {
-                if ( m_byte_counter >= err.first &&
-                     err.count != 0 &&
-                    (m_byte_counter - err.first) % err.period == 0 )
+                if ( m_byte_counter >= err.first && err.count != 0 && (m_byte_counter - err.first) % err.period == 0 )
                 {
                     err.count--;
                     error_happened = true;
                     break;
                 }
             }
-            m_readbuf.push( error_happened ? (m_writebuf.front() ^ 0x34 ) : m_writebuf.front() );
+            m_readbuf.push(error_happened ? (m_writebuf.front() ^ 0x34) : m_writebuf.front());
             data_avail = true;
         }
         else
         {
-            if (m_enabled)
+            if ( m_enabled )
             {
-                //fprintf(stderr, "HW missed byte %d -> %d\n", m_writebuf_size, m_readbuf_size);
+                // fprintf(stderr, "HW missed byte %d -> %d\n", m_writebuf_size, m_readbuf_size);
                 m_lostBytes++;
             }
         }
@@ -164,8 +163,8 @@ void FakeWire::reset()
 {
     std::queue<uint8_t> empty;
     std::queue<uint8_t> empty2;
-    std::swap( m_readbuf, empty );
-    std::swap( m_writebuf, empty2 );
+    std::swap(m_readbuf, empty);
+    std::swap(m_writebuf, empty2);
 }
 
 void FakeWire::flush()

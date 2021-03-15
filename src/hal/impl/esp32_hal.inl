@@ -24,22 +24,22 @@ void tiny_mutex_create(tiny_mutex_t *mutex)
 
 void tiny_mutex_destroy(tiny_mutex_t *mutex)
 {
-    vSemaphoreDelete( *mutex );
+    vSemaphoreDelete(*mutex);
 }
 
 void tiny_mutex_lock(tiny_mutex_t *mutex)
 {
-    xSemaphoreTake( *mutex, portMAX_DELAY );
+    xSemaphoreTake(*mutex, portMAX_DELAY);
 }
 
 uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
 {
-    return xSemaphoreTake( *mutex, 0 ) == pdTRUE;
+    return xSemaphoreTake(*mutex, 0) == pdTRUE;
 }
 
 void tiny_mutex_unlock(tiny_mutex_t *mutex)
 {
-    xSemaphoreGive( *mutex );
+    xSemaphoreGive(*mutex);
 }
 
 void tiny_events_create(tiny_events_t *events)
@@ -49,15 +49,12 @@ void tiny_events_create(tiny_events_t *events)
 
 void tiny_events_destroy(tiny_events_t *events)
 {
-    vEventGroupDelete( *events );
+    vEventGroupDelete(*events);
 }
 
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
-                         uint8_t clear, uint32_t timeout)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits, uint8_t clear, uint32_t timeout)
 {
-    return xEventGroupWaitBits(*events, bits,
-                               clear ? pdTRUE: pdFALSE,
-                               pdFALSE, timeout/portTICK_PERIOD_MS) & bits;
+    return xEventGroupWaitBits(*events, bits, clear ? pdTRUE : pdFALSE, pdFALSE, timeout / portTICK_PERIOD_MS) & bits;
 }
 
 uint8_t tiny_events_check_int(tiny_events_t *event, uint8_t bits, uint8_t clear)
@@ -75,12 +72,12 @@ void tiny_events_clear(tiny_events_t *events, uint8_t bits)
     xEventGroupClearBits(*events, bits);
 }
 
-void tiny_sleep( uint32_t millis )
+void tiny_sleep(uint32_t millis)
 {
-    vTaskDelay( millis / portTICK_PERIOD_MS );
+    vTaskDelay(millis / portTICK_PERIOD_MS);
 }
 
 uint32_t tiny_millis()
 {
-    return (uint32_t)(esp_timer_get_time()/1000);
+    return (uint32_t)(esp_timer_get_time() / 1000);
 }

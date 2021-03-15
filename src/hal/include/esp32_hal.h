@@ -25,15 +25,15 @@
 #include "freertos/event_groups.h"
 
 #ifndef CONFIG_ENABLE_CHECKSUM
-#   define CONFIG_ENABLE_CHECKSUM
+#define CONFIG_ENABLE_CHECKSUM
 #endif
 
 #ifndef CONFIG_ENABLE_FCS16
-#   define CONFIG_ENABLE_FCS16
+#define CONFIG_ENABLE_FCS16
 #endif
 
 #ifndef CONFIG_ENABLE_FCS32
-#   define CONFIG_ENABLE_FCS32
+#define CONFIG_ENABLE_FCS32
 #endif
 
 /**
@@ -47,5 +47,3 @@ typedef SemaphoreHandle_t tiny_mutex_t;
  * The type declaration depends on platform.
  */
 typedef EventGroupHandle_t tiny_events_t;
-
-

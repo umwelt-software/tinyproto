@@ -24,32 +24,30 @@
 #include <chrono>
 #include <condition_variable>
 
-template <uint32_t M>
-class Semaphore
+template <uint32_t M> class Semaphore
 {
 public:
     Semaphore(uint32_t count)
-        : m_count( count )
+        : m_count(count)
     {
     }
 
     void acquire()
     {
-        std::unique_lock< std::mutex > lock(m_mutex);
-        m_condition.wait(lock,[&]()->bool{ return m_count > 0; } );
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_condition.wait(lock, [&]() -> bool { return m_count > 0; });
         m_count--;
     }
 
     bool try_acquire()
     {
-        return try_acquire_for( std::chrono::milliseconds(0) );
+        return try_acquire_for(std::chrono::milliseconds(0));
     }
 
-    template< typename R,typename P >
-    bool try_acquire_for(const std::chrono::duration<R,P>& timeout)
+    template <typename R, typename P> bool try_acquire_for(const std::chrono::duration<R, P> &timeout)
     {
-        std::unique_lock< std::mutex > lock(m_mutex);
-        if ( !m_condition.wait_for(lock, timeout, [&]()->bool{ return m_count > 0; } ) )
+        std::unique_lock<std::mutex> lock(m_mutex);
+        if ( !m_condition.wait_for(lock, timeout, [&]() -> bool { return m_count > 0; }) )
         {
             return false;
         }
@@ -59,12 +57,12 @@ public:
 
     void release()
     {
-        std::unique_lock< std::mutex > lock(m_mutex);
+        std::unique_lock<std::mutex> lock(m_mutex);
         if ( m_count < m_max )
         {
             m_count++;
         }
-	lock.unlock();
+        lock.unlock();
         m_condition.notify_one();
     }
 
@@ -73,13 +71,13 @@ private:
     uint32_t m_max = M;
     std::mutex m_mutex{};
     std::condition_variable m_condition{};
-
 };
 
 class BinarySemaphore: public Semaphore<1>
 {
 public:
-    BinarySemaphore(uint32_t value): Semaphore(value ? 1: 0)
+    BinarySemaphore(uint32_t value)
+        : Semaphore(value ? 1 : 0)
     {
     }
 };

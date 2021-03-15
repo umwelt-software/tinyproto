@@ -24,7 +24,7 @@
 #include <chrono>
 #include <thread>
 
-enum class protocol_type_t: uint8_t
+enum class protocol_type_t : uint8_t
 {
     HDLC = 0,
     FD = 2,
@@ -65,25 +65,29 @@ static void print_help()
 
 static int parse_args(int argc, char *argv[])
 {
-    if ( argc < 2)
+    if ( argc < 2 )
     {
         return -1;
     }
     int i = 1;
-    while (i < argc)
+    while ( i < argc )
     {
         if ( argv[i][0] != '-' )
         {
             break;
         }
-        if ((!strcmp(argv[i],"-p")) || (!strcmp(argv[i],"--port")))
+        if ( (!strcmp(argv[i], "-p")) || (!strcmp(argv[i], "--port")) )
         {
-            if (++i < argc ) s_port = argv[i]; else return -1;
+            if ( ++i < argc )
+                s_port = argv[i];
+            else
+                return -1;
         }
-        else if ((!strcmp(argv[i],"-c")) || (!strcmp(argv[i],"--crc")))
+        else if ( (!strcmp(argv[i], "-c")) || (!strcmp(argv[i], "--crc")) )
         {
-            if (++i >= argc ) return -1;
-            switch (strtoul(argv[i], nullptr, 10) )
+            if ( ++i >= argc )
+                return -1;
+            switch ( strtoul(argv[i], nullptr, 10) )
             {
                 case 0: s_crc = HDLC_CRC_OFF; break;
                 case 8: s_crc = HDLC_CRC_8; break;
@@ -92,52 +96,57 @@ static int parse_args(int argc, char *argv[])
                 default: fprintf(stderr, "CRC type not supported\n"); return -1;
             }
         }
-        else if ((!strcmp(argv[i],"-s")) || (!strcmp(argv[i],"--size")))
+        else if ( (!strcmp(argv[i], "-s")) || (!strcmp(argv[i], "--size")) )
         {
-            if (++i >= argc ) return -1;
+            if ( ++i >= argc )
+                return -1;
             s_packetSize = strtoul(argv[i], nullptr, 10);
-            if (s_packetSize < 32 )
+            if ( s_packetSize < 32 )
             {
-                fprintf(stderr, "Packets size less than 32 bytes are not supported\n"); return -1;
+                fprintf(stderr, "Packets size less than 32 bytes are not supported\n");
+                return -1;
                 return -1;
             }
         }
-        else if ((!strcmp(argv[i],"-w")) || (!strcmp(argv[i],"--window")))
+        else if ( (!strcmp(argv[i], "-w")) || (!strcmp(argv[i], "--window")) )
         {
-            if (++i >= argc ) return -1;
+            if ( ++i >= argc )
+                return -1;
             s_windowSize = strtoul(argv[i], nullptr, 10);
-            if (s_windowSize < 1 || s_windowSize > 7 )
+            if ( s_windowSize < 1 || s_windowSize > 7 )
             {
-                fprintf(stderr, "Allowable window size is between 1 and 7 inclusively\n"); return -1;
+                fprintf(stderr, "Allowable window size is between 1 and 7 inclusively\n");
+                return -1;
                 return -1;
             }
         }
-        else if ((!strcmp(argv[i],"-g")) || (!strcmp(argv[i],"--generator")))
+        else if ( (!strcmp(argv[i], "-g")) || (!strcmp(argv[i], "--generator")) )
         {
             s_generatorEnabled = true;
             s_loopbackMode = !s_generatorEnabled;
         }
-        else if ((!strcmp(argv[i],"-r")) || (!strcmp(argv[i],"--run-test")))
+        else if ( (!strcmp(argv[i], "-r")) || (!strcmp(argv[i], "--run-test")) )
         {
             s_runTest = true;
         }
-        else if ((!strcmp(argv[i],"-a")) || (!strcmp(argv[i],"--arduino-tty")))
+        else if ( (!strcmp(argv[i], "-a")) || (!strcmp(argv[i], "--arduino-tty")) )
         {
             s_isArduinoBoard = true;
         }
-        else if ((!strcmp(argv[i],"-t")) || (!strcmp(argv[i],"--protocol")))
+        else if ( (!strcmp(argv[i], "-t")) || (!strcmp(argv[i], "--protocol")) )
         {
-            if (++i >= argc ) return -1;
-            else if (!strcmp(argv[i], "fd"))
+            if ( ++i >= argc )
+                return -1;
+            else if ( !strcmp(argv[i], "fd") )
                 s_protocol = protocol_type_t::FD;
-            else if (!strcmp(argv[i], "light"))
+            else if ( !strcmp(argv[i], "light") )
                 s_protocol = protocol_type_t::LIGHT;
             else
                 return -1;
         }
         i++;
     }
-    if (s_port == nullptr)
+    if ( s_port == nullptr )
     {
         return -1;
     }
@@ -152,13 +161,13 @@ tinyproto::FdD *s_protoFd = nullptr;
 void onReceiveFrameFd(tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
-        fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size() );
+        fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size());
     s_receivedBytes += pkt.size();
     if ( !s_generatorEnabled )
     {
-        if ( s_protoFd->write( pkt ) < 0 )
+        if ( s_protoFd->write(pkt) < 0 )
         {
-            fprintf( stderr, "Failed to send packet\n" );
+            fprintf(stderr, "Failed to send packet\n");
         }
     }
 }
@@ -166,50 +175,57 @@ void onReceiveFrameFd(tinyproto::IPacket &pkt)
 void onSendFrameFd(tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
-        fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)pkt.size() );
+        fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)pkt.size());
     s_sentBytes += pkt.size();
 }
 
 static int run_fd(tiny_serial_handle_t port)
 {
     s_serialFd = port;
-    tinyproto::FdD proto( tiny_fd_buffer_size_by_mtu( s_packetSize, s_windowSize ) );
-    proto.enableCrc( s_crc );
+    tinyproto::FdD proto(tiny_fd_buffer_size_by_mtu(s_packetSize, s_windowSize));
+    proto.enableCrc(s_crc);
     // Set window size to 4 frames. This should be the same value, used by other size
-    proto.setWindowSize( s_windowSize );
+    proto.setWindowSize(s_windowSize);
     // Set send timeout to 1000ms as we are going to use multithread mode
     // With generator mode it is ok to send with timeout from run_fd() function
-    // But in loopback mode (!generator), we must resend frames from receiveCallback as soon as possible, use no timeout then
-    proto.setSendTimeout( s_generatorEnabled ? 1000: 0 );
-    proto.setReceiveCallback( onReceiveFrameFd );
-    proto.setSendCallback( onSendFrameFd );
+    // But in loopback mode (!generator), we must resend frames from receiveCallback as soon as possible, use no timeout
+    // then
+    proto.setSendTimeout(s_generatorEnabled ? 1000 : 0);
+    proto.setReceiveCallback(onReceiveFrameFd);
+    proto.setSendCallback(onSendFrameFd);
     s_protoFd = &proto;
 
     proto.begin();
-    std::thread rxThread( [](tinyproto::FdD &proto)->void {
-        while (!s_terminate) {
-            proto.run_rx( [](void *u, void *b, int s)->int { return tiny_serial_read(s_serialFd, b, s); } );
-        }
-    }, std::ref(proto) );
-    std::thread txThread( [](tinyproto::FdD &proto)->void {
-        while (!s_terminate) {
-            proto.run_tx( [](void *u, const void *b, int s)->int { return tiny_serial_send(s_serialFd, b, s); } );
-        }
-    }, std::ref(proto) );
+    std::thread rxThread(
+        [](tinyproto::FdD &proto) -> void {
+            while ( !s_terminate )
+            {
+                proto.run_rx([](void *u, void *b, int s) -> int { return tiny_serial_read(s_serialFd, b, s); });
+            }
+        },
+        std::ref(proto));
+    std::thread txThread(
+        [](tinyproto::FdD &proto) -> void {
+            while ( !s_terminate )
+            {
+                proto.run_tx([](void *u, const void *b, int s) -> int { return tiny_serial_send(s_serialFd, b, s); });
+            }
+        },
+        std::ref(proto));
 
     auto startTs = std::chrono::steady_clock::now();
     auto progressTs = startTs;
 
     /* Run main cycle forever */
-    while (!s_terminate)
+    while ( !s_terminate )
     {
-        if (s_generatorEnabled)
+        if ( s_generatorEnabled )
         {
             tinyproto::PacketD packet(s_packetSize);
             packet.put("Generated frame. test in progress");
-            if ( proto.write( packet.data(), packet.size() ) < 0 )
+            if ( proto.write(packet.data(), packet.size()) < 0 )
             {
-                fprintf( stderr, "Failed to send packet\n" );
+                fprintf(stderr, "Failed to send packet\n");
             }
         }
         else
@@ -219,8 +235,9 @@ static int run_fd(tiny_serial_handle_t port)
         if ( s_runTest && s_generatorEnabled )
         {
             auto ts = std::chrono::steady_clock::now();
-            if (ts - startTs >= std::chrono::seconds(15)) s_terminate = true;
-            if (ts - progressTs >= std::chrono::seconds(1))
+            if ( ts - startTs >= std::chrono::seconds(15) )
+                s_terminate = true;
+            if ( ts - progressTs >= std::chrono::seconds(1) )
             {
                 progressTs = ts;
                 fprintf(stderr, ".");
@@ -239,42 +256,45 @@ static int run_light(tiny_serial_handle_t port)
 {
     s_serialFd = port;
     tinyproto::Light proto;
-    proto.enableCrc( s_crc );
+    proto.enableCrc(s_crc);
 
-    proto.begin( [](void *a, const void *b, int c)->int { return tiny_serial_send(s_serialFd,b,c); },
-                 [](void *a, void *b, int c)->int { return tiny_serial_read(s_serialFd,b,c); } );
-    std::thread rxThread( [](tinyproto::Light &proto)->void
-    {
-        tinyproto::PacketD packet(s_packetSize + 4);
-        while (!s_terminate) {
-            if (proto.read(packet) > 0) {
-               s_receivedBytes += packet.size();
-               if ( !s_runTest )
-                   fprintf(stderr, "<<< Frame received payload len=%d\n", (int)packet.size() );
-               if ( !s_generatorEnabled )
-               {
-                   if ( proto.write( packet ) < 0 )
-                   {
-                       fprintf( stderr, "Failed to send packet\n" );
-                   }
-               }
+    proto.begin([](void *a, const void *b, int c) -> int { return tiny_serial_send(s_serialFd, b, c); },
+                [](void *a, void *b, int c) -> int { return tiny_serial_read(s_serialFd, b, c); });
+    std::thread rxThread(
+        [](tinyproto::Light &proto) -> void {
+            tinyproto::PacketD packet(s_packetSize + 4);
+            while ( !s_terminate )
+            {
+                if ( proto.read(packet) > 0 )
+                {
+                    s_receivedBytes += packet.size();
+                    if ( !s_runTest )
+                        fprintf(stderr, "<<< Frame received payload len=%d\n", (int)packet.size());
+                    if ( !s_generatorEnabled )
+                    {
+                        if ( proto.write(packet) < 0 )
+                        {
+                            fprintf(stderr, "Failed to send packet\n");
+                        }
+                    }
+                }
             }
-        }
-    }, std::ref(proto) );
+        },
+        std::ref(proto));
 
     auto startTs = std::chrono::steady_clock::now();
     auto progressTs = startTs;
 
     /* Run main cycle forever */
-    while (!s_terminate)
+    while ( !s_terminate )
     {
-        if (s_generatorEnabled)
+        if ( s_generatorEnabled )
         {
             tinyproto::PacketD packet(s_packetSize);
             packet.put("Generated frame. test in progress");
-            if ( proto.write( packet ) < 0 )
+            if ( proto.write(packet) < 0 )
             {
-                fprintf( stderr, "Failed to send packet\n" );
+                fprintf(stderr, "Failed to send packet\n");
             }
             else
             {
@@ -290,8 +310,9 @@ static int run_light(tiny_serial_handle_t port)
         if ( s_runTest && s_generatorEnabled )
         {
             auto ts = std::chrono::steady_clock::now();
-            if (ts - startTs >= std::chrono::seconds(15)) s_terminate = true;
-            if (ts - progressTs >= std::chrono::seconds(1))
+            if ( ts - startTs >= std::chrono::seconds(15) )
+                s_terminate = true;
+            if ( ts - progressTs >= std::chrono::seconds(1) )
             {
                 progressTs = ts;
                 fprintf(stderr, ".");
@@ -324,7 +345,7 @@ int main(int argc, char *argv[])
     }
 
     int result = -1;
-    switch (s_protocol)
+    switch ( s_protocol )
     {
         case protocol_type_t::FD: result = run_fd(hPort); break;
         case protocol_type_t::LIGHT: result = run_light(hPort); break;
@@ -333,8 +354,8 @@ int main(int argc, char *argv[])
     tiny_serial_close(hPort);
     if ( s_runTest )
     {
-        printf("\nRegistered TX speed: %u bps\n", (s_sentBytes) * 8 / 15);
-        printf("Registered RX speed: %u bps\n", (s_receivedBytes) * 8 / 15);
+        printf("\nRegistered TX speed: %u bps\n", (s_sentBytes)*8 / 15);
+        printf("Registered RX speed: %u bps\n", (s_receivedBytes)*8 / 15);
     }
     return result;
 }

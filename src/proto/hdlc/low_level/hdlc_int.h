@@ -41,87 +41,86 @@ extern "C"
 /**
  * Macro calculating minimum buffer size required for specific packet size in bytes
  */
-#define HDLC_MIN_BUF_SIZE(mtu, crc) ( sizeof(hdlc_ll_data_t) + (int)(crc) / 8 + (mtu) )
-
-/**
- * Structure describes configuration of lowest HDLC level
- * Initialize this structure by 0 before passing to hdlc_ll_init()
- * function.
- */
-typedef struct hdlc_ll_data_t
-{
-    /**
-     * User-defined callback, which is called when new packet arrives from hw
-     * channel. The context of this callback is context, where hdlc_ll_run_rx() is
-     * called from.
-     * @param user_data user-defined data
-     * @param data pointer to received data
-     * @param len size of received data in bytes
-     * @return user callback must return negative value in case of error
-     *         or 0 value if packet is successfully processed.
-     */
-
-    int (*on_frame_read)(void *user_data, void *data, int len);
+#define HDLC_MIN_BUF_SIZE(mtu, crc) (sizeof(hdlc_ll_data_t) + (int)(crc) / 8 + (mtu))
 
     /**
-     * User-defined callback, which is called when the packet is sent to TX
-     * channel. The context of this callback is context, where hdlc_ll_run_tx() is
-     * called from.
-     * @param user_data user-defined data
-     * @param data pointer to sent data
-     * @param len size of sent data in bytes
-     * @return user callback must return negative value in case of error
-     *         or 0 value if packet is successfully processed.
+     * Structure describes configuration of lowest HDLC level
+     * Initialize this structure by 0 before passing to hdlc_ll_init()
+     * function.
      */
-    int (*on_frame_sent)(void *user_data, const void *data, int len);
+    typedef struct hdlc_ll_data_t
+    {
+        /**
+         * User-defined callback, which is called when new packet arrives from hw
+         * channel. The context of this callback is context, where hdlc_ll_run_rx() is
+         * called from.
+         * @param user_data user-defined data
+         * @param data pointer to received data
+         * @param len size of received data in bytes
+         * @return user callback must return negative value in case of error
+         *         or 0 value if packet is successfully processed.
+         */
 
-    /**
-     * Buffer to be used by hdlc level to receive data to
-     */
-    void *rx_buf;
+        int (*on_frame_read)(void *user_data, void *data, int len);
 
-    /**
-     * size of hdlc buffer
-     */
-    int rx_buf_size;
+        /**
+         * User-defined callback, which is called when the packet is sent to TX
+         * channel. The context of this callback is context, where hdlc_ll_run_tx() is
+         * called from.
+         * @param user_data user-defined data
+         * @param data pointer to sent data
+         * @param len size of sent data in bytes
+         * @return user callback must return negative value in case of error
+         *         or 0 value if packet is successfully processed.
+         */
+        int (*on_frame_sent)(void *user_data, const void *data, int len);
 
-    /**
-     * crc field type to use on hdlc level.
-     * If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration),
-     * but HDLC_CRC_16 has higher priority.
-     */
-    hdlc_crc_t crc_type;
+        /**
+         * Buffer to be used by hdlc level to receive data to
+         */
+        void *rx_buf;
 
-    /** User data, which will be passed to user-defined callback as first argument */
-    void *user_data;
+        /**
+         * size of hdlc buffer
+         */
+        int rx_buf_size;
+
+        /**
+         * crc field type to use on hdlc level.
+         * If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration),
+         * but HDLC_CRC_16 has higher priority.
+         */
+        hdlc_crc_t crc_type;
+
+        /** User data, which will be passed to user-defined callback as first argument */
+        void *user_data;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    /** Parameters in DOXYGEN_SHOULD_SKIP_THIS section should not be modified by a user */
-    struct
-    {
-        uint8_t *data;
-        int (*state)( hdlc_ll_handle_t handle, const uint8_t *data, int len );
-        uint8_t escape;
-    } rx;
-    struct
-    {
-        uint8_t *out_buffer;
-        int out_buffer_len;
-        const uint8_t *origin_data;
-        const uint8_t *data;
-        int len;
-        crc_t crc;
-        uint8_t escape;
-        int (*state)( hdlc_ll_handle_t handle );
-    } tx;
+        /** Parameters in DOXYGEN_SHOULD_SKIP_THIS section should not be modified by a user */
+        struct
+        {
+            uint8_t *data;
+            int (*state)(hdlc_ll_handle_t handle, const uint8_t *data, int len);
+            uint8_t escape;
+        } rx;
+        struct
+        {
+            uint8_t *out_buffer;
+            int out_buffer_len;
+            const uint8_t *origin_data;
+            const uint8_t *data;
+            int len;
+            crc_t crc;
+            uint8_t escape;
+            int (*state)(hdlc_ll_handle_t handle);
+        } tx;
 #endif
-} hdlc_ll_data_t;
+    } hdlc_ll_data_t;
 
-/**
- * @}
- */
+    /**
+     * @}
+     */
 
 #ifdef __cplusplus
 }
 #endif
-

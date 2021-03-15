@@ -36,7 +36,7 @@ void tiny_mutex_lock(tiny_mutex_t *mutex)
             locked = !*mutex;
             *mutex = 1;
         }
-    } while (!locked);
+    } while ( !locked );
 }
 
 uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
@@ -67,8 +67,7 @@ void tiny_events_destroy(tiny_events_t *events)
 {
 }
 
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
-                         uint8_t clear, uint32_t timeout)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits, uint8_t clear, uint32_t timeout)
 {
     uint8_t locked;
     uint32_t ts = tiny_millis();
@@ -77,15 +76,15 @@ uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
         ATOMIC_BLOCK
         {
             locked = *events;
-            if ( clear && (locked & bits) ) *events &= ~bits;
+            if ( clear && (locked & bits) )
+                *events &= ~bits;
         }
-        if (!(locked & bits) && (uint32_t)(tiny_millis() - ts) >= timeout)
+        if ( !(locked & bits) && (uint32_t)(tiny_millis() - ts) >= timeout )
         {
             locked = 0;
             break;
         }
-     }
-    while (!(locked & bits));
+    } while ( !(locked & bits) );
     return locked;
 }
 
@@ -95,7 +94,8 @@ uint8_t tiny_events_check_int(tiny_events_t *events, uint8_t bits, uint8_t clear
     ATOMIC_BLOCK
     {
         locked = *events;
-        if ( clear && (locked & bits) ) *events &= ~bits;
+        if ( clear && (locked & bits) )
+            *events &= ~bits;
     }
     return locked;
 }
@@ -115,4 +115,3 @@ void tiny_events_clear(tiny_events_t *events, uint8_t bits)
         *events &= ~bits;
     }
 }
-

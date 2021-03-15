@@ -22,4 +22,3 @@
 #include <Python.h>
 
 extern "C" PyTypeObject FdType;
-

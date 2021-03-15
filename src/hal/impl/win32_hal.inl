@@ -32,12 +32,12 @@ void tiny_mutex_destroy(tiny_mutex_t *mutex)
 
 void tiny_mutex_lock(tiny_mutex_t *mutex)
 {
-    WaitForSingleObject( *mutex, INFINITE );
+    WaitForSingleObject(*mutex, INFINITE);
 }
 
 uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
 {
-    return WaitForSingleObject( *mutex, 0 ) == WAIT_OBJECT_0;
+    return WaitForSingleObject(*mutex, 0) == WAIT_OBJECT_0;
 }
 
 void tiny_mutex_unlock(tiny_mutex_t *mutex)
@@ -56,12 +56,11 @@ void tiny_events_create(tiny_events_t *events)
 
 void tiny_events_destroy(tiny_events_t *events)
 {
-//    pthread_cond_destroy(&events->cond);
+    //    pthread_cond_destroy(&events->cond);
     DeleteCriticalSection(&events->mutex);
 }
 
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
-                         uint8_t clear, uint32_t timeout)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits, uint8_t clear, uint32_t timeout)
 {
     EnterCriticalSection(&events->mutex);
     events->waiters++;
@@ -69,29 +68,30 @@ uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
     while ( (events->bits & bits) == 0 )
     {
         uint32_t start_ms = tiny_millis();
-        if (timeout == 0xFFFFFFFF)
+        if ( timeout == 0xFFFFFFFF )
         {
-            SleepConditionVariableCS( &events->cond, &events->mutex, INFINITE );
+            SleepConditionVariableCS(&events->cond, &events->mutex, INFINITE);
         }
         else
         {
-            if ( !SleepConditionVariableCS( &events->cond, &events->mutex, timeout ))
+            if ( !SleepConditionVariableCS(&events->cond, &events->mutex, timeout) )
             {
                 res = 1;
                 break;
             }
         }
         uint32_t delta = (uint32_t)(tiny_millis() - start_ms);
-        if (timeout != 0xFFFFFFFF)
+        if ( timeout != 0xFFFFFFFF )
         {
-            timeout -= delta > timeout ? timeout: delta;
+            timeout -= delta > timeout ? timeout : delta;
         }
     }
     uint8_t locked = 0;
     if ( res != 1 )
     {
         locked = events->bits;
-        if ( clear ) events->bits &= ~bits;
+        if ( clear )
+            events->bits &= ~bits;
     }
     events->waiters--;
     LeaveCriticalSection(&events->mutex);
@@ -118,9 +118,9 @@ void tiny_events_clear(tiny_events_t *events, uint8_t bits)
     LeaveCriticalSection(&events->mutex);
 }
 
-void tiny_sleep( uint32_t millis )
+void tiny_sleep(uint32_t millis)
 {
-    Sleep( millis );
+    Sleep(millis);
 }
 
 uint32_t tiny_millis()

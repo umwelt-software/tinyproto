@@ -29,253 +29,253 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <stdint.h>
 #include "proto/crc/crc.h"
 #include "hal/tiny_types.h"
 
-/**
- * @defgroup FULL_DUPLEX_API Tiny Full Duplex API functions
- * @{
- */
+    /**
+     * @defgroup FULL_DUPLEX_API Tiny Full Duplex API functions
+     * @{
+     */
 
-struct tiny_fd_data_t;
-
-/**
- * This handle points to service data, required for full-duplex
- * functioning.
- */
-typedef struct tiny_fd_data_t *tiny_fd_handle_t;
-
-/**
- * This structure is used for initialization of Tiny Full Duplex protocol.
- */
-typedef struct tiny_fd_init_t_
-{
-    /// user data for block read/write functions
-    void             * pdata;
-    /// callback function to process incoming frames. Callback is called from tiny_fd_run_rx() context.
-    on_frame_cb_t      on_frame_cb;
-    /// Callback to get notification of sent frames. Callback is called from tiny_fd_run_tx() context.
-    on_frame_cb_t      on_sent_cb;
+    struct tiny_fd_data_t;
 
     /**
-     * buffer to store data during full-duplex protocol operating.
-     * The size should be at least size returned by tiny_fd_buffer_size_by_mtu()
+     * This handle points to service data, required for full-duplex
+     * functioning.
      */
-    void             * buffer;
-
-    /// maximum input buffer size, see tiny_fd_buffer_size_by_mtu()
-    uint16_t           buffer_size;
+    typedef struct tiny_fd_data_t *tiny_fd_handle_t;
 
     /**
-     * timeout. Can be set to 0 during initialization. In this case timeout will be set to default.
-     * Timeout parameter sets timeout in milliseconds for blocking API functions: tiny_fd_send().
+     * This structure is used for initialization of Tiny Full Duplex protocol.
      */
-    uint16_t           send_timeout;
+    typedef struct tiny_fd_init_t_
+    {
+        /// user data for block read/write functions
+        void *pdata;
+        /// callback function to process incoming frames. Callback is called from tiny_fd_run_rx() context.
+        on_frame_cb_t on_frame_cb;
+        /// Callback to get notification of sent frames. Callback is called from tiny_fd_run_tx() context.
+        on_frame_cb_t on_sent_cb;
+
+        /**
+         * buffer to store data during full-duplex protocol operating.
+         * The size should be at least size returned by tiny_fd_buffer_size_by_mtu()
+         */
+        void *buffer;
+
+        /// maximum input buffer size, see tiny_fd_buffer_size_by_mtu()
+        uint16_t buffer_size;
+
+        /**
+         * timeout. Can be set to 0 during initialization. In this case timeout will be set to default.
+         * Timeout parameter sets timeout in milliseconds for blocking API functions: tiny_fd_send().
+         */
+        uint16_t send_timeout;
+
+        /**
+         * timeout for retry operation. It is valid and applicable to I-frames only.
+         * retry_timeout sets timeout in milliseconds. If zero value is specified, it is calculated as
+         */
+        uint16_t retry_timeout;
+
+        /**
+         * number retries to perform before timeout takes place
+         */
+        uint8_t retries;
+
+        /**
+         * crc field type to use on hdlc level.
+         * If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration),
+         * but HDLC_CRC_16 has higher priority.
+         */
+        hdlc_crc_t crc_type;
+
+        /**
+         * Number of frames in window, which confirmation may be deferred for. Must be at least 1. Maximum allowable
+         * value is 7. Extended HDLC format (with 127 window size) is not yet supported.
+         * Smaller values reduce channel throughput, while higher values require more RAM.
+         * It is not mandatory to have the same window_frames value on both endpoints.
+         */
+        uint8_t window_frames;
+
+        /**
+         * Maximum transmission unit in bytes. If this parameter is zero, the protocol
+         * will automatically calculate mtu based on buffer_size, window_frames.
+         */
+        int mtu;
+    } tiny_fd_init_t;
 
     /**
-     * timeout for retry operation. It is valid and applicable to I-frames only.
-     * retry_timeout sets timeout in milliseconds. If zero value is specified, it is calculated as
+     * @brief Initialized communication for Tiny Full Duplex protocol.
+     *
+     * The function initializes internal structures for Tiny Full Duplex state machine.
+     *
+     * @param handle - pointer to Tiny Full Duplex data
+     * @param init - pointer to tiny_fd_init_t data.
+     * @return TINY_NO_ERROR in case of success.
+     *         TINY_ERR_FAILED if init parameters are incorrect.
+     * @remarks This function is not thread safe.
      */
-    uint16_t           retry_timeout;
+    extern int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init);
 
     /**
-     * number retries to perform before timeout takes place
+     * @brief stops Tiny Full Duplex state machine
+     *
+     * stops Tiny Full Duplex state machine.
+     *
+     * @param handle handle of full-duplex protocol
      */
-    uint8_t            retries;
+    extern void tiny_fd_close(tiny_fd_handle_t handle);
 
     /**
-     * crc field type to use on hdlc level.
-     * If HDLC_CRC_DEFAULT is passed, crc type will be selected automatically (depending on library configuration),
-     * but HDLC_CRC_16 has higher priority.
+     * @brief runs tx processing to fill specified buffer with data.
+     *
+     * Runs tx processing to fill specified buffer with data.
+     *
+     * @param handle handle of full-duplex protocol
+     * @param data pointer to buffer to fill with tx data
+     * @param len maximum size of specified buffer
+     * @return number of bytes written to specified buffer
      */
-    hdlc_crc_t         crc_type;
+    extern int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len);
 
     /**
-     * Number of frames in window, which confirmation may be deferred for. Must be at least 1. Maximum allowable
-     * value is 7. Extended HDLC format (with 127 window size) is not yet supported.
-     * Smaller values reduce channel throughput, while higher values require more RAM.
-     * It is not mandatory to have the same window_frames value on both endpoints.
+     * @brief sends tx data to the communication channel via user callback `write_func()`.
+     *
+     * Sends tx data to the communication channel via user callback `write_func()`.
+     * Internally this function generates next 4 bytes to send (or less if nothing to send),
+     * and calls user callback write_func() until all generated bytes are sent, or error
+     * happens. This function helps to simplify application code.
+     *
+     * @param handle handle of full-duplex protocol
+     * @param write_func callback to the function to write data to the physical channel.
+     *
+     * @return number of bytes sent
      */
-    uint8_t            window_frames;
+    extern int tiny_fd_run_tx(tiny_fd_handle_t handle, write_block_cb_t write_func);
 
     /**
-     * Maximum transmission unit in bytes. If this parameter is zero, the protocol
-     * will automatically calculate mtu based on buffer_size, window_frames.
+     * @brief runs rx bytes processing for specified buffer.
+     *
+     * Runs rx bytes processing for specified buffer.
+     * This is alternative method to run Full-duplex protocol for
+     * rx data. Use it, when you wish to control reading from hardware
+     * by yourself.
+     *
+     * @param handle handle of full-duplex protocol
+     * @param data pointer to data to process
+     * @param len length of data to process
+     * @return TINY_SUCCESS
      */
-    int                mtu;
-} tiny_fd_init_t;
+    extern int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len);
 
-/**
- * @brief Initialized communication for Tiny Full Duplex protocol.
- *
- * The function initializes internal structures for Tiny Full Duplex state machine.
- *
- * @param handle - pointer to Tiny Full Duplex data
- * @param init - pointer to tiny_fd_init_t data.
- * @return TINY_NO_ERROR in case of success.
- *         TINY_ERR_FAILED if init parameters are incorrect.
- * @remarks This function is not thread safe.
- */
-extern int tiny_fd_init(tiny_fd_handle_t *handle,
-                        tiny_fd_init_t   *init);
+    /**
+     * @brief reads rx data from the communication channel via user callback `read_func()`
+     *
+     * Reads rx data from the communication channel via user callback `read_func()`.
+     * Internally this function has 4-byte buffer, and tries to read 4 bytes from the channel.
+     * Then received bytes are processed by the protocol. If FD protocol detects new incoming
+     * message then it calls on_sent_callback.
+     * If no data available in the channel, the function returns immediately after read_func() callback
+     * returns control.
+     *
+     * @param handle handle of full-duplex protocol
+     * @param read_func callback to the function to read data from the physical channel.
+     * @return number of bytes received
+     */
+    extern int tiny_fd_run_rx(tiny_fd_handle_t handle, read_block_cb_t read_func);
 
-/**
- * @brief stops Tiny Full Duplex state machine
- *
- * stops Tiny Full Duplex state machine.
- *
- * @param handle handle of full-duplex protocol
- */
-extern void tiny_fd_close(tiny_fd_handle_t handle);
+    /**
+     * @brief Sends userdata over full-duplex protocol.
+     *
+     * Sends userdata over full-duplex protocol. Note, that this command
+     * will return success, when data are copied to internal queue. That doesn't mean
+     * that data are physically sent, but they are enqueued for sending.
+     *
+     * @important the maximum size of the allowed buffer to send is equal to mtu size set for
+     *            the protocol. If you want to send data larger than mtu size, please, use
+     *            tiny_fd_send() function.
+     *
+     * When timeout happens, the data were not actually enqueued. Call this function once again.
+     * If TINY_ERR_DATA_TOO_LARGE is returned, try to send less data. If you don't want to care about
+     * mtu size, please, use different function tiny_fd_send()..
+     *
+     * @param handle   tiny_fd_handle_t handle
+     * @param buf      data to send
+     * @param len      length of data to send
+     *
+     * @return Success result or error code:
+     *         * TINY_SUCCESS          if user data are put to internal queue.
+     *         * TINY_ERR_TIMEOUT      if no room in internal queue to put data. Retry operation once again.
+     *         * TINY_ERR_FAILED       if request was cancelled, by tiny_fd_close() or other error happened.
+     *         * TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
+     */
+    extern int tiny_fd_send_packet(tiny_fd_handle_t handle, const void *buf, int len);
 
-/**
- * @brief runs tx processing to fill specified buffer with data.
- *
- * Runs tx processing to fill specified buffer with data.
- *
- * @param handle handle of full-duplex protocol
- * @param data pointer to buffer to fill with tx data
- * @param len maximum size of specified buffer
- * @return number of bytes written to specified buffer
- */
-extern int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len );
+    /**
+     * Returns minimum required buffer size for specified parameters.
+     *
+     * @important This function calculates buffer requirements based on HDLC_CRC_16.
+     *
+     * @param mtu size of desired user payload in bytes.
+     * @param window maximum tx queue size of I-frames.
+     */
+    extern int tiny_fd_buffer_size_by_mtu(int mtu, int window);
 
-/**
- * @brief sends tx data to the communication channel via user callback `write_func()`.
- *
- * Sends tx data to the communication channel via user callback `write_func()`.
- * Internally this function generates next 4 bytes to send (or less if nothing to send),
- * and calls user callback write_func() until all generated bytes are sent, or error
- * happens. This function helps to simplify application code.
- *
- * @param handle handle of full-duplex protocol
- * @param write_func callback to the function to write data to the physical channel.
- *
- * @return number of bytes sent
- */
-extern int tiny_fd_run_tx(tiny_fd_handle_t handle, write_block_cb_t write_func);
+    /**
+     * Returns minimum required buffer size for specified parameters.
+     *
+     * @param mtu size of desired user payload in bytes.
+     * @param window maximum tx queue size of I-frames.
+     * @param crc_type crc type to be used with FD protocol
+     */
+    extern int tiny_fd_buffer_size_by_mtu_ex(int mtu, int window, hdlc_crc_t crc_type);
 
-/**
- * @brief runs rx bytes processing for specified buffer.
- *
- * Runs rx bytes processing for specified buffer.
- * This is alternative method to run Full-duplex protocol for
- * rx data. Use it, when you wish to control reading from hardware
- * by yourself.
- *
- * @param handle handle of full-duplex protocol
- * @param data pointer to data to process
- * @param len length of data to process
- * @return TINY_SUCCESS
- */
-extern int tiny_fd_on_rx_data(tiny_fd_handle_t handle, const void *data, int len);
+    /**
+     * @brief returns max packet size in bytes.
+     *
+     * Returns max packet size in bytes.
+     *
+     * @param handle   tiny_fd_handle_t handle
+     * @return mtu size in bytes
+     * @see tiny_fd_send_packet
+     */
+    extern int tiny_fd_get_mtu(tiny_fd_handle_t handle);
 
-/**
- * @brief reads rx data from the communication channel via user callback `read_func()`
- *
- * Reads rx data from the communication channel via user callback `read_func()`.
- * Internally this function has 4-byte buffer, and tries to read 4 bytes from the channel.
- * Then received bytes are processed by the protocol. If FD protocol detects new incoming
- * message then it calls on_sent_callback.
- * If no data available in the channel, the function returns immediately after read_func() callback
- * returns control.
- *
- * @param handle handle of full-duplex protocol
- * @param read_func callback to the function to read data from the physical channel.
- * @return number of bytes received
- */
-extern int tiny_fd_run_rx(tiny_fd_handle_t handle, read_block_cb_t read_func);
+    /**
+     * @brief Sends userdata over full-duplex protocol.
+     *
+     * Sends userdata over full-duplex protocol. Note, that this function will try to send
+     * all data from buf. In success case it will return number of bytes sent, equal to len
+     * input parameter. But if timeout happens, it returns number of bytes actually enqueued.
+     *
+     * If you constantly get number of sent bytes less than expected, try to increase
+     * timeout value of the speed of used communication channel.
+     *
+     * @param handle   tiny_fd_handle_t handle
+     * @param buf      data to send
+     * @param len      length of data to send
+     *
+     * @return Number of bytes sent
+     */
+    extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
 
-/**
- * @brief Sends userdata over full-duplex protocol.
- *
- * Sends userdata over full-duplex protocol. Note, that this command
- * will return success, when data are copied to internal queue. That doesn't mean
- * that data are physically sent, but they are enqueued for sending.
- *
- * @important the maximum size of the allowed buffer to send is equal to mtu size set for
- *            the protocol. If you want to send data larger than mtu size, please, use
- *            tiny_fd_send() function.
- *
- * When timeout happens, the data were not actually enqueued. Call this function once again.
- * If TINY_ERR_DATA_TOO_LARGE is returned, try to send less data. If you don't want to care about
- * mtu size, please, use different function tiny_fd_send()..
- *
- * @param handle   tiny_fd_handle_t handle
- * @param buf      data to send
- * @param len      length of data to send
- *
- * @return Success result or error code:
- *         * TINY_SUCCESS          if user data are put to internal queue.
- *         * TINY_ERR_TIMEOUT      if no room in internal queue to put data. Retry operation once again.
- *         * TINY_ERR_FAILED       if request was cancelled, by tiny_fd_close() or other error happened.
- *         * TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
- */
-extern int tiny_fd_send_packet(tiny_fd_handle_t handle, const void *buf, int len);
+    /**
+     * Sets keep alive timeout in milliseconds. This timeout is used to send special RR
+     * frames, when no user data queued for sending.
+     * @param handle   pointer to tiny_fd_handle_t
+     * @param keep_alive timeout in milliseconds
+     */
+    extern void tiny_fd_set_ka_timeout(tiny_fd_handle_t handle, uint32_t keep_alive);
 
-/**
- * Returns minimum required buffer size for specified parameters.
- *
- * @important This function calculates buffer requirements based on HDLC_CRC_16.
- *
- * @param mtu size of desired user payload in bytes.
- * @param window maximum tx queue size of I-frames.
- */
-extern int tiny_fd_buffer_size_by_mtu( int mtu, int window );
-
-/**
- * Returns minimum required buffer size for specified parameters.
- *
- * @param mtu size of desired user payload in bytes.
- * @param window maximum tx queue size of I-frames.
- * @param crc_type crc type to be used with FD protocol
- */
-extern int tiny_fd_buffer_size_by_mtu_ex( int mtu, int window, hdlc_crc_t crc_type );
-
-/**
- * @brief returns max packet size in bytes.
- *
- * Returns max packet size in bytes.
- *
- * @param handle   tiny_fd_handle_t handle
- * @return mtu size in bytes
- * @see tiny_fd_send_packet
- */
-extern int tiny_fd_get_mtu(tiny_fd_handle_t handle);
-
-/**
- * @brief Sends userdata over full-duplex protocol.
- *
- * Sends userdata over full-duplex protocol. Note, that this function will try to send
- * all data from buf. In success case it will return number of bytes sent, equal to len
- * input parameter. But if timeout happens, it returns number of bytes actually enqueued.
- *
- * If you constantly get number of sent bytes less than expected, try to increase
- * timeout value of the speed of used communication channel.
- *
- * @param handle   tiny_fd_handle_t handle
- * @param buf      data to send
- * @param len      length of data to send
- *
- * @return Number of bytes sent
- */
-extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
-
-/**
- * Sets keep alive timeout in milliseconds. This timeout is used to send special RR
- * frames, when no user data queued for sending.
- * @param handle   pointer to tiny_fd_handle_t
- * @param keep_alive timeout in milliseconds
- */
-extern void tiny_fd_set_ka_timeout( tiny_fd_handle_t handle, uint32_t keep_alive );
-
-/**
- * @}
- */
+    /**
+     * @}
+     */
 
 #ifdef __cplusplus
 }

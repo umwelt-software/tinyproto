@@ -22,27 +22,26 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
-extern "C" {
-#endif
-/// structure defines base type for the lists
-typedef struct list_element_
+extern "C"
 {
-    /// pointer to the next element in the list
-    struct list_element_ *pnext;
-    /// pointer to the previous element in the list
-    struct list_element_ *pprev;
-} list_element;
+#endif
+    /// structure defines base type for the lists
+    typedef struct list_element_
+    {
+        /// pointer to the next element in the list
+        struct list_element_ *pnext;
+        /// pointer to the previous element in the list
+        struct list_element_ *pprev;
+    } list_element;
 
+    uint16_t tiny_list_add(list_element **head, list_element *element);
 
-uint16_t tiny_list_add(list_element **head, list_element *element);
+    void tiny_list_remove(list_element **head, list_element *element);
 
-void tiny_list_remove(list_element **head, list_element *element);
+    void tiny_list_clear(list_element **head);
 
-void tiny_list_clear(list_element **head);
-
-void tiny_list_enumerate(list_element *head,
-                         uint8_t (*enumerate_func)(list_element *element, uint16_t data),
-                         uint16_t      data);
+    void tiny_list_enumerate(list_element *head, uint8_t (*enumerate_func)(list_element *element, uint16_t data),
+                             uint16_t data);
 
 #ifdef __cplusplus
 }

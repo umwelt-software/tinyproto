@@ -20,8 +20,7 @@
 #include "tiny_base_helper.h"
 #include "hal/tiny_types.h"
 
-BaseHelper::BaseHelper(FakeEndpoint * endpoint,
-                       int rxBufferSize)
+BaseHelper::BaseHelper(FakeEndpoint *endpoint, int rxBufferSize)
     : m_forceStop(false)
 {
     m_buffer = new uint8_t[rxBufferSize];
@@ -30,10 +29,10 @@ BaseHelper::BaseHelper(FakeEndpoint * endpoint,
 
 int BaseHelper::run(bool forked)
 {
-    if (forked)
+    if ( forked )
     {
         m_forceStop = false;
-        m_receiveThread = new std::thread(receiveThread,this);
+        m_receiveThread = new std::thread(receiveThread, this);
         m_sendThread = new std::thread(sendThread, this);
         return 0;
     }
@@ -45,7 +44,7 @@ int BaseHelper::run(bool forked)
 
 void BaseHelper::receiveThread(BaseHelper *p)
 {
-    while (p->m_forceStop == false)
+    while ( p->m_forceStop == false )
     {
         int result = p->run_rx();
         if ( result < 0 && result != TINY_ERR_TIMEOUT && result != TINY_ERR_WRONG_CRC )
@@ -57,7 +56,7 @@ void BaseHelper::receiveThread(BaseHelper *p)
 
 void BaseHelper::sendThread(BaseHelper *p)
 {
-    while (p->m_forceStop == false)
+    while ( p->m_forceStop == false )
     {
         int result = p->run_tx();
         if ( result < 0 && result != TINY_ERR_TIMEOUT )
@@ -70,13 +69,13 @@ void BaseHelper::sendThread(BaseHelper *p)
 void BaseHelper::stop()
 {
     m_forceStop = true;
-    if (m_receiveThread != nullptr)
+    if ( m_receiveThread != nullptr )
     {
         m_receiveThread->join();
         delete m_receiveThread;
         m_receiveThread = nullptr;
     }
-    if (m_sendThread != nullptr)
+    if ( m_sendThread != nullptr )
     {
         m_sendThread->join();
         delete m_sendThread;
@@ -89,4 +88,3 @@ BaseHelper::~BaseHelper()
     delete[] m_buffer;
     m_buffer = nullptr;
 }
-

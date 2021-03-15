@@ -31,90 +31,91 @@ static void mutex_lock_default(tiny_mutex_t *mutex)
     uint8_t locked;
     do
     {
-        locked = tiny_mutex_try_lock( mutex );
+        locked = tiny_mutex_try_lock(mutex);
         if ( locked )
         {
             break;
         }
         tiny_sleep(1);
-    } while (!locked);
+    } while ( !locked );
 }
 
 static uint8_t mutex_try_lock_default(tiny_mutex_t *mutex)
 {
-    uint8_t locked = __sync_bool_compare_and_swap( mutex, 0, 1 );
+    uint8_t locked = __sync_bool_compare_and_swap(mutex, 0, 1);
     locked = !!locked;
     return locked;
 }
 
 static void mutex_unlock_default(tiny_mutex_t *mutex)
 {
-    /*uint8_t result =*/ __sync_bool_compare_and_swap( mutex, 1, 0 );
+    /*uint8_t result =*/__sync_bool_compare_and_swap(mutex, 1, 0);
     // assert( result == 1 );
 }
 
 static void events_create_default(tiny_events_t *events)
 {
-    tiny_mutex_create( &events->mutex );
+    tiny_mutex_create(&events->mutex);
     events->bits = 0;
 }
 
 static void events_destroy_default(tiny_events_t *events)
 {
-    tiny_mutex_destroy( &events->mutex );
+    tiny_mutex_destroy(&events->mutex);
 }
 
-static uint8_t events_wait_default(tiny_events_t *events, uint8_t bits,
-                         uint8_t clear, uint32_t timeout)
+static uint8_t events_wait_default(tiny_events_t *events, uint8_t bits, uint8_t clear, uint32_t timeout)
 {
     uint8_t locked = 0;
     uint32_t ts = tiny_millis();
     do
     {
-        tiny_mutex_lock( &events->mutex );
+        tiny_mutex_lock(&events->mutex);
         locked = events->bits;
-        if ( clear && (locked & bits) ) events->bits &= ~bits;
-        tiny_mutex_unlock( &events->mutex );
-        if (!(locked & bits) && (uint32_t)(tiny_millis() - ts) >= timeout)
+        if ( clear && (locked & bits) )
+            events->bits &= ~bits;
+        tiny_mutex_unlock(&events->mutex);
+        if ( !(locked & bits) && (uint32_t)(tiny_millis() - ts) >= timeout )
         {
             locked = 0;
             break;
         }
         tiny_sleep(1);
-     }
-    while (!(locked & bits));
+    } while ( !(locked & bits) );
     return locked;
 }
 
 static uint8_t events_check_int_default(tiny_events_t *events, uint8_t bits, uint8_t clear)
 {
     uint8_t locked;
-    tiny_mutex_lock( &events->mutex );
+    tiny_mutex_lock(&events->mutex);
     locked = events->bits;
-    if ( clear && (locked & bits) ) events->bits &= ~bits;
-    tiny_mutex_unlock( &events->mutex );
+    if ( clear && (locked & bits) )
+        events->bits &= ~bits;
+    tiny_mutex_unlock(&events->mutex);
     return locked;
 }
 
 static void events_set_default(tiny_events_t *events, uint8_t bits)
 {
-    tiny_mutex_lock( &events->mutex );
+    tiny_mutex_lock(&events->mutex);
     events->bits |= bits;
-    tiny_mutex_unlock( &events->mutex );
+    tiny_mutex_unlock(&events->mutex);
 }
 
 static void events_clear_default(tiny_events_t *events, uint8_t bits)
 {
-    tiny_mutex_lock( &events->mutex );
+    tiny_mutex_lock(&events->mutex);
     events->bits &= ~bits;
-    tiny_mutex_unlock( &events->mutex );
+    tiny_mutex_unlock(&events->mutex);
 }
 
 static void sleep_default(uint32_t ms)
 {
     // No default support for sleep
     uint32_t start = tiny_millis();
-    while ( (uint32_t)(tiny_millis() - start) < ms );
+    while ( (uint32_t)(tiny_millis() - start) < ms )
+        ;
 }
 
 static uint32_t millis_default()
@@ -124,8 +125,7 @@ static uint32_t millis_default()
     return cnt++;
 }
 
-static tiny_platform_hal_t s_hal =
-{
+static tiny_platform_hal_t s_hal = {
     .mutex_create = mutex_create_default,
     .mutex_destroy = mutex_destroy_default,
     .mutex_try_lock = mutex_try_lock_default,
@@ -143,73 +143,70 @@ static tiny_platform_hal_t s_hal =
     .millis = millis_default,
 };
 
-
 void tiny_mutex_create(tiny_mutex_t *mutex)
 {
-    s_hal.mutex_create( mutex );
+    s_hal.mutex_create(mutex);
 }
 
 void tiny_mutex_destroy(tiny_mutex_t *mutex)
 {
-    s_hal.mutex_destroy( mutex );
+    s_hal.mutex_destroy(mutex);
 }
 
 void tiny_mutex_lock(tiny_mutex_t *mutex)
 {
-    s_hal.mutex_lock( mutex );
+    s_hal.mutex_lock(mutex);
 }
 
 uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
 {
-    return s_hal.mutex_try_lock( mutex );
+    return s_hal.mutex_try_lock(mutex);
 }
 
 void tiny_mutex_unlock(tiny_mutex_t *mutex)
 {
-    s_hal.mutex_unlock( mutex );
+    s_hal.mutex_unlock(mutex);
 }
 
 void tiny_events_create(tiny_events_t *events)
 {
-    s_hal.events_create( events );
+    s_hal.events_create(events);
 }
 
 void tiny_events_destroy(tiny_events_t *events)
 {
-    s_hal.events_destroy( events );
+    s_hal.events_destroy(events);
 }
 
-uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits,
-                         uint8_t clear, uint32_t timeout)
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits, uint8_t clear, uint32_t timeout)
 {
-    return s_hal.events_wait( events, bits, clear, timeout );
+    return s_hal.events_wait(events, bits, clear, timeout);
 }
 
 uint8_t tiny_events_check_int(tiny_events_t *events, uint8_t bits, uint8_t clear)
 {
-    return s_hal.events_check_int( events, bits, clear );
+    return s_hal.events_check_int(events, bits, clear);
 }
 
 void tiny_events_set(tiny_events_t *events, uint8_t bits)
 {
-    s_hal.events_set( events, bits );
+    s_hal.events_set(events, bits);
 }
 
 void tiny_events_clear(tiny_events_t *events, uint8_t bits)
 {
-    s_hal.events_clear( events, bits );
+    s_hal.events_clear(events, bits);
 }
 
 void tiny_sleep(uint32_t ms)
 {
-    s_hal.sleep( ms );
+    s_hal.sleep(ms);
 }
 
 uint32_t tiny_millis(void)
 {
     return s_hal.millis();
 }
-
 
 void tiny_hal_init(tiny_platform_hal_t *hal)
 {

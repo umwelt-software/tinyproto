@@ -30,7 +30,8 @@
 #include "hal/tiny_types.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**
@@ -47,110 +48,105 @@ extern "C" {
 /**
  * This macro defines buffer size required for tiny light protocol
  */
-#define  LIGHT_BUF_SIZE (sizeof(uintptr_t) * 16)
+#define LIGHT_BUF_SIZE (sizeof(uintptr_t) * 16)
 
-/**
- * This structure contains information about communication channel and its state.
- * \warning This is for internal use only, and should not be accessed directly from the application.
- */
-typedef struct
-{
-    /// pointer to platform related write function
-    write_block_cb_t    write_func;
-    /// pointer to platform related read function
-    read_block_cb_t     read_func;
-    /// user-specific data
-    void               *user_data;
-    /// CRC type to use
-    hdlc_crc_t          crc_type;
+    /**
+     * This structure contains information about communication channel and its state.
+     * \warning This is for internal use only, and should not be accessed directly from the application.
+     */
+    typedef struct
+    {
+        /// pointer to platform related write function
+        write_block_cb_t write_func;
+        /// pointer to platform related read function
+        read_block_cb_t read_func;
+        /// user-specific data
+        void *user_data;
+        /// CRC type to use
+        hdlc_crc_t crc_type;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    hdlc_ll_handle_t  _hdlc;
-    int                 rx_len;
-    uint8_t             buffer[LIGHT_BUF_SIZE];
+        hdlc_ll_handle_t _hdlc;
+        int rx_len;
+        uint8_t buffer[LIGHT_BUF_SIZE];
 #endif
-} STinyLightData;
+    } STinyLightData;
 
+    /**
+     * The function initializes internal structures for Tiny channel and return handle
+     * to be used with all Tiny and IPC functions.
+     * @param handle - pointer to Tiny Light data
+     * @param write_func - pointer to write data function (to communication channel).
+     * @param read_func - pointer to read function (from communication channel).
+     *        read_func is not required and should be NULL, if event-based API of Tiny Protocol is used.
+     * @param pdata - pointer to a user private data. This pointer is passed to write_func/read_func.
+     * @see write_block_cb_t
+     * @see read_block_cb_t
+     * @return TINY_NO_ERROR or error code.
+     * @remarks This function is not thread safe.
+     */
+    extern int tiny_light_init(STinyLightData *handle, write_block_cb_t write_func, read_block_cb_t read_func,
+                               void *pdata);
 
+    /**
+     * The function closes  channel.
+     * @param handle - pointer to Tiny Light data.
+     * @see tiny_init()
+     * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
+     * @remarks This function is not thread safe.
+     */
+    extern int tiny_light_close(STinyLightData *handle);
 
-/**
- * The function initializes internal structures for Tiny channel and return handle
- * to be used with all Tiny and IPC functions.
- * @param handle - pointer to Tiny Light data
- * @param write_func - pointer to write data function (to communication channel).
- * @param read_func - pointer to read function (from communication channel).
- *        read_func is not required and should be NULL, if event-based API of Tiny Protocol is used.
- * @param pdata - pointer to a user private data. This pointer is passed to write_func/read_func.
- * @see write_block_cb_t
- * @see read_block_cb_t
- * @return TINY_NO_ERROR or error code.
- * @remarks This function is not thread safe.
- */
-extern int tiny_light_init(STinyLightData *handle,
-                           write_block_cb_t write_func,
-                           read_block_cb_t read_func,
-                           void *pdata);
+    /**
+     * @brief sends frame with user payload to communication channel in blocking mode
+     *
+     * The function sends data to communication channel.
+     * The function works in blocking mode, i.e. it returns
+     * control only if user data are successfully sent, or in case of error.
+     * @param handle - pointer to Tiny Light data.
+     * @param pbuf - a const pointer to unsigned char - buffer with data to send
+     * @param len - an integer argument - length of data to send
+     * @see TINY_ERR_INVALID_DATA
+     * @see TINY_ERR_FAILED
+     * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
+     * @remarks This function is thread safe.
+     */
+    extern int tiny_light_send(STinyLightData *handle, const uint8_t *pbuf, int len);
 
+    /**
+     * @brief reads frame from the channel in blocking mode.
+     *
+     * The function reads user data from communication channel
+     * @param handle - pointer to Tiny Light data.
+     * @param pbuf a const pointer to unsigned char - buffer with data to send
+     * @param len an integer argument - length of data to send
+     * @see TINY_ERR_INVALID_DATA
+     * @see TINY_ERR_FAILED
+     * @see TINY_ERR_DATA_TOO_LARGE
+     * @see TINY_ERR_OUT_OF_SYNC
+     * @see TINY_ERR_BUSY
+     * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED, TINY_ERR_OUT_OF_SYNC, TINY_ERR_BUSY, TINY_ERR_DATA_TOO_LARGE
+     *         or number of sent bytes.
+     * @note TINY_ERR_DATA_TOO_LARGE can be returned in successful case. If frame is received, but passed buffer
+     *       to the function is too small to fit all.
+     * @remarks This function is not thread safe.
+     */
+    extern int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len);
 
-/**
- * The function closes  channel.
- * @param handle - pointer to Tiny Light data.
- * @see tiny_init()
- * @return TINY_ERR_INVALID_DATA, TINY_NO_ERROR.
- * @remarks This function is not thread safe.
- */
-extern int tiny_light_close(STinyLightData *handle);
+    /**
+     * @brief returns lower level hdlc handle.
+     *
+     * Returns lower level hdlc handle to use with low level function.
+     * If you use high level light API, please be careful with low-level hdlc functions in
+     * case you mix the calls.
+     *
+     * @param handle - pointer to Tiny Light data.
+     * @return hdlc handle or NULL
+     */
+    extern hdlc_ll_handle_t tiny_light_get_hdlc(STinyLightData *handle);
 
-/**
- * @brief sends frame with user payload to communication channel in blocking mode
- *
- * The function sends data to communication channel.
- * The function works in blocking mode, i.e. it returns
- * control only if user data are successfully sent, or in case of error.
- * @param handle - pointer to Tiny Light data.
- * @param pbuf - a const pointer to unsigned char - buffer with data to send
- * @param len - an integer argument - length of data to send
- * @see TINY_ERR_INVALID_DATA
- * @see TINY_ERR_FAILED
- * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED or number of sent bytes.
- * @remarks This function is thread safe.
- */
-extern int tiny_light_send(STinyLightData *handle, const uint8_t *pbuf, int len);
-
-/**
- * @brief reads frame from the channel in blocking mode.
- *
- * The function reads user data from communication channel
- * @param handle - pointer to Tiny Light data.
- * @param pbuf a const pointer to unsigned char - buffer with data to send
- * @param len an integer argument - length of data to send
- * @see TINY_ERR_INVALID_DATA
- * @see TINY_ERR_FAILED
- * @see TINY_ERR_DATA_TOO_LARGE
- * @see TINY_ERR_OUT_OF_SYNC
- * @see TINY_ERR_BUSY
- * @return TINY_ERR_INVALID_DATA, TINY_ERR_FAILED, TINY_ERR_OUT_OF_SYNC, TINY_ERR_BUSY, TINY_ERR_DATA_TOO_LARGE
- *         or number of sent bytes.
- * @note TINY_ERR_DATA_TOO_LARGE can be returned in successful case. If frame is received, but passed buffer
- *       to the function is too small to fit all.
- * @remarks This function is not thread safe.
- */
-extern int tiny_light_read(STinyLightData *handle, uint8_t *pbuf, int len);
-
-/**
- * @brief returns lower level hdlc handle.
- *
- * Returns lower level hdlc handle to use with low level function.
- * If you use high level light API, please be careful with low-level hdlc functions in
- * case you mix the calls.
- *
- * @param handle - pointer to Tiny Light data.
- * @return hdlc handle or NULL
- */
-extern hdlc_ll_handle_t tiny_light_get_hdlc(STinyLightData *handle);
-
-/**
- * @}
- */
+    /**
+     * @}
+     */
 
 #ifdef __cplusplus
 }

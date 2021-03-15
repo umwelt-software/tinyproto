@@ -30,18 +30,18 @@
 #include "proto/fd/tiny_fd.h"
 
 #ifdef ARDUINO
-#   include <HardwareSerial.h>
+#include <HardwareSerial.h>
 #else
-#   include <string.h>
+#include <string.h>
 #endif
 
-namespace tinyproto {
+namespace tinyproto
+{
 
 /**
  * @ingroup FULL_DUPLEX_API
  * @{
  */
-
 
 /**
  *  IFd class incapsulates Full Duplex Protocol functionality.
@@ -59,10 +59,9 @@ public:
      * @param buffer - buffer to store the frames being received.
      * @param bufferSize - size of the buffer
      */
-    IFd(void * buffer,
-             int    bufferSize)
-         : m_buffer( (uint8_t *)buffer )
-         , m_bufferSize( bufferSize )
+    IFd(void *buffer, int bufferSize)
+        : m_buffer((uint8_t *)buffer)
+        , m_bufferSize(bufferSize)
     {
     }
 
@@ -90,7 +89,7 @@ public:
      *         zero if nothing is sent
      *         positive - should be equal to size parameter
      */
-    int  write(const char* buf, int size);
+    int write(const char *buf, int size);
 
     /**
      * Sends packet over communication channel.
@@ -100,7 +99,7 @@ public:
      *         zero if nothing is sent
      *         positive - Packet is successfully sent
      */
-    int  write(const IPacket &pkt);
+    int write(const IPacket &pkt);
 
     /**
      * Processes incoming rx data, specified by a user.
@@ -182,13 +181,19 @@ public:
      * Sets receive callback for incoming messages
      * @param on_receive user callback to process incoming messages. The processing must be non-blocking
      */
-    void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr) { m_onReceive = on_receive; };
+    void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr)
+    {
+        m_onReceive = on_receive;
+    };
 
     /**
      * Sets send callback for outgoing messages
      * @param on_send user callback to process outgoing messages. The processing must be non-blocking
      */
-    void setSendCallback(void (*on_send)(IPacket &pkt) = nullptr) { m_onSend = on_send; };
+    void setSendCallback(void (*on_send)(IPacket &pkt) = nullptr)
+    {
+        m_onSend = on_send;
+    };
 
     /**
      * Sets desired window size. Use this function only before begin() call.
@@ -196,13 +201,19 @@ public:
      * @param window window size, valid between 1 - 7 inclusively
      * @warning if you use smallest window size, this can reduce throughput of the channel.
      */
-    void setWindowSize(uint8_t window) { m_window = window; }
+    void setWindowSize(uint8_t window)
+    {
+        m_window = window;
+    }
 
     /**
      * Sets send timeout in milliseconds.
      * @param timeout timeout in milliseconds,
      */
-    void setSendTimeout(uint16_t timeout) { m_sendTimeout = timeout; }
+    void setSendTimeout(uint16_t timeout)
+    {
+        m_sendTimeout = timeout;
+    }
 
 protected:
     /**
@@ -215,7 +226,8 @@ protected:
     {
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
-        if ( m_onReceive ) m_onReceive( pkt );
+        if ( m_onReceive )
+            m_onReceive(pkt);
     }
 
     /**
@@ -228,48 +240,52 @@ protected:
     {
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
-        if ( m_onSend ) m_onSend( pkt );
+        if ( m_onSend )
+            m_onSend(pkt);
     }
 
 private:
     /** The variable contain protocol state */
-    tiny_fd_handle_t    m_handle = nullptr;
+    tiny_fd_handle_t m_handle = nullptr;
 
     /** buffer to receive data to */
-    uint8_t             *m_buffer = nullptr;
+    uint8_t *m_buffer = nullptr;
 
-    hdlc_crc_t          m_crc = HDLC_CRC_DEFAULT;
+    hdlc_crc_t m_crc = HDLC_CRC_DEFAULT;
 
     /** max buffer size */
-    int                 m_bufferSize = 0;
+    int m_bufferSize = 0;
 
     /** Use 0-value timeout for small controllers as all operations should be non-blocking */
-    uint16_t            m_sendTimeout = 0;
+    uint16_t m_sendTimeout = 0;
 
     /** Limit window to only 3 frames for small controllers by default */
-    uint8_t             m_window = 3;
+    uint8_t m_window = 3;
 
     /** Callback, when new frame is received */
-    void              (*m_onReceive)(IPacket &pkt) = nullptr;
+    void (*m_onReceive)(IPacket &pkt) = nullptr;
 
     /** Callback, when new frame is sent */
-    void              (*m_onSend)(IPacket &pkt) = nullptr;
+    void (*m_onSend)(IPacket &pkt) = nullptr;
 
     /** Internal function */
-    static void         onReceiveInternal(void *handle, uint8_t *pdata, int size);
+    static void onReceiveInternal(void *handle, uint8_t *pdata, int size);
 
     /** Internal function */
-    static void         onSendInternal(void *handle, uint8_t *pdata, int size);
+    static void onSendInternal(void *handle, uint8_t *pdata, int size);
 };
 
 /**
  * This is class, which allocates buffers statically. Use it for systems with low resources.
  */
-template <int S>
-class Fd: public IFd
+template <int S> class Fd: public IFd
 {
 public:
-    Fd(): IFd( m_data, S ) {}
+    Fd()
+        : IFd(m_data, S)
+    {
+    }
+
 private:
     uint8_t m_data[S]{};
 };
@@ -286,8 +302,15 @@ public:
      * Creates instance of Full duplex protocol with dynamically allocated buffer.
      * Use this class only on powerful microcontrollers.
      */
-    explicit FdD( int size ): IFd( new uint8_t[size], size ) { }
-    ~FdD() { delete[] m_buffer; }
+    explicit FdD(int size)
+        : IFd(new uint8_t[size], size)
+    {
+    }
+    ~FdD()
+    {
+        delete[] m_buffer;
+    }
+
 private:
 };
 
@@ -295,5 +318,4 @@ private:
  * @}
  */
 
-} // Tiny namespace
-
+} // namespace tinyproto

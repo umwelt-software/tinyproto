@@ -18,11 +18,11 @@
 */
 
 #if defined(ARDUINO)
-#   if ARDUINO >= 100
-    #include "Arduino.h"
-#   else
-    #include "WProgram.h"
-#   endif
+#if ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 #endif
 
 #include "TinyLightProtocol.h"
@@ -32,8 +32,7 @@ namespace tinyproto
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-void Light::begin(write_block_cb_t writecb,
-                  read_block_cb_t readcb)
+void Light::begin(write_block_cb_t writecb, read_block_cb_t readcb)
 {
     m_data.crc_type = m_crc;
     tiny_light_init(&m_data, writecb, readcb, this);
@@ -44,14 +43,14 @@ void Light::end()
     tiny_light_close(&m_data);
 }
 
-int Light::write(char* buf, int size)
+int Light::write(char *buf, int size)
 {
-    return tiny_light_send(&m_data, (uint8_t*)buf, size);
+    return tiny_light_send(&m_data, (uint8_t *)buf, size);
 }
 
 int Light::read(char *buf, int size)
 {
-    return tiny_light_read(&m_data, (uint8_t*)buf, size);
+    return tiny_light_read(&m_data, (uint8_t *)buf, size);
 }
 
 int Light::write(const IPacket &pkt)
@@ -121,10 +120,9 @@ static int readFromSerial(void *p, void *b, int s)
     return length;
 }
 
-
 void Light::beginToSerial()
 {
-    Serial.setTimeout( 100 );
+    Serial.setTimeout(100);
     begin(writeToSerial, readFromSerial);
 }
 #endif
@@ -132,5 +130,4 @@ void Light::beginToSerial()
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-}  // namespace Tiny
-
+} // namespace tinyproto

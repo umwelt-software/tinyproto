@@ -31,20 +31,39 @@
 class FakeWire
 {
 public:
-    FakeWire(int readbuf_size  = 1024, int writebuf_size = 1024);
+    FakeWire(int readbuf_size = 1024, int writebuf_size = 1024);
     ~FakeWire();
-    int read(uint8_t * data, int length, int timeout = 10);
-    int write(const uint8_t * data, int length, int timeout = 10);
-    bool wait_until_rx_count(int  count, int timeout );
+    int read(uint8_t *data, int length, int timeout = 10);
+    int write(const uint8_t *data, int length, int timeout = 10);
+    bool wait_until_rx_count(int count, int timeout);
 
-    void generate_error_every_n_byte(int n) { m_errors.push_back( ErrorDesc{0, n, -1} ); };
-    void generate_single_error(int position) { m_errors.push_back( ErrorDesc{position, position, 1} ); };
-    void generate_error(int first, int period, int count = -1) { m_errors.push_back( ErrorDesc{first, period, count} ); };
+    void generate_error_every_n_byte(int n)
+    {
+        m_errors.push_back(ErrorDesc{0, n, -1});
+    };
+    void generate_single_error(int position)
+    {
+        m_errors.push_back(ErrorDesc{position, position, 1});
+    };
+    void generate_error(int first, int period, int count = -1)
+    {
+        m_errors.push_back(ErrorDesc{first, period, count});
+    };
     void reset();
-    void disable() { m_enabled = false; }
-    void enable()  { m_enabled = true; }
+    void disable()
+    {
+        m_enabled = false;
+    }
+    void enable()
+    {
+        m_enabled = true;
+    }
     void flush();
-    int lostBytes() { return m_lostBytes; }
+    int lostBytes()
+    {
+        return m_lostBytes;
+    }
+
 private:
     typedef struct
     {
@@ -55,18 +74,18 @@ private:
     BinarySemaphore m_dataavail{0};
     BinarySemaphore m_roomavail{1};
     BinarySemaphore m_transavail{0};
-    std::mutex   m_readmutex{};
-    std::mutex   m_writemutex{};
+    std::mutex m_readmutex{};
+    std::mutex m_writemutex{};
     std::queue<uint8_t> m_readbuf;
     std::queue<uint8_t> m_writebuf;
-    int          m_readbuf_size = 0;
-    int          m_writebuf_size = 0;
+    int m_readbuf_size = 0;
+    int m_writebuf_size = 0;
     std::list<ErrorDesc> m_errors;
-    int          m_byte_counter = 0;
-    bool         m_enabled = true;
-    std::atomic<int> m_lostBytes{ 0 };
+    int m_byte_counter = 0;
+    bool m_enabled = true;
+    std::atomic<int> m_lostBytes{0};
 
-    void         TransferData(int num_bytes);
+    void TransferData(int num_bytes);
 
     friend class FakeConnection;
 };

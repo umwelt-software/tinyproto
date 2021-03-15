@@ -26,17 +26,17 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <windows.h>
 
-/// Unique port handle
-typedef HANDLE tiny_serial_handle_t;
+    /// Unique port handle
+    typedef HANDLE tiny_serial_handle_t;
 /** Invalid serial handle definition */
-#define TINY_SERIAL_INVALID  INVALID_HANDLE_VALUE
+#define TINY_SERIAL_INVALID INVALID_HANDLE_VALUE
 
 #ifdef __cplusplus
 }
 #endif
-

@@ -18,11 +18,11 @@
 */
 
 #if defined(ARDUINO)
-#   if ARDUINO >= 100
-    #include "Arduino.h"
-#   else
-    #include "WProgram.h"
-#   endif
+#if ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 #endif
 
 #include "TinyProtocolHdlc.h"
@@ -34,29 +34,28 @@ namespace tinyproto
 
 int Hdlc::onReceiveInternal(void *handle, void *pdata, int size)
 {
-    (reinterpret_cast<Hdlc*>(handle))->onReceive((uint8_t *)pdata, size);
+    (reinterpret_cast<Hdlc *>(handle))->onReceive((uint8_t *)pdata, size);
     return 0;
 }
 
 int Hdlc::onSendInternal(void *handle, const void *pdata, int size)
 {
-    (reinterpret_cast<Hdlc*>(handle))->onSend((const uint8_t *)pdata, size);
+    (reinterpret_cast<Hdlc *>(handle))->onSend((const uint8_t *)pdata, size);
     return 0;
 }
 
-void Hdlc::begin(write_block_cb_t writecb,
-                     read_block_cb_t readcb)
+void Hdlc::begin(write_block_cb_t writecb, read_block_cb_t readcb)
 {
-    m_data.send_tx          = writecb;
-    m_data.on_frame_read    = onReceiveInternal;
-    m_data.on_frame_sent    = onSendInternal;
-    m_data.rx_buf           = m_buffer;
-    m_data.rx_buf_size      = m_bufferSize;
-    m_data.crc_type         = m_crc;
+    m_data.send_tx = writecb;
+    m_data.on_frame_read = onReceiveInternal;
+    m_data.on_frame_sent = onSendInternal;
+    m_data.rx_buf = m_buffer;
+    m_data.rx_buf_size = m_bufferSize;
+    m_data.crc_type = m_crc;
     m_data.multithread_mode = false;
-    m_data.user_data        = this;
+    m_data.user_data = this;
 
-    m_handle = hdlc_init( &m_data  );
+    m_handle = hdlc_init(&m_data);
 }
 
 void Hdlc::begin()
@@ -66,28 +65,29 @@ void Hdlc::begin()
 
 void Hdlc::end()
 {
-    if ( m_bufferSize == 0 ) return;
-    hdlc_close( m_handle );
+    if ( m_bufferSize == 0 )
+        return;
+    hdlc_close(m_handle);
 }
 
-int Hdlc::write(const char* buf, int size)
+int Hdlc::write(const char *buf, int size)
 {
-    return hdlc_send( m_handle, buf, size, 0 );
+    return hdlc_send(m_handle, buf, size, 0);
 }
 
 int Hdlc::write(const IPacket &pkt)
 {
-    return write( (char *)pkt.m_buf, pkt.m_len );
+    return write((char *)pkt.m_buf, pkt.m_len);
 }
 
 int Hdlc::run_rx(const void *data, int len)
 {
-    return hdlc_run_rx( m_handle, data, len, nullptr);
+    return hdlc_run_rx(m_handle, data, len, nullptr);
 }
 
 int Hdlc::run_tx(void *data, int max_len)
 {
-    return hdlc_get_tx_data( m_handle, data, max_len );
+    return hdlc_get_tx_data(m_handle, data, max_len);
 }
 
 void Hdlc::disableCrc()
@@ -121,5 +121,4 @@ bool Hdlc::enableCrc32()
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-}  // namespace Tiny
-
+} // namespace tinyproto
