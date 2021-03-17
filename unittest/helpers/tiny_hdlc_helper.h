@@ -22,6 +22,8 @@
 #include <functional>
 #include <stdint.h>
 #include <thread>
+#include <atomic>
+#include <string.h>
 #include "fake_endpoint.h"
 #include "proto/hdlc/high_level/hdlc.h"
 
@@ -37,6 +39,7 @@ public:
     ~TinyHdlcHelper();
     int send(const uint8_t *buf, int len, int timeout = 1000);
     void send(int count, const std::string &msg);
+    int recv(uint8_t *buf, int len, int timeout = 1000);
     int run_rx() override;
     int run_tx() override;
     int rx_count()
@@ -58,10 +61,13 @@ public:
 private:
     std::function<void(uint8_t *, int)> m_onRxFrameCb;
     std::function<void(uint8_t *, int)> m_onTxFrameCb;
+    tiny_mutex_t m_read_mutex;
     bool m_stop_sender = false;
     std::thread *m_sender_thread = nullptr;
-    int m_rx_count = 0;
-    int m_tx_count = 0;
+    std::atomic<int> m_rx_count{ 0 };
+    std::atomic<int> m_tx_count{ 0 };
+    uint8_t *m_user_rx_buf = nullptr;
+    int  m_user_rx_buf_size = 0;
     bool m_tx_from_main = false;
 
     static int onRxFrame(void *handle, void *buf, int len);

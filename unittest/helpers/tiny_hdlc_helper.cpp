@@ -35,6 +35,7 @@ TinyHdlcHelper::TinyHdlcHelper(FakeEndpoint *endpoint, const std::function<void(
     m_handle.rx_buf_size = rx_buf_size;
     m_handle.crc_type = crc;
     hdlc_init(&m_handle);
+    tiny_mutex_create(&m_read_mutex);
 }
 
 int TinyHdlcHelper::send(const uint8_t *buf, int len, int timeout)
@@ -75,11 +76,19 @@ int TinyHdlcHelper::run_tx()
 int TinyHdlcHelper::onRxFrame(void *handle, void *buf, int len)
 {
     TinyHdlcHelper *helper = reinterpret_cast<TinyHdlcHelper *>(handle);
+    tiny_mutex_lock(&helper->m_read_mutex);
     helper->m_rx_count++;
+    if (helper->m_user_rx_buf != nullptr)
+    {
+        int sz = helper->m_user_rx_buf_size > len ? len: helper->m_user_rx_buf_size;
+        memcpy( helper->m_user_rx_buf, buf, sz );
+        helper->m_user_rx_buf_size = sz;
+    }
     if ( helper->m_onRxFrameCb )
     {
         helper->m_onRxFrameCb((uint8_t *)buf, len);
     }
+    tiny_mutex_unlock(&helper->m_read_mutex);
     return 0;
 }
 
@@ -123,6 +132,28 @@ void TinyHdlcHelper::send(int count, const std::string &msg)
     }
 }
 
+int TinyHdlcHelper::recv(uint8_t *buf, int len, int timeout)
+{
+    tiny_mutex_lock(&m_read_mutex);
+    int cnt = m_rx_count;
+    m_user_rx_buf = buf;
+    m_user_rx_buf_size = len;
+    tiny_mutex_unlock(&m_read_mutex);
+    while (timeout >= 0 && cnt == m_rx_count)
+    {
+        if ( m_receiveThread == nullptr )
+        {
+            run( false );
+        }
+        usleep(1000);
+        timeout--;
+    }
+    tiny_mutex_lock(&m_read_mutex);
+    m_user_rx_buf = nullptr;
+    tiny_mutex_unlock(&m_read_mutex);
+    return timeout < 0 ? 0: m_user_rx_buf_size;
+}
+
 void TinyHdlcHelper::wait_until_rx_count(int count, uint32_t timeout)
 {
     while ( m_rx_count != count && timeout-- )
@@ -142,5 +173,6 @@ TinyHdlcHelper::~TinyHdlcHelper()
     send(0, "");
     stop();
     hdlc_close(&m_handle);
+    tiny_mutex_destroy(&m_read_mutex);
     free(m_handle.rx_buf);
 }

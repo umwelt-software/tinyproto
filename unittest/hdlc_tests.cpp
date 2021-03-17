@@ -222,9 +222,49 @@ TEST(HDLC, hdlc_ll_missalignment)
     // Test to send 7E 7E XX XX 7E
 
     // On frame sent is not defined
+    FakeConnection conn;
+    conn.endpoint1().setTimeout(0);
+    conn.endpoint2().setTimeout(10);
+    TinyHdlcHelper helper2(&conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF);
+    const uint8_t data[] = { 0x7E, 0x7E, 0x01, 0x02, 0x03, 0x7E };
+    conn.endpoint1().write(data, sizeof(data));
+
+    helper2.wait_until_rx_count(2, 50); // Never 2 messages should be received, alway exit on timeout 50ms
+    CHECK_EQUAL( 1, helper2.rx_count() );
 }
 
-TEST(HDLC, hdlc_send_escape_chars)
+TEST(HDLC, hdlc_send_escape_chars_encode)
 {
-    // Send escape 0x7E 0x7D
+    FakeConnection conn;
+    conn.endpoint1().setTimeout(0);
+    conn.endpoint2().setTimeout(10);
+    TinyHdlcHelper helper2( &conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF );
+    const uint8_t frame[] = { 0x7E, 0x7D };
+    helper2.send(frame, sizeof(frame), 100);
+
+    const uint8_t data[] = { 0x7E, 0x7D, 0x5E, 0x7D, 0x5D, 0x7E };
+    if ( !conn.endpoint1().wait_until_rx_count(sizeof(data), 50) )
+    {
+        FAIL("Timeout");
+    }
+    uint8_t actual_data[sizeof(data)]{};
+    conn.endpoint1().read(actual_data, sizeof(actual_data));
+    MEMCMP_EQUAL(data, actual_data, sizeof(data));
+}
+
+TEST(HDLC, hdlc_recv_escape_chars_decode)
+{
+    FakeConnection conn;
+    conn.endpoint1().setTimeout(0);
+    conn.endpoint2().setTimeout(10);
+    TinyHdlcHelper helper2(&conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF);
+    const uint8_t data[] = { 0x7E, 0x7D, 0x5E, 0x7D, 0x5D, 0x7E };
+    conn.endpoint1().write(data, sizeof(data));
+    // Use single thread recv() implementation, that's why helper2.run( true ) is commented out
+    // helper2.run(true);
+    uint8_t frame[] = { 0x7E, 0x7D };
+    uint8_t actual_frame[] = { 0x00, 0x00, 0x00 };
+    int len = helper2.recv( actual_frame, sizeof(actual_frame), 50 );
+    CHECK_EQUAL(sizeof(frame), len );
+    MEMCMP_EQUAL( frame, actual_frame, len);
 }
