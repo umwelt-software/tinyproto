@@ -133,6 +133,7 @@ int hdlc_run_tx(hdlc_handle_t handle)
                 break;
             }
             temp_result -= temp;
+            result += temp;
         }
         if ( temp_result <= 0 )
         {
@@ -143,8 +144,6 @@ int hdlc_run_tx(hdlc_handle_t handle)
             result = result ? result : temp_result;
             break;
         }
-        result += temp_result;
-        //        break;
     }
     LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_run_tx EXIT\n", handle);
     return result;

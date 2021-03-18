@@ -90,10 +90,10 @@ int hdlc_ll_close(hdlc_ll_handle_t handle)
         if ( handle->on_frame_sent )
         {
             handle->on_frame_sent(handle->user_data, handle->tx.origin_data,
-                                  (int)(handle->tx.data - handle->tx.origin_data));
+                                  (int)(handle->tx.data - handle->tx.origin_data) + handle->tx.len);
         }
     }
-    return 0;
+    return TINY_SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,12 +154,13 @@ static int hdlc_ll_send_start(hdlc_ll_handle_t handle)
 
 static int hdlc_ll_send_data(hdlc_ll_handle_t handle)
 {
-    if ( handle->tx.len == 0 )
-    {
-        LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_send_crc\n", handle);
-        handle->tx.state = hdlc_ll_send_crc;
-        return 0;
-    }
+    // This commented out code is never reachable because of implementation of hdlc_ll_put() - it check for zero length
+    //if ( handle->tx.len == 0 )
+    //{
+    //    LOG(TINY_LOG_DEB, "[HDLC:%p] hdlc_ll_send_crc\n", handle);
+    //    handle->tx.state = hdlc_ll_send_crc;
+    //    return 0;
+    //}
     int pos = 0;
     while ( handle->tx.data[pos] != FLAG_SEQUENCE && handle->tx.data[pos] != TINY_ESCAPE_CHAR && pos < handle->tx.len )
     {

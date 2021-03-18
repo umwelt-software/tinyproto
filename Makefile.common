@@ -105,6 +105,6 @@ ifdef CONFIG_FOR_WINDOWS_BUILD
 	for /R .\src\ %%G in (*.o) do ( del /F/Q/S %%G )
 else
 	rm -rf $(BLD)
-	rm -rf $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda)
+	rm -rf $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda) $(OBJ_LIB:.o=.gcov)
 	rm -rf gmon.out
 endif
