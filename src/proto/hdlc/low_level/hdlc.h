@@ -154,6 +154,9 @@ extern "C"
      * if hdlc_ll_run_rx() returns 0 bytes processed, just call it once again.
      * It is guaranteed, that at least second call will process bytes.
      *
+     * @important this API can be used in interrupt context, but please implement
+     *            on_frame_read callback carefully.
+     *
      * This function will return the following codes in error field:
      *   - TINY_ERR_DATA_TOO_LARGE if receiving data fails to fit incoming buffer
      *   - TINY_ERR_FAILED if generic failure happened

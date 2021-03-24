@@ -52,7 +52,7 @@
  * size for the packet and use 7 packets in outgoing queue.             */
 tinyproto::FdD proto(tiny_fd_buffer_size_by_mtu(128, 7));
 
-void onReceive(tinyproto::IPacket &pkt)
+void onReceive(void *udata, tinyproto::IPacket &pkt)
 {
     if ( proto.write(pkt) == TINY_ERR_TIMEOUT )
     {

@@ -108,7 +108,7 @@ Example of using full duplex Tiny Protocol in C++ is a little bit bigger, but it
 
 tinyproto::Fd<FD_MIN_BUF_SIZE(64,4)>  proto;
 
-void onReceive(tinyproto::IPacket &pkt) {
+void onReceive(void *udata, tinyproto::IPacket &pkt) {
     // Process message here, you can do with the message, what you need
     // Let's send it back to the sender ;)
     if ( proto.write(pkt) == TINY_ERR_TIMEOUT ) {

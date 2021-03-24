@@ -29,3 +29,4 @@ help:
 	@echo "        docs           Build library documentation (requires doxygen)"
 	@echo "        install        Install library"
 	@echo "        clean          Remove all temporary generated files and binaries"
+	@echo "        coverage       Dry run / generate unit tests coverage data"

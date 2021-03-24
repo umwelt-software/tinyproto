@@ -25,3 +25,9 @@ clean: clean_unittest
 
 clean_unittest:
 	rm -rf $(OBJ_UNIT_TEST) $(OBJ_UNIT_TEST:.o=.gcno) $(OBJ_UNIT_TEST:.o=.gcda) $(OBJ_UNIT_TEST:.o=.*.gcov)
+
+coverage:
+	$(MAKE) ARCH=linux EXTRA_CPPFLAGS="--coverage" check
+	COVERALLS_REPO_TOKEN=4Ia7t9YDo22zQcFEnMYLh1tiWCRlBJlhk coveralls -b . \
+	    --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples \
+	    --gcov-options '\-lp' --dryrun
