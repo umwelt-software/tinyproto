@@ -181,7 +181,7 @@ public:
      * Sets receive callback for incoming messages
      * @param on_receive user callback to process incoming messages. The processing must be non-blocking
      */
-    void setReceiveCallback(void (*on_receive)(IPacket &pkt) = nullptr)
+    void setReceiveCallback(void (*on_receive)(void *userData,IPacket &pkt) = nullptr)
     {
         m_onReceive = on_receive;
     };
@@ -190,7 +190,7 @@ public:
      * Sets send callback for outgoing messages
      * @param on_send user callback to process outgoing messages. The processing must be non-blocking
      */
-    void setSendCallback(void (*on_send)(IPacket &pkt) = nullptr)
+    void setSendCallback(void (*on_send)(void *userData, IPacket &pkt) = nullptr)
     {
         m_onSend = on_send;
     };
@@ -215,6 +215,15 @@ public:
         m_sendTimeout = timeout;
     }
 
+    /**
+     * Sets user data to pass to callbacks
+     * @param userData user data to pass to callback
+     */
+    void setUserData(void *userData)
+    {
+        m_userData = userData;
+    }
+
 protected:
     /**
      * Method called by hdlc protocol upon receiving new frame.
@@ -227,7 +236,7 @@ protected:
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
         if ( m_onReceive )
-            m_onReceive(pkt);
+            m_onReceive(m_userData, pkt);
     }
 
     /**
@@ -241,7 +250,7 @@ protected:
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
         if ( m_onSend )
-            m_onSend(pkt);
+            m_onSend(m_userData, pkt);
     }
 
 private:
@@ -263,10 +272,12 @@ private:
     uint8_t m_window = 3;
 
     /** Callback, when new frame is received */
-    void (*m_onReceive)(IPacket &pkt) = nullptr;
+    void (*m_onReceive)(void *userData, IPacket &pkt) = nullptr;
 
     /** Callback, when new frame is sent */
-    void (*m_onSend)(IPacket &pkt) = nullptr;
+    void (*m_onSend)(void *userData, IPacket &pkt) = nullptr;
+
+    void *m_userData = nullptr;
 
     /** Internal function */
     static void onReceiveInternal(void *handle, uint8_t *pdata, int size);

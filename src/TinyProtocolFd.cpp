@@ -83,7 +83,13 @@ int IFd::run_rx(const void *data, int len)
 
 int IFd::run_rx(read_block_cb_t read_func)
 {
-    return tiny_fd_run_rx(m_handle, read_func);
+    uint8_t buf[4];
+    int len = read_func(m_userData, buf, sizeof(buf));
+    if ( len <= 0 )
+    {
+        return len;
+    }
+    return tiny_fd_on_rx_data(m_handle, buf, len);
 }
 
 int IFd::run_tx(void *data, int max_size)
@@ -93,7 +99,24 @@ int IFd::run_tx(void *data, int max_size)
 
 int IFd::run_tx(write_block_cb_t write_func)
 {
-    return tiny_fd_run_tx(m_handle, write_func);
+    uint8_t buf[4];
+    int len = tiny_fd_get_tx_data(m_handle, buf, sizeof(buf));
+    if ( len <= 0 )
+    {
+        return len;
+    }
+    uint8_t *ptr = buf;
+    while ( len )
+    {
+        int result = write_func(m_userData, ptr, len);
+        if ( result < 0 )
+        {
+            return result;
+        }
+        len -= result;
+        ptr += result;
+    }
+    return TINY_SUCCESS;
 }
 
 void IFd::disableCrc()
