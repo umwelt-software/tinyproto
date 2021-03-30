@@ -557,7 +557,7 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
         ptr += protocol->frames.mtu + sizeof(tiny_i_frame_info_t) - sizeof(((tiny_i_frame_info_t *)0)->user_payload);
     }
     /* Lets allocate memory for HDLC low level protocol */
-    hdlc_ll_init_t _init = {};
+    hdlc_ll_init_t _init = { 0 };
     _init.on_frame_read = on_frame_read;
     _init.on_frame_sent = on_frame_sent;
     _init.user_data = protocol;

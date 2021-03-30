@@ -60,7 +60,7 @@ int tiny_light_init(STinyLightData *handle, write_block_cb_t write_func, read_bl
     {
         return TINY_ERR_FAILED;
     }
-    hdlc_ll_init_t init = {};
+    hdlc_ll_init_t init = { 0 };
     init.user_data = handle;
     init.on_frame_read = on_frame_read;
     init.on_frame_sent = on_frame_sent;

@@ -39,7 +39,7 @@ static bool peek_next;
 static void send_message(const char *message)
 {
     tiny_mutex_lock(&queue_mutex);
-    char *msg = strdup(message);
+    char *msg = _strdup(message);
     queue.push(msg);
     tiny_mutex_unlock(&queue_mutex);
 }
@@ -90,7 +90,7 @@ static void protocol_tx_thread(tiny_serial_handle_t serial, hdlc_handle_t handle
             message = peek_message();
             if ( message )
             {
-                hdlc_send(handle, message, strlen(message), 0);
+                hdlc_send(handle, message, static_cast<int>(strlen(message)), 0);
                 peek_next = false;
             }
         }

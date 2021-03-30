@@ -162,7 +162,7 @@ void onReceiveFrameFd(void *userData, tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size());
-    s_receivedBytes += pkt.size();
+    s_receivedBytes += static_cast<int>(pkt.size());
     if ( !s_generatorEnabled )
     {
         if ( s_protoFd->write(pkt) < 0 )
@@ -176,7 +176,7 @@ void onSendFrameFd(void *userData,tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)pkt.size());
-    s_sentBytes += pkt.size();
+    s_sentBytes += static_cast<int>(pkt.size());
 }
 
 static int run_fd(tiny_serial_handle_t port)
@@ -223,7 +223,7 @@ static int run_fd(tiny_serial_handle_t port)
         {
             tinyproto::PacketD packet(s_packetSize);
             packet.put("Generated frame. test in progress");
-            if ( proto.write(packet.data(), packet.size()) < 0 )
+            if ( proto.write(packet.data(), static_cast<int>(packet.size())) < 0 )
             {
                 fprintf(stderr, "Failed to send packet\n");
             }
@@ -298,7 +298,7 @@ static int run_light(tiny_serial_handle_t port)
             }
             else
             {
-                s_sentBytes += packet.size();
+                s_sentBytes += static_cast<int>(packet.size());
                 if ( !s_runTest )
                     fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)packet.size());
             }
