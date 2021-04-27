@@ -48,8 +48,8 @@
 #define HDLC_U_FRAME_TYPE_UA 0x60
 #define HDLC_U_FRAME_TYPE_FRMR 0x84
 #define HDLC_U_FRAME_TYPE_RSET 0x8C
-#define HDLC_U_FRAME_TYPE_SABM 0x2C  // TODO: possibly wrong and should be 0x3C
-#define HDLC_U_FRAME_TYPE_DISC 0x0A
+#define HDLC_U_FRAME_TYPE_SABM 0x2C
+#define HDLC_U_FRAME_TYPE_DISC 0x40
 #define HDLC_U_FRAME_TYPE_MASK 0xEC
 
 #define HDLC_P_BIT 0x10
