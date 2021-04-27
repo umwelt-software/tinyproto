@@ -124,6 +124,30 @@ extern "C"
     extern int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init);
 
     /**
+     * @brief Returns status of the connection
+     *
+     * The function returns status of the connection
+     *
+     * @param handle pointer to Tiny Full Duplex data
+     * @return TINY_ERR_INVALID_DATA in case of error
+     *         TINY_SUCCESS if connection is established
+     *         TINY_ERR_FAILED if protocol is in disconnected state
+     */
+    extern int tiny_fd_get_status(tiny_fd_handle_t handle);
+
+    /**
+     * @brief Sends DISC command to remote side
+     *
+     * The function sends DISC command to remote side and exits. It doesn't wait for UA answer back.
+     *
+     * @param handle pointer to Tiny Full Duplex data
+     * @return TINY_ERR_INVALID_DATA in case of error
+     *         TINY_SUCCESS if DISC command is put to tx queue successfully
+     *         TINY_ERR_FAILED if DISC command cannot be put to tx queue since it is full.
+     */
+    extern int tiny_fd_disconnect(tiny_fd_handle_t handle);
+
+    /**
      * @brief stops Tiny Full Duplex state machine
      *
      * stops Tiny Full Duplex state machine.

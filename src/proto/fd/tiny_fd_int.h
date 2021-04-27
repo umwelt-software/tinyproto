@@ -43,6 +43,7 @@ extern "C"
         TINY_FD_STATE_DISCONNECTED,
         TINY_FD_STATE_CONNECTING,
         TINY_FD_STATE_CONNECTED_ABM,
+        TINY_FD_STATE_DISCONNECTING,
     } tiny_fd_state_t;
 
     typedef struct

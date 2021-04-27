@@ -48,7 +48,8 @@
 #define HDLC_U_FRAME_TYPE_UA 0x60
 #define HDLC_U_FRAME_TYPE_FRMR 0x84
 #define HDLC_U_FRAME_TYPE_RSET 0x8C
-#define HDLC_U_FRAME_TYPE_SABM 0x2C
+#define HDLC_U_FRAME_TYPE_SABM 0x2C  // TODO: possibly wrong and should be 0x3C
+#define HDLC_U_FRAME_TYPE_DISC 0x0A
 #define HDLC_U_FRAME_TYPE_MASK 0xEC
 
 #define HDLC_P_BIT 0x10
@@ -388,6 +389,15 @@ static int __on_u_frame_read(tiny_fd_handle_t handle, void *data, int len)
         __put_u_s_frame_to_tx_queue(handle, &frame, 2);
         __switch_to_connected_state(handle);
     }
+    else if ( type == HDLC_U_FRAME_TYPE_DISC )
+    {
+        tiny_u_frame_info_t frame = {
+            .header.address = 0xFF,
+            .header.control = HDLC_U_FRAME_TYPE_UA | HDLC_F_BIT | HDLC_U_FRAME_BITS,
+        };
+        __put_u_s_frame_to_tx_queue(handle, &frame, 2);
+        __switch_to_disconnected_state(handle);
+    }
     else if ( type == HDLC_U_FRAME_TYPE_RSET )
     {
         // resets N(R) = 0 in secondary, resets N(S) = 0 in primary
@@ -400,8 +410,15 @@ static int __on_u_frame_read(tiny_fd_handle_t handle, void *data, int len)
     }
     else if ( type == HDLC_U_FRAME_TYPE_UA )
     {
-        // confirmation received
-        __switch_to_connected_state(handle);
+        if ( handle->state == TINY_FD_STATE_CONNECTING )
+        {
+            // confirmation received
+            __switch_to_connected_state(handle);
+        }
+        else if ( handle->state == TINY_FD_STATE_DISCONNECTING )
+        {
+            __switch_to_disconnected_state(handle);
+        }
     }
     else
     {
@@ -429,7 +446,7 @@ static int on_frame_read(void *user_data, void *data, int len)
     {
         __on_u_frame_read(handle, data, len);
     }
-    else if ( handle->state != TINY_FD_STATE_CONNECTED_ABM )
+    else if ( handle->state != TINY_FD_STATE_CONNECTED_ABM && handle->state != TINY_FD_STATE_DISCONNECTING )
     {
         // Should send DM in case we receive here S- or I-frames.
         // If connection is not established, we should ignore all frames except U-frames
@@ -439,6 +456,7 @@ static int on_frame_read(void *user_data, void *data, int len)
             .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
         };
         __put_u_s_frame_to_tx_queue(handle, &frame, 2);
+        handle->state = TINY_FD_STATE_CONNECTING;
     }
     else if ( (control & HDLC_I_FRAME_MASK) == HDLC_I_FRAME_BITS )
     {
@@ -670,7 +688,7 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
         }
 #endif
     }
-    else if ( __has_non_sent_i_frames(handle) && handle->state == TINY_FD_STATE_CONNECTED_ABM )
+    else if ( __has_non_sent_i_frames(handle) && ( handle->state == TINY_FD_STATE_CONNECTED_ABM || handle->state == TINY_FD_STATE_DISCONNECTING ) )
     {
         uint8_t i = __get_i_frame_to_send_index(handle) + handle->frames.head_ptr;
         while ( i >= handle->frames.max_i_frames )
@@ -769,7 +787,7 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len)
     while ( result < len )
     {
         int generated_data = 0;
-        if ( handle->state == TINY_FD_STATE_CONNECTED_ABM )
+        if ( handle->state == TINY_FD_STATE_CONNECTED_ABM || handle->state == TINY_FD_STATE_DISCONNECTING )
         {
             tiny_fd_connected_on_idle_timeout(handle);
         }
@@ -942,3 +960,48 @@ int tiny_fd_send(tiny_fd_handle_t handle, const void *data, int len)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_get_status(tiny_fd_handle_t handle)
+{
+    if ( !handle )
+    {
+         return TINY_ERR_INVALID_DATA;
+    }
+    int result = TINY_ERR_FAILED;
+    tiny_mutex_lock(&handle->frames.mutex);
+    if ( (handle->state == TINY_FD_STATE_CONNECTED_ABM) || (handle->state == TINY_FD_STATE_DISCONNECTING) )
+    {
+        result = TINY_SUCCESS;
+    }
+    tiny_mutex_unlock(&handle->frames.mutex);
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int tiny_fd_disconnect(tiny_fd_handle_t handle)
+{
+    if ( !handle )
+    {
+         return TINY_ERR_INVALID_DATA;
+    }
+    int result = TINY_SUCCESS;
+    tiny_mutex_lock(&handle->frames.mutex);
+    tiny_u_frame_info_t frame = {
+        .header.address = 0xFF,
+        .header.control = HDLC_U_FRAME_TYPE_DISC | HDLC_P_BIT | HDLC_U_FRAME_BITS,
+    };
+    if ( !__put_u_s_frame_to_tx_queue(handle, &frame, 2) )
+    {
+        result = TINY_ERR_FAILED;
+    }
+    else
+    {
+        handle->state = TINY_FD_STATE_DISCONNECTING;
+    }
+    tiny_mutex_unlock(&handle->frames.mutex);
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
