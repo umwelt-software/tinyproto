@@ -60,15 +60,15 @@ extern "C"
         write_block_cb_t write_func;
         /// pointer to platform related read function
         read_block_cb_t read_func;
-        /// user-specific data
-        void *user_data;
-        /// CRC type to use
-        hdlc_crc_t crc_type;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
         hdlc_ll_handle_t _hdlc;
         int rx_len;
         uint8_t buffer[LIGHT_BUF_SIZE];
 #endif
+        /// user-specific data
+        void *user_data;
+        /// CRC type to use
+        hdlc_crc_t crc_type;
     } STinyLightData;
 
     /**

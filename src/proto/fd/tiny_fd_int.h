@@ -110,14 +110,14 @@ extern "C"
 
     typedef struct tiny_fd_data_t
     {
-        /// hdlc information
-        hdlc_ll_handle_t _hdlc;
-        /// state of hdlc protocol according to ISO & RFC
-        tiny_fd_state_t state;
         /// Callback to process received frames
         on_frame_cb_t on_frame_cb;
         /// Callback to get notification of sent frames
         on_frame_cb_t on_sent_cb;
+        /// hdlc information
+        hdlc_ll_handle_t _hdlc;
+        /// state of hdlc protocol according to ISO & RFC
+        tiny_fd_state_t state;
         /// Timeout for operations with acknowledge
         uint16_t send_timeout;
         /// Timeout before retrying resend I-frames

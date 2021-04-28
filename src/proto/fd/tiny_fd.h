@@ -55,12 +55,14 @@ extern "C"
      */
     typedef struct tiny_fd_init_t_
     {
-        /// user data for block read/write functions
-        void *pdata;
         /// callback function to process incoming frames. Callback is called from tiny_fd_run_rx() context.
         on_frame_cb_t on_frame_cb;
+
         /// Callback to get notification of sent frames. Callback is called from tiny_fd_run_tx() context.
         on_frame_cb_t on_sent_cb;
+
+        /// user data for block read/write functions
+        void *pdata;
 
         /**
          * buffer to store data during full-duplex protocol operating.
