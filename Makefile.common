@@ -61,7 +61,7 @@ endif
 TARGET_LIB ?= libtinyprotocol.a
 
 OBJ_LIB += \
-        src/proto/crc/crc.o \
+        src/proto/crc/tiny_crc.o \
         src/proto/light/tiny_light.o \
         src/proto/hdlc/high_level/hdlc.o \
         src/proto/hdlc/low_level/hdlc.o \
