@@ -298,7 +298,7 @@ public:
     }
 
 private:
-    uint8_t m_data[S]{};
+    uint8_t m_data[S] __attribute__ ((aligned (16))) {};
 };
 
 /**

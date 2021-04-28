@@ -19,7 +19,7 @@
 
 #include "hdlc.h"
 #include "hdlc_int.h"
-#include "proto/crc/crc.h"
+#include "proto/crc/tiny_crc.h"
 #include "hal/tiny_debug.h"
 
 #include <stddef.h>
@@ -127,13 +127,13 @@ static int hdlc_ll_send_start(hdlc_ll_handle_t handle)
     switch ( handle->crc_type )
     {
 #ifdef CONFIG_ENABLE_FCS16
-        case HDLC_CRC_16: handle->tx.crc = crc16(PPPINITFCS16, handle->tx.data, handle->tx.len); break;
+        case HDLC_CRC_16: handle->tx.crc = tiny_crc16(PPPINITFCS16, handle->tx.data, handle->tx.len); break;
 #endif
 #ifdef CONFIG_ENABLE_FCS32
-        case HDLC_CRC_32: handle->tx.crc = crc32(PPPINITFCS32, handle->tx.data, handle->tx.len); break;
+        case HDLC_CRC_32: handle->tx.crc = tiny_crc32(PPPINITFCS32, handle->tx.data, handle->tx.len); break;
 #endif
 #ifdef CONFIG_ENABLE_CHECKSUM
-        case HDLC_CRC_8: handle->tx.crc = chksum(INITCHECKSUM, handle->tx.data, handle->tx.len); break;
+        case HDLC_CRC_8: handle->tx.crc = tiny_chksum(INITCHECKSUM, handle->tx.data, handle->tx.len); break;
 #endif
         default: break;
     }
@@ -444,19 +444,19 @@ static int hdlc_ll_read_end(hdlc_ll_handle_t handle, const uint8_t *data, int le
     {
 #ifdef CONFIG_ENABLE_CHECKSUM
         case HDLC_CRC_8:
-            calc_crc = chksum(INITCHECKSUM, handle->rx_buf, len - 1) & 0x00FF;
+            calc_crc = tiny_chksum(INITCHECKSUM, handle->rx_buf, len - 1) & 0x00FF;
             read_crc = handle->rx.data[-1];
             break;
 #endif
 #ifdef CONFIG_ENABLE_FCS16
         case HDLC_CRC_16:
-            calc_crc = crc16(PPPINITFCS16, handle->rx_buf, len - 2);
+            calc_crc = tiny_crc16(PPPINITFCS16, handle->rx_buf, len - 2);
             read_crc = handle->rx.data[-2] | ((uint16_t)handle->rx.data[-1] << 8);
             break;
 #endif
 #ifdef CONFIG_ENABLE_FCS32
         case HDLC_CRC_32:
-            calc_crc = crc32(PPPINITFCS32, handle->rx_buf, len - 4);
+            calc_crc = tiny_crc32(PPPINITFCS32, handle->rx_buf, len - 4);
             read_crc = handle->rx.data[-4] | ((uint32_t)handle->rx.data[-3] << 8) |
                        ((uint32_t)handle->rx.data[-2] << 16) | ((uint32_t)handle->rx.data[-1] << 24);
             break;

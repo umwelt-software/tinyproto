@@ -33,7 +33,7 @@ extern "C"
 #include "proto/hdlc/low_level/hdlc_int.h"
 #include "hal/tiny_types.h"
 
-#define FD_MIN_BUF_SIZE(mtu, window) ( (sizeof(tiny_fd_data_t) + \
+#define FD_MIN_BUF_SIZE(mtu, window) ( sizeof(tiny_fd_data_t) + \
                                       HDLC_MIN_BUF_SIZE( mtu + sizeof(tiny_frame_header_t), HDLC_CRC_16 ) + \
                                       ( sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t) + mtu \
                                                                       - sizeof(((tiny_i_frame_info_t *)0)->user_payload) ) * window )

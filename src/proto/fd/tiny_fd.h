@@ -34,7 +34,7 @@ extern "C"
 #endif
 
 #include <stdint.h>
-#include "proto/crc/crc.h"
+#include "proto/crc/tiny_crc.h"
 #include "hal/tiny_types.h"
 
     /**
