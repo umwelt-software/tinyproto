@@ -17,7 +17,7 @@
     along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "crc.h"
+#include "tiny_crc.h"
 
 /* CRC32 RFC1662 (PPP in HDLC-like framing) */
 
@@ -65,7 +65,7 @@ uint32_t crc32_byte(uint32_t crc, uint8_t data)
     return fcstab_32[(crc ^ data) & 0xFF] ^ (crc >> 8);
 }
 
-uint32_t crc32(uint32_t crc, const uint8_t *buf, int size)
+uint32_t tiny_crc32(uint32_t crc, const uint8_t *buf, int size)
 {
     const uint8_t *p;
 
@@ -115,7 +115,7 @@ uint16_t crc16_byte(uint16_t crc, uint8_t data)
     return (crc >> 8) ^ fcstab_16[(crc ^ (data)) & 0xff];
 }
 
-uint16_t crc16(uint16_t crc, const uint8_t *data, int data_length)
+uint16_t tiny_crc16(uint16_t crc, const uint8_t* data, int data_length)
 {
     while ( data_length )
     {
@@ -136,7 +136,7 @@ uint16_t chksum_byte(uint16_t sum, uint8_t data)
     return sum + data;
 }
 
-uint16_t chksum(uint16_t sum, const uint8_t *data, int data_length)
+uint16_t tiny_chksum(uint16_t sum, const uint8_t* data, int data_length)
 {
     while ( data_length )
     {

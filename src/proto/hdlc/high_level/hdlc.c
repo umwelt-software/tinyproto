@@ -18,7 +18,7 @@
 */
 
 #include "proto/hdlc/high_level/hdlc.h"
-#include "proto/crc/crc.h"
+#include "proto/crc/tiny_crc.h"
 #include "proto/hdlc/low_level/hdlc_int.h"
 #include "hal/tiny_debug.h"
 

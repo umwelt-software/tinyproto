@@ -19,7 +19,7 @@
 #pragma once
 
 #include "hal/tiny_types.h"
-#include "proto/crc/crc.h"
+#include "proto/crc/tiny_crc.h"
 #include <stdint.h>
 #include <stdbool.h>
 
