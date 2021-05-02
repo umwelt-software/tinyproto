@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -33,6 +33,7 @@
 #include <HardwareSerial.h>
 #else
 #include <string.h>
+#include <stdlib.h>
 #endif
 
 namespace tinyproto
@@ -298,7 +299,7 @@ public:
     }
 
 private:
-    uint8_t m_data[S] __attribute__ ((aligned (16))) {};
+    TINY_ALIGNED_PTR uint8_t m_data[S]{};
 };
 
 /**
@@ -314,12 +315,13 @@ public:
      * Use this class only on powerful microcontrollers.
      */
     explicit FdD(int size)
-        : IFd(new uint8_t[size], size)
+        : IFd(reinterpret_cast<uint8_t *>(new uintptr_t[(size + sizeof(uintptr_t) - 1) / sizeof(uintptr_t)]), size)
     {
     }
+
     ~FdD()
     {
-        delete[] m_buffer;
+        free( m_buffer );
     }
 
 private:

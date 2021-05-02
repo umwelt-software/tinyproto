@@ -52,6 +52,31 @@ extern "C"
 
 #include <stdint.h>
 
+
+
+#if defined(_MSC_VER)
+#define TINY_ALIGNED(x)   __declspec(align(x))
+#elif defined(__GNUC__)
+#define TINY_ALIGNED(x)   __attribute__ ((aligned (x)))
+#else
+#define TINY_ALIGNED(x)
+#endif
+
+
+#if defined(__TARGET_CPU_CORTEX_M0) || defined(__TARGET_CPU_CORTEX_M0_) || defined(__ARM_ARCH_6M__) || \
+    defined(__TARGET_CPU_CORTEX_M3) || defined(__TARGET_CPU_CORTEX_M4) || defined(__ARM_ARCH_7EM__) || \
+    defined(__ARM_ARCH_7M__)
+
+#define TINY_ALIGNED_PTR   TINY_ALIGNED(sizeof(uintptr_t))
+
+#else
+
+#define TINY_ALIGNED_PTR   TINY_ALIGNED(sizeof(uintptr_t))
+
+#endif
+
+
+
 /**
  * @ingroup ERROR_CODES
  * @{
