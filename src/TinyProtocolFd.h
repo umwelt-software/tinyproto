@@ -321,7 +321,7 @@ public:
 
     ~FdD()
     {
-        free( m_buffer );
+        delete[] m_buffer;
     }
 
 private:
