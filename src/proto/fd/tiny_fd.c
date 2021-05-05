@@ -558,21 +558,50 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     memset(init->buffer, 0, init->buffer_size);
 
     uint8_t *ptr = (uint8_t *)init->buffer;
-    /* Lets locate main FD protocol data at the beginning of specified buffer */
+    /* Lets locate main FD protocol data at the beginning of specified buffer.
+     * The buffer must be properly aligned for ARM processors to get correct alignment for tiny_fd_data_t structure.
+     * That's why we allocate the space for the tiny_fd_data_t structure at the beginning. */
+    if ( (uintptr_t)ptr % TINY_ALIGN_STRUCT_VALUE != 0 )
+    {
+        LOG(TINY_LOG_CRIT, "The provided buffer is not aligned properly\n");
+        return TINY_ERR_INVALID_DATA;
+    }
     tiny_fd_data_t *protocol = (tiny_fd_data_t *)ptr;
     ptr += sizeof(tiny_fd_data_t);
+    /* Next let's allocate the space for low level hdlc structure.
+     * It will be located right next to the tiny_fd_data_t. */
+    uint8_t *hdlc_ll_ptr = ptr;
+    int hdlc_ll_size = (uint8_t *)init->buffer + init->buffer_size - ptr -
+                        init->window_frames * ( sizeof(tiny_i_frame_info_t *) + init->mtu + sizeof(tiny_i_frame_info_t) - sizeof(((tiny_i_frame_info_t *)0)->user_payload) );
+    /* All FD protocol structures must be aligned. That's why we fix the size, allocated for hdlc low level */
+    hdlc_ll_size &= ~(TINY_ALIGN_STRUCT_VALUE - 1);
+    ptr += hdlc_ll_size;
+    if ( (uintptr_t)ptr % TINY_ALIGN_STRUCT_VALUE != 0 )
+    {
+        LOG(TINY_LOG_CRIT, "Error in alignment, when allocating internal structures 2\n");
+        return TINY_ERR_FAILED;
+    }
+
     /* Next we need some space to hold pointers to tiny_i_frame_info_t records (window_frames pointers) */
     protocol->frames.i_frames = (tiny_i_frame_info_t **)(ptr);
     ptr += sizeof(tiny_i_frame_info_t *) * init->window_frames;
+    /* At this point we still have correct alignment in the buffer if init->window_frames is even.
+     * pointer is 4 bytes on ARM 32-bit, and if window_frames is even, that gives us multiply of 8.
+     */
     protocol->frames.max_i_frames = init->window_frames;
     protocol->frames.mtu = init->mtu;
     /* Lets allocate memory for TX frames, we have <window_frames> TX frames */
     for ( int i = 0; i < init->window_frames; i++ )
     {
         protocol->frames.i_frames[i] = (tiny_i_frame_info_t *)ptr;
-        /* We do not allocate space for CRC field since, it is calculated only during send operation by HDLC low level
-         */
+        /* mtu must be correctly aligned also, so the developer must use only mtu multiple of 8 on 32-bit ARM systems */
         ptr += protocol->frames.mtu + sizeof(tiny_i_frame_info_t) - sizeof(((tiny_i_frame_info_t *)0)->user_payload);
+    }
+    if ( ptr > (uint8_t *)init->buffer + init->buffer_size )
+    {
+        LOG(TINY_LOG_CRIT, "Out of provided memory: provided %i bytes, used %i bytes\n", init->buffer_size,
+            (int)(ptr - (uint8_t *)init->buffer));
+        return TINY_ERR_INVALID_DATA;
     }
     /* Lets allocate memory for HDLC low level protocol */
     hdlc_ll_init_t _init = { 0 };
@@ -580,15 +609,8 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     _init.on_frame_sent = on_frame_sent;
     _init.user_data = protocol;
     _init.crc_type = init->crc_type;
-    _init.buf_size = hdlc_ll_get_buf_size_ex(protocol->frames.mtu + sizeof(tiny_frame_header_t), init->crc_type);
-    _init.buf = ptr;
-    ptr += _init.buf_size;
-    if ( ptr > (uint8_t *)init->buffer + init->buffer_size )
-    {
-        LOG(TINY_LOG_CRIT, "Out of provided memory: provided %i bytes, used %i bytes\n", init->buffer_size,
-            (int)(ptr - (uint8_t *)init->buffer));
-        return TINY_ERR_INVALID_DATA;
-    }
+    _init.buf_size = hdlc_ll_size;
+    _init.buf = hdlc_ll_ptr;
 
     int result = hdlc_ll_init(&protocol->_hdlc, &_init);
     if ( result != TINY_SUCCESS )

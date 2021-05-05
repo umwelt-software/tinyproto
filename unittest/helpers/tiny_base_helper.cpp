@@ -23,7 +23,8 @@
 BaseHelper::BaseHelper(FakeEndpoint *endpoint, int rxBufferSize)
     : m_forceStop(false)
 {
-    m_buffer = new uint8_t[rxBufferSize];
+    m_bufferOriginPtr = new uint8_t[rxBufferSize + TINY_ALIGN_STRUCT_VALUE - 1];
+    m_buffer = (uint8_t *)( ((uintptr_t)m_bufferOriginPtr + TINY_ALIGN_STRUCT_VALUE - 1) & (~(TINY_ALIGN_STRUCT_VALUE-1)) );
     m_endpoint = endpoint;
 }
 
@@ -85,6 +86,6 @@ void BaseHelper::stop()
 
 BaseHelper::~BaseHelper()
 {
-    delete[] m_buffer;
-    m_buffer = nullptr;
+    delete[] m_bufferOriginPtr;
+    m_bufferOriginPtr = nullptr;
 }

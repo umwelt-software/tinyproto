@@ -41,6 +41,7 @@ protected:
     std::thread *m_sendThread = nullptr;
     std::atomic<bool> m_forceStop;
     uint8_t *m_buffer;
+    uint8_t *m_bufferOriginPtr;
 
     static void receiveThread(BaseHelper *p);
     void wait_until_rx_count(int count, uint32_t timeout);

@@ -68,6 +68,11 @@ int hdlc_ll_init(hdlc_ll_handle_t *handle, hdlc_ll_init_t *init)
             (int)sizeof(hdlc_ll_data_t));
         return TINY_ERR_FAILED;
     }
+    if ( (uintptr_t)init->buf % TINY_ALIGN_STRUCT_VALUE != 0 )
+    {
+        LOG(TINY_LOG_CRIT, "Provided buffer has incorrect alignment\n");
+        return TINY_ERR_INVALID_DATA;
+    }
     *handle = (hdlc_ll_handle_t)init->buf;
     (*handle)->rx_buf = (uint8_t *)init->buf + sizeof(hdlc_ll_data_t);
     (*handle)->rx_buf_size = init->buf_size - sizeof(hdlc_ll_data_t);

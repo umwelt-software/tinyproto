@@ -63,7 +63,7 @@ extern "C"
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
         hdlc_ll_handle_t _hdlc;
         int rx_len;
-        uint8_t buffer[LIGHT_BUF_SIZE];
+        TINY_ALIGNED_STRUCT uint8_t buffer[LIGHT_BUF_SIZE];
 #endif
         /// user-specific data
         void *user_data;

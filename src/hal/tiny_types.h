@@ -67,14 +67,15 @@ extern "C"
     defined(__TARGET_CPU_CORTEX_M3) || defined(__TARGET_CPU_CORTEX_M4) || defined(__ARM_ARCH_7EM__) || \
     defined(__ARM_ARCH_7M__)
 
-#define TINY_ALIGNED_PTR   TINY_ALIGNED(sizeof(uintptr_t))
+#define TINY_ALIGN_STRUCT_VALUE     8
+#define TINY_ALIGNED_STRUCT   TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
 
 #else
 
-#define TINY_ALIGNED_PTR   TINY_ALIGNED(sizeof(uintptr_t))
+#define TINY_ALIGN_STRUCT_VALUE     sizeof(uintptr_t)
+#define TINY_ALIGNED_STRUCT   TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
 
 #endif
-
 
 
 /**

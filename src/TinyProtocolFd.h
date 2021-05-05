@@ -299,7 +299,7 @@ public:
     }
 
 private:
-    TINY_ALIGNED_PTR uint8_t m_data[S]{};
+    TINY_ALIGNED_STRUCT uint8_t m_data[S]{};
 };
 
 /**

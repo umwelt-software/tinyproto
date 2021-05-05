@@ -54,12 +54,13 @@ extern "C"
 
     typedef struct
     {
-        tiny_frame_header_t header; ///< header of s-frame, non-empty is there is something to send
+        TINY_ALIGNED(1) tiny_frame_header_t header; ///< header of s-frame, non-empty is there is something to send
     } tiny_s_frame_info_t;
 
     typedef struct
     {
-        tiny_frame_header_t header; ///< header of u-frame, non-empty is there is something to send
+        /* Aligning header to 1 byte, since header, data1, data2, data2 together are the byte-stream */
+        TINY_ALIGNED(1) tiny_frame_header_t header; ///< header of u-frame, non-empty is there is something to send
         uint8_t data1;
         uint8_t data2;
         uint8_t data3;
@@ -69,7 +70,8 @@ extern "C"
     {
         uint8_t type; ///< 0 for now
         int len;
-        tiny_frame_header_t header; ///< header, fill every time, when user payload is sending
+        /* Aligning header to 1 byte, since header and user_payload together are the byte-stream */
+        TINY_ALIGNED(1) tiny_frame_header_t header; ///< header, fill every time, when user payload is sending
         uint8_t user_payload;       ///< this byte and all bytes after are user payload
     } tiny_i_frame_info_t;
 
