@@ -62,20 +62,18 @@ static int hdlc_ll_send_end(hdlc_ll_handle_t handle);
 int hdlc_ll_init(hdlc_ll_handle_t *handle, hdlc_ll_init_t *init)
 {
     *handle = NULL;
-    if ( !init->buf || init->buf_size < sizeof(hdlc_ll_data_t) )
+    // Aligning provided buffer for the system
+    uint8_t *buf = (uint8_t *)( ((uintptr_t)init->buf + TINY_ALIGN_STRUCT_VALUE - 1) & (~(TINY_ALIGN_STRUCT_VALUE - 1)) );
+    int buf_size = init->buf_size -  (buf - (uint8_t *)init->buf);
+    if ( !init->buf || buf_size < sizeof(hdlc_ll_data_t) )
     {
         LOG(TINY_LOG_ERR, "[HDLC] failed to init hdlc. buf=%p, size=%i (%i required)\n", init->buf, init->buf_size,
-            (int)sizeof(hdlc_ll_data_t));
+            (int)(sizeof(hdlc_ll_data_t) + TINY_ALIGN_STRUCT_VALUE - 1));
         return TINY_ERR_FAILED;
     }
-    if ( (uintptr_t)init->buf % TINY_ALIGN_STRUCT_VALUE != 0 )
-    {
-        LOG(TINY_LOG_CRIT, "Provided buffer has incorrect alignment\n");
-        return TINY_ERR_INVALID_DATA;
-    }
-    *handle = (hdlc_ll_handle_t)init->buf;
-    (*handle)->rx_buf = (uint8_t *)init->buf + sizeof(hdlc_ll_data_t);
-    (*handle)->rx_buf_size = init->buf_size - sizeof(hdlc_ll_data_t);
+    *handle = (hdlc_ll_handle_t)buf;
+    (*handle)->rx_buf = (uint8_t *)buf + sizeof(hdlc_ll_data_t);
+    (*handle)->rx_buf_size = buf_size - sizeof(hdlc_ll_data_t);
     (*handle)->crc_type = init->crc_type == HDLC_CRC_OFF ? 0 : init->crc_type;
     (*handle)->on_frame_read = init->on_frame_read;
     (*handle)->on_frame_sent = init->on_frame_sent;
@@ -526,14 +524,16 @@ int hdlc_ll_run_rx(hdlc_ll_handle_t handle, const void *data, int len, int *erro
 
 int hdlc_ll_get_buf_size(int mtu)
 {
-    return get_crc_field_size(HDLC_CRC_32) + sizeof(hdlc_ll_data_t) + mtu;
+    // TINY_ALIGN_STRUCT_VALUE is added to satisfy alignment requirements
+    return get_crc_field_size(HDLC_CRC_32) + sizeof(hdlc_ll_data_t) + mtu + TINY_ALIGN_STRUCT_VALUE - 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 int hdlc_ll_get_buf_size_ex(int mtu, hdlc_crc_t crc_type)
 {
-    return get_crc_field_size(crc_type) + sizeof(hdlc_ll_data_t) + mtu;
+    // TINY_ALIGN_STRUCT_VALUE is added to satisfy alignment requirements
+    return get_crc_field_size(crc_type) + sizeof(hdlc_ll_data_t) + mtu + TINY_ALIGN_STRUCT_VALUE - 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

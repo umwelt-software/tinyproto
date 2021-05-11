@@ -292,9 +292,9 @@ TEST(HDLC, hdlc_incomplete_send_on_close)
 
 TEST(HDLC, check_buf_size_calculations)
 {
-    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 14, hdlc_ll_get_buf_size(10) );
-    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 10, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_OFF) );
-    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 11, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_8) );
-    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 12, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_16) );
-    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 14, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_32) );
+    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 13 + TINY_ALIGN_STRUCT_VALUE, hdlc_ll_get_buf_size(10) );
+    CHECK_EQUAL( sizeof(hdlc_ll_data_t) +  9 + TINY_ALIGN_STRUCT_VALUE, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_OFF) );
+    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 10 + TINY_ALIGN_STRUCT_VALUE, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_8) );
+    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 11 + TINY_ALIGN_STRUCT_VALUE, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_16) );
+    CHECK_EQUAL( sizeof(hdlc_ll_data_t) + 13 + TINY_ALIGN_STRUCT_VALUE, hdlc_ll_get_buf_size_ex(10, HDLC_CRC_32) );
 }

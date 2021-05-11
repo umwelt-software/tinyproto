@@ -118,8 +118,8 @@ static PyObject *Fd_begin(Fd *self)
     init.on_sent_cb = on_frame_sent;
     init.crc_type = self->crc_type;
     init.buffer_size = tiny_fd_buffer_size_by_mtu_ex(self->mtu, self->window_size, init.crc_type);
-    self->buffer = PyObject_Malloc(init.buffer_size + TINY_ALIGN_STRUCT_VALUE - 1);
-    init.buffer = (void *)( ((uintptr_t)self->buffer + TINY_ALIGN_STRUCT_VALUE - 1) & (~(TINY_ALIGN_STRUCT_VALUE - 1)) );
+    self->buffer = PyObject_Malloc(init.buffer_size);
+    init.buffer = self->buffer;
     init.send_timeout = 1000;
     init.retry_timeout = 200;
     init.retries = 2;
