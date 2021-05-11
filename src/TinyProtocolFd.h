@@ -315,7 +315,7 @@ public:
      * Use this class only on powerful microcontrollers.
      */
     explicit FdD(int size)
-        : IFd(reinterpret_cast<uint8_t *>(new uintptr_t[(size + sizeof(uintptr_t) - 1) / sizeof(uintptr_t)]), size)
+        : IFd(reinterpret_cast<uint8_t *>(new uintptr_t[(size + TINY_ALIGN_STRUCT_VALUE - 1) / TINY_ALIGN_STRUCT_VALUE]), size)
     {
     }
 
