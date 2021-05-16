@@ -39,7 +39,7 @@ inline static int _iSetPrimask(int priMask)
 
 #define ATOMIC_BLOCK for ( int mask = _iDisGetPrimask(), flag = 1; flag; flag = _iSetPrimask(mask) )
 
-#include "hal_single_core.inl"
+#include "../single_core/hal_single_core.inl"
 
 void tiny_sleep(uint32_t ms)
 {

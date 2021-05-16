@@ -70,7 +70,7 @@ int _free_lock(int status)
 
 #endif
 
-#include "hal_single_core.inl"
+#include "../single_core/hal_single_core.inl"
 
 void tiny_sleep(uint32_t ms)
 {

@@ -32,22 +32,22 @@ extern "C"
 #endif
 
 #if defined(TINY_CUSTOM_PLATFORM)
-#include "include/no_platform_hal.h"
+#include "no_platform/no_platform_hal.h"
 #elif defined(__AVR__)
-#include "include/avr_hal.h"
+#include "avr/avr_hal.h"
 #elif defined(__XTENSA__)
-#include "include/esp32_hal.h"
+#include "esp32/esp32_hal.h"
 #elif defined(ARDUINO)
-#include "include/arduino_hal.h"
+#include "arduino/arduino_hal.h"
 #elif defined(__linux__)
-#include "include/linux_hal.h"
+#include "linux/linux_hal.h"
 #elif defined(__MINGW32__)
-#include "include/mingw32_hal.h"
+#include "mingw32/mingw32_hal.h"
 #elif defined(_WIN32)
-#include "include/win32_hal.h"
+#include "win32/win32_hal.h"
 #else
 #info "Platform not supported. Multithread support is disabled"
-#include "include/no_platform_hal.h"
+#include "no_platform/no_platform_hal.h"
 #endif
 
 #include <stdint.h>

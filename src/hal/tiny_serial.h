@@ -37,11 +37,11 @@ extern "C"
 
 #include <stdint.h>
 #if defined(__linux__)
-#include "serial/linux_serial.h"
+#include "linux/linux_serial.h"
 #elif defined(_WIN32)
-#include "serial/win32_serial.h"
+#include "win32/win32_serial.h"
 #else
-#include "serial/noplatform_serial.h"
+#include "no_platform/noplatform_serial.h"
 #endif
 
     /**

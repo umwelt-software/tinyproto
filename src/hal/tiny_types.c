@@ -21,22 +21,22 @@
 #include "tiny_debug.h"
 
 #if defined(TINY_CUSTOM_PLATFORM)
-#include "impl/no_platform_hal.inl"
+#include "no_platform/no_platform_hal.inl"
 #elif defined(__AVR__)
-#include "impl/avr_hal.inl"
+#include "avr/avr_hal.inl"
 #elif defined(__XTENSA__)
-#include "impl/esp32_hal.inl"
+#include "esp32/esp32_hal.inl"
 #elif defined(ARDUINO)
-#include "impl/arduino_hal.inl"
+#include "arduino/arduino_hal.inl"
 #elif defined(__linux__)
-#include "impl/linux_hal.inl"
+#include "linux/linux_hal.inl"
 #elif defined(__MINGW32__)
-#include "impl/mingw32_hal.inl"
+#include "mingw32/mingw32_hal.inl"
 #elif defined(_WIN32)
-#include "impl/win32_hal.inl"
+#include "win32/win32_hal.inl"
 #else
 #warning "Platform not supported. Multithread support is disabled"
-#include "impl/no_platform_hal.inl"
+#include "no_platform/no_platform_hal.inl"
 #endif
 
 uint8_t g_tiny_log_level = TINY_LOG_LEVEL_DEFAULT;

@@ -69,8 +69,8 @@ Main features:
 
  That's not a problem. Just implement abstraction layer for your platform (timing and mutex functions).
 Refer to `tiny_hal_init()` function. To understand HAL implementation refer to
-[Linux](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/linux_hal.inl) and
-[ESP32](https://github.com/lexus2k/tinyproto/blob/master/src/hal/impl/esp32_hal.inl) examples in
+[Linux](https://github.com/lexus2k/tinyproto/blob/master/src/hal/linux/linux_hal.inl) and
+[ESP32](https://github.com/lexus2k/tinyproto/blob/master/src/hal/esp32/esp32_hal.inl) examples in
  [HAL abstraction layer](https://github.com/lexus2k/tinyproto/tree/master/src/hal).
 Do not forget to add TINY_CUSTOM_PLATFORM define to your compilation flags. You may use template code
 [platform_hal.c](tools/hal_template_functions/platform_hal.c)
