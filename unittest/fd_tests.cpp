@@ -158,7 +158,7 @@ TEST(FD, error_on_single_I_send)
         CHECK_EQUAL(TINY_SUCCESS, result);
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count(2, 300);
+    helper1.wait_until_rx_count(2, 500);
     CHECK_EQUAL(2, helper1.rx_count());
 }
 
@@ -183,7 +183,7 @@ TEST(FD, error_on_rej)
         CHECK_EQUAL(TINY_SUCCESS, result);
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count(2, 250);
+    helper1.wait_until_rx_count(2, 400);
     CHECK_EQUAL(2, helper1.rx_count());
 }
 
