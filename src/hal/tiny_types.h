@@ -68,15 +68,19 @@ extern "C"
     defined(__ARM_ARCH_7M__)
 
 #define TINY_ALIGN_STRUCT_VALUE     (sizeof(uintptr_t))
-#define TINY_ALIGNED_STRUCT   TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
+
+#elif defined(_MSC_VER)
+
+// MS Compiler at least in MSVC 2019 doesn't support sizeof and braces in __declspec(align(x)).
+#define TINY_ALIGN_STRUCT_VALUE  8
 
 #else
 
 #define TINY_ALIGN_STRUCT_VALUE     (sizeof(uintptr_t))
-#define TINY_ALIGNED_STRUCT   TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
 
 #endif
 
+#define TINY_ALIGNED_STRUCT TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
 
 /**
  * @ingroup ERROR_CODES
