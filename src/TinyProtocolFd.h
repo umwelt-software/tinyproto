@@ -225,6 +225,14 @@ public:
         m_userData = userData;
     }
 
+    /**
+     * Returns low-level handle for full duplex protocol
+     */
+    tiny_fd_handle_t getHandle()
+    {
+        return m_handle;
+    }
+
 protected:
     /**
      * Method called by hdlc protocol upon receiving new frame.
