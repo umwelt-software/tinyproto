@@ -790,6 +790,7 @@ static void tiny_fd_disconnected_on_idle_timeout(tiny_fd_handle_t handle)
             .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
         };
         __put_u_s_frame_to_tx_queue(handle, &frame, 2);
+        handle->state = TINY_FD_STATE_CONNECTING;
         handle->frames.last_ka_ts = tiny_millis();
     }
     tiny_mutex_unlock(&handle->frames.mutex);
