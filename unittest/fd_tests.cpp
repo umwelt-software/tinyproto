@@ -256,3 +256,19 @@ TEST(FD, singlethread_basic)
     // TODO:
     CHECK_EQUAL(0, 0);
 }
+
+TEST(FD, connecting_in_different_time)
+{
+    FakeConnection conn;
+    TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 250);
+    TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 250);
+    helper1.run(true);
+    tiny_sleep( 400 );
+    helper2.run(true);
+
+    uint8_t txbuf[4] = {0xAA, 0xFF, 0xCC, 0x66};
+    helper1.send(txbuf, sizeof(txbuf));
+    // wait until last frame arrives
+    helper2.wait_until_rx_count(1, 100);
+    CHECK_EQUAL(1, helper2.rx_count());
+}
