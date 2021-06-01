@@ -32,33 +32,44 @@ class FakeWire
 {
 public:
     FakeWire(int readbuf_size = 1024, int writebuf_size = 1024);
+
     ~FakeWire();
+
     int read(uint8_t *data, int length, int timeout = 10);
+
     int write(const uint8_t *data, int length, int timeout = 10);
+
     bool wait_until_rx_count(int count, int timeout);
 
     void generate_error_every_n_byte(int n)
     {
         m_errors.push_back(ErrorDesc{0, n, -1});
     };
+
     void generate_single_error(int position)
     {
         m_errors.push_back(ErrorDesc{position, position, 1});
     };
+
     void generate_error(int first, int period, int count = -1)
     {
         m_errors.push_back(ErrorDesc{first, period, count});
     };
+
     void reset();
+
     void disable()
     {
         m_enabled = false;
     }
+
     void enable()
     {
         m_enabled = true;
     }
+
     void flush();
+
     int lostBytes()
     {
         return m_lostBytes;

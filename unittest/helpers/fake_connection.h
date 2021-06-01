@@ -29,11 +29,17 @@ public:
     FakeConnection()
         : m_line_thread(TransferDataStatic, this)
     {
+        setSpeed( 512000 );
     }
+
     FakeConnection(int p1_hw_size, int p2_hw_size)
         : m_line1(p1_hw_size, p2_hw_size)
         , m_line2(p2_hw_size, p1_hw_size)
-        , m_line_thread(TransferDataStatic, this){};
+        , m_line_thread(TransferDataStatic, this)
+    {
+        setSpeed( 512000 );
+    }
+
     ~FakeConnection()
     {
         m_stopped = true;
@@ -58,9 +64,13 @@ public:
         return m_line2;
     }
 
-    void setSpeed(int bps)
+    void setSpeed(uint32_t bps)
     {
-        m_interval_us = 1000000 / (bps / 8);
+        uint64_t Bps = bps / 8;
+        uint64_t interval = 1000000 / (Bps);
+        interval = interval < 50 ? 50: interval;
+        m_Bps = Bps;
+        m_interval_us = interval;
     }
     int lostBytes()
     {
@@ -72,7 +82,8 @@ private:
     FakeWire m_line2{};
     FakeEndpoint m_endpoint1{m_line1, m_line2};
     FakeEndpoint m_endpoint2{m_line2, m_line1};
-    std::atomic<int> m_interval_us{1000000 / (/*115200*/ 512000 / 8)};
+    std::atomic<uint64_t> m_interval_us;
+    std::atomic<uint64_t> m_Bps;
     std::atomic<bool> m_stopped{false};
     std::thread m_line_thread;
 

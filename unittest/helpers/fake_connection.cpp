@@ -33,8 +33,13 @@ void FakeConnection::TransferData()
     {
         std::this_thread::sleep_for(std::chrono::microseconds(m_interval_us));
         auto endTs = std::chrono::steady_clock::now();
-        int bytes = (endTs - startTs) / std::chrono::microseconds(m_interval_us);
-        startTs += bytes * std::chrono::microseconds(m_interval_us);
+        uint64_t duration = std::chrono::duration_cast<std::chrono::microseconds>(endTs - startTs).count();
+        uint32_t bytes = m_Bps * duration / 1000000ULL;
+        if ( bytes == 0 )
+        {
+            bytes = 1;
+        }
+        startTs = endTs;
         m_line1.TransferData(bytes);
         m_line2.TransferData(bytes);
     }

@@ -27,9 +27,13 @@ class FakeEndpoint
 {
 public:
     FakeEndpoint(FakeWire &tx, FakeWire &rx);
+
     ~FakeEndpoint();
+
     int read(uint8_t *data, int length);
+
     int write(const uint8_t *data, int length);
+
     bool wait_until_rx_count(int count, int timeout);
 
     void setTimeout(int timeout_ms)
