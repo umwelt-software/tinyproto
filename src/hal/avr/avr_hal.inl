@@ -57,7 +57,7 @@ void tiny_sleep(uint32_t ms)
 
 void tiny_sleep_us(uint32_t us)
 {
-    if ( !ms )
+    if ( !us )
         return;
 #if defined(ARDUINO)
     return delayMicroseconds(us);
