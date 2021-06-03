@@ -282,7 +282,7 @@ static void __switch_to_connected_state(tiny_fd_handle_t handle)
         handle->frames.last_ka_ts = tiny_millis();
         tiny_events_set(&handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS);
         tiny_events_set(&handle->frames.events, FD_EVENT_TX_DATA_AVAILABLE);
-        LOG(TINY_LOG_INFO, "[%p] ABM connection is established\n", handle);
+        LOG(TINY_LOG_CRIT, "[%p] ABM connection is established\n", handle);
     }
 }
 
@@ -301,7 +301,7 @@ static void __switch_to_disconnected_state(tiny_fd_handle_t handle)
         handle->frames.sent_reject = 0;
         handle->frames.head_ptr = 0;
         tiny_events_clear(&handle->frames.events, FD_EVENT_QUEUE_HAS_FREE_SLOTS);
-        LOG(TINY_LOG_INFO, "[%p] Disconnected\n", handle);
+        LOG(TINY_LOG_CRIT, "[%p] ABM disconnected\n", handle);
     }
 }
 
@@ -450,7 +450,7 @@ static int on_frame_read(void *user_data, void *data, int len)
     {
         // Should send DM in case we receive here S- or I-frames.
         // If connection is not established, we should ignore all frames except U-frames
-        LOG(TINY_LOG_ERR, "[%p] ABM connection is not established\n", handle);
+        LOG(TINY_LOG_CRIT, "[%p] ABM connection is not established, connecting (1)\n", handle);
         tiny_u_frame_info_t frame = {
             .header.address = 0xFF,
             .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
@@ -783,15 +783,18 @@ static void tiny_fd_disconnected_on_idle_timeout(tiny_fd_handle_t handle)
     if ( __time_passed_since_last_frame_received(handle) >= handle->retry_timeout ||
          __number_of_awaiting_tx_i_frames(handle) > 0 )
     {
-        LOG(TINY_LOG_ERR, "[%p] ABM connection is not established\n", handle);
-        // Try to establish ABM connection
-        tiny_u_frame_info_t frame = {
-            .header.address = 0xFF,
-            .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
-        };
-        __put_u_s_frame_to_tx_queue(handle, &frame, 2);
-        handle->state = TINY_FD_STATE_CONNECTING;
-        handle->frames.last_ka_ts = tiny_millis();
+        if ( handle->state != TINY_FD_STATE_CONNECTED_ABM )
+        {
+            LOG(TINY_LOG_ERR, "[%p] ABM connection is not established, connecting (2)\n", handle);
+            // Try to establish ABM connection
+            tiny_u_frame_info_t frame = {
+                .header.address = 0xFF,
+                .header.control = HDLC_P_BIT | HDLC_U_FRAME_TYPE_SABM | HDLC_U_FRAME_BITS,
+            };
+            __put_u_s_frame_to_tx_queue(handle, &frame, 2);
+            handle->state = TINY_FD_STATE_CONNECTING;
+            handle->frames.last_ka_ts = tiny_millis();
+        }
     }
     tiny_mutex_unlock(&handle->frames.mutex);
 }
