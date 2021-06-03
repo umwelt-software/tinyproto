@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2019 (C) Alexey Dynda
+    Copyright 2017-2021 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -27,6 +27,7 @@
 #include "hal/tiny_list.h"
 #include "hal/tiny_debug.h"
 #include "proto/crc/tiny_crc.h"
+#include <thread>
 
 TEST_GROUP(HAL){void setup(){
     // ...
@@ -119,4 +120,34 @@ TEST(HAL, crc)
                                                                           (crc32_num >> 8) & 0xFF),
                                                                (crc32_num >> 16) & 0xFF),
                                                     (crc32_num >> 24))));
+}
+
+TEST(HAL, millis)
+{
+    uint32_t start = tiny_millis();
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    uint32_t delta = static_cast<uint32_t>( tiny_millis() - start );
+//    fprintf(stderr, "DELTA: %d\n", delta );
+    bool result = delta >= 100 && delta < 120;
+    CHECK_TEXT( result, "Timestamping functions are incorrect" );
+    tiny_sleep( 100 );
+    delta = static_cast<uint32_t>( tiny_millis() - start );
+//    fprintf(stderr, "DELTA: %d\n", delta );
+    result = delta >= 200 && delta < 220;
+    CHECK_TEXT( result, "Sleep function works incorrectly" );
+}
+
+TEST(HAL, micros)
+{
+    uint32_t start = tiny_micros();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    uint32_t delta = static_cast<uint32_t>( tiny_micros() - start );
+//    fprintf(stderr, "DELTA: %d\n", delta );
+    bool result = delta >= 1000 && delta < 1500;
+    CHECK_TEXT( result, "Timestamping functions are incorrect" );
+    tiny_sleep_us( 100 );
+    delta = static_cast<uint32_t>( tiny_micros() - start );
+//    fprintf(stderr, "DELTA: %d\n", delta );
+    result = delta >= 1100 && delta < 1600;
+    CHECK_TEXT( result, "Sleep function works incorrectly" );
 }

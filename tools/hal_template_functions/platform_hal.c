@@ -120,9 +120,23 @@ static void my_platform_sleep(uint32_t ms)
     while ( (uint32_t)(tiny_millis() - start) < ms );
 }
 
+static void my_platform_sleep_us(uint32_t us)
+{
+    // No default support for sleep
+    uint32_t start = tiny_micros();
+    while ( (uint32_t)(tiny_micros() - start) < us );
+}
+
 static uint32_t my_platform_millis()
 {
     // No default support for milliseconds
+    static uint32_t cnt = 0;
+    return cnt++;
+}
+
+static uint32_t my_platform_micros()
+{
+    // No default support for microseconds
     static uint32_t cnt = 0;
     return cnt++;
 }
@@ -146,6 +160,9 @@ void my_platform_tiny_hal_init(tiny_platform_hal_t *hal)
 
         .sleep = my_platform_sleep,
         .millis = my_platform_millis,
+
+        .sleep_us = my_platform_sleep_us,
+        .micros = my_platform_micros,
     };
 
     tiny_hal_init( &hal );

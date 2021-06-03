@@ -103,8 +103,14 @@ typedef struct
     /** Must have for Full duplex protocol. Default implementation does not do any sleep operation */
     void (*sleep)(uint32_t ms);
 
-    /** Must have for Full duplex protocol. Default implementation does not cound milliseconds */
+    /** Must have for Full duplex protocol. Default implementation does not count milliseconds */
     uint32_t (*millis)(void);
+
+    /** Must have for 1-wire interface. Default implementation does not do any sleep operation */
+    void (*sleep_us)(uint32_t us);
+
+    /** Must have for 1-wire interface. Default implementation does not count microseconds */
+    uint32_t (*micros)(void);
 } tiny_platform_hal_t;
 
 /**

@@ -55,10 +55,33 @@ void tiny_sleep(uint32_t ms)
 #endif
 }
 
+void tiny_sleep_us(uint32_t us)
+{
+    if ( !ms )
+        return;
+#if defined(ARDUINO)
+    return delayMicroseconds(us);
+#else
+    while ( us-- )
+    {
+        _delay_us(1);
+    }
+#endif
+}
+
 uint32_t tiny_millis()
 {
 #if defined(ARDUINO)
     return millis();
+#else
+    return 0;
+#endif
+}
+
+uint32_t tiny_micros()
+{
+#if defined(ARDUINO)
+    return micros();
 #else
     return 0;
 #endif

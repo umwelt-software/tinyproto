@@ -132,9 +132,21 @@ void tiny_sleep(uint32_t millis)
     usleep(millis * 1000);
 }
 
+void tiny_sleep_us(uint32_t us)
+{
+    usleep(us);
+}
+
 uint32_t tiny_millis()
 {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return (ts.tv_sec * 1000) + ts.tv_nsec / 1000000;
+}
+
+uint32_t tiny_micros()
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (ts.tv_sec * 1000000) + ts.tv_nsec / 1000;
 }

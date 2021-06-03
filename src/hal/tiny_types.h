@@ -266,9 +266,20 @@ extern "C"
     void tiny_sleep(uint32_t ms);
 
     /**
+     * Sleeps for specified period in microseconds.
+     * @param us time in microseconds to sleep
+     */
+    void tiny_sleep_us(uint32_t us);
+
+    /**
      * Returns timestamp in milliseconds since system started up.
      */
     uint32_t tiny_millis();
+
+    /**
+     * Returns timestamp in microseconds since system started up.
+     */
+    uint32_t tiny_micros();
 
     /** @} */
 

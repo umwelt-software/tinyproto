@@ -77,7 +77,21 @@ void tiny_sleep(uint32_t millis)
     vTaskDelay(millis / portTICK_PERIOD_MS);
 }
 
+void tiny_sleep_us(uint32_t us)
+{
+    uint32_t start = tiny_micros();
+    while ( (uint32_t)(tiny_micros() - start) < us )
+    {
+        __asm__ __volatile__ ("nop\n\t");
+    }
+}
+
 uint32_t tiny_millis()
 {
     return (uint32_t)(esp_timer_get_time() / 1000);
+}
+
+uint32_t tiny_micros()
+{
+    return (uint32_t)(esp_timer_get_time());
 }

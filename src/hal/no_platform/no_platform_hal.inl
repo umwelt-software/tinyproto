@@ -118,9 +118,24 @@ static void sleep_default(uint32_t ms)
         ;
 }
 
+static void sleep_us_default(uint32_t us)
+{
+    // No default support for sleep
+    uint32_t start = tiny_micros();
+    while ( (uint32_t)(tiny_micros() - start) < us )
+        ;
+}
+
 static uint32_t millis_default()
 {
     // No default support for milliseconds
+    static uint32_t cnt = 0;
+    return cnt++;
+}
+
+static uint32_t micros_default()
+{
+    // No default support for microseconds
     static uint32_t cnt = 0;
     return cnt++;
 }
@@ -141,6 +156,8 @@ static tiny_platform_hal_t s_hal = {
 
     .sleep = sleep_default,
     .millis = millis_default,
+    .sleep_us = sleep_us_default,
+    .micros = micros_default,
 };
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
@@ -203,9 +220,19 @@ void tiny_sleep(uint32_t ms)
     s_hal.sleep(ms);
 }
 
+void tiny_sleep_us(uint32_t us)
+{
+    s_hal.sleep_us(us);
+}
+
 uint32_t tiny_millis(void)
 {
     return s_hal.millis();
+}
+
+uint32_t tiny_micros(void)
+{
+    return s_hal.micros();
 }
 
 void tiny_hal_init(tiny_platform_hal_t *hal)
@@ -236,4 +263,8 @@ void tiny_hal_init(tiny_platform_hal_t *hal)
         s_hal.sleep = hal->sleep;
     if ( hal->millis )
         s_hal.millis = hal->millis;
+    if ( hal->sleep_us )
+        s_hal.sleep_us = hal->sleep_us;
+    if ( hal->micros )
+        s_hal.micros = hal->micros;
 }

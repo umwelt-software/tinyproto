@@ -566,8 +566,8 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     /* Next let's allocate the space for low level hdlc structure.
      * It will be located right next to the tiny_fd_data_t. */
     uint8_t *hdlc_ll_ptr = ptr;
-    int hdlc_ll_size = (uint8_t *)init->buffer + init->buffer_size - ptr -
-                        init->window_frames * ( sizeof(tiny_i_frame_info_t *) + init->mtu + sizeof(tiny_i_frame_info_t) - sizeof(((tiny_i_frame_info_t *)0)->user_payload) );
+    int hdlc_ll_size = (int)((uint8_t *)init->buffer + init->buffer_size - ptr -
+                             init->window_frames * ( sizeof(tiny_i_frame_info_t *) + init->mtu + sizeof(tiny_i_frame_info_t) - sizeof(((tiny_i_frame_info_t *)0)->user_payload) ));
     /* All FD protocol structures must be aligned. That's why we fix the size, allocated for hdlc low level */
     hdlc_ll_size &= ~(TINY_ALIGN_STRUCT_VALUE - 1);
     ptr += hdlc_ll_size;

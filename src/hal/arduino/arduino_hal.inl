@@ -77,7 +77,17 @@ void tiny_sleep(uint32_t ms)
     delay(ms);
 }
 
+void tiny_sleep_us(uint32_t us)
+{
+    delayMicroseconds(us);
+}
+
 uint32_t tiny_millis()
 {
     return millis();
+}
+
+uint32_t tiny_micros()
+{
+    return micros();
 }

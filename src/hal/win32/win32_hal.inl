@@ -19,6 +19,7 @@
 
 #include <stdint.h>
 #include <errno.h>
+#include <profileapi.h>
 
 void tiny_mutex_create(tiny_mutex_t *mutex)
 {
@@ -123,7 +124,32 @@ void tiny_sleep(uint32_t millis)
     Sleep(millis);
 }
 
+void tiny_sleep_us(uint32_t us)
+{
+    HANDLE timer;
+    LARGE_INTEGER ft;
+
+    ft.QuadPart = -(10 * (__int64)us);
+
+    timer = CreateWaitableTimer(NULL, TRUE, NULL);
+    SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
+    WaitForSingleObject(timer, INFINITE);
+    CloseHandle(timer);
+}
+
 uint32_t tiny_millis()
 {
     return GetTickCount();
+}
+
+uint32_t tiny_micros()
+{
+    LARGE_INTEGER T;
+    LARGE_INTEGER F;
+
+    QueryPerformanceFrequency(&F); 
+    QueryPerformanceCounter(&T);
+
+    T.QuadPart = T.QuadPart * 1000000 / F.QuadPart;
+    return (uint32_t)T.QuadPart;
 }
