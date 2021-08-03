@@ -322,9 +322,36 @@ static int Fd_set_on_send(Fd *self, PyObject *value, void *closure)
     return 0;
 }
 
+static PyObject* Fd_get_crc(Fd *self, void * closure)
+{
+    return PyLong_FromLong( self->crc_type );
+}
+
+static int Fd_set_crc(Fd *self, PyObject *value)
+{
+    int result = -1;
+    if ( value && PyLong_Check(value) )
+    {
+        int temp = PyLong_AsLong(value);
+        if ( temp == HDLC_CRC_16 || temp == HDLC_CRC_32 ||
+             temp == HDLC_CRC_8 || temp == HDLC_CRC_OFF ||
+             temp == HDLC_CRC_DEFAULT )
+        {
+             result = 0;
+             self->crc_type = (hdlc_crc_t)temp;
+        }
+    }
+    if ( result < 0 )
+    {
+        PyErr_Format(PyExc_RuntimeError, "Allowable CRC values are: 0 (AUTO), 8, 16, 32, 255 (OFF)");
+    }
+    return result/* 0 on success, -1 on failure with error set. */;
+}
+
 static PyGetSetDef Fd_getsetters[] = {
     {"on_read", (getter)Fd_get_on_read, (setter)Fd_set_on_read, "Callback for incoming messages", NULL},
     {"on_send", (getter)Fd_get_on_send, (setter)Fd_set_on_send, "Callback for successfully sent messages", NULL},
+    {"crc",     (getter)Fd_get_crc,     (setter)Fd_set_crc,     "CRC value", NULL},
     {NULL} /* Sentinel */
 };
 
