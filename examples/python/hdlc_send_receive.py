@@ -18,6 +18,7 @@
 #
 
 import tinyproto
+import tinyproto.options
 
 p = tinyproto.Hdlc()
 def on_read(a):
@@ -29,9 +30,12 @@ def on_send(a):
 # setup protocol
 p.on_read = on_read
 p.on_send = on_send
+p.crc = tinyproto.options.HDLC_CRC_16
 p.begin()
 
 # provide rx bytes to the protocol
+# For serial port communication you need to read the bytes from the serial port
+# and pass them to rx() method then.
 p.rx( bytearray([ 0x7E, 0xFF, 0x3F, 0xF3, 0x39, 0x7E  ]) )
 
 # Let's try to send single byte frame 0x65
