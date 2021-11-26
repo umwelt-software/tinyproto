@@ -66,6 +66,7 @@ OBJ_LIB += \
         src/proto/hdlc/high_level/hdlc.o \
         src/proto/hdlc/low_level/hdlc.o \
         src/proto/fd/tiny_fd.o \
+        src/proto/fd/tiny_fd_frames.o \
         src/hal/tiny_list.o \
         src/hal/tiny_types.o \
         src/hal/tiny_serial.o \
