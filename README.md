@@ -223,6 +223,7 @@ Just place the library to your project components folder.
 For more information about this library, please, visit https://github.com/lexus2k/tinyproto.
 Doxygen documentation can be found at [Codedocs xyz site](https://codedocs.xyz/lexus2k/tinyproto).
 If you found any problem or have any idea, please, report to Issues section.
+If you find the library useful and want to [support future development](https://www.paypal.me/lexus2k), you may contact me.
 
 ## License
 
