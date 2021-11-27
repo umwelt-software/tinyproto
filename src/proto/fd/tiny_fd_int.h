@@ -37,7 +37,7 @@ extern "C"
 #define FD_MIN_BUF_SIZE(mtu, window) ( sizeof(tiny_fd_data_t) + \
                                       HDLC_MIN_BUF_SIZE( mtu + sizeof(tiny_frame_header_t), HDLC_CRC_16 ) + \
                                       ( sizeof(tiny_fd_frame_info_t *) + sizeof(tiny_fd_frame_info_t) + mtu \
-                                                                      - sizeof(((tiny_fd_frame_info_t *)0)->user_payload) ) * window + \
+                                                                      - sizeof(((tiny_fd_frame_info_t *)0)->payload) ) * window + \
                                       ( sizeof(tiny_fd_frame_info_t) + sizeof(tiny_fd_frame_info_t *) ) * TINY_FD_U_QUEUE_MAX_SIZE )
 
     typedef enum

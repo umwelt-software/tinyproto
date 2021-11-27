@@ -720,11 +720,11 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
     if ( ptr != NULL )
     {
         // clear queue only, when send is done, so for now, use pointer data for sending only
-        uint8_t s_frame_peer = 0; // TODO: Get from the packet
         data = (uint8_t *)&ptr->header;
         *len = ptr->len + sizeof(tiny_frame_header_t);
         if ( (data[1] & HDLC_S_FRAME_MASK) == HDLC_S_FRAME_BITS )
         {
+            uint8_t s_frame_peer = 0; // TODO: Get from the packet
             handle->peers[s_frame_peer].sent_nr = ptr->header.control >> 5;
         }
 
