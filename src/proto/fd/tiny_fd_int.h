@@ -36,8 +36,9 @@ extern "C"
 
 #define FD_MIN_BUF_SIZE(mtu, window) ( sizeof(tiny_fd_data_t) + \
                                       HDLC_MIN_BUF_SIZE( mtu + sizeof(tiny_frame_header_t), HDLC_CRC_16 ) + \
-                                      ( sizeof(tiny_i_frame_info_t *) + sizeof(tiny_i_frame_info_t) + mtu \
-                                                                      - sizeof(((tiny_i_frame_info_t *)0)->user_payload) ) * window )
+                                      ( sizeof(tiny_fd_frame_info_t *) + sizeof(tiny_fd_frame_info_t) + mtu \
+                                                                      - sizeof(((tiny_fd_frame_info_t *)0)->user_payload) ) * window + \
+                                      ( sizeof(tiny_fd_frame_info_t) + sizeof(tiny_fd_frame_info_t *) ) * TINY_FD_U_QUEUE_MAX_SIZE )
 
     typedef enum
     {
@@ -49,30 +50,15 @@ extern "C"
 
     typedef struct
     {
-        TINY_ALIGNED(1) tiny_frame_header_t header; ///< header of s-frame, non-empty is there is something to send
-    } tiny_s_frame_info_t;
-
-    typedef struct
-    {
-        /* Aligning header to 1 byte, since header, data1, data2, data2 together are the byte-stream */
-        TINY_ALIGNED(1) tiny_frame_header_t header; ///< header of u-frame, non-empty is there is something to send
+        tiny_frame_header_t header;
         uint8_t data1;
         uint8_t data2;
-        uint8_t data3;
-    } tiny_u_frame_info_t;
+    } tiny_fd_u_frame_t;
 
     typedef struct
     {
-        int len;
-        union
-        {
-            tiny_s_frame_info_t s_frame;
-            tiny_u_frame_info_t u_frame;
-        };
-    } tiny_frame_info_t;
-
-    typedef struct
-    {
+        /// state of hdlc protocol according to ISO & RFC
+        tiny_fd_state_t state;
         uint8_t addr;        // Peer address
 
         uint8_t next_nr;     // frame waiting to receive
@@ -109,8 +95,6 @@ extern "C"
         on_frame_cb_t on_sent_cb;
         /// hdlc information
         hdlc_ll_handle_t _hdlc;
-        /// state of hdlc protocol according to ISO & RFC
-        tiny_fd_state_t state;
         /// Timeout for operations with acknowledge
         uint16_t send_timeout;
         /// Timeout before retrying resend I-frames
@@ -121,13 +105,12 @@ extern "C"
         uint8_t retries;
         /// Information for frames being processed
         tiny_frames_info_t frames;
+        /// Information on all peers stations
         tiny_fd_peer_info_t peers[1];
-        struct
-        {
-            tiny_frame_info_t queue[TINY_FD_U_QUEUE_MAX_SIZE];
-            uint8_t queue_ptr;
-            uint8_t queue_len;
-        } s_u_frames;
+        /// Storage for all S- and U- service frames
+        tiny_fd_queue_t s_queue;
+        /// Global events for HDLC protocol
+        tiny_events_t events;
         /// user specific data
         void *user_data;
     } tiny_fd_data_t;

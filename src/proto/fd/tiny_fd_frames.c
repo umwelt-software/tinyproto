@@ -43,14 +43,11 @@ int tiny_fd_queue_init(tiny_fd_queue_t *queue, uint8_t *buffer,
      */
     queue->size = max_frames;
     /* Lets allocate memory for TX frames, we have <window_frames> TX frames */
-    if ( mtu >= sizeof(((tiny_fd_frame_info_t *)0)->payload) )
+    for ( int i = 0; i < queue->size; i++ )
     {
-        for ( int i = 0; i < queue->size; i++ )
-        {
-            queue->frames[i] = (tiny_fd_frame_info_t *)ptr;
-            /* mtu must be correctly aligned also, so the developer must use only mtu multiple of 8 on 32-bit ARM systems */
-            ptr += mtu + sizeof(tiny_fd_frame_info_t) - sizeof(((tiny_fd_frame_info_t *)0)->payload);
-        }
+        queue->frames[i] = (tiny_fd_frame_info_t *)ptr;
+        /* mtu must be correctly aligned also, so the developer must use only mtu multiple of 8 on 32-bit ARM systems */
+        ptr += mtu + sizeof(tiny_fd_frame_info_t) - sizeof(((tiny_fd_frame_info_t *)0)->payload);
     }
     if ( ptr > buffer + max_size )
     {
@@ -73,7 +70,7 @@ void tiny_fd_queue_reset(tiny_fd_queue_t *queue)
 
 tiny_fd_frame_info_t *tiny_fd_queue_allocate(tiny_fd_queue_t *queue, int type, const uint8_t *data, int len)
 {
-    tiny_fd_frame_info_t *ptr = len <= queue->mtu ?  tiny_fd_queue_get_next(queue, TINY_FD_QUEUE_FREE, 0) : NULL;
+    tiny_fd_frame_info_t *ptr = len <= queue->mtu ?  tiny_fd_queue_get_next(queue, TINY_FD_QUEUE_FREE, 0, 0) : NULL;
     if ( ptr != NULL )
     {
         memcpy( &ptr->payload[0], data, len );
@@ -83,13 +80,13 @@ tiny_fd_frame_info_t *tiny_fd_queue_allocate(tiny_fd_queue_t *queue, int type, c
     return ptr;
 }
 
-tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, uint8_t arg)
+tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, uint8_t address, uint8_t arg)
 {
     tiny_fd_frame_info_t *ptr = NULL;
     int index = queue->lookup_index;
     for (int i=0; i < queue->size; i++)
     {
-        if ( queue->frames[index]->type == type )
+        if ( queue->frames[index]->type & type )
         {
             if ( type != TINY_FD_QUEUE_I_FRAME )
             {
@@ -97,7 +94,7 @@ tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, u
                 break;
             }
             // Check for I-frame for the frame number
-            if ( ( ( queue->frames[index]->header.control >> 1 ) & 0x07 )  == arg )
+            if ( ( ( queue->frames[index]->header.control >> 1 ) & 0x07 )  == arg && (address & 0xFC) == (queue->frames[index]->header.address & 0xFC) )
             {
                 ptr = queue->frames[index];
                 break;
@@ -112,22 +109,18 @@ tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, u
     return ptr;
 }
 
-void tiny_fd_queue_free_i_frame(tiny_fd_queue_t *queue, uint8_t ns)
+void tiny_fd_queue_free(tiny_fd_queue_t *queue, tiny_fd_frame_info_t *frame)
 {
-    tiny_fd_frame_info_t *ptr = tiny_fd_queue_get_next(queue, TINY_FD_QUEUE_I_FRAME, ns);
-    if (ptr != NULL)
-    {
-        ptr->type = TINY_FD_QUEUE_FREE;
-    }
+    tiny_fd_queue_free_by_header(queue, &frame->header);
 }
 
-void tiny_fd_queue_free(tiny_fd_queue_t *queue, tiny_fd_frame_info_t *frame)
+void tiny_fd_queue_free_by_header(tiny_fd_queue_t *queue, const void *header)
 {
     for (int i=0; i < queue->size; i++)
     {
-        if ( queue->frames[i] == frame )
+        if ( &queue->frames[i]->header == header )
         {
-            frame->type = TINY_FD_QUEUE_FREE;
+            queue->frames[i]->type = TINY_FD_QUEUE_FREE;
             queue->lookup_index = i + 1;
             if ( queue->lookup_index >= queue->size )
             {
@@ -145,5 +138,5 @@ int tiny_fd_queue_get_mtu(tiny_fd_queue_t *queue)
 
 bool tiny_fd_queue_has_free_slots(tiny_fd_queue_t *queue)
 {
-    return tiny_fd_queue_get_next(queue, TINY_FD_QUEUE_FREE, 0) != NULL;
+    return tiny_fd_queue_get_next(queue, TINY_FD_QUEUE_FREE, 0, 0) != NULL;
 }

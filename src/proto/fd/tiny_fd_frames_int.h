@@ -32,10 +32,10 @@ extern "C"
 
     typedef enum
     {
-        TINY_FD_QUEUE_FREE,
-        TINY_FD_QUEUE_U_FRAME,
-        TINY_FD_QUEUE_S_FRAME,
-        TINY_FD_QUEUE_I_FRAME,
+        TINY_FD_QUEUE_FREE = 0x01,
+        TINY_FD_QUEUE_U_FRAME = 0x02,
+        TINY_FD_QUEUE_S_FRAME = 0x04,
+        TINY_FD_QUEUE_I_FRAME = 0x08
     } tiny_fd_queue_type_t;
 
     typedef struct
@@ -105,7 +105,7 @@ extern "C"
      *
      * @important Remember that S-Frames and U-Frames can be reordered by the queue.
      */
-    tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, uint8_t arg);
+    tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, uint8_t address, uint8_t arg);
 
     /**
      * Marks frame slot as free
@@ -116,9 +116,12 @@ extern "C"
     void tiny_fd_queue_free(tiny_fd_queue_t *queue, tiny_fd_frame_info_t *frame);
 
     /**
-     * API to free i-frame by it's number
+     * Marks frame slot as free, using pointer to header
+     *
+     * @param queue pointer to queue structure
+     * @param frame pointer to the frame information
      */
-    void tiny_fd_queue_free_i_frame(tiny_fd_queue_t *queue, uint8_t ns);
+    void tiny_fd_queue_free_by_header(tiny_fd_queue_t *queue, const void *header);
 
 #ifdef __cplusplus
 }
