@@ -88,16 +88,25 @@ tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, u
     {
         if ( queue->frames[index]->type & type )
         {
-            if ( type != TINY_FD_QUEUE_I_FRAME )
+            if ( queue->frames[index]->type == TINY_FD_QUEUE_FREE )
             {
                 ptr = queue->frames[index];
                 break;
             }
-            // Check for I-frame for the frame number
-            if ( ( ( queue->frames[index]->header.control >> 1 ) & 0x07 )  == arg && (address & 0xFC) == (queue->frames[index]->header.address & 0xFC) )
+            // Check address for all frames
+            if ( (address & 0xFC) == (queue->frames[index]->header.address & 0xFC) )
             {
-                ptr = queue->frames[index];
-                break;
+                if ( queue->frames[index]->type != TINY_FD_QUEUE_I_FRAME )
+                {
+                    ptr = queue->frames[index];
+                    break;
+                }
+                // Check for I-frame for the frame number
+                if ( ( ( queue->frames[index]->header.control >> 1 ) & 0x07 )  == arg )
+                {
+                    ptr = queue->frames[index];
+                    break;
+                }
             }
         }
         index++;
@@ -124,7 +133,7 @@ void tiny_fd_queue_free_by_header(tiny_fd_queue_t *queue, const void *header)
             queue->lookup_index = i + 1;
             if ( queue->lookup_index >= queue->size )
             {
-                 queue->lookup_index -= queue->size;
+                queue->lookup_index -= queue->size;
             }
             break;
         }

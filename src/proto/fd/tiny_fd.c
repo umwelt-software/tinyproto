@@ -714,9 +714,10 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
 {
     uint8_t *data = NULL;
     uint8_t peer = 0; // TODO: Maybe cycle for all slave stations ???
+    uint8_t address = __peer_to_address_field( handle, peer );
     // Tx data available
     tiny_mutex_lock(&handle->frames.mutex);
-    tiny_fd_frame_info_t *ptr = tiny_fd_queue_get_next( &handle->s_queue, TINY_FD_QUEUE_S_FRAME | TINY_FD_QUEUE_U_FRAME, 0, 0 );
+    tiny_fd_frame_info_t *ptr = tiny_fd_queue_get_next( &handle->s_queue, TINY_FD_QUEUE_S_FRAME | TINY_FD_QUEUE_U_FRAME, address, 0 );
     if ( ptr != NULL )
     {
         // clear queue only, when send is done, so for now, use pointer data for sending only
@@ -724,8 +725,7 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
         *len = ptr->len + sizeof(tiny_frame_header_t);
         if ( (data[1] & HDLC_S_FRAME_MASK) == HDLC_S_FRAME_BITS )
         {
-            uint8_t s_frame_peer = 0; // TODO: Get from the packet
-            handle->peers[s_frame_peer].sent_nr = ptr->header.control >> 5;
+            handle->peers[peer].sent_nr = ptr->header.control >> 5;
         }
 
 #if TINY_FD_DEBUG
@@ -740,7 +740,7 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
         }
 #endif
     }
-    else if ( (ptr = tiny_fd_queue_get_next( &handle->frames.i_queue, TINY_FD_QUEUE_I_FRAME, __peer_to_address_field(handle, peer), handle->peers[peer].next_ns )) != NULL &&
+    else if ( (ptr = tiny_fd_queue_get_next( &handle->frames.i_queue, TINY_FD_QUEUE_I_FRAME, address, handle->peers[peer].next_ns )) != NULL &&
               ( handle->peers[peer].state == TINY_FD_STATE_CONNECTED_ABM || handle->peers[peer].state == TINY_FD_STATE_DISCONNECTING ) )
     {
         data = (uint8_t *)&ptr->header;
