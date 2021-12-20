@@ -284,10 +284,17 @@ static PyObject *Fd_run_rx(Fd *self, PyObject *args)
     return PyLong_FromLong((long)result);
 }
 
+static PyObject *Fd_get_status(Fd *self)
+{
+    int result = tiny_fd_get_status(self->handle);
+    return PyLong_FromLong((long)result);
+}
+
 /*
 void tiny_fd_set_ka_timeout 	( 	tiny_fd_handle_t  	handle,
                 uint32_t  	keep_alive
         )
+
 */
 
 ///////////////////////////////// GETTERS SETTERS
@@ -365,6 +372,7 @@ static PyMethodDef Fd_methods[] = {
     {"tx", (PyCFunction)Fd_tx, METH_VARARGS, "Fills specified buffer with tx data"},
     {"run_rx", (PyCFunction)Fd_run_rx, METH_VARARGS, "Reads data from user callback and parses them"},
     {"run_tx", (PyCFunction)Fd_run_tx, METH_VARARGS, "Writes data to user callback"},
+    {"get_status", (PyCFunction)Fd_get_status, METH_NOARGS, "Get connection status"},
     {NULL} /* Sentinel */
 };
 
