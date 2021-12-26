@@ -44,7 +44,6 @@ def tx_thread_fn(endpoint: tinyproto.Fd, port: serial.Serial):
 
     while not g_stop:
         endpoint.run_tx(write_func)
-        time.sleep(0.001)
 
 
 def rx_thread_fn(endpoint, port: serial.Serial):
@@ -59,7 +58,6 @@ def rx_thread_fn(endpoint, port: serial.Serial):
 
     while not g_stop:
         endpoint.run_rx(read_func)
-        time.sleep(0.001)
 
 
 def on_read(data):
@@ -109,7 +107,6 @@ def main(port: str, crc: int, generator: bool, packet_size: int, run_test: bool)
             ret = g_proto.send(b"Generated frame. test in progress")
             if ret < 0:
                 print(f"Failed to send packet: {ret}", file=sys.stderr)
-            time.sleep(0.1)
         else:
             time.sleep(1)
 
