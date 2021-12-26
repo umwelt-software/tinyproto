@@ -89,10 +89,15 @@ static void on_frame_read(void *user_data, uint8_t *data, int len)
     Fd *self = (Fd *)user_data;
     if ( self->on_frame_read )
     {
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
         PyObject *arg = PyByteArray_FromStringAndSize((const char *)data, (Py_ssize_t)len);
         PyObject *temp = PyObject_CallFunctionObjArgs(self->on_frame_read, arg, NULL);
         Py_XDECREF(temp); // Dereference result
         Py_DECREF(arg);   // We do not need ByteArray anymore
+
+        PyGILState_Release(gstate);
     }
 }
 
@@ -101,10 +106,15 @@ static void on_frame_sent(void *user_data, uint8_t *data, int len)
     Fd *self = (Fd *)user_data;
     if ( self->on_frame_sent )
     {
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
         PyObject *arg = PyByteArray_FromStringAndSize((const char *)data, (Py_ssize_t)len);
         PyObject *temp = PyObject_CallFunctionObjArgs(self->on_frame_sent, arg, NULL);
         Py_XDECREF(temp); // Dereference result
         Py_DECREF(arg);   // We do not need ByteArray anymore
+
+        PyGILState_Release(gstate);
     }
 }
 
@@ -145,7 +155,12 @@ static PyObject *Fd_send(Fd *self, PyObject *args)
     {
         return NULL;
     }
-    int result = tiny_fd_send_packet(self->handle, buffer.buf, buffer.len);
+    int result;
+
+    Py_BEGIN_ALLOW_THREADS;
+    result = tiny_fd_send_packet(self->handle, buffer.buf, buffer.len);
+    Py_END_ALLOW_THREADS;
+
     PyBuffer_Release(&buffer);
     return PyLong_FromLong((long)result);
 }
@@ -192,6 +207,9 @@ int write_func(void *user_data, const void *buffer, int size)
     Fd *self = (Fd *)user_data;
     if ( self->write_func )
     {
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
         PyObject *arg = PyByteArray_FromStringAndSize((const char *)buffer, (Py_ssize_t)size);
         PyObject *temp = PyObject_CallFunctionObjArgs(self->write_func, arg, NULL);
         if ( !temp || !PyLong_Check(temp) )
@@ -199,12 +217,17 @@ int write_func(void *user_data, const void *buffer, int size)
             Py_XDECREF(temp); // Dereference result
             Py_DECREF(arg);   // We do not need ByteArray anymore
             self->error_flag = 1;
+
+            PyGILState_Release(gstate);
             return size;
         }
         result = PyLong_AsLong(temp);
         Py_XDECREF(temp); // Dereference result
         Py_DECREF(arg);   // We do not need ByteArray anymore
+
+        PyGILState_Release(gstate);
     }
+
     return result;
 }
 
@@ -222,7 +245,11 @@ static PyObject *Fd_run_tx(Fd *self, PyObject *args)
     }
     Py_INCREF(cb);
     self->write_func = cb;
+
+    Py_BEGIN_ALLOW_THREADS;
     result = tiny_fd_run_tx(self->handle, write_func);
+    Py_END_ALLOW_THREADS;
+
     Py_DECREF(cb);
     self->write_func = NULL;
     if ( self->error_flag )
@@ -238,6 +265,9 @@ int read_func(void *user_data, void *buffer, int size)
     Fd *self = (Fd *)user_data;
     if ( self->read_func )
     {
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
         PyObject *arg = PyLong_FromLong((long)size);
         PyObject *temp = PyObject_CallFunctionObjArgs(self->read_func, arg, NULL);
         if ( !temp || !PyObject_CheckBuffer(temp) )
@@ -245,6 +275,8 @@ int read_func(void *user_data, void *buffer, int size)
             Py_XDECREF(temp); // Dereference result
             Py_DECREF(arg);   // We do not need ByteArray anymore
             self->error_flag = 1;
+
+            PyGILState_Release(gstate);
             return 0;
         }
         Py_buffer view;
@@ -256,7 +288,10 @@ int read_func(void *user_data, void *buffer, int size)
         }
         Py_XDECREF(temp); // Dereference result
         Py_DECREF(arg);
+
+        PyGILState_Release(gstate);
     }
+
     return result;
 }
 
@@ -274,7 +309,11 @@ static PyObject *Fd_run_rx(Fd *self, PyObject *args)
     }
     Py_INCREF(cb);
     self->read_func = cb;
+
+    Py_BEGIN_ALLOW_THREADS;
     result = tiny_fd_run_rx(self->handle, read_func);
+    Py_END_ALLOW_THREADS;
+
     Py_DECREF(cb);
     self->read_func = NULL;
     if ( self->error_flag )
