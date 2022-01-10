@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2021 (C) Alexey Dynda
+    Copyright 2019-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -110,6 +110,13 @@ extern "C"
          * will automatically calculate mtu based on buffer_size, window_frames.
          */
         int mtu;
+
+        /**
+         * Callback to get the notification when connect or disconnect event takes place.
+         * Can be NULL.
+         */
+        on_connect_event_cb_t on_connect_event_cb;
+
     } tiny_fd_init_t;
 
     /**

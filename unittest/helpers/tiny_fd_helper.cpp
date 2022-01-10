@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2021 (C) Alexey Dynda
+    Copyright 2017-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -31,6 +31,7 @@ TinyHelperFd::TinyHelperFd(FakeEndpoint *endpoint, int rxBufferSize,
     init.pdata = this;
     init.on_frame_cb = onRxFrame;
     init.on_sent_cb = onTxFrame;
+    init.on_connect_event_cb = onConnect;
     init.buffer = m_buffer;
     init.buffer_size = rxBufferSize;
     init.window_frames = window_frames ?: 7;
@@ -40,6 +41,11 @@ TinyHelperFd::TinyHelperFd(FakeEndpoint *endpoint, int rxBufferSize,
     init.crc_type = HDLC_CRC_16;
 
     tiny_fd_init(&m_handle, &init);
+}
+
+void TinyHelperFd::set_connect_cb(const std::function<void(uint8_t, bool)> &onConnectCb)
+{
+    m_onConnectCb = onConnectCb;
 }
 
 int TinyHelperFd::send(uint8_t *buf, int len)
@@ -121,6 +127,15 @@ void TinyHelperFd::onTxFrame(void *handle, uint8_t *buf, int len)
 {
     TinyHelperFd *helper = reinterpret_cast<TinyHelperFd *>(handle);
     helper->m_tx_count++;
+}
+
+void TinyHelperFd::onConnect(void *handle, uint8_t addr, bool connected)
+{
+    TinyHelperFd *helper = reinterpret_cast<TinyHelperFd *>(handle);
+    if ( helper->m_onConnectCb )
+    {
+        helper->m_onConnectCb(addr, connected);
+    }
 }
 
 TinyHelperFd::~TinyHelperFd()

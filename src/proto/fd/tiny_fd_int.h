@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2021 (C) Alexey Dynda
+    Copyright 2019-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -93,6 +93,8 @@ extern "C"
         on_frame_cb_t on_frame_cb;
         /// Callback to get notification of sent frames
         on_frame_cb_t on_sent_cb;
+        /// Callback to get connect/disconnect notification
+        on_connect_event_cb_t on_connect_event_cb;
         /// hdlc information
         hdlc_ll_handle_t _hdlc;
         /// Timeout for operations with acknowledge

@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -271,4 +271,31 @@ TEST(FD, connecting_in_different_time)
     // wait until last frame arrives
     helper2.wait_until_rx_count(1, 100);
     CHECK_EQUAL(1, helper2.rx_count());
+}
+
+TEST(FD, on_connect_callback)
+{
+    FakeConnection conn;
+    bool connected = false;
+    TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 100);
+    TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 100);
+    helper1.set_connect_cb( [&connected](uint8_t addr, bool result) -> void { connected = result; } );
+
+    helper1.run(true);
+    helper2.run(true);
+    uint8_t data[1] = {0xAA};
+    helper1.send( data, sizeof(data) );
+
+    for (int i = 0; i < 200 && !connected; i++)
+    {
+        tiny_sleep( 1 );
+    }
+    CHECK_EQUAL(true, connected);
+    helper2.stop();
+
+    for (int i = 0; i < 200 && connected; i++)
+    {
+        tiny_sleep( 1 );
+    }
+    CHECK_EQUAL(false, connected);
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2021 (C) Alexey Dynda
+    Copyright 2019-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -304,6 +304,12 @@ static void __switch_to_connected_state(tiny_fd_handle_t handle, uint8_t peer)
         handle->peers[peer].last_ka_ts = tiny_millis();
         tiny_events_set(&handle->peers[peer].events, FD_EVENT_CAN_ACCEPT_I_FRAMES);
         tiny_events_set(&handle->events, FD_EVENT_TX_DATA_AVAILABLE);
+        if ( handle->on_connect_event_cb )
+        {
+            tiny_mutex_unlock(&handle->frames.mutex);
+            handle->on_connect_event_cb(handle->user_data, __peer_to_address_field( handle, peer ), true);
+            tiny_mutex_lock(&handle->frames.mutex);
+        }
         LOG(TINY_LOG_CRIT, "[%p] ABM connection is established\n", handle);
     }
 }
@@ -324,6 +330,12 @@ static void __switch_to_disconnected_state(tiny_fd_handle_t handle, uint8_t peer
         tiny_fd_queue_reset(&handle->frames.i_queue);
         tiny_fd_queue_reset(&handle->s_queue);
         tiny_events_clear(&handle->peers[peer].events, FD_EVENT_CAN_ACCEPT_I_FRAMES);
+        if ( handle->on_connect_event_cb )
+        {
+            tiny_mutex_unlock(&handle->frames.mutex);
+            handle->on_connect_event_cb(handle->user_data, __peer_to_address_field( handle, peer ), false);
+            tiny_mutex_lock(&handle->frames.mutex);
+        }
         LOG(TINY_LOG_CRIT, "[%p] ABM disconnected\n", handle);
     }
 }
@@ -649,6 +661,7 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     protocol->user_data = init->pdata;
     protocol->on_frame_cb = init->on_frame_cb;
     protocol->on_sent_cb = init->on_sent_cb;
+    protocol->on_connect_event_cb = init->on_connect_event_cb;
     protocol->send_timeout = init->send_timeout;
     protocol->ka_timeout = 5000;
     protocol->retry_timeout =

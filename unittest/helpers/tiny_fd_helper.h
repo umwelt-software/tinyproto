@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2020 (C) Alexey Dynda
+    Copyright 2017-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -56,15 +56,19 @@ public:
         return m_tx_count;
     }
 
+    void set_connect_cb(const std::function<void(uint8_t, bool)> &onConnectCb);
+
 private:
     tiny_fd_handle_t m_handle;
     int m_rx_count = 0;
     int m_tx_count = 0;
     std::thread *m_message_sender = nullptr;
     std::function<void(uint8_t *, int)> m_onRxFrameCb;
+    std::function<void(uint8_t, bool)> m_onConnectCb = nullptr;
     bool m_stop_sender = false;
 
     static void onRxFrame(void *handle, uint8_t *buf, int len);
     static void onTxFrame(void *handle, uint8_t *buf, int len);
+    static void onConnect(void *handle, uint8_t addr, bool connected);
     static void MessageSender(TinyHelperFd *helper, int count, std::string message);
 };
