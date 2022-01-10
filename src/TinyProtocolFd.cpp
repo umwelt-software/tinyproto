@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020 (C) Alexey Dynda
+    Copyright 2019-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -40,6 +40,11 @@ void IFd::onReceiveInternal(void *handle, uint8_t *pdata, int size)
 void IFd::onSendInternal(void *handle, uint8_t *pdata, int size)
 {
     (reinterpret_cast<IFd *>(handle))->onSend(pdata, size);
+}
+
+void IFd::onConnectEventInternal(void *handle, uint8_t addr, bool connected)
+{
+    (reinterpret_cast<IFd *>(handle))->onConnectEvent(addr, connected);
 }
 
 void IFd::begin()

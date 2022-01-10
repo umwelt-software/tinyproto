@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2021 (C) Alexey Dynda
+    Copyright 2019-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -197,6 +197,15 @@ public:
     };
 
     /**
+     * Sets connect/disconnect callback.
+     * @param on_connect user callback to process connect/disconnect events. The processing must be non-blocking
+     */
+    void setConnectEventCallback(void (*on_connect)(void *userData, uint8_t addr, bool connected) = nullptr)
+    {
+        m_onConnectEvent = on_connect;
+    }
+
+    /**
      * Sets desired window size. Use this function only before begin() call.
      * window size is number of frames, which confirmation may be deferred for.
      * @param window window size, valid between 1 - 7 inclusively
@@ -262,6 +271,18 @@ protected:
             m_onSend(m_userData, pkt);
     }
 
+    /**
+     * Method called by fd protocol when connect/disconnect event takes place.
+     * Can be redefined in derived classes.
+     * @param addr remote client address. Has meaning only in master mode.
+     * @param connected connection status
+     */
+    virtual void onConnectEvent(uint8_t addr, bool connected)
+    {
+        if ( m_onConnectEvent )
+            m_onConnectEvent(m_userData, addr, connected);
+    }
+
 private:
     /** The variable contain protocol state */
     tiny_fd_handle_t m_handle = nullptr;
@@ -286,6 +307,10 @@ private:
     /** Callback, when new frame is sent */
     void (*m_onSend)(void *userData, IPacket &pkt) = nullptr;
 
+    /** Callback, when connect/disconnect event takes place */
+    void (*m_onConnectEvent)(void *userData, uint8_t addr, bool connected) = nullptr;
+
+    /** user data to pass to the callbacks */
     void *m_userData = nullptr;
 
     /** Internal function */
@@ -293,6 +318,9 @@ private:
 
     /** Internal function */
     static void onSendInternal(void *handle, uint8_t *pdata, int size);
+
+    /** Internal function */
+    static void onConnectEventInternal(void *handle, uint8_t addr, bool connected);
 };
 
 /**
