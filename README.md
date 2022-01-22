@@ -21,9 +21,6 @@
 
 ## Introduction
 
-_If you want to get stable code, please, refer to [stable branch](https://github.com/lexus2k/tinyproto/tree/stable).
-HD (half duplex) protocol is removed from this version. If you need it, please refer to stable branch._
-
 Tiny Protocol is **LAYER 2** protocol. It is intended to be used for the systems with low resources.
 It is also can be compiled for desktop Linux system, and it can be built for Windows.
 Using this library you can easy implement data transfer between 2 microcontrollers or between microcontroller and pc via UART, SPI,
