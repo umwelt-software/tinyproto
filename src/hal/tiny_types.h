@@ -82,6 +82,7 @@ extern "C"
 #endif
 
 #define TINY_ALIGNED_STRUCT TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
+#define TINY_ALIGN_BUFFER(x) ((uint8_t *)( ((uintptr_t)x + TINY_ALIGN_STRUCT_VALUE - 1) & (~(TINY_ALIGN_STRUCT_VALUE - 1)) ))
 
 /**
  * @ingroup ERROR_CODES

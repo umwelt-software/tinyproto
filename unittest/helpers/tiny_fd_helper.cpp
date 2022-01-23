@@ -34,7 +34,7 @@ TinyHelperFd::TinyHelperFd(FakeEndpoint *endpoint, int rxBufferSize,
     init.on_connect_event_cb = onConnect;
     init.buffer = m_buffer;
     init.buffer_size = rxBufferSize;
-    init.window_frames = window_frames ?: 7;
+    init.window_frames = window_frames ? window_frames : 7;
     init.send_timeout = timeout < 0 ? 2000 : timeout;
     init.retry_timeout = init.send_timeout ? (init.send_timeout / 2) : 200;
     init.retries = 2;

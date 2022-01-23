@@ -263,11 +263,12 @@ extern "C"
     /**
      * Returns minimum required buffer size for specified parameters.
      *
+     * @param peers_count maximum number of peers supported by the master. Use 0 or 1 for slave devices
      * @param mtu size of desired user payload in bytes.
      * @param window maximum tx queue size of I-frames.
      * @param crc_type crc type to be used with FD protocol
      */
-    extern int tiny_fd_buffer_size_by_mtu_ex(int mtu, int window, hdlc_crc_t crc_type);
+    extern int tiny_fd_buffer_size_by_mtu_ex(uint8_t peers_count, int mtu, int window, hdlc_crc_t crc_type);
 
     /**
      * @brief returns max packet size in bytes.
