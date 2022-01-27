@@ -221,7 +221,7 @@ static int run_fd(tiny_serial_handle_t port)
     {
         if ( s_generatorEnabled )
         {
-            tinyproto::PacketD packet(s_packetSize);
+            tinyproto::Packet packet(s_packetSize);
             packet.put("Generated frame. test in progress");
             if ( proto.write(packet.data(), static_cast<int>(packet.size())) < 0 )
             {
@@ -262,7 +262,7 @@ static int run_light(tiny_serial_handle_t port)
                 [](void *a, void *b, int c) -> int { return tiny_serial_read(s_serialFd, b, c); });
     std::thread rxThread(
         [](tinyproto::Light &proto) -> void {
-            tinyproto::PacketD packet(s_packetSize + 4);
+            tinyproto::Packet packet(s_packetSize + 4);
             while ( !s_terminate )
             {
                 if ( proto.read(packet) > 0 )
@@ -290,7 +290,7 @@ static int run_light(tiny_serial_handle_t port)
     {
         if ( s_generatorEnabled )
         {
-            tinyproto::PacketD packet(s_packetSize);
+            tinyproto::Packet packet(s_packetSize);
             packet.put("Generated frame. test in progress");
             if ( proto.write(packet) < 0 )
             {

@@ -64,14 +64,14 @@ Second variant: with using special helper to pack the data being sent
 tinyproto::Proto proto;
 
 /* The buffer must be defined globally */
-tinyproto::Packet<16> packet;
+tinyproto::StaticPacket<16> packet;
 
 void loop()
 {
     if (needToSend)
     {
         /* Create helper object to simplify packing of data being sent */
-        tinyproto::Packet<16> packet;
+        tinyproto::StaticPacket<16> packet;
 
         /* Pack data you want to send here */
         packet.put( "message" );

@@ -28,7 +28,7 @@ void setup() {
 }
 
 /* Create special class, which simplifies the work with buffer */
-tinyproto::Packet<16> g_packet;
+tinyproto::StaticPacket<16> g_packet;
 
 void loop()
 {

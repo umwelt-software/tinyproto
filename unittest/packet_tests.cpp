@@ -37,8 +37,8 @@ TEST(PACKET, packet_write)
 {
     const uint8_t array[] = {0x32, 'A', 0x24, 0x00, 0x32, 0x16, 0x00, 0x00, 0xFF, 0xFF,
                              'H',  'e', 'l',  'l',  'o',  0x00, 0x78, 0x56, 0x34, 0x12};
-    tinyproto::Packet<32> packet;
-    tinyproto::Packet<4> testPacket;
+    tinyproto::StaticPacket<32> packet;
+    tinyproto::StaticPacket<4> testPacket;
     testPacket.put((uint32_t)0x12345678);
 
     packet.put((uint8_t)0x32);

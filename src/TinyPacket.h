@@ -252,13 +252,13 @@ private:
  * Template  class to create packet with static allocation of buffer
  * Use this class for microcontrollers with few resources.
  */
-template <size_t S> class Packet: public IPacket
+template <size_t S> class StaticPacket: public IPacket
 {
 public:
     /**
      * Creates IPacket instance with statically allocated buffer
      */
-    Packet()
+    StaticPacket()
         : IPacket(m_data, S)
     {
     }
@@ -271,19 +271,19 @@ private:
  * Class which allocated buffer for packet dynamically.
  * Use this class only on powerful microcontrollers.
  */
-class PacketD: public IPacket
+class Packet: public IPacket
 {
 public:
     /**
      * Creates packet with dynamically allocated buffer.
      * @param size number of bytes to allocate for the packet buffer.
      */
-    explicit PacketD(int size)
+    explicit Packet(int size)
         : IPacket((char *)(new uint8_t[size]), size)
     {
     }
 
-    ~PacketD()
+    ~Packet()
     {
         delete[](uint8_t *) data();
     }

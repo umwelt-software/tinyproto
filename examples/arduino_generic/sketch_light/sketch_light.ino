@@ -18,11 +18,11 @@ void setup() {
 }
 
 /* Specify buffer for packets to send and receive */
-tinyproto::Packet<32> inPacket;
+tinyproto::StaticPacket<32> inPacket;
 
 void loop()
 {
-    tinyproto::Packet<32> outPacket;
+    tinyproto::StaticPacket<32> outPacket;
     /* Prepare data you want to send here - null-terminated string "DATA" */
     outPacket.put("DATA");
     /* Send packet over UART to other side */

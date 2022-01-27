@@ -32,7 +32,7 @@ void setup()
 }
 
 /* Specify buffer for packets to send and receive */
-tinyproto::Packet<256> packet;
+tinyproto::StaticPacket<256> packet;
 
 void loop()
 {
