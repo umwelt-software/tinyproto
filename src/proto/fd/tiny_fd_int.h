@@ -48,7 +48,7 @@ extern "C"
     {
         TINY_FD_STATE_DISCONNECTED,
         TINY_FD_STATE_CONNECTING,
-        TINY_FD_STATE_CONNECTED_ABM,
+        TINY_FD_STATE_CONNECTED,
         TINY_FD_STATE_DISCONNECTING,
     } tiny_fd_state_t;
 
@@ -118,6 +118,8 @@ extern "C"
         tiny_fd_peer_info_t *peers;
         /// Local address: 0x00 or 0xFF for master devices
         uint8_t addr;
+        /// Next peer to process
+        uint8_t next_peer;
         /// HDLC mode;
         uint8_t mode;
         /// Global events for HDLC protocol

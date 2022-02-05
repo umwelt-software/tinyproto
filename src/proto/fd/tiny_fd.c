@@ -140,6 +140,25 @@ static uint8_t __peer_to_address_field(tiny_fd_handle_t handle, uint8_t peer)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+static uint8_t __switch_to_next_peer(tiny_fd_handle_t handle)
+{
+    const uint8_t start_peer = handle->next_peer;
+    do
+    {
+        if ( ++handle->next_peer >= handle->peers_count )
+        {
+            handle->next_peer = 0;
+        }
+        if ( handle->peers[ handle->next_peer ].addr != 0xFF )
+        {
+            break;
+        }
+    } while ( start_peer != handle->next_peer );
+    return start_peer != handle->next_peer;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 static inline uint8_t __number_of_awaiting_tx_i_frames(tiny_fd_handle_t handle, uint8_t peer)
 {
     return ((uint8_t)(handle->peers[peer].last_ns - handle->peers[peer].confirm_ns) & seq_bits_mask);
@@ -330,9 +349,9 @@ static void __resend_all_unconfirmed_frames(tiny_fd_handle_t handle, uint8_t pee
 
 static void __switch_to_connected_state(tiny_fd_handle_t handle, uint8_t peer)
 {
-    if ( handle->peers[peer].state != TINY_FD_STATE_CONNECTED_ABM )
+    if ( handle->peers[peer].state != TINY_FD_STATE_CONNECTED )
     {
-        handle->peers[peer].state = TINY_FD_STATE_CONNECTED_ABM;
+        handle->peers[peer].state = TINY_FD_STATE_CONNECTED;
         handle->peers[peer].confirm_ns = 0;
         handle->peers[peer].last_ns = 0;
         handle->peers[peer].next_ns = 0;
@@ -526,13 +545,14 @@ static int on_frame_read(void *user_data, void *data, int len)
     uint8_t control = ((uint8_t *)data)[1];
     if ( control & HDLC_P_BIT )
     {
+        // Cool! Now we have marker again, and we can send
         tiny_events_set( &handle->events, FD_EVENT_HAS_MARKER );
     }
     if ( (control & HDLC_U_FRAME_MASK) == HDLC_U_FRAME_MASK )
     {
         __on_u_frame_read(handle, peer, data, len);
     }
-    else if ( handle->peers[peer].state != TINY_FD_STATE_CONNECTED_ABM && handle->peers[peer].state != TINY_FD_STATE_DISCONNECTING )
+    else if ( handle->peers[peer].state != TINY_FD_STATE_CONNECTED && handle->peers[peer].state != TINY_FD_STATE_DISCONNECTING )
     {
         // Should send DM in case we receive here S- or I-frames.
         // If connection is not established, we should ignore all frames except U-frames
@@ -595,6 +615,8 @@ static int on_frame_sent(void *user_data, const void *data, int len)
     {
         flags |= FD_EVENT_HAS_MARKER;
     }
+    // Let's talk to the next station
+    __switch_to_next_peer( handle );
     tiny_events_clear( &handle->events, flags );
     tiny_mutex_unlock( &handle->frames.mutex );
     return len;
@@ -680,6 +702,7 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     ptr = TINY_ALIGN_BUFFER(ptr);
     protocol->peers_count = peers_count;
     protocol->peers = (tiny_fd_peer_info_t *)ptr;
+    protocol->next_peer = 0;
     ptr += sizeof(tiny_fd_peer_info_t) * peers_count;
 
     if ( ptr > (uint8_t *)init->buffer + init->buffer_size )
@@ -787,12 +810,6 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
     uint8_t *data = NULL;
     uint8_t peer = 0; // TODO: Maybe cycle for all slave stations ???
     uint8_t address = __peer_to_address_field( handle, peer );
-    // Check if the station has marker to send
-    if ( !tiny_events_wait(&handle->events, FD_EVENT_HAS_MARKER, EVENT_BITS_LEAVE, 0 ) )
-    {
-        // If not then send operation is restricted right now
-        return data;
-    }
     // Tx data available
     tiny_mutex_lock(&handle->frames.mutex);
     tiny_fd_frame_info_t *ptr = tiny_fd_queue_get_next( &handle->frames.s_queue, TINY_FD_QUEUE_S_FRAME | TINY_FD_QUEUE_U_FRAME, address, 0 );
@@ -820,7 +837,7 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
 #endif
     }
     else if ( (ptr = tiny_fd_queue_get_next( &handle->frames.i_queue, TINY_FD_QUEUE_I_FRAME, address, handle->peers[peer].next_ns )) != NULL &&
-              ( handle->peers[peer].state == TINY_FD_STATE_CONNECTED_ABM || handle->peers[peer].state == TINY_FD_STATE_DISCONNECTING ) )
+              ( handle->peers[peer].state == TINY_FD_STATE_CONNECTED || handle->peers[peer].state == TINY_FD_STATE_DISCONNECTING ) )
     {
         data = (uint8_t *)&ptr->header;
         *len = ptr->len + sizeof(tiny_frame_header_t);
@@ -905,7 +922,7 @@ static void tiny_fd_disconnected_on_idle_timeout(tiny_fd_handle_t handle, uint8_
     if ( __time_passed_since_last_frame_received(handle, peer) >= handle->retry_timeout ||
          __number_of_awaiting_tx_i_frames(handle, peer) > 0 )
     {
-        if ( handle->peers[peer].state != TINY_FD_STATE_CONNECTED_ABM )
+        if ( handle->peers[peer].state != TINY_FD_STATE_CONNECTED )
         {
             LOG(TINY_LOG_ERR, "[%p] ABM connection is not established, connecting (2)\n", handle);
             // Try to establish ABM connection
@@ -927,11 +944,12 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len)
 {
     bool repeat = true;
     int result = 0;
-    uint8_t peer = 0; // TODO: Loop for all peers
+    // TODO: Check for correct mutex usage here. Some fields are not protected
+    const uint8_t peer = handle->next_peer;
     while ( result < len )
     {
         int generated_data = 0;
-        if ( handle->peers[peer].state == TINY_FD_STATE_CONNECTED_ABM || handle->peers[peer].state == TINY_FD_STATE_DISCONNECTING )
+        if ( handle->peers[peer].state == TINY_FD_STATE_CONNECTED || handle->peers[peer].state == TINY_FD_STATE_DISCONNECTING )
         {
             tiny_fd_connected_on_idle_timeout(handle, 0);
         }
@@ -945,19 +963,33 @@ int tiny_fd_get_tx_data(tiny_fd_handle_t handle, void *data, int len)
             generated_data = hdlc_ll_run_tx(handle->_hdlc, ((uint8_t *)data) + result, len - result);
         }
         // Since no send operation is in progress, check if we have something to send
-        else if ( tiny_events_wait(&handle->events, FD_EVENT_TX_DATA_AVAILABLE, EVENT_BITS_CLEAR, 0) )
+        // Check if the station has marker to send FIRST (That means, we are allowed to send anything still)
+        else if ( tiny_events_wait(&handle->events, FD_EVENT_HAS_MARKER, EVENT_BITS_LEAVE, 0 ) )
         {
-            int frame_len = 0;
-            uint8_t *frame_data = tiny_fd_get_next_frame_to_send(handle, &frame_len);
-            if ( frame_data != NULL )
+            if ( tiny_events_wait(&handle->events, FD_EVENT_TX_DATA_AVAILABLE, EVENT_BITS_CLEAR, 0) )
             {
-                // Force to check for new frame once again
-                tiny_events_set(&handle->events, FD_EVENT_TX_DATA_AVAILABLE);
-                tiny_events_set(&handle->events, FD_EVENT_TX_SENDING);
-                // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
-                // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
-                // send data.
-                hdlc_ll_put(handle->_hdlc, frame_data, frame_len);
+                int frame_len = 0;
+                uint8_t *frame_data = tiny_fd_get_next_frame_to_send(handle, &frame_len);
+                if ( frame_data != NULL )
+                {
+                    // Force to check for new frame once again
+                    tiny_events_set(&handle->events, FD_EVENT_TX_DATA_AVAILABLE);
+                    tiny_events_set(&handle->events, FD_EVENT_TX_SENDING);
+                    // Do not use timeout for hdlc_send(), as hdlc level is ready to accept next frame
+                    // (FD_EVENT_TX_SENDING is not set). And at this step we do not need hdlc_send() to
+                    // send data.
+                    hdlc_ll_put(handle->_hdlc, frame_data, frame_len);
+                    continue;
+                }
+                else
+                {
+                    // Now what? We have marker, and we have nothing to send for this peer.
+                    // Switch to the next one peer
+                    if ( __switch_to_next_peer( handle ) )
+                    {
+                        continue;
+                    }
+                }
             }
         }
         result += generated_data;
@@ -1140,7 +1172,7 @@ int tiny_fd_get_status(tiny_fd_handle_t handle)
     }
     int result = TINY_ERR_FAILED;
     tiny_mutex_lock(&handle->frames.mutex);
-    if ( (handle->peers[peer].state == TINY_FD_STATE_CONNECTED_ABM) || (handle->peers[peer].state == TINY_FD_STATE_DISCONNECTING) )
+    if ( (handle->peers[peer].state == TINY_FD_STATE_CONNECTED) || (handle->peers[peer].state == TINY_FD_STATE_DISCONNECTING) )
     {
         result = TINY_SUCCESS;
     }
