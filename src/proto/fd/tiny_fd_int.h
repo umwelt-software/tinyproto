@@ -118,7 +118,8 @@ extern "C"
         tiny_fd_peer_info_t *peers;
         /// Local address: 0x00 or 0xFF for master devices
         uint8_t addr;
-//        tiny_fd_peer_info_t peers[1];
+        /// HDLC mode;
+        uint8_t mode;
         /// Global events for HDLC protocol
         tiny_events_t events;
         /// user specific data

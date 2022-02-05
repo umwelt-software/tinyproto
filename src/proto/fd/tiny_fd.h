@@ -42,6 +42,28 @@ extern "C"
      * @{
      */
 
+    enum
+    {
+        /**
+         * Asynchronous balanced mode - the default mode of HDLC protocol.
+         * ABM adds combined terminal which can act as both a primary and a secondary.
+         */
+        TINY_FD_MODE_ABM = 0x00,
+
+        /**
+         * Normal response mode allows the secondary-to-primary link to be shared without
+         * contention, because it has the primary give the secondaries permission to transmit
+         * one at a time.
+         * @warning This mode is still in development
+         */
+        TINY_FD_MODE_NRM = 0x01,
+
+        /**
+         * Asynchronous response mode. NOT IMPLEMENTED.
+         */
+        TINY_FD_MODE_ARM = 0x02,
+    };
+
     struct tiny_fd_data_t;
 
     /**
@@ -130,6 +152,11 @@ extern "C"
          * @warning Use 1 or 0 for now
          */
         uint8_t peers_count;
+
+        /**
+         * Communication link mode. Refer to TINY_FD_MODE_ABM, TINY_FD_MODE_NRM, TINY_FD_MODE_ARM.
+         */
+        uint8_t mode;
 
     } tiny_fd_init_t;
 

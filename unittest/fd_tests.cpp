@@ -120,8 +120,8 @@ TEST(FD, errors_on_tx_line)
 {
     FakeConnection conn;
     uint16_t nsent = 0;
-    TinyHelperFd helper1(&conn.endpoint1(), 1024, nullptr, 7, 250);
-    TinyHelperFd helper2(&conn.endpoint2(), 1024, nullptr, 7, 250);
+    TinyHelperFd helper1(&conn.endpoint1(), 1024, nullptr, 7, 400);
+    TinyHelperFd helper2(&conn.endpoint2(), 1024, nullptr, 7, 400);
     conn.line2().generate_error_every_n_byte(200);
     helper1.run(true);
     helper2.run(true);
@@ -133,7 +133,7 @@ TEST(FD, errors_on_tx_line)
         CHECK_EQUAL(TINY_SUCCESS, result);
     }
     // wait until last frame arrives
-    helper1.wait_until_rx_count(200, 250);
+    helper1.wait_until_rx_count(200, 400);
     CHECK_EQUAL(200, helper1.rx_count());
 }
 
@@ -242,9 +242,9 @@ TEST(FD, resend_timeout)
     helper1.send("#");
     std::this_thread::sleep_for(std::chrono::milliseconds(70 * 2 + 100));
     helper1.stop();
-    const uint8_t reconnect_dat[] = {0x7E, 0xFF, 0x00, '#',  0xA6, 0x13, 0x7E, // 1-st attempt
-                                     0x7E, 0xFF, 0x00, '#',  0xA6, 0x13, 0x7E, // 2-nd attempt (1st retry)
-                                     0x7E, 0xFF, 0x00, '#',  0xA6, 0x13, 0x7E, // 3-rd attempt (2nd retry)
+    const uint8_t reconnect_dat[] = {0x7E, 0xFD, 0x10, '#',  0x8F, 0x33, 0x7E, // 1-st attempt
+                                     0x7E, 0xFD, 0x10, '#',  0x8F, 0x33, 0x7E, // 2-nd attempt (1st retry)
+                                     0x7E, 0xFD, 0x10, '#',  0x8F, 0x33, 0x7E, // 3-rd attempt (2nd retry)
                                      0x7E, 0xFF, 0x3F, 0xF3, 0x39, 0x7E};      // Attempt to reconnect (SABM)
     uint8_t buffer[64]{};
     conn.endpoint2().read(buffer, sizeof(buffer));
