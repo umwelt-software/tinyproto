@@ -61,6 +61,7 @@ enum
     FD_EVENT_TX_DATA_AVAILABLE = 0x02,     // Global event
     FD_EVENT_QUEUE_HAS_FREE_SLOTS = 0x04,  // Global event
     FD_EVENT_CAN_ACCEPT_I_FRAMES = 0x08,   // Local event
+    FD_EVENT_HAS_MARKER          = 0x10,   // Global event
 };
 
 static const uint8_t seq_bits_mask = 0x07;
@@ -72,23 +73,46 @@ static int on_frame_sent(void *user_data, const void *data, int len);
 // Helper functions
 ///////////////////////////////////////////////////////////////////////////////
 
+static uint8_t __is_master_address(uint8_t address)
+{
+    return address == 0x00 || address == 0xFF;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 static uint8_t __address_field_to_peer(tiny_fd_handle_t handle, uint8_t address)
 {
     if ( !(address & 0x01) )
     {
         // Exit, if extension bit is not set.
         // We will not support this format for now.
-        return 0;
+        return 0xFF;
     }
-    if ( address == 0xFF )
+    // If our station is SLAVE station, then we use always peer 0 to communicate with master
+    if ( !__is_master_address( handle->addr ) )
     {
-        // 0xFF address is used by legacy tinyproto implementation
+        // If this is not our address, just ignore it
+        if ( address != handle->addr )
+        {
+            return 0xFF;
+        }
+        handle->peers[0].addr = 0xFF;
         return 0;
     }
+    // This code works only for master station
     for ( uint8_t peer = 0; peer < handle->peers_count; peer++ )
     {
         if ( handle->peers[peer].addr == address )
         {
+            return peer;
+        }
+    }
+    // Attempt to register new slave peer station
+    for ( uint8_t peer = 0; peer < handle->peers_count; peer++ )
+    {
+        if ( handle->peers[peer].addr == 0xFF )
+        {
+            handle->peers[peer].addr = address;
             return peer;
         }
     }
@@ -403,9 +427,13 @@ static int __on_s_frame_read(tiny_fd_handle_t handle, uint8_t peer, void *data, 
             {
                 tiny_frame_header_t frame = {
                     .address = __peer_to_address_field( handle, peer ),
-                    .control = HDLC_S_FRAME_BITS | HDLC_S_FRAME_TYPE_RR | (handle->peers[peer].next_nr << 5),
+                    .control = HDLC_F_BIT | HDLC_S_FRAME_BITS | HDLC_S_FRAME_TYPE_RR | (handle->peers[peer].next_nr << 5),
                 };
                 __put_u_s_frame_to_tx_queue(handle, TINY_FD_QUEUE_S_FRAME, &frame, 2);
+            }
+            else
+            {
+                
             }
         }
     }
@@ -480,8 +508,8 @@ static int on_frame_read(void *user_data, void *data, int len)
     uint8_t peer = __address_field_to_peer( handle, ((uint8_t *)data)[0] );
     if ( peer == 0xFF )
     {
-        LOG(TINY_LOG_CRIT, "[%p] Peer is unknown, ignoring frame\n", handle);
-        return TINY_ERR_FAILED;
+        LOG(TINY_LOG_INFO, "[%p] Peer is unknown, ignoring frame\n", handle);
+        return len;
     }
     // printf("[%p] Incoming frame of size %i\n", handle, len);
     handle->peers[peer].last_ka_ts = tiny_millis();
@@ -527,7 +555,8 @@ static int on_frame_sent(void *user_data, const void *data, int len)
     uint8_t control = ((uint8_t *)data)[1];
     if ( peer == 0xFF )
     {
-        // Do nothing for now
+        // Do nothing for now, but this should never happen
+        return len;
     }
     tiny_mutex_lock(&handle->frames.mutex);
     if ( (control & HDLC_I_FRAME_MASK) == HDLC_I_FRAME_BITS )
@@ -555,25 +584,9 @@ static int on_frame_sent(void *user_data, const void *data, int len)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static int tiny_fd_calculate_mtu_size(int buffer_size, uint8_t peers_count, int window, hdlc_crc_t crc_type)
-{
-    return (buffer_size - (TINY_ALIGN_STRUCT_VALUE - 1)
-            - sizeof(tiny_fd_data_t)
-            - peers_count * sizeof(tiny_fd_peer_info_t)
-            // RX overhead
-            - sizeof(hdlc_ll_data_t) - sizeof(tiny_frame_header_t) - get_crc_field_size(crc_type)
-            // TX overhead
-            - (sizeof(tiny_fd_frame_info_t *) + sizeof(tiny_fd_frame_info_t) -
-                   sizeof(((tiny_fd_frame_info_t *)0)->payload)) * window
-            - (sizeof(tiny_fd_frame_info_t *) + sizeof(tiny_fd_frame_info_t)) * TINY_FD_U_QUEUE_MAX_SIZE ) /
-           (window + 1);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
 {
-    const uint8_t peers_count = 1;
+    const uint8_t peers_count = init->peers_count == 0 ? 1 : init->peers_count;
     *handle = NULL;
     if ( (0 == init->on_frame_cb) || (0 == init->buffer) || (0 == init->buffer_size) )
     {
@@ -581,7 +594,8 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     }
     if ( init->mtu == 0 )
     {
-        init->mtu = tiny_fd_calculate_mtu_size(init->buffer_size, peers_count, init->window_frames, init->crc_type);
+        int size = tiny_fd_buffer_size_by_mtu_ex(peers_count, 0, init->window_frames, init->crc_type);
+        init->mtu = (init->buffer_size - size) / (init->window_frames + 1);
         if ( init->mtu < 1 )
         {
             LOG(TINY_LOG_CRIT, "Calculated mtu size is zero, no payload transfer is available\n");
@@ -677,6 +691,9 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     protocol->on_sent_cb = init->on_sent_cb;
     protocol->on_connect_event_cb = init->on_connect_event_cb;
     protocol->send_timeout = init->send_timeout;
+    // By default assign master address
+    protocol->addr = init->addr ? init->addr: 0xFF;
+    // Master devices always have markers
     protocol->ka_timeout = 5000;
     protocol->retry_timeout =
         init->retry_timeout ? init->retry_timeout : (protocol->send_timeout / (init->retries + 1));
@@ -684,6 +701,7 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     for (uint8_t peer = 0; peer < protocol->peers_count; peer++ )
     {
         protocol->peers[peer].retries = init->retries;
+        // Initialize all remotes as master devices by default
         protocol->peers[peer].addr = 0xFF;
         protocol->peers[peer].state = TINY_FD_STATE_DISCONNECTED;
         tiny_events_create(&protocol->peers[peer].events);
@@ -691,7 +709,8 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
 
     tiny_mutex_create(&protocol->frames.mutex);
     tiny_events_create(&protocol->events);
-    tiny_events_set( &protocol->events, FD_EVENT_QUEUE_HAS_FREE_SLOTS );
+    tiny_events_set( &protocol->events, FD_EVENT_QUEUE_HAS_FREE_SLOTS |
+                                        (__is_master_address( protocol->addr ) ? FD_EVENT_HAS_MARKER : 0) );
     *handle = protocol;
 
     return TINY_SUCCESS;
@@ -749,6 +768,13 @@ static uint8_t *tiny_fd_get_next_frame_to_send(tiny_fd_handle_t handle, int *len
     uint8_t *data = NULL;
     uint8_t peer = 0; // TODO: Maybe cycle for all slave stations ???
     uint8_t address = __peer_to_address_field( handle, peer );
+#if 0
+    if ( !tiny_events_wait(&handle->events, FD_EVENT_HAS_MARKER, EVENT_BITS_CLEAR, 0 ) )
+    {
+        return data;
+    }
+    tiny_events_set(&handle->events, FD_EVENT_HAS_MARKER);
+#endif
     // Tx data available
     tiny_mutex_lock(&handle->frames.mutex);
     tiny_fd_frame_info_t *ptr = tiny_fd_queue_get_next( &handle->frames.s_queue, TINY_FD_QUEUE_S_FRAME | TINY_FD_QUEUE_U_FRAME, address, 0 );

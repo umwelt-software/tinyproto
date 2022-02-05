@@ -117,6 +117,20 @@ extern "C"
          */
         on_connect_event_cb_t on_connect_event_cb;
 
+        /**
+         * Local station address. Has meaning only for slave stations
+         */
+        uint8_t addr;
+
+        /**
+         * Maximum number of peers supported by the local station.
+         * If the value is equal to 0, that means that only one remote station is supported.
+         * For slave stations this value must be set to 1 or 0.
+         * For master stations this value can be in range 0 - 63.
+         * @warning Use 1 or 0 for now
+         */
+        uint8_t peers_count;
+
     } tiny_fd_init_t;
 
     /**
