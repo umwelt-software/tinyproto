@@ -123,7 +123,7 @@ static int hdlc_ll_send_start(hdlc_ll_handle_t handle)
     // Do not clear data ready bit here in case if 0x7F is failed to be sent
     if ( !handle->tx.origin_data )
     {
-        LOG(TINY_LOG_DEB, "[HDLC:%p] SENDING START NO DATA READY\n", handle);
+        // LOG(TINY_LOG_DEB, "[HDLC:%p] SENDING START NO DATA READY\n", handle);
         return 0;
     }
     LOG(TINY_LOG_INFO, "[HDLC:%p] Starting send op for HDLC frame\n", handle);
