@@ -294,6 +294,11 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t peer, uint8_t
                 tiny_mutex_lock(&handle->frames.mutex);
             }
             tiny_fd_queue_free( &handle->frames.i_queue, slot );
+            if ( tiny_fd_queue_has_free_slots( &handle->frames.i_queue ) )
+            {
+                // Unblock tx queue to allow application to put new frames for sending
+                tiny_events_set(&handle->events, FD_EVENT_QUEUE_HAS_FREE_SLOTS);
+            }
         }
         else
         {
@@ -303,11 +308,6 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t peer, uint8_t
         }
         handle->peers[peer].confirm_ns = (handle->peers[peer].confirm_ns + 1) & seq_bits_mask;
         handle->peers[peer].retries = handle->retries;
-    }
-    if ( tiny_fd_queue_has_free_slots( &handle->frames.i_queue ) )
-    {
-        // Unblock tx queue to allow application to put new frames for sending
-        tiny_events_set(&handle->events, FD_EVENT_QUEUE_HAS_FREE_SLOTS);
     }
     if ( __can_accept_i_frames( handle, peer ) )
     {
@@ -1076,6 +1076,7 @@ int tiny_fd_send_packet(tiny_fd_handle_t handle, const void *data, int len)
             else
             {
                 result = TINY_ERR_TIMEOUT;
+                // !!!! If this log appears, then in the code of the protocol something is definitely wrong !!!!
                 LOG(TINY_LOG_ERR, "[%p] Wrong flag FD_EVENT_QUEUE_HAS_FREE_SLOTS\n", handle);
             }
             if ( __can_accept_i_frames( handle, peer ) )
