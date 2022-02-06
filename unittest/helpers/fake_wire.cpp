@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2020 (C) Alexey Dynda
+    Copyright 2017-2020,2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -22,33 +22,175 @@
 #include <thread>
 #include <chrono>
 
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 enum
 {
-    EV_WR_ROOM_AVAIL = 0x01,
-    EV_RD_DATA_AVAIL = 0x02,
-    EV_TR_READY = 0x04,
+    HAS_SPACE = 0x01,
+    HAS_DATA = 0x02,
 };
 
-FakeWire::FakeWire(int readbuf_size, int writebuf_size)
-    : m_readbuf{}
-    , m_writebuf{}
-    , m_readbuf_size(readbuf_size)
-    , m_writebuf_size(writebuf_size)
+TxHardwareBlock::TxHardwareBlock(int size)
+    : m_size( size )
 {
+    tiny_events_create( &m_events );
+    tiny_mutex_create( &m_mutex );
+    tiny_events_set( &m_events, HAS_SPACE );
 }
 
-bool FakeWire::wait_until_rx_count(int count, int timeout)
+TxHardwareBlock::~TxHardwareBlock()
+{
+    tiny_mutex_destroy( &m_mutex );
+    tiny_events_destroy( &m_events );
+}
+
+int TxHardwareBlock::Write(const void *buffer, int size, uint32_t timeout)
+{
+    int written = 0;
+    while ( size > 0 )
+    {
+        uint32_t ts = tiny_millis();
+        if ( tiny_events_wait(&m_events, HAS_SPACE, EVENT_BITS_LEAVE, timeout) == 0 )
+        {
+            break;
+        }
+        uint32_t delta = (uint32_t)(tiny_millis() - ts);
+        timeout = timeout < delta ? 0: (timeout - delta);
+        tiny_mutex_lock( &m_mutex );
+        while (size > 0 && (int)m_queue.size() < m_size)
+        {
+            m_queue.push( *(const uint8_t *)buffer );
+//            fprintf(stderr, "%02X\n", *(const uint8_t *)buffer);
+            buffer = (const void *)((const uint8_t *)buffer + 1);
+            size--;
+            written++;
+        }
+        if ( (int)m_queue.size() > 0 )
+        {
+            tiny_events_set( &m_events, HAS_DATA );
+        }
+        if ( (int)m_queue.size() == m_size )
+        {
+            tiny_events_clear( &m_events, HAS_SPACE );
+        }
+        tiny_mutex_unlock( &m_mutex );
+    }
+    return written;
+}
+
+int TxHardwareBlock::Peek(uint8_t &byte)
+{
+    if ( !m_enabled )
+    {
+        return 0;
+    }
+    if ( tiny_events_wait(&m_events, HAS_DATA, EVENT_BITS_LEAVE, 0) == 0 )
+    {
+        return 0;
+    }
+    tiny_mutex_lock( &m_mutex );
+    byte = m_queue.front();
+    m_queue.pop();
+    if ( (int)m_queue.size() < m_size )
+    {
+        tiny_events_set( &m_events, HAS_SPACE );
+    }
+    if ( (int)m_queue.size() == 0 )
+    {
+        tiny_events_clear( &m_events, HAS_DATA );
+    }
+    tiny_mutex_unlock( &m_mutex );
+//    fprintf(stderr, "TX: %02X\n", byte);
+    return 1;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+RxHardwareBlock::RxHardwareBlock(int size)
+    : m_size( size )
+{
+    tiny_events_create( &m_events );
+    tiny_mutex_create( &m_mutex );
+    tiny_events_set( &m_events, HAS_SPACE );
+}
+
+RxHardwareBlock::~RxHardwareBlock()
+{
+    tiny_mutex_destroy( &m_mutex );
+    tiny_events_destroy( &m_events );
+}
+
+int RxHardwareBlock::Read(void *buffer, int size, uint32_t timeout)
+{
+    int read = 0;
+    while ( size > 0 )
+    {
+        uint32_t ts = tiny_millis();
+        if ( tiny_events_wait(&m_events, HAS_DATA, EVENT_BITS_LEAVE, timeout) == 0 )
+        {
+            break;
+        }
+        uint32_t delta = (uint32_t)(tiny_millis() - ts);
+        timeout = timeout < delta ? 0: (timeout - delta);
+        tiny_mutex_lock( &m_mutex );
+        while (size > 0 && (int)m_queue.size() > 0)
+        {
+            *(uint8_t *)buffer = m_queue.front();
+            m_queue.pop();
+            buffer = (void *)((uint8_t *)buffer + 1);
+            size--;
+            read++;
+        }
+        if ( (int)m_queue.size() == 0 )
+        {
+            tiny_events_clear( &m_events, HAS_DATA );
+        }
+        if ( (int)m_queue.size() < m_size )
+        {
+            tiny_events_set( &m_events, HAS_SPACE );
+        }
+        tiny_mutex_unlock( &m_mutex );
+    }
+    return read;
+}
+
+int RxHardwareBlock::Put(uint8_t byte)
+{
+    if ( !m_enabled)
+    {
+        return 0;
+    }
+    if ( tiny_events_wait(&m_events, HAS_SPACE, EVENT_BITS_LEAVE, 0) == 0 )
+    {
+        return 0;
+    }
+    tiny_mutex_lock( &m_mutex );
+    m_queue.push( byte );
+    if ( (int)m_queue.size() == m_size )
+    {
+        tiny_events_clear( &m_events, HAS_SPACE );
+    }
+    if ( (int)m_queue.size() > 0 )
+    {
+        tiny_events_set( &m_events, HAS_DATA );
+    }
+    tiny_mutex_unlock( &m_mutex );
+    return 1;
+}
+
+bool RxHardwareBlock::WaitUntilRxCount(int count, uint32_t timeout)
 {
     for ( ;; )
     {
-        m_readmutex.lock();
-        int size = m_readbuf.size();
-        m_readmutex.unlock();
+        tiny_mutex_lock( &m_mutex );
+        int size = (int)m_queue.size();
+        tiny_mutex_unlock( &m_mutex );
         if ( size >= count )
         {
             return true;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        tiny_sleep( 1 );
         if ( !timeout )
             break;
         timeout--;
@@ -56,126 +198,91 @@ bool FakeWire::wait_until_rx_count(int count, int timeout)
     return false;
 }
 
-int FakeWire::read(uint8_t *data, int length, int timeout)
+void RxHardwareBlock::Flush()
 {
-    int size = 0;
-    if ( !m_dataavail.try_acquire_for(std::chrono::milliseconds(timeout)) )
+    tiny_mutex_lock( &m_mutex );
+    tiny_events_clear( &m_events, HAS_DATA );
+    tiny_events_set( &m_events, HAS_SPACE );
+    while ( m_queue.size() > 0 )
     {
-        return 0;
+        m_queue.pop();
     }
-    m_readmutex.lock();
-    while ( m_readbuf.size() && size < length )
-    {
-        data[size] = m_readbuf.front();
-        m_readbuf.pop();
-        size++;
-    }
-    if ( m_readbuf.size() )
-    {
-        m_dataavail.release();
-    }
-    m_readmutex.unlock();
-    return size;
+    tiny_mutex_unlock( &m_mutex );
 }
 
-int FakeWire::write(const uint8_t *data, int length, int timeout)
-{
-    int size = 0;
-    if ( !m_roomavail.try_acquire_for(std::chrono::milliseconds(timeout)) )
-    {
-        return 0;
-    }
-    m_writemutex.lock();
-    while ( m_writebuf.size() < (unsigned int)m_writebuf_size && size < length )
-    {
-        m_writebuf.push(data[size]);
-        size++;
-    }
-    if ( m_writebuf.size() < (unsigned int)m_writebuf_size )
-    {
-        m_roomavail.release();
-    }
-    if ( size )
-    {
-        m_transavail.release();
-    }
-    m_writemutex.unlock();
-    return size;
-}
 
-void FakeWire::TransferData(int bytes)
-{
-    bool room_avail = false;
-    bool data_avail = false;
-    if ( !m_transavail.try_acquire() )
-    {
-        return;
-    }
-    m_readmutex.lock();
-    m_writemutex.lock();
-    while ( bytes-- && m_writebuf.size() )
-    {
-        if ( m_readbuf.size() < (unsigned int)m_readbuf_size &&
-             m_enabled ) // If we don't have space or device not enabled, the data will be lost
-        {
-            m_byte_counter++;
-            bool error_happened = false;
-            for ( auto &err : m_errors )
-            {
-                if ( m_byte_counter >= err.first && err.count != 0 && (m_byte_counter - err.first) % err.period == 0 )
-                {
-                    err.count--;
-                    error_happened = true;
-                    break;
-                }
-            }
-            m_readbuf.push(error_happened ? (m_writebuf.front() ^ 0x34) : m_writebuf.front());
-            data_avail = true;
-        }
-        else
-        {
-            if ( m_enabled )
-            {
-                // fprintf(stderr, "HW missed byte %d -> %d\n", m_writebuf_size, m_readbuf_size);
-                m_lostBytes++;
-            }
-        }
-        m_writebuf.pop();
-        room_avail = true;
-    }
-    if ( m_writebuf.size() )
-    {
-        m_transavail.release();
-    }
-    m_writemutex.unlock();
-    m_readmutex.unlock();
-    if ( room_avail )
-    {
-        m_roomavail.release();
-    }
-    if ( data_avail )
-    {
-        m_dataavail.release();
-    }
-}
+//////////////////////////////////////////////////////////////////////////////////////
 
-void FakeWire::reset()
+FakeWire::FakeWire()
 {
-    std::queue<uint8_t> empty;
-    std::queue<uint8_t> empty2;
-    std::swap(m_readbuf, empty);
-    std::swap(m_writebuf, empty2);
-}
-
-void FakeWire::flush()
-{
-    m_readmutex.lock();
-    m_writemutex.lock();
-    reset();
-    m_writemutex.unlock();
-    m_readmutex.unlock();
 }
 
 FakeWire::~FakeWire()
 {
+    for (auto tx: m_tx)
+    {
+        delete tx;
+    }
+    for (auto rx: m_rx)
+    {
+        delete rx;
+    }
 }
+
+RxHardwareBlock *FakeWire::CreateRxHardware(int size)
+{
+    RxHardwareBlock * block = new RxHardwareBlock(size);
+    m_rx.push_back(block);
+    return block;
+}
+
+TxHardwareBlock *FakeWire::CreateTxHardware(int size)
+{
+    TxHardwareBlock * block = new TxHardwareBlock(size);
+    m_tx.push_back(block);
+    return block;
+}
+
+void FakeWire::TransferData(int bytes)
+{
+    while ( bytes-- )
+    {
+        bool has_data = false;
+        uint8_t data = 0;
+        for (auto tx: m_tx)
+        {
+            uint8_t d;
+            if (tx->Peek(d))
+            {
+                data = data | d;
+                has_data = true;
+            }
+        }
+        if ( !has_data )
+        {
+            break;
+        }
+//        fprintf(stderr, "*T: %02X\n", data);
+        if ( data == 0x7E ) { if ( ++cnt >=3 ) *((uint8_t *)0) = 1; } else cnt = 0;
+        m_byte_counter++;
+        bool error_happened = false;
+        for ( auto &err : m_errors )
+        {
+            if ( m_byte_counter >= err.first && err.count != 0 && (m_byte_counter - err.first) % err.period == 0 )
+            {
+                err.count--;
+                error_happened = true;
+                break;
+            }
+        }
+        data = error_happened ? (data ^ 0x34) : data;
+        for (auto rx: m_rx)
+        {
+            if (!rx->Put(data))
+            {
+                m_lostBytes++;
+            }
+        }
+    }
+}
+

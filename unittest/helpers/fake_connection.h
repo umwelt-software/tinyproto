@@ -33,8 +33,10 @@ public:
     }
 
     FakeConnection(int p1_hw_size, int p2_hw_size)
-        : m_line1(p1_hw_size, p2_hw_size)
-        , m_line2(p2_hw_size, p1_hw_size)
+        : m_line1()
+        , m_line2()
+        , m_endpoint1(m_line1, m_line2, p1_hw_size, p1_hw_size)
+        , m_endpoint2(m_line2, m_line1, p2_hw_size, p2_hw_size)
         , m_line_thread(TransferDataStatic, this)
     {
         setSpeed( 512000 );
@@ -80,8 +82,8 @@ public:
 private:
     FakeWire m_line1{};
     FakeWire m_line2{};
-    FakeEndpoint m_endpoint1{m_line1, m_line2};
-    FakeEndpoint m_endpoint2{m_line2, m_line1};
+    FakeEndpoint m_endpoint1{m_line1, m_line2, 256, 256};
+    FakeEndpoint m_endpoint2{m_line2, m_line1, 256, 256};
     std::atomic<uint64_t> m_interval_us{50};
     std::atomic<uint64_t> m_Bps{64000};
     std::atomic<bool> m_stopped{false};

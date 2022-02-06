@@ -181,7 +181,7 @@ TEST(HDLC, arduino_to_pc)
     }
     if ( arduino.tx_count() > pc.rx_count() + (conn.lostBytes() ? 5 : 0) )
         CHECK_EQUAL(arduino.tx_count(), pc.rx_count());
-    if ( conn.lostBytes() > 30 )
+    if ( conn.lostBytes() > 2000 ) // 115200 / 8 * 100 milliseconds = 1440 bytes can be lost
         CHECK_EQUAL(0, conn.lostBytes());
 }
 

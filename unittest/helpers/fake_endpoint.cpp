@@ -19,10 +19,12 @@
 
 #include "fake_endpoint.h"
 
-FakeEndpoint::FakeEndpoint(FakeWire &tx, FakeWire &rx)
+FakeEndpoint::FakeEndpoint(FakeWire &tx, FakeWire &rx, int rxSize, int txSize)
     : m_tx(tx)
     , m_rx(rx)
 {
+    m_txBlock = m_tx.CreateTxHardware(txSize);
+    m_rxBlock = m_rx.CreateRxHardware(rxSize);
 }
 
 FakeEndpoint::~FakeEndpoint()
@@ -31,15 +33,15 @@ FakeEndpoint::~FakeEndpoint()
 
 int FakeEndpoint::read(uint8_t *data, int length)
 {
-    return m_rx.read(data, length, m_timeout);
+    return m_rxBlock->Read(data, length, m_timeout);
 }
 
 int FakeEndpoint::write(const uint8_t *data, int length)
 {
-    return m_tx.write(data, length, m_timeout);
+    return m_txBlock->Write(data, length, m_timeout);
 }
 
 bool FakeEndpoint::wait_until_rx_count(int count, int timeout)
 {
-    return m_rx.wait_until_rx_count(count, timeout);
+    return m_rxBlock->WaitUntilRxCount(count, timeout);
 }

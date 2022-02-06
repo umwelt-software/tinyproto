@@ -118,10 +118,15 @@ TEST(FD, arduino_to_pc)
 
 TEST(FD, errors_on_tx_line)
 {
-    FakeConnection conn;
+    // Limit hardware blocks to 32 byte buffers only.
+    // Too large blocks cause much frames to be bufferred, and each restransmission
+    // contains errors (because we set error every 200 bytes)
+    FakeConnection conn(32, 32);
     uint16_t nsent = 0;
-    TinyHelperFd helper1(&conn.endpoint1(), 1024, nullptr, 7, 400);
-    TinyHelperFd helper2(&conn.endpoint2(), 1024, nullptr, 7, 400);
+    // Also, to make test logs more clear, we limit window size to 3 frames only.
+    // This will give us clear understanding what is happenning when something goes wrong
+    TinyHelperFd helper1(&conn.endpoint1(), 1024, nullptr, 3, 400);
+    TinyHelperFd helper2(&conn.endpoint2(), 1024, nullptr, 3, 400);
     conn.line2().generate_error_every_n_byte(200);
     helper1.run(true);
     helper2.run(true);

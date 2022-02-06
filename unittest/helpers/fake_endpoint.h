@@ -26,7 +26,7 @@
 class FakeEndpoint
 {
 public:
-    FakeEndpoint(FakeWire &tx, FakeWire &rx);
+    FakeEndpoint(FakeWire &tx, FakeWire &rx, int rxSize, int txSize);
 
     ~FakeEndpoint();
 
@@ -42,20 +42,22 @@ public:
     }
     void disable()
     {
-        m_rx.disable();
+        m_rxBlock->Disable();
     }
     void enable()
     {
-        m_rx.enable();
+        m_rxBlock->Enable();
     }
     void flush()
     {
-        m_rx.flush();
+        m_rxBlock->Flush();
     }
 
 private:
     FakeWire &m_tx;
     FakeWire &m_rx;
+    TxHardwareBlock *m_txBlock = nullptr;
+    RxHardwareBlock *m_rxBlock = nullptr;
     std::mutex m_mutex;
     int m_timeout = 10;
 };

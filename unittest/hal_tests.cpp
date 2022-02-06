@@ -143,11 +143,11 @@ TEST(HAL, micros)
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
     uint32_t delta = static_cast<uint32_t>( tiny_micros() - start );
 //    fprintf(stderr, "DELTA: %d\n", delta );
-    bool result = delta >= 1000 && delta < 1900;
-    CHECK_TEXT( result, "Timestamping functions are incorrect" );
+    CHECK_TEXT( delta >= 1000, "Timestamping functions are incorrect" );
+    CHECK_TEXT( delta <  2100, "Timestamping functions are incorrect" );
     tiny_sleep_us( 500 );
     delta = static_cast<uint32_t>( tiny_micros() - start );
 //    fprintf(stderr, "DELTA: %d\n", delta );
-    result = delta >= 1500 && delta < 3500;
-    CHECK_TEXT( result, "Sleep function works incorrectly" );
+    CHECK_TEXT( delta >= 1500, "Sleep function works incorrectly" );
+    CHECK_TEXT( delta < 4000, "Sleep function works incorrectly" );
 }

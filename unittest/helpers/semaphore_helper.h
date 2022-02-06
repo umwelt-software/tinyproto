@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 (C) Alexey Dynda
+    Copyright 2020,2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -18,6 +18,8 @@
  */
 
 #pragma once
+
+#include "hal/tiny_types.h"
 
 #include <cstdint>
 #include <mutex>
