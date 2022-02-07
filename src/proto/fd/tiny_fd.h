@@ -349,6 +349,18 @@ extern "C"
     extern void tiny_fd_set_ka_timeout(tiny_fd_handle_t handle, uint32_t keep_alive);
 
     /**
+     * Registers remote peer with specified address. Remember that 2 lower bits of the address
+     * will be ignored. 0x00 and 0xFF addresses are restricted as they are dedicated to
+     * master station.
+     * @param handle   pointer to tiny_fd_handle_t
+     * @param handle   pointer to tiny_fd_handle_t
+     *
+     * @return TINY_SUCCESS in case of success or TINY_ERR_FAILED if there is no free slots
+     *         for new peer, wrong address is specified, or peer is already registered.
+     */
+    extern int tiny_fd_register_peer(tiny_fd_handle_t handle, uint8_t address);
+
+    /**
      * @}
      */
 
