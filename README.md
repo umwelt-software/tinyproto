@@ -227,6 +227,8 @@ Doxygen documentation can be found at [Codedocs xyz site](https://codedocs.xyz/l
 If you found any problem or have any idea, please, report to Issues section.
 If you find the library useful and want to [support future development](https://www.paypal.me/lexus2k), you may contact me.
 
+BTC: ![BTC](.travis/btc_segwit.png) ETH: ![ETH](.travis/eth.png)<br>
+
 ## License
 
 Copyright 2016-2022 (C) Alexey Dynda
