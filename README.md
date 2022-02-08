@@ -3,7 +3,8 @@
 [![Build Status](https://circleci.com/gh/lexus2k/tinyproto.svg?style=svg)](https://circleci.com/gh/lexus2k/tinyproto)
 [![Coverage Status](https://coveralls.io/repos/github/lexus2k/tinyproto/badge.svg?branch=master)](https://coveralls.io/github/lexus2k/tinyproto?branch=master)
 [![Documentation](https://codedocs.xyz/lexus2k/tinyproto.svg)](https://codedocs.xyz/lexus2k/tinyproto/)
-![License](https://img.shields.io/badge/license-LGPLv3-blue)
+![License](https://img.shields.io/badge/license-GPLv3-blue)
+![License](https://img.shields.io/badge/license-Commercial-blue)
 
 
 [tocstart]: # (toc start)
@@ -231,9 +232,13 @@ BTC: ![BTC](.travis/btc_segwit.png) ETH: ![ETH](.travis/eth.png)<br>
 
 ## License
 
+The project is released under dual license: GPLv3, or Commercial license.
+
 Copyright 2016-2022 (C) Alexey Dynda
 
 This file is part of Tiny Protocol Library.
+
+GNU General Public License Usage
 
 Protocol Library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -248,3 +253,9 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with Protocol Library.  If not, see <http://www.gnu.org/licenses/>.
 
+Commercial License Usage
+
+Licensees holding valid commercial Tiny Protocol licenses may use this file in
+accordance with the commercial license agreement provided in accordance with
+the terms contained in a written agreement between you and Alexey Dynda.
+For further information contact via email on github account.
