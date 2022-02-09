@@ -171,7 +171,7 @@ extern "C"
     /**
      * on_connect_event_cb_t is a callback function, which is called every time connection is established or interrupted.
      * @param handle handle of Tiny.
-     * @param address remote client id (only for master device). Not used for now.
+     * @param address remote client id (only for master device).
      * @param connected event occured.
      * @return None.
      */

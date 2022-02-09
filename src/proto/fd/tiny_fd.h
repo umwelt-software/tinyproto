@@ -149,7 +149,9 @@ extern "C"
         on_connect_event_cb_t on_connect_event_cb;
 
         /**
-         * Local station address. Has meaning only for slave stations
+         * Local station address. The field has meaning only for slave stations.
+         * For master station please, leave this field as 0.
+         * Not all addresses can be used for slave stations. The allowable range is 1 - 62.
          */
         uint8_t addr;
 
@@ -358,16 +360,23 @@ extern "C"
     extern void tiny_fd_set_ka_timeout(tiny_fd_handle_t handle, uint32_t keep_alive);
 
     /**
-     * Registers remote peer with specified address. Remember that 2 lower bits of the address
-     * will be ignored. 0x00 and 0xFF addresses are restricted as they are dedicated to
-     * master station.
+     * Registers remote peer with specified address. This API can be used only in NRM mode
+     * on master station. The allowable range of the addresses is 1 - 62.
+     * The addresses 0, 63 cannot be used as they are dedicated to master station and legacy support.
+     * After slave station is registered, the master will send establish connection to remote station.
+     * If remote station is not yet ready, this can cause reducing of the master station performance.
+     *
      * @param handle   pointer to tiny_fd_handle_t
-     * @param handle   pointer to tiny_fd_handle_t
+     * @param address  address in range 1 - 62.
      *
      * @return TINY_SUCCESS in case of success or TINY_ERR_FAILED if there is no free slots
      *         for new peer, wrong address is specified, or peer is already registered.
      */
     extern int tiny_fd_register_peer(tiny_fd_handle_t handle, uint8_t address);
+
+    extern int tiny_fd_send_to(tiny_fd_handle_t handle, uint8_t address, const void *buf, int len);
+
+    extern int tiny_fd_send_packet_to(tiny_fd_handle_t handle, uint8_t address, const void *buf, int len);
 
     /**
      * @}

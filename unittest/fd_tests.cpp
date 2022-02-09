@@ -229,7 +229,7 @@ TEST(FD, no_ka_switch_to_disconnected)
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     uint8_t buffer[32];
     int len = conn.endpoint2().read(buffer, sizeof(buffer));
-    const uint8_t sabm_request[] = {0x7E, 0xFF, 0x3F, 0xF3, 0x39, 0x7E};
+    const uint8_t sabm_request[] = {0x7E, 0x03, 0x3F, 0x5B, 0xEC, 0x7E};
     if ( (size_t)len < sizeof(sabm_request) )
     {
         CHECK_EQUAL(sizeof(sabm_request), len);
@@ -256,10 +256,10 @@ TEST(FD, resend_timeout)
     helper1.send("#");
     std::this_thread::sleep_for(std::chrono::milliseconds(70 * 2 + 100));
     helper1.stop();
-    const uint8_t reconnect_dat[] = {0x7E, 0xFD, 0x10, '#',  0x8F, 0x33, 0x7E, // 1-st attempt
-                                     0x7E, 0xFD, 0x10, '#',  0x8F, 0x33, 0x7E, // 2-nd attempt (1st retry)
-                                     0x7E, 0xFD, 0x10, '#',  0x8F, 0x33, 0x7E, // 3-rd attempt (2nd retry)
-                                     0x7E, 0xFF, 0x3F, 0xF3, 0x39, 0x7E};      // Attempt to reconnect (SABM)
+    const uint8_t reconnect_dat[] = {0x7E, 0x01, 0x10, '#',  0x18, 0x1A, 0x7E, // 1-st attempt
+                                     0x7E, 0x01, 0x10, '#',  0x18, 0x1A, 0x7E, // 2-nd attempt (1st retry)
+                                     0x7E, 0x01, 0x10, '#',  0x18, 0x1A, 0x7E, // 3-rd attempt (2nd retry)
+                                     0x7E, 0x03, 0x3F, 0x5B, 0xEC, 0x7E};      // Attempt to reconnect (SABM)
     uint8_t buffer[64]{};
     conn.endpoint2().read(buffer, sizeof(buffer));
     MEMCMP_EQUAL(reconnect_dat, buffer, sizeof(reconnect_dat));
