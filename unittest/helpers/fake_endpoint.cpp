@@ -28,6 +28,14 @@
 
 #include "fake_endpoint.h"
 
+FakeEndpoint::FakeEndpoint(FakeWire &both, int rxSize, int txSize)
+    : m_tx(both)
+    , m_rx(both)
+{
+    m_txBlock = m_tx.CreateTxHardware(txSize);
+    m_rxBlock = m_rx.CreateRxHardware(rxSize);
+}
+
 FakeEndpoint::FakeEndpoint(FakeWire &tx, FakeWire &rx, int rxSize, int txSize)
     : m_tx(tx)
     , m_rx(rx)

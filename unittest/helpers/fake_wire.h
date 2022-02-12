@@ -155,5 +155,5 @@ private:
 
     void TransferData(int num_bytes);
 
-    friend class FakeConnection;
+    friend class FakeSetup;
 };

@@ -14,6 +14,7 @@ OBJ_UNIT_TEST = \
         unittest/hdlc_tests.o \
         unittest/light_tests.o \
         unittest/fd_tests.o \
+        unittest/fd_multidrop_tests.o \
 
 unittest: $(OBJ_UNIT_TEST) library
 	$(CXX) $(CPPFLAGS) -o $(BLD)/unit_test $(OBJ_UNIT_TEST) -L$(BLD) -lm -pthread -ltinyprotocol -lCppUTest -lCppUTestExt

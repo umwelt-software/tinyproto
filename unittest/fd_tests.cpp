@@ -47,7 +47,7 @@ TEST_GROUP(FD){void setup(){
 
 TEST(FD, multithread_basic_test)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     uint16_t nsent = 0;
     TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 250);
     TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 250);
@@ -69,7 +69,7 @@ TEST(FD, multithread_basic_test)
 
 TEST(FD, multithread_read_test)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     uint16_t nsent = 0;
     TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 250);
     TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 250);
@@ -92,7 +92,7 @@ TEST(FD, multithread_read_test)
 TEST(FD, arduino_to_pc)
 {
     std::atomic<int> arduino_timedout_frames{};
-    FakeConnection conn(4096, 64); // PC side has larger UART buffer: 4096, arduino side has small uart buffer
+    FakeSetup conn(4096, 64); // PC side has larger UART buffer: 4096, arduino side has small uart buffer
     TinyHelperFd pc(&conn.endpoint1(), 4096, nullptr, 4, 400);
     TinyHelperFd arduino(
         &conn.endpoint2(), tiny_fd_buffer_size_by_mtu(64, 4),
@@ -130,7 +130,7 @@ TEST(FD, errors_on_tx_line)
     // Limit hardware blocks to 32 byte buffers only.
     // Too large blocks cause much frames to be bufferred, and each restransmission
     // contains errors (because we set error every 200 bytes)
-    FakeConnection conn(32, 32);
+    FakeSetup conn(32, 32);
     uint16_t nsent = 0;
     // Also, to make test logs more clear, we limit window size to 3 frames only.
     // This will give us clear understanding what is happenning when something goes wrong
@@ -156,7 +156,7 @@ TEST(FD, error_on_single_I_send)
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
     // TX1: U, U, R
     // TX2: U, U, I,
-    FakeConnection conn;
+    FakeSetup conn;
     uint16_t nsent = 0;
     TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 1000);
     TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 1000);
@@ -181,7 +181,7 @@ TEST(FD, error_on_rej)
     // Each U-frame or S-frame is 6 bytes or more: 7F, ADDR, CTL, FSC16, 7F
     // TX1: U, U, R
     // TX2: U, U, I,
-    FakeConnection conn;
+    FakeSetup conn;
     uint16_t nsent = 0;
     TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 250);
     TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 250);
@@ -203,7 +203,7 @@ TEST(FD, error_on_rej)
 
 TEST(FD, no_ka_switch_to_disconnected)
 {
-    FakeConnection conn(32, 32);
+    FakeSetup conn(32, 32);
     TinyHelperFd helper1(&conn.endpoint1(), 1024, nullptr, 4, 100);
     TinyHelperFd helper2(&conn.endpoint2(), 1024, nullptr, 4, 100);
     conn.endpoint1().setTimeout(30);
@@ -239,7 +239,7 @@ TEST(FD, no_ka_switch_to_disconnected)
 
 TEST(FD, resend_timeout)
 {
-    FakeConnection conn(128, 128);
+    FakeSetup conn(128, 128);
     TinyHelperFd helper1(&conn.endpoint1(), 1024, nullptr, 4, 70);
     TinyHelperFd helper2(&conn.endpoint2(), 1024, nullptr, 4, 70);
     conn.endpoint1().setTimeout(30);
@@ -273,7 +273,7 @@ TEST(FD, singlethread_basic)
 
 TEST(FD, connecting_in_different_time)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 250);
     TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 250);
     helper1.run(true);
@@ -289,7 +289,7 @@ TEST(FD, connecting_in_different_time)
 
 TEST(FD, on_connect_callback)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     bool connected = false;
     TinyHelperFd helper1(&conn.endpoint1(), 4096, nullptr, 7, 100);
     TinyHelperFd helper2(&conn.endpoint2(), 4096, nullptr, 7, 100);

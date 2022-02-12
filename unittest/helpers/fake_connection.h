@@ -31,73 +31,43 @@
 #include "fake_wire.h"
 #include "fake_endpoint.h"
 #include <atomic>
+#include <list>
 
-class FakeConnection
+class FakeSetup
 {
 public:
-    FakeConnection()
-        : m_line_thread(TransferDataStatic, this)
-    {
-        setSpeed( 512000 );
-    }
+    FakeSetup();
+    FakeSetup(int p1_hw_size, int p2_hw_size);
 
-    FakeConnection(int p1_hw_size, int p2_hw_size)
-        : m_line1()
-        , m_line2()
-        , m_endpoint1(m_line1, m_line2, p1_hw_size, p1_hw_size)
-        , m_endpoint2(m_line2, m_line1, p2_hw_size, p2_hw_size)
-        , m_line_thread(TransferDataStatic, this)
-    {
-        setSpeed( 512000 );
-    }
+    ~FakeSetup();
 
-    ~FakeConnection()
-    {
-        m_stopped = true;
-        m_line_thread.join();
-    }
-
-    FakeEndpoint &endpoint1()
-    {
-        return m_endpoint1;
-    }
-    FakeEndpoint &endpoint2()
-    {
-        return m_endpoint2;
-    }
+    FakeEndpoint &endpoint1();
+    FakeEndpoint &endpoint2();
 
     FakeWire &line1()
     {
         return m_line1;
     }
+
     FakeWire &line2()
     {
         return m_line2;
     }
 
-    void setSpeed(uint32_t bps)
-    {
-        uint64_t Bps = bps / 8;
-        uint64_t interval = 1000000ULL / (Bps);
-        interval = interval < 50 ? 50: interval;
-        m_Bps = Bps;
-        m_interval_us = interval;
-    }
-    int lostBytes()
-    {
-        return m_line1.lostBytes() + m_line2.lostBytes();
-    }
+    void setSpeed(uint32_t bps);
+
+    int lostBytes();
 
 private:
     FakeWire m_line1{};
     FakeWire m_line2{};
-    FakeEndpoint m_endpoint1{m_line1, m_line2, 256, 256};
-    FakeEndpoint m_endpoint2{m_line2, m_line1, 256, 256};
+    std::list<FakeEndpoint *> m_endpoints{};
+
     std::atomic<uint64_t> m_interval_us{50};
     std::atomic<uint64_t> m_Bps{64000};
     std::atomic<bool> m_stopped{false};
-    std::thread m_line_thread;
+    std::thread *m_line_thread = nullptr;
 
-    static void TransferDataStatic(FakeConnection *conn);
+    static void TransferDataStatic(FakeSetup *conn);
     void TransferData();
 };

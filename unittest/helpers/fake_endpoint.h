@@ -1,5 +1,5 @@
 /*
-    Copyright 2017, 2020,2022 (C) Alexey Dynda
+    Copyright 2017,2020,2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -35,6 +35,10 @@
 class FakeEndpoint
 {
 public:
+    // This constructor creates looped device
+    FakeEndpoint(FakeWire &both, int rxSize, int txSize);
+
+    // This constructor creates normal device with TX and RX lines
     FakeEndpoint(FakeWire &tx, FakeWire &rx, int rxSize, int txSize);
 
     ~FakeEndpoint();

@@ -49,7 +49,7 @@ TEST_GROUP(HDLC){void setup(){
 TEST(HDLC, crc_mismatch)
 {
     const char *txbuf = "This is CRC mismatch check";
-    FakeConnection conn;
+    FakeSetup conn;
     TinyHdlcHelper helper1(&conn.endpoint1(), nullptr, nullptr, 1024, HDLC_CRC_32);
     TinyHdlcHelper helper2(&conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_16);
     int msg_size = strlen(txbuf) + 1;
@@ -64,7 +64,7 @@ TEST(HDLC, crc_mismatch)
 
 TEST(HDLC, zero_len_not_allowed)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     TinyHdlcHelper helper1(&conn.endpoint1(), nullptr, nullptr, 1024, HDLC_CRC_32);
     uint8_t buff[2];
     CHECK_EQUAL(TINY_ERR_INVALID_DATA, helper1.send(buff, 0, 100));
@@ -73,7 +73,7 @@ TEST(HDLC, zero_len_not_allowed)
 TEST(HDLC, crc8)
 {
     const char *txbuf = "This is CRC8 check";
-    FakeConnection conn;
+    FakeSetup conn;
     TinyHdlcHelper helper1(&conn.endpoint1(), nullptr, nullptr, 1024, HDLC_CRC_8);
     TinyHdlcHelper helper2(
         &conn.endpoint2(), [&txbuf](uint8_t *buf, int len) -> void { STRCMP_EQUAL(txbuf, (char *)buf); }, nullptr, 1024,
@@ -87,7 +87,7 @@ TEST(HDLC, crc8)
 TEST(HDLC, crc16)
 {
     const char *txbuf = "This is CRC16 check";
-    FakeConnection conn;
+    FakeSetup conn;
     TinyHdlcHelper helper1(&conn.endpoint1(), nullptr, nullptr, 1024, HDLC_CRC_16);
     TinyHdlcHelper helper2(
         &conn.endpoint2(), [&txbuf](uint8_t *buf, int len) -> void { STRCMP_EQUAL(txbuf, (char *)buf); }, nullptr, 1024,
@@ -101,7 +101,7 @@ TEST(HDLC, crc16)
 TEST(HDLC, crc32)
 {
     const char *txbuf = "This is CRC32 check";
-    FakeConnection conn;
+    FakeSetup conn;
     TinyHdlcHelper helper1(&conn.endpoint1(), nullptr, nullptr, 1024, HDLC_CRC_32);
     TinyHdlcHelper helper2(
         &conn.endpoint2(), [&txbuf](uint8_t *buf, int len) -> void { STRCMP_EQUAL(txbuf, (char *)buf); }, nullptr, 1024,
@@ -116,7 +116,7 @@ TEST(HDLC, send_receive)
 {
     uint32_t bytes_sent = 0;
     uint32_t bytes_received = 0;
-    FakeConnection conn;
+    FakeSetup conn;
     TinyHdlcHelper helper1(&conn.endpoint1(), nullptr,
                            [&bytes_sent](uint8_t *buf, int len) -> void { bytes_sent += len; });
     TinyHdlcHelper helper2(&conn.endpoint2(),
@@ -142,7 +142,7 @@ TEST(HDLC, arduino_to_pc)
     uint8_t ardu_buffer[512];
     int timed_out_frames = 0;
     // PC side has a larger buffer
-    FakeConnection conn(4096, 64);
+    FakeSetup conn(4096, 64);
     TinyHdlcHelper pc(&conn.endpoint1(), nullptr, nullptr, 512);
     TinyHdlcHelper arduino(
         &conn.endpoint2(),
@@ -196,7 +196,7 @@ TEST(HDLC, arduino_to_pc)
 
 TEST(HDLC, single_receive)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     conn.endpoint1().setTimeout(0);
     conn.endpoint2().setTimeout(100);
     TinyHdlcHelper helper2(&conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF);
@@ -214,7 +214,7 @@ TEST(HDLC, single_receive)
 
 TEST(HDLC, single_send)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     conn.endpoint1().setTimeout(0);
     conn.endpoint2().setTimeout(10);
     TinyHdlcHelper helper2(&conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF);
@@ -234,7 +234,7 @@ TEST(HDLC, hdlc_ll_missalignment)
     // Test to send 7E 7E XX XX 7E
 
     // On frame sent is not defined
-    FakeConnection conn;
+    FakeSetup conn;
     conn.endpoint1().setTimeout(0);
     conn.endpoint2().setTimeout(10);
     TinyHdlcHelper helper2(&conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF);
@@ -247,7 +247,7 @@ TEST(HDLC, hdlc_ll_missalignment)
 
 TEST(HDLC, hdlc_send_escape_chars_encode)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     conn.endpoint1().setTimeout(0);
     conn.endpoint2().setTimeout(10);
     TinyHdlcHelper helper2( &conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_8 );
@@ -266,7 +266,7 @@ TEST(HDLC, hdlc_send_escape_chars_encode)
 
 TEST(HDLC, hdlc_recv_escape_chars_decode)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     conn.endpoint1().setTimeout(0);
     conn.endpoint2().setTimeout(10);
     TinyHdlcHelper helper2(&conn.endpoint2(), nullptr, nullptr, 1024, HDLC_CRC_OFF);
@@ -284,7 +284,7 @@ TEST(HDLC, hdlc_recv_escape_chars_decode)
 
 TEST(HDLC, hdlc_incomplete_send_on_close)
 {
-    FakeConnection conn;
+    FakeSetup conn;
     conn.endpoint1().setTimeout(0);
     conn.endpoint2().setTimeout(10);
     int bytes_sent = 0;

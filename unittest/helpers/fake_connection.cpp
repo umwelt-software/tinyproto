@@ -30,12 +30,41 @@
 #include <thread>
 #include <chrono>
 
-void FakeConnection::TransferDataStatic(FakeConnection *conn)
+FakeSetup::FakeSetup()
+{
+    setSpeed( 512000 );
+    m_endpoints.push_back(new FakeEndpoint(m_line1, m_line2, 256, 256));
+    m_endpoints.push_back(new FakeEndpoint(m_line2, m_line1, 256, 256));
+    m_line_thread = new std::thread(TransferDataStatic, this);
+}
+
+FakeSetup::FakeSetup(int p1_hw_size, int p2_hw_size)
+   : m_line1()
+   , m_line2()
+{
+    setSpeed( 512000 );
+    m_endpoints.push_back(new FakeEndpoint(m_line1, m_line2, p1_hw_size, p1_hw_size));
+    m_endpoints.push_back(new FakeEndpoint(m_line2, m_line1, p2_hw_size, p2_hw_size));
+    m_line_thread = new std::thread(TransferDataStatic, this);
+}
+
+FakeSetup::~FakeSetup()
+{
+    m_stopped = true;
+    m_line_thread->join();
+    delete m_line_thread;
+    for (auto e: m_endpoints)
+    {
+        delete e;
+    }
+}
+
+void FakeSetup::TransferDataStatic(FakeSetup *conn)
 {
     conn->TransferData();
 }
 
-void FakeConnection::TransferData()
+void FakeSetup::TransferData()
 {
     auto startTs = std::chrono::steady_clock::now();
     while ( !m_stopped )
@@ -52,4 +81,31 @@ void FakeConnection::TransferData()
         m_line1.TransferData(bytes);
         m_line2.TransferData(bytes);
     }
+}
+
+FakeEndpoint &FakeSetup::endpoint1()
+{
+    auto it = m_endpoints.begin();
+    return **it;
+}
+
+FakeEndpoint &FakeSetup::endpoint2()
+{
+    auto it = m_endpoints.begin();
+    it++;
+    return **it;
+}
+
+void FakeSetup::setSpeed(uint32_t bps)
+{
+    uint64_t Bps = bps / 8;
+    uint64_t interval = 1000000ULL / (Bps);
+    interval = interval < 50 ? 50: interval;
+    m_Bps = Bps;
+    m_interval_us = interval;
+}
+
+int FakeSetup::lostBytes()
+{
+    return m_line1.lostBytes() + m_line2.lostBytes();
 }

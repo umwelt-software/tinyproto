@@ -33,23 +33,58 @@ TinyHelperFd::TinyHelperFd(FakeEndpoint *endpoint, int rxBufferSize,
                            const std::function<void(uint8_t *, int)> &onRxFrameCb, int window_frames, int timeout)
     : IBaseHelper(endpoint, rxBufferSize)
     , m_onRxFrameCb(onRxFrameCb)
+    , m_rxBufferSize(rxBufferSize)
+    , m_window(window_frames)
+    , m_timeout(timeout)
+{
+    init();
+}
+
+TinyHelperFd::TinyHelperFd(FakeEndpoint *endpoint, int rxBufferSize, uint8_t mode,
+                           const std::function<void(uint8_t *, int)> &onRxFrameCb)
+    : IBaseHelper(endpoint, rxBufferSize)
+    , m_onRxFrameCb(onRxFrameCb)
+    , m_rxBufferSize(rxBufferSize)
+    , m_window(7)
+    , m_timeout(-1)
+{
+    m_mode = mode;
+}
+
+void TinyHelperFd::setTimeout(int timeout)
+{
+    m_timeout = timeout;
+}
+
+void TinyHelperFd::setAddress(uint8_t address)
+{
+    m_addr = address;
+}
+
+void TinyHelperFd::setPeersCount(uint8_t count)
+{
+    m_peersCount = count;
+}
+
+int TinyHelperFd::init()
 {
     tiny_fd_init_t init{};
-    //    init.write_func       = write_data;
-    //    init.read_func        = read_data;
     init.pdata = this;
     init.on_frame_cb = onRxFrame;
     init.on_sent_cb = onTxFrame;
     init.on_connect_event_cb = onConnect;
     init.buffer = m_buffer;
-    init.buffer_size = rxBufferSize;
-    init.window_frames = window_frames ? window_frames : 7;
-    init.send_timeout = timeout < 0 ? 2000 : timeout;
+    init.buffer_size = m_rxBufferSize;
+    init.window_frames = m_window ? m_window : 7;
+    init.send_timeout = m_timeout < 0 ? 2000 : m_timeout;
     init.retry_timeout = init.send_timeout ? (init.send_timeout / 2) : 200;
     init.retries = 2;
+    init.mode = m_mode;
+    init.peers_count = m_peersCount;
+    init.addr = m_addr;
     init.crc_type = HDLC_CRC_16;
 
-    tiny_fd_init(&m_handle, &init);
+    return tiny_fd_init(&m_handle, &init);
 }
 
 void TinyHelperFd::set_connect_cb(const std::function<void(uint8_t, bool)> &onConnectCb)
@@ -57,9 +92,19 @@ void TinyHelperFd::set_connect_cb(const std::function<void(uint8_t, bool)> &onCo
     m_onConnectCb = onConnectCb;
 }
 
+int TinyHelperFd::registerPeer(uint8_t address)
+{
+    return tiny_fd_register_peer(m_handle, address);
+}
+
 int TinyHelperFd::send(uint8_t *buf, int len)
 {
     return tiny_fd_send_packet(m_handle, buf, len);
+}
+
+int TinyHelperFd::sendto(uint8_t address, uint8_t *buf, int len)
+{
+    return tiny_fd_send_packet_to(m_handle, address, buf, len);
 }
 
 void TinyHelperFd::MessageSender(TinyHelperFd *helper, int count, std::string msg)
