@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2022 (C) Alexey Dynda
+    Copyright 2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -26,33 +26,67 @@
     For further information contact via email on github account.
 */
 
-#include "tiny_types.h"
-#include "tiny_debug.h"
+#include <mutex>
 
-#if defined(CONFIG_ENABLE_CPP_HAL)
-// Do not include anything here, there is tiny_types_cpp.cpp for it
-#elif defined(TINY_CUSTOM_PLATFORM)
-#include "no_platform/no_platform_hal.inl"
-#elif defined(__AVR__)
-#include "avr/avr_hal.inl"
-#elif defined(__XTENSA__)
-#include "esp32/esp32_hal.inl"
-#elif defined(ARDUINO)
-#include "arduino/arduino_hal.inl"
-#elif defined(__linux__)
-#include "linux/linux_hal.inl"
-#elif defined(__MINGW32__)
-#include "mingw32/mingw32_hal.inl"
-#elif defined(_WIN32)
-#include "win32/win32_hal.inl"
-#else
-#warning "Platform not supported. Multithread support is disabled"
-#include "no_platform/no_platform_hal.inl"
-#endif
+#error "Not implemented now"
 
-uint8_t g_tiny_log_level = TINY_LOG_LEVEL_DEFAULT;
-
-void tiny_log_level(uint8_t level)
+void tiny_mutex_create(tiny_mutex_t *mutex)
 {
-    g_tiny_log_level = level;
 }
+
+void tiny_mutex_destroy(tiny_mutex_t *mutex)
+{
+}
+
+void tiny_mutex_lock(tiny_mutex_t *mutex)
+{
+}
+
+uint8_t tiny_mutex_try_lock(tiny_mutex_t *mutex)
+{
+}
+
+void tiny_mutex_unlock(tiny_mutex_t *mutex)
+{
+}
+
+void tiny_events_create(tiny_events_t *events)
+{
+}
+
+void tiny_events_destroy(tiny_events_t *events)
+{
+}
+
+uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits, uint8_t clear, uint32_t timeout)
+{
+}
+
+uint8_t tiny_events_check_int(tiny_events_t *events, uint8_t bits, uint8_t clear)
+{
+}
+
+void tiny_events_set(tiny_events_t *events, uint8_t bits)
+{
+}
+
+void tiny_events_clear(tiny_events_t *events, uint8_t bits)
+{
+}
+
+void tiny_sleep(uint32_t ms)
+{
+}
+
+void tiny_sleep_us(uint32_t us)
+{
+}
+
+uint32_t tiny_millis(void)
+{
+}
+
+uint32_t tiny_micros(void)
+{
+}
+

@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2022 (C) Alexey Dynda
+    Copyright 2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -26,33 +26,42 @@
     For further information contact via email on github account.
 */
 
-#include "tiny_types.h"
-#include "tiny_debug.h"
+#pragma once
 
-#if defined(CONFIG_ENABLE_CPP_HAL)
-// Do not include anything here, there is tiny_types_cpp.cpp for it
-#elif defined(TINY_CUSTOM_PLATFORM)
-#include "no_platform/no_platform_hal.inl"
-#elif defined(__AVR__)
-#include "avr/avr_hal.inl"
-#elif defined(__XTENSA__)
-#include "esp32/esp32_hal.inl"
-#elif defined(ARDUINO)
-#include "arduino/arduino_hal.inl"
-#elif defined(__linux__)
-#include "linux/linux_hal.inl"
-#elif defined(__MINGW32__)
-#include "mingw32/mingw32_hal.inl"
-#elif defined(_WIN32)
-#include "win32/win32_hal.inl"
-#else
-#warning "Platform not supported. Multithread support is disabled"
-#include "no_platform/no_platform_hal.inl"
+#include <stdint.h>
+
+/* For fastest version of protocol assign all defines to zero.
+ * In this case protocol supports no CRC field, and
+ * all api functions become not thread-safe.
+ */
+
+#ifndef CONFIG_ENABLE_CHECKSUM
+#define CONFIG_ENABLE_CHECKSUM
 #endif
 
-uint8_t g_tiny_log_level = TINY_LOG_LEVEL_DEFAULT;
+#ifndef CONFIG_ENABLE_FCS16
+#define CONFIG_ENABLE_FCS16
+#endif
 
-void tiny_log_level(uint8_t level)
+#ifndef CONFIG_ENABLE_FCS32
+#define CONFIG_ENABLE_FCS32
+#endif
+
+/**
+ * Mutex type used by Tiny Protocol implementation.
+ * The type declaration depends on platform.
+ */
+typedef uintptr_t tiny_mutex_t;
+
+/**
+ * Events group type used by Tiny Protocol implementation.
+ * The type declaration depends on platform.
+ */
+typedef struct
 {
-    g_tiny_log_level = level;
-}
+    /** Mutex object to protect bits */
+    tiny_mutex_t mutex;
+    /** Current state of bits */
+    uint8_t bits;
+} tiny_events_t;
+

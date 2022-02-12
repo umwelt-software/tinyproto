@@ -35,6 +35,9 @@ ifeq ($(ENABLE_FD_LOGS),y)
     CPPFLAGS += -DTINY_FD_DEBUG=1
     ENABLE_DEBUG=y
 endif
+ifeq ($(CONFIG_ENABLE_CPP_HAL),y)
+    CPPFLAGS += -DCONFIG_ENABLE_CPP_HAL=1
+endif
 ifeq ($(ENABLE_DEBUG),y)
     CPPFLAGS += -DTINY_DEBUG=1
 endif
@@ -69,6 +72,7 @@ OBJ_LIB += \
         src/proto/fd/tiny_fd_frames.o \
         src/hal/tiny_list.o \
         src/hal/tiny_types.o \
+        src/hal/tiny_types_cpp.o \
         src/hal/tiny_serial.o \
         src/TinyProtocolHdlc.o \
         src/TinyProtocolFd.o \

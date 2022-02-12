@@ -9,6 +9,7 @@ help:
 	@echo "    options:"
 	@echo "        DESTDIR=path                  Specify install destination"
 	@echo "        ARCH=<platform>               Specify platform: linux, mingw32, avr, esp32"
+	@echo "        CONFIG_ENABLE_CPP_HAL         Enable C++ support for synchronization objects "
 	@echo "        CONFIG_ENABLE_FCS32=<y/n>     Enable or disable FCS32 support"
 	@echo "        CONFIG_ENABLE_FCS16=<y/n>     Enable or disable FCS16 support"
 	@echo "        CONFIG_ENABLE_CHECKSUM=<y/n>  Enable or disable checksum support"

@@ -40,7 +40,9 @@ extern "C"
 {
 #endif
 
-#if defined(TINY_CUSTOM_PLATFORM)
+#if defined(CONFIG_ENABLE_CPP_HAL)
+#include "cpp/cpp_hal.h"
+#elif defined(TINY_CUSTOM_PLATFORM)
 #include "no_platform/no_platform_hal.h"
 #elif defined(__AVR__)
 #include "avr/avr_hal.h"
@@ -115,6 +117,8 @@ extern "C"
 #define TINY_ERR_AGAIN (-7)
 /// Invalid crc field of incoming frame
 #define TINY_ERR_WRONG_CRC (-8)
+/// Unknown remote peer
+#define TINY_ERR_UNKNOWN_PEER (-9)
 
 /** @} */
 
