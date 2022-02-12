@@ -51,6 +51,8 @@ extern "C"
      * @{
      */
 
+    #define TINY_FD_PRIMARY_ADDR (0)
+
     enum
     {
         /**
@@ -149,17 +151,17 @@ extern "C"
         on_connect_event_cb_t on_connect_event_cb;
 
         /**
-         * Local station address. The field has meaning only for slave stations.
-         * For master station please, leave this field as 0.
-         * Not all addresses can be used for slave stations. The allowable range is 1 - 62.
+         * Local station address. The field has meaning only for secondary stations.
+         * For primary stations please, leave this field as 0.
+         * Not all addresses can be used for secondary stations. The allowable range is 1 - 62.
          */
         uint8_t addr;
 
         /**
          * Maximum number of peers supported by the local station.
          * If the value is equal to 0, that means that only one remote station is supported.
-         * For slave stations this value must be set to 1 or 0.
-         * For master stations this value can be in range 0 - 63.
+         * For secondary stations this value must be set to 1 or 0.
+         * For primary stations this value can be in range 0 - 63.
          * @warning Use 1 or 0 for now
          */
         uint8_t peers_count;
@@ -291,6 +293,7 @@ extern "C"
      * mtu size, please, use different function tiny_fd_send()..
      *
      * @param handle   tiny_fd_handle_t handle
+     * @param address  address of remote peer. For primary device, please use TINY_FD_PRIMARY_ADDR
      * @param buf      data to send
      * @param len      length of data to send
      *
@@ -298,9 +301,10 @@ extern "C"
      *         * TINY_SUCCESS          if user data are put to internal queue.
      *         * TINY_ERR_TIMEOUT      if no room in internal queue to put data. Retry operation once again.
      *         * TINY_ERR_FAILED       if request was cancelled, by tiny_fd_close() or other error happened.
+     *         * TINY_ERR_UNKNOWN_PEER if peer is not known to the system.
      *         * TINY_ERR_DATA_TOO_LARGE if user data are too big to fit in tx buffer.
      */
-    extern int tiny_fd_send_packet(tiny_fd_handle_t handle, const void *buf, int len);
+    extern int tiny_fd_send_packet_to(tiny_fd_handle_t handle, uint8_t address, const void *buf, int len);
 
     /**
      * Returns minimum required buffer size for specified parameters.
@@ -315,7 +319,7 @@ extern "C"
     /**
      * Returns minimum required buffer size for specified parameters.
      *
-     * @param peers_count maximum number of peers supported by the master. Use 0 or 1 for slave devices
+     * @param peers_count maximum number of peers supported by the primary. Use 0 or 1 for secondary devices
      * @param mtu size of desired user payload in bytes.
      * @param window maximum tx queue size of I-frames.
      * @param crc_type crc type to be used with FD protocol
@@ -344,12 +348,13 @@ extern "C"
      * timeout value of the speed of used communication channel.
      *
      * @param handle   tiny_fd_handle_t handle
+     * @param address  address of remote peer. For primary device, please use TINY_FD_PRIMARY_ADDR
      * @param buf      data to send
      * @param len      length of data to send
      *
      * @return Number of bytes sent
      */
-    extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
+    extern int tiny_fd_send_to(tiny_fd_handle_t handle, uint8_t address, const void *buf, int len);
 
     /**
      * Sets keep alive timeout in milliseconds. This timeout is used to send special RR
@@ -361,10 +366,10 @@ extern "C"
 
     /**
      * Registers remote peer with specified address. This API can be used only in NRM mode
-     * on master station. The allowable range of the addresses is 1 - 62.
-     * The addresses 0, 63 cannot be used as they are dedicated to master station and legacy support.
-     * After slave station is registered, the master will send establish connection to remote station.
-     * If remote station is not yet ready, this can cause reducing of the master station performance.
+     * on primary station. The allowable range of the addresses is 1 - 62.
+     * The addresses 0, 63 cannot be used as they are dedicated to primary station and legacy support.
+     * After secondary station is registered, the primary will send establish connection to remote station.
+     * If remote station is not yet ready, this can cause reducing of the primary station performance.
      *
      * @param handle   pointer to tiny_fd_handle_t
      * @param address  address in range 1 - 62.
@@ -374,9 +379,31 @@ extern "C"
      */
     extern int tiny_fd_register_peer(tiny_fd_handle_t handle, uint8_t address);
 
-    extern int tiny_fd_send_to(tiny_fd_handle_t handle, uint8_t address, const void *buf, int len);
+    /**
+     * @brief Sends userdata over full-duplex protocol to primary station.
+     *
+     * Sends userdata over full-duplex protocol to primary station. For details, please, refer to tiny_fd_send_to().
+     *
+     * @param handle   tiny_fd_handle_t handle
+     * @param address  address of remote peer. For primary device, please use TINY_FD_PRIMARY_ADDR
+     * @param buf      data to send
+     * @param len      length of data to send
+     *
+     * @return Number of bytes sent
+     */
+    extern int tiny_fd_send(tiny_fd_handle_t handle, const void *buf, int len);
 
-    extern int tiny_fd_send_packet_to(tiny_fd_handle_t handle, uint8_t address, const void *buf, int len);
+    /**
+     * Sends packet to primary station. For details, please, refer to tiny_fd_send_packet_to().
+     *
+     * @param handle   tiny_fd_handle_t handle
+     * @param address  address of remote peer. For primary device, please use TINY_FD_PRIMARY_ADDR
+     * @param buf      data to send
+     * @param len      length of data to send
+     *
+     * @return Success result or error code
+     */
+    extern int tiny_fd_send_packet(tiny_fd_handle_t handle, const void *buf, int len);
 
     /**
      * @}

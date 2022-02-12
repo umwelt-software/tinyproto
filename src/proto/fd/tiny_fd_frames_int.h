@@ -90,6 +90,11 @@ extern "C"
     void tiny_fd_queue_reset(tiny_fd_queue_t *queue);
 
     /**
+     * Reset the queue only for specific address
+     */
+    void tiny_fd_queue_reset_for(tiny_fd_queue_t *queue, uint8_t address);
+
+    /**
      * Returns true if the queue has free slots
      */
     bool tiny_fd_queue_has_free_slots(tiny_fd_queue_t *queue);
@@ -103,7 +108,7 @@ extern "C"
      * Allocates free slot in the queue and copies user data to the queue.
      * If there are no space returns NULL, otherwise returns pointer to allocated frame info structure.
      */
-    tiny_fd_frame_info_t *tiny_fd_queue_allocate(tiny_fd_queue_t *queue, int type, const uint8_t *data, int len);
+    tiny_fd_frame_info_t *tiny_fd_queue_allocate(tiny_fd_queue_t *queue, uint8_t type, const uint8_t *data, int len);
 
     /**
      * Returns pointer to the next element with speciifed type and arg or NULL.
@@ -114,7 +119,7 @@ extern "C"
      *
      * @important Remember that S-Frames and U-Frames can be reordered by the queue.
      */
-    tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, uint8_t address, uint8_t arg);
+    tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, uint8_t type, uint8_t address, uint8_t arg);
 
     /**
      * Marks frame slot as free

@@ -121,14 +121,16 @@ extern "C"
         uint8_t retries;
         /// Information for frames being processed
         tiny_frames_info_t frames;
-        /// Peers count supported by the master device
+        /// Peers count supported by the primary device
         uint8_t peers_count;
         /// Information on all peers stations
         tiny_fd_peer_info_t *peers;
-        /// Local address: 0x00 or 0xFF for master devices
+        /// Local address: 0x00 or 0xFF for primary devices
         uint8_t addr;
         /// Next peer to process
         uint8_t next_peer;
+        /// Last marker timestamp
+        uint32_t last_marker_ts;
         /// HDLC mode;
         uint8_t mode;
         /// Global events for HDLC protocol

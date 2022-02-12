@@ -77,7 +77,18 @@ void tiny_fd_queue_reset(tiny_fd_queue_t *queue)
     queue->lookup_index = 0;
 }
 
-tiny_fd_frame_info_t *tiny_fd_queue_allocate(tiny_fd_queue_t *queue, int type, const uint8_t *data, int len)
+void tiny_fd_queue_reset_for(tiny_fd_queue_t *queue, uint8_t address)
+{
+    for (int i=0; i < queue->size; i++)
+    {
+        if ( ( queue->frames[i]->header.address & 0xFC ) == (address & 0xFC) )
+        {
+            queue->frames[i]->type = TINY_FD_QUEUE_FREE;
+        }
+    }
+}
+
+tiny_fd_frame_info_t *tiny_fd_queue_allocate(tiny_fd_queue_t *queue, uint8_t type, const uint8_t *data, int len)
 {
     tiny_fd_frame_info_t *ptr = len <= queue->mtu ?  tiny_fd_queue_get_next(queue, TINY_FD_QUEUE_FREE, 0, 0) : NULL;
     if ( ptr != NULL )
@@ -89,12 +100,13 @@ tiny_fd_frame_info_t *tiny_fd_queue_allocate(tiny_fd_queue_t *queue, int type, c
     return ptr;
 }
 
-tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, uint8_t address, uint8_t arg)
+tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, uint8_t type, uint8_t address, uint8_t arg)
 {
     tiny_fd_frame_info_t *ptr = NULL;
     int index = queue->lookup_index;
     for (int i=0; i < queue->size; i++)
     {
+        // fprintf(stderr, "REC: type %02X address %02X, looking for type %02X addr %02X\n", queue->frames[index]->type, queue->frames[index]->header.address, type, address);
         if ( queue->frames[index]->type & type )
         {
             if ( queue->frames[index]->type == TINY_FD_QUEUE_FREE )
@@ -105,6 +117,7 @@ tiny_fd_frame_info_t *tiny_fd_queue_get_next(tiny_fd_queue_t *queue, int type, u
             // Check address for all frames
             if ( (address & 0xFC) == (queue->frames[index]->header.address & 0xFC) )
             {
+                // fprintf(stderr, "REC FOUND: type %02X address %02X, looking for type %02X addr %02X\n", queue->frames[index]->type, queue->frames[index]->header.address, type, address);
                 if ( queue->frames[index]->type != TINY_FD_QUEUE_I_FRAME )
                 {
                     ptr = queue->frames[index];
