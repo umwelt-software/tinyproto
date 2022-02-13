@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2022 (C) Alexey Dynda
+    Copyright 2019-2022 (,2022 (,2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -671,7 +671,7 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
 {
     const uint8_t peers_count = init->peers_count == 0 ? 1 : init->peers_count;
     *handle = NULL;
-    if ( (0 == init->on_frame_cb) || (0 == init->buffer) || (0 == init->buffer_size) )
+    if ( (0 == init->on_frame_cb && 0 == init->on_read_cb) || (0 == init->buffer) || (0 == init->buffer_size) )
     {
         return TINY_ERR_FAILED;
     }

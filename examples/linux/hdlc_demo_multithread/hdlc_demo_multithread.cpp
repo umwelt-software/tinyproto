@@ -57,14 +57,14 @@ static char *peek_message()
     return msg;
 }
 
-static int on_frame_read(void *user_data, void *data, int len)
+static int on_frame_read(void *user_data, uint8_t addr, void *data, int len)
 {
     // Process all incoming data here
     fprintf(stderr, "Received message '%.*s'\n", len, (char *)data);
     return 0;
 }
 
-static int on_frame_sent(void *user_data, const void *data, int len)
+static int on_frame_sent(void *user_data, uint8_t addr, const void *data, int len)
 {
     // This callback is called, when frame is sent
     fprintf(stderr, "Sent message '%.*s'\n", len, (char *)data);

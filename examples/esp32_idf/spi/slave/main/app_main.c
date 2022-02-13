@@ -107,7 +107,7 @@ void deinit_spi()
 {
 }
 
-int on_receive(void *user_data, void *data, int size)
+int on_receive(void *user_data, uint8_t addr, void *data, int size)
 {
     static uint8_t last_index = 0;
     uint8_t index = *((uint8_t *)data);
@@ -121,7 +121,7 @@ int on_receive(void *user_data, void *data, int size)
     return 0;
 }
 
-int on_send(void *user_data, const void *data, int size)
+int on_send(void *user_data, uint8_t addr, const void *data, int size)
 {
     uint8_t index = *((const uint8_t *)data);
     fprintf(stderr, ">> Sent: [%02X] %.*s\n", index, size - 1, ((const char *)data) + 1);

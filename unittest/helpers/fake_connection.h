@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2020,2022 (C) Alexey Dynda
+    Copyright 2019-2020,2022 (,2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 

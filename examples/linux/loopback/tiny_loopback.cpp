@@ -158,7 +158,7 @@ static int parse_args(int argc, char *argv[])
 tiny_serial_handle_t s_serialFd;
 tinyproto::FdD *s_protoFd = nullptr;
 
-void onReceiveFrameFd(void *userData, tinyproto::IPacket &pkt)
+void onReceiveFrameFd(void *userData, uint8_t addr, tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size());
@@ -172,7 +172,7 @@ void onReceiveFrameFd(void *userData, tinyproto::IPacket &pkt)
     }
 }
 
-void onSendFrameFd(void *userData,tinyproto::IPacket &pkt)
+void onSendFrameFd(void *userData, uint8_t addr, tinyproto::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)pkt.size());

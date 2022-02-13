@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2022 (C) Alexey Dynda
+    Copyright 2019-2022 (,2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -191,7 +191,7 @@ public:
      * Sets receive callback for incoming messages
      * @param on_receive user callback to process incoming messages. The processing must be non-blocking
      */
-    void setReceiveCallback(void (*on_receive)(void *userData,IPacket &pkt) = nullptr)
+    void setReceiveCallback(void (*on_receive)(void *userData, uint8_t addr, IPacket &pkt) = nullptr)
     {
         m_onReceive = on_receive;
     };
@@ -200,7 +200,7 @@ public:
      * Sets send callback for outgoing messages
      * @param on_send user callback to process outgoing messages. The processing must be non-blocking
      */
-    void setSendCallback(void (*on_send)(void *userData, IPacket &pkt) = nullptr)
+    void setSendCallback(void (*on_send)(void *userData, uint8_t addr, IPacket &pkt) = nullptr)
     {
         m_onSend = on_send;
     };
@@ -258,12 +258,12 @@ protected:
      * @param pdata pointer to received data
      * @param size size of received payload in bytes
      */
-    virtual void onReceive(uint8_t *pdata, int size)
+    virtual void onReceive(uint8_t addr, uint8_t *pdata, int size)
     {
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
         if ( m_onReceive )
-            m_onReceive(m_userData, pkt);
+            m_onReceive(m_userData, addr, pkt);
     }
 
     /**
@@ -272,12 +272,12 @@ protected:
      * @param pdata pointer to sent data
      * @param size size of sent payload in bytes
      */
-    virtual void onSend(uint8_t *pdata, int size)
+    virtual void onSend(uint8_t addr, const uint8_t *pdata, int size)
     {
         IPacket pkt((char *)pdata, size);
         pkt.m_len = size;
         if ( m_onSend )
-            m_onSend(m_userData, pkt);
+            m_onSend(m_userData, addr, pkt);
     }
 
     /**
@@ -311,10 +311,10 @@ private:
     uint8_t m_window = 3;
 
     /** Callback, when new frame is received */
-    void (*m_onReceive)(void *userData, IPacket &pkt) = nullptr;
+    void (*m_onReceive)(void *userData, uint8_t addr, IPacket &pkt) = nullptr;
 
     /** Callback, when new frame is sent */
-    void (*m_onSend)(void *userData, IPacket &pkt) = nullptr;
+    void (*m_onSend)(void *userData, uint8_t addr, IPacket &pkt) = nullptr;
 
     /** Callback, when connect/disconnect event takes place */
     void (*m_onConnectEvent)(void *userData, uint8_t addr, bool connected) = nullptr;
@@ -323,10 +323,10 @@ private:
     void *m_userData = nullptr;
 
     /** Internal function */
-    static void onReceiveInternal(void *handle, uint8_t *pdata, int size);
+    static void onReceiveInternal(void *handle, uint8_t addr, uint8_t *pdata, int size);
 
     /** Internal function */
-    static void onSendInternal(void *handle, uint8_t *pdata, int size);
+    static void onSendInternal(void *handle, uint8_t addr, const uint8_t *pdata, int size);
 
     /** Internal function */
     static void onConnectEventInternal(void *handle, uint8_t addr, bool connected);
