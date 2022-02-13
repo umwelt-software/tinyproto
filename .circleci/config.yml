@@ -92,4 +92,6 @@ workflows:
 #          context: github
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - cpp_api
