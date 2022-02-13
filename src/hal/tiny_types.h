@@ -67,10 +67,13 @@ extern "C"
 
 
 #if defined(_MSC_VER)
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGNED(x)   __declspec(align(x))
 #elif defined(__GNUC__)
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGNED(x)   __attribute__ ((aligned (x)))
 #else
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGNED(x)
 #endif
 
@@ -79,20 +82,26 @@ extern "C"
     defined(__TARGET_CPU_CORTEX_M3) || defined(__TARGET_CPU_CORTEX_M4) || defined(__ARM_ARCH_7EM__) || \
     defined(__ARM_ARCH_7M__)
 
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGN_STRUCT_VALUE     (sizeof(uintptr_t))
 
 #elif defined(_MSC_VER)
 
 // MS Compiler at least in MSVC 2019 doesn't support sizeof and braces in __declspec(align(x)).
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGN_STRUCT_VALUE  8
 
 #else
 
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGN_STRUCT_VALUE     (sizeof(uintptr_t))
 
 #endif
 
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGNED_STRUCT TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
+
+/// This macro is used internally for aligning the structures
 #define TINY_ALIGN_BUFFER(x) ((uint8_t *)( ((uintptr_t)x + TINY_ALIGN_STRUCT_VALUE - 1) & (~(TINY_ALIGN_STRUCT_VALUE - 1)) ))
 
 /**

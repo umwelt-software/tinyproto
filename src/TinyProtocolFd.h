@@ -255,6 +255,7 @@ protected:
     /**
      * Method called by hdlc protocol upon receiving new frame.
      * Can be redefined in derived classes.
+     * @param addr address of peer station
      * @param pdata pointer to received data
      * @param size size of received payload in bytes
      */
@@ -269,6 +270,7 @@ protected:
     /**
      * Method called by hdlc protocol upon sending next frame.
      * Can be redefined in derived classes.
+     * @param addr address of peer station
      * @param pdata pointer to sent data
      * @param size size of sent payload in bytes
      */

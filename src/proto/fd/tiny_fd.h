@@ -51,6 +51,9 @@ extern "C"
      * @{
      */
 
+    /**
+     * Address of primary stations to use with the protocol. See RFC.
+     */
     #define TINY_FD_PRIMARY_ADDR (0)
 
     enum
@@ -290,9 +293,9 @@ extern "C"
      * will return success, when data are copied to internal queue. That doesn't mean
      * that data are physically sent, but they are enqueued for sending.
      *
-     * @important the maximum size of the allowed buffer to send is equal to mtu size set for
-     *            the protocol. If you want to send data larger than mtu size, please, use
-     *            tiny_fd_send() function.
+     * @note the maximum size of the allowed buffer to send is equal to mtu size set for
+     *       the protocol. If you want to send data larger than mtu size, please, use
+     *       tiny_fd_send() function.
      *
      * When timeout happens, the data were not actually enqueued. Call this function once again.
      * If TINY_ERR_DATA_TOO_LARGE is returned, try to send less data. If you don't want to care about
@@ -315,7 +318,7 @@ extern "C"
     /**
      * Returns minimum required buffer size for specified parameters.
      *
-     * @important This function calculates buffer requirements based on HDLC_CRC_16.
+     * @note This function calculates buffer requirements based on HDLC_CRC_16.
      *
      * @param mtu size of desired user payload in bytes.
      * @param window maximum tx queue size of I-frames.
@@ -391,7 +394,6 @@ extern "C"
      * Sends userdata over full-duplex protocol to primary station. For details, please, refer to tiny_fd_send_to().
      *
      * @param handle   tiny_fd_handle_t handle
-     * @param address  address of remote peer. For primary device, please use TINY_FD_PRIMARY_ADDR
      * @param buf      data to send
      * @param len      length of data to send
      *
@@ -403,7 +405,6 @@ extern "C"
      * Sends packet to primary station. For details, please, refer to tiny_fd_send_packet_to().
      *
      * @param handle   tiny_fd_handle_t handle
-     * @param address  address of remote peer. For primary device, please use TINY_FD_PRIMARY_ADDR
      * @param buf      data to send
      * @param len      length of data to send
      *

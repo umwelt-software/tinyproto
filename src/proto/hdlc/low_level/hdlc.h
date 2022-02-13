@@ -163,8 +163,8 @@ extern "C"
      * if hdlc_ll_run_rx() returns 0 bytes processed, just call it once again.
      * It is guaranteed, that at least second call will process bytes.
      *
-     * @important this API can be used in interrupt context, but please implement
-     *            on_frame_read callback carefully.
+     * @note this API can be used in interrupt context, but please implement
+     *       on_frame_read callback carefully.
      *
      * This function will return the following codes in error field:
      *   - TINY_ERR_DATA_TOO_LARGE if receiving data fails to fit incoming buffer
@@ -221,7 +221,7 @@ extern "C"
     /**
      * Returns minimum buffer size, required to hold hdlc low level data for desired payload size.
      *
-     * @important This function calculates required buffer size based on CRC32
+     * @note This function calculates required buffer size based on CRC32
      *
      * @param mtu size of desired max payload in bytes
      * @return size of the buffer required
@@ -232,6 +232,8 @@ extern "C"
      * Returns minimum buffer size, required to hold hdlc low level data for desired payload size.
      *
      * @param mtu size of desired max payload in bytes
+     * @param crc_type type of crc validation to use for the protocol
+     *
      * @return size of the buffer required
      */
     int hdlc_ll_get_buf_size_ex(int mtu, hdlc_crc_t crc_type);
