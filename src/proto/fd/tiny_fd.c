@@ -168,10 +168,12 @@ static uint8_t __switch_to_next_peer(tiny_fd_handle_t handle)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static inline uint8_t __number_of_awaiting_tx_i_frames(tiny_fd_handle_t handle, uint8_t peer)
 {
     return ((uint8_t)(handle->peers[peer].last_ns - handle->peers[peer].confirm_ns) & seq_bits_mask);
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 

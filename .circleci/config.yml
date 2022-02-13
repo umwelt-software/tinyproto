@@ -51,7 +51,7 @@ jobs:
             CC=clang CXX=clang++ LD=clang++ make
             make install DESTDIR=test_path
             ./.travis/check_install.sh . test_path
-            make cppcheck
+            make cppcheck tiny_loopback
       - run:
           name: Building for AVR
           command: |
