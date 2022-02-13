@@ -171,6 +171,25 @@ extern "C"
      */
     typedef void (*on_frame_cb_t)(void *handle, uint8_t *pdata, int size);
 
+    /**
+     * on_frame_read_cb_t is a callback function, which is called every time new frame is received.
+     * @param udata user data
+     * @param address address if peer station
+     * @param pdata  pointer to data received from the channel.
+     * @param size   size of data received.
+     * @return None.
+     */
+    typedef void (*on_frame_read_cb_t)(void *udata, uint8_t address, uint8_t *pdata, int size);
+
+    /**
+     * on_frame_send_cb_t is a callback function, which is called every time new frame is sent.
+     * @param udata user data
+     * @param address address of peer station
+     * @param pdata  pointer data sent to the channel.
+     * @param size   size of data sent.
+     * @return None.
+     */
+    typedef void (*on_frame_send_cb_t)(void *udata, uint8_t address, const uint8_t *pdata, int size);
 
     /**
      * on_connect_event_cb_t is a callback function, which is called every time connection is established or interrupted.

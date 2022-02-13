@@ -171,6 +171,12 @@ extern "C"
          */
         uint8_t mode;
 
+        /// callback function to process incoming frames. Callback is called from tiny_fd_run_rx() context.
+        on_frame_read_cb_t on_read_cb;
+
+        /// Callback to get notification of sent frames. Callback is called from tiny_fd_run_tx() context.
+        on_frame_send_cb_t on_send_cb;
+
     } tiny_fd_init_t;
 
     /**

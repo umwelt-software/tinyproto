@@ -80,10 +80,10 @@ uint8_t tiny_events_wait(tiny_events_t *events, uint8_t bits, uint8_t clear, uin
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     ts.tv_sec += timeout / 1000;
-    ts.tv_nsec += (timeout % 1000) * 1000000ULL;
-    if ( ts.tv_nsec >= 1000000000ULL )
+    ts.tv_nsec += (timeout % 1000) * 1000000LL;
+    if ( ts.tv_nsec >= 1000000000LL )
     {
-        ts.tv_nsec -= 1000000000ULL;
+        ts.tv_nsec -= 1000000000LL;
         ts.tv_sec++;
     }
     pthread_mutex_lock(&events->mutex);

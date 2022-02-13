@@ -310,6 +310,14 @@ static void __confirm_sent_frames(tiny_fd_handle_t handle, uint8_t peer, uint8_t
                 handle->on_sent_cb(handle->user_data, &slot->payload[0], slot->len);
                 tiny_mutex_lock(&handle->frames.mutex);
             }
+            if ( handle->on_send_cb )
+            {
+                tiny_mutex_unlock(&handle->frames.mutex);
+                handle->on_send_cb(handle->user_data,
+                                   __is_primary_station( handle ) ? (__peer_to_address_field( handle, peer ) >> 2) : TINY_FD_PRIMARY_ADDR,
+                                   &slot->payload[0], slot->len);
+                tiny_mutex_lock(&handle->frames.mutex);
+            }
             tiny_fd_queue_free( &handle->frames.i_queue, slot );
             if ( tiny_fd_queue_has_free_slots( &handle->frames.i_queue ) )
             {
@@ -383,7 +391,9 @@ static void __switch_to_connected_state(tiny_fd_handle_t handle, uint8_t peer)
         if ( handle->on_connect_event_cb )
         {
             tiny_mutex_unlock(&handle->frames.mutex);
-            handle->on_connect_event_cb(handle->user_data, __peer_to_address_field( handle, peer ) >> 2, true);
+            handle->on_connect_event_cb(handle->user_data,
+                                       __is_primary_station( handle ) ? (__peer_to_address_field( handle, peer ) >> 2) : TINY_FD_PRIMARY_ADDR,
+                                       true);
             tiny_mutex_lock(&handle->frames.mutex);
         }
     }
@@ -408,7 +418,9 @@ static void __switch_to_disconnected_state(tiny_fd_handle_t handle, uint8_t peer
         if ( handle->on_connect_event_cb )
         {
             tiny_mutex_unlock(&handle->frames.mutex);
-            handle->on_connect_event_cb(handle->user_data, __peer_to_address_field( handle, peer ) >> 2, false);
+            handle->on_connect_event_cb(handle->user_data,
+                                       __is_primary_station( handle ) ? (__peer_to_address_field( handle, peer ) >> 2) : TINY_FD_PRIMARY_ADDR,
+                                        false);
             tiny_mutex_lock(&handle->frames.mutex);
         }
     }
@@ -431,6 +443,14 @@ static int __on_i_frame_read(tiny_fd_handle_t handle, uint8_t peer, void *data, 
         {
             tiny_mutex_unlock(&handle->frames.mutex);
             handle->on_frame_cb(handle->user_data, (uint8_t *)data + 2, len - 2);
+            tiny_mutex_lock(&handle->frames.mutex);
+        }
+        if ( handle->on_read_cb )
+        {
+            tiny_mutex_unlock(&handle->frames.mutex);
+            handle->on_read_cb(handle->user_data,
+                               __is_primary_station( handle ) ? (__peer_to_address_field( handle, peer ) >> 2) : TINY_FD_PRIMARY_ADDR,
+                               (uint8_t *)data + 2, len - 2);
             tiny_mutex_lock(&handle->frames.mutex);
         }
         // Decide whenever we need to send RR after user callback
@@ -753,6 +773,8 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     protocol->user_data = init->pdata;
     protocol->on_frame_cb = init->on_frame_cb;
     protocol->on_sent_cb = init->on_sent_cb;
+    protocol->on_read_cb = init->on_read_cb;
+    protocol->on_send_cb = init->on_send_cb;
     protocol->on_connect_event_cb = init->on_connect_event_cb;
     protocol->send_timeout = init->send_timeout;
     // By default assign primary address
