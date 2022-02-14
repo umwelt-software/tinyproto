@@ -60,7 +60,7 @@ int tiny_fd_queue_init(tiny_fd_queue_t *queue, uint8_t *buffer,
     }
     if ( ptr > buffer + max_size )
     {
-        LOG(TINY_LOG_CRIT, "Out of provided memory: provided %i bytes, used %i bytes\n", max_size, (int)(ptr - buffer));
+        LOG(TINY_LOG_CRIT, "Queue out of provided memory: provided %i bytes, used %i bytes\n", max_size, (int)(ptr - buffer));
         return TINY_ERR_INVALID_DATA;
     }
     queue->mtu = mtu;

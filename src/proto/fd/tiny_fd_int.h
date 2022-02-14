@@ -46,7 +46,7 @@ extern "C"
 #define FD_PEER_BUF_SIZE() ( sizeof(tiny_fd_peer_info_t) )
 
 
-#define FD_MIN_BUF_SIZE(mtu, window) ( sizeof(tiny_fd_data_t) + \
+#define FD_MIN_BUF_SIZE(mtu, window) ( sizeof(tiny_fd_data_t) + TINY_ALIGN_STRUCT_VALUE - 1 + \
                                       HDLC_MIN_BUF_SIZE( mtu + sizeof(tiny_frame_header_t), HDLC_CRC_16 ) + \
                                       ( 1 * FD_PEER_BUF_SIZE() ) + \
                                       ( sizeof(tiny_fd_frame_info_t *) + sizeof(tiny_fd_frame_info_t) + mtu \

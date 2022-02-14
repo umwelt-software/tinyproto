@@ -1261,7 +1261,7 @@ int tiny_fd_buffer_size_by_mtu_ex(uint8_t peers_count, int mtu, int window, hdlc
         peers_count = 1;
     }
     // Alignment requirements are already satisfied by hdlc_ll_get_buf_size_ex() subfunction call
-    return sizeof(tiny_fd_data_t) +
+    return sizeof(tiny_fd_data_t) + TINY_ALIGN_STRUCT_VALUE - 1 +
            peers_count * sizeof(tiny_fd_peer_info_t) +
            // RX side
            hdlc_ll_get_buf_size_ex(mtu + sizeof(tiny_frame_header_t), crc_type) +
