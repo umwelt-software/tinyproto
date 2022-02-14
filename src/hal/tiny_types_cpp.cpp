@@ -32,3 +32,17 @@
 #if defined(CONFIG_ENABLE_CPP_HAL)
 #include "cpp/cpp_hal.inl"
 #endif
+
+#if 0
+#include <Arduino.h>
+static char buffer[1024];
+int my_printf( const char *str, ... )
+{
+    va_list l;
+    va_start( l, str );
+    int len = vsnprintf(buffer, 1024, str, l);
+    Serial.println(buffer);
+    va_end(l);
+    return len;
+}
+#endif
