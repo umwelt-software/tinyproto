@@ -57,6 +57,8 @@ extern "C"
 #define TINY_DEBUG 1
 #endif
 
+//extern int my_printf( const char *str, ... );
+
 #if TINY_DEBUG
 #define TINY_LOG(lvl, fmt, ...)                                                                                        \
     {                                                                                                                  \

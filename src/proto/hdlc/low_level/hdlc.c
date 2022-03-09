@@ -38,7 +38,7 @@
 #endif
 
 #if TINY_HDLC_DEBUG
-#define LOG(...) TINY_LOG(__VA_ARGS__)
+#define LOG(lvl, fmt, ...) TINY_LOG(lvl, fmt, __VA_ARGS__)
 #else
 #define LOG(...)
 #endif
