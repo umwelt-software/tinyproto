@@ -29,10 +29,8 @@ It is also can be compiled for desktop Linux system, and it can be built for Win
 Using this library you can easy implement data transfer between 2 microcontrollers or between microcontroller and pc via UART, SPI,
 I2C or any other communication channels.
 You don't need to think about data synchronization between points. The library use no dynamic allocation of memory.
-TinyProto is based on RFC 1662, it implements the following frames:
- * U-frames (SABM, UA)
- * S-frames (REJ, RR)
- * I-frames
+TinyProto is based on RFC 1662. Tiny Protocol supports 2 HDLC modes: ABM (for peer to peer connections) and NRM (for
+multi-drop connections).
 
 Tiny Protocol is NOT an application layer protocol, although, for example, it can be used with Protocol Buffers.
 
@@ -40,16 +38,13 @@ Tiny Protocol is NOT an application layer protocol, although, for example, it ca
 ## Key Features
 
 Main features:
- * Hot plug/unplug support
+ * Hot plug/unplug support for ABM (peer to peer).
  * Connection autorecover for Full duplex and Light protocols (with enabled crc)
+ * Error detection: Simple 8-bit checksum (sum of bytes), FCS16 (CCITT-16), FCS32 (CCITT-32)
  * Platform independent hdlc framing implementation (hdlc low level API: hdlc_ll_xxxx)
- * High level hdlc implementation for backward compatibility with previous releases (hdlc_xxxx API)
- * Easy to use Light protcol (tiny_light_xxxx API, see examples)
+ * Easy to use Light protcol - analogue of a SLIP protcol (tiny_light_xxxx API, see examples)
  * Full-duplex protocol (tiny_fd_xxxx true RFC 1662 implementation, supports confirmation, frames retransmissions)
- * Error detection
-   * Simple 8-bit checksum (sum of bytes)
-   * FCS16 (CCITT-16)
-   * FCS32 (CCITT-32)
+ * one to one and one to many modes
  * Frames of maximum 32K or 2G size (payload limit depends on platfrom).
  * Low SRAM consumption (starts at 60 bytes).
  * Low Flash consumption (starts at 1.2KiB, features can be disabled and enabled at compilation time)
