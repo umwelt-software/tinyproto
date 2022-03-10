@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2022 (,2022 (C) Alexey Dynda
+    Copyright 2019-2022 (C) Alexey Dynda
 
     This file is part of Tiny Protocol Library.
 
@@ -69,6 +69,7 @@ void IFd::begin()
     init.retry_timeout = 200;
     init.retries = 2;
     init.crc_type = m_crc;
+    init.mode = TINY_FD_MODE_ABM;
 
     tiny_fd_init(&m_handle, &init);
 }
