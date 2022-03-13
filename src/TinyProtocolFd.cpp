@@ -62,6 +62,7 @@ void IFd::begin()
     init.pdata = this;
     init.on_read_cb = onReceiveInternal;
     init.on_send_cb = onSendInternal;
+    init.on_connect_event_cb = onConnectEventInternal;
     init.buffer = m_buffer;
     init.buffer_size = m_bufferSize;
     init.window_frames = m_window;
