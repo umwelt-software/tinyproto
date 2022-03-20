@@ -251,6 +251,14 @@ public:
         return m_handle;
     }
 
+    /**
+     * Returns status of the protocol
+     */
+    int getStatus()
+    {
+        return tiny_fd_get_status(m_handle);
+    }
+
 protected:
     /**
      * Method called by hdlc protocol upon receiving new frame.

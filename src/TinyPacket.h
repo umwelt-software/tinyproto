@@ -230,12 +230,21 @@ public:
     }
 
     /**
-     * Returns size of payload data in the received packet.
-     * @return size of payload data.
+     * Returns pointer to payload data in the received packet.
+     * @return pointer to payload data.
      */
     inline char *data()
     {
         return (char *)m_buf;
+    }
+
+    /**
+     * Returns size of remaining bytes (not yet accessed through get*()) in the received packet.
+     * @return size of remaining payload data.
+     */
+    inline size_t availableBytes()
+    {
+        return (size_t)(m_len - m_p);
     }
 
     /**
