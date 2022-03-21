@@ -1,6 +1,7 @@
 
 ![Tiny Protocol](.travis/tinylogo.svg)<br>
 <!-- [![Build Status](https://circleci.com/gh/lexus2k/tinyproto.svg?style=svg)](https://circleci.com/gh/lexus2k/tinyproto) -->
+![Github actions](https://github.com/lexus2k/tinyproto/actions/workflows/main.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/lexus2k/tinyproto/badge.svg?branch=master)](https://coveralls.io/github/lexus2k/tinyproto?branch=master)
 [![Documentation](https://codedocs.xyz/lexus2k/tinyproto.svg)](https://codedocs.xyz/lexus2k/tinyproto/)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
