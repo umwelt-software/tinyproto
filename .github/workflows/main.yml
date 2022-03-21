@@ -29,7 +29,7 @@ jobs:
       - name: Install apt dependencies
         run: |
           sudo apt update
-          sudo apt install -y gcc g++ clang clang-format libsdl2-dev
+          sudo apt install -y gcc g++ clang clang-format libsdl2-dev lcov
           sudo apt install -y cppcheck cpputest doxygen avr-libc gcc-avr graphviz socat
           sudo pip3 install cpp-coveralls
           pip3 install --user cpp-coveralls
@@ -45,12 +45,13 @@ jobs:
           make
           ./.travis/run_tests.sh
           make clean
-          make ARCH=linux EXTRA_CPPFLAGS="--coverage" check
+          make ARCH=linux EXTRA_CPPFLAGS="--coverage" coverage
           
       - name: Upload coverage statistics
         uses: coverallsapp/github-action@master
         with:
            github-token: ${{ secrets.GITHUB_TOKEN }}
+           path-to-lcov: ./lcov.info
         #run: |
         #  sudo find / -name coveralls
         #  echo -e "service_name: circle-ci\n" > .coveralls.yml \
