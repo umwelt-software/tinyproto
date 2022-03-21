@@ -48,8 +48,11 @@ jobs:
           make ARCH=linux EXTRA_CPPFLAGS="--coverage" check
           
       - name: Upload coverage statistics
-        run: |
-          sudo find / -name coveralls
-          echo -e "service_name: circle-ci\n" > .coveralls.yml \
-          && TRAVIS_JOB_ID="#${CIRCLE_BUILD_NUM}" COVERALLS_REPO_TOKEN=4Ia7t9YDo22zQcFEnMYLh1tiWCRlBJlhk coveralls -b . \
-          --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
+        uses: coverallsapp/github-action@master
+        with:
+           github-token: ${{ secrets.GITHUB_TOKEN }}
+        #run: |
+        #  sudo find / -name coveralls
+        #  echo -e "service_name: circle-ci\n" > .coveralls.yml \
+        #  && TRAVIS_JOB_ID="#${GITHUB_RUN_NUMBER}" COVERALLS_REPO_TOKEN=4Ia7t9YDo22zQcFEnMYLh1tiWCRlBJlhk coveralls -b . \
+        #  --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
