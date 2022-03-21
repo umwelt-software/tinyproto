@@ -50,10 +50,44 @@ jobs:
       - name: Upload coverage statistics
         uses: coverallsapp/github-action@master
         with:
-           github-token: ${{ secrets.GITHUB_TOKEN }}
-           path-to-lcov: ./lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./lcov.info
         #run: |
         #  sudo find / -name coveralls
         #  echo -e "service_name: circle-ci\n" > .coveralls.yml \
         #  && TRAVIS_JOB_ID="#${GITHUB_RUN_NUMBER}" COVERALLS_REPO_TOKEN=4Ia7t9YDo22zQcFEnMYLh1tiWCRlBJlhk coveralls -b . \
         #  --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
+        
+      - name: Building via clang
+        run: |
+          make clean
+          CC=clang CXX=clang++ LD=clang++ make
+          make install DESTDIR=test_path
+          ./.travis/check_install.sh . test_path
+          make cppcheck tiny_loopback
+          
+      - name: Building for AVR
+        run: |
+          make clean
+          make ARCH=avr
+
+      - name: Cache ESP32 build system modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-esp32-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: |
+             ~/esp
+             ~/.espressif
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - name: Install ESP32 SDK
+        run: |
+          ./.travis/setup_esp_build_env.sh travis
+      - name: Building ESP32 code
+        run: |
+          . ~/esp/esp-idf/export.sh
+          cd examples/esp32_idf/uart/tinyfd_loopback/components/tinyproto && ln -s ../../../../../../src && ln -s ../../../../../../component.mk
+          cd ../.. && make defconfig
+          make
