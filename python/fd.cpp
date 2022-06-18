@@ -182,6 +182,15 @@ static PyObject *Fd_end(Fd *self)
     Py_RETURN_NONE;
 }
 
+static PyObject *Fd_disconnect(Fd *self)
+{
+    int result = 0;
+    Py_BEGIN_ALLOW_THREADS;
+    result = tiny_fd_disconnect(self->handle);
+    Py_END_ALLOW_THREADS;
+    return PyLong_FromLong((long)result);
+}
+
 static PyObject *Fd_send(Fd *self, PyObject *args)
 {
     Py_buffer buffer{};
@@ -458,6 +467,7 @@ static PyMethodDef Fd_methods[] = {
     {"begin", (PyCFunction)Fd_begin, METH_NOARGS, "Initializes Fd protocol"},
     {"end", (PyCFunction)Fd_end, METH_NOARGS, "Stops Fd protocol"},
     {"send", (PyCFunction)Fd_send, METH_VARARGS, "Sends new message to remote side"},
+    {"disconnect", (PyCFunction)Fd_disconnect, METH_NOARGS, "Sends disconnect frame"},
     {"rx", (PyCFunction)Fd_rx, METH_VARARGS, "Passes rx data"},
     {"tx", (PyCFunction)Fd_tx, METH_VARARGS, "Fills specified buffer with tx data"},
     {"run_rx", (PyCFunction)Fd_run_rx, METH_VARARGS, "Reads data from user callback and parses them"},
