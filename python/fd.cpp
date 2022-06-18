@@ -44,6 +44,7 @@ typedef struct
     void *buffer;
     PyObject *on_frame_sent;
     PyObject *on_frame_read;
+    PyObject *on_connect_event;
     PyObject *read_func;
     PyObject *write_func;
     int error_flag;
@@ -59,6 +60,7 @@ static void Fd_dealloc(Fd *self)
 {
     Py_XDECREF(self->on_frame_read);
     Py_XDECREF(self->on_frame_sent);
+    Py_XDECREF(self->on_connect_event);
     Py_XDECREF(self->read_func);
     Py_XDECREF(self->write_func);
     Py_TYPE(self)->tp_free((PyObject *)self);
@@ -71,6 +73,7 @@ static int Fd_init(Fd *self, PyObject *args, PyObject *kwds)
     self->crc_type = HDLC_CRC_16;
     self->on_frame_sent = NULL;
     self->on_frame_read = NULL;
+    self->on_connect_event = NULL;
     self->read_func = NULL;
     self->write_func = NULL;
     self->mtu = 1500;
@@ -127,6 +130,27 @@ static void on_frame_sent(void *user_data, uint8_t *data, int len)
     }
 }
 
+static void on_connect_event(void *user_data, uint8_t address, bool connected)
+{
+    Fd *self = (Fd *)user_data;
+    if ( self->on_connect_event )
+    {
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
+        PyObject *arg_address = PyLong_FromLong((long)address);
+        PyObject *arg_connected = PyBool_FromLong((long)connected);
+        PyObject *temp = PyObject_CallFunctionObjArgs(self->on_connect_event, arg_address, arg_connected, NULL);
+        // Dereference result
+        Py_XDECREF(temp);
+        // Dereference argss
+        Py_DECREF(arg_address);
+        Py_DECREF(arg_connected);
+
+        PyGILState_Release(gstate);
+    }
+}
+
 ////////////////////////////// METHODS
 
 static PyObject *Fd_begin(Fd *self)
@@ -135,6 +159,7 @@ static PyObject *Fd_begin(Fd *self)
     init.pdata = self;
     init.on_frame_cb = on_frame_read;
     init.on_sent_cb = on_frame_sent;
+    init.on_connect_event_cb = on_connect_event;
     init.crc_type = self->crc_type;
     init.buffer_size = tiny_fd_buffer_size_by_mtu_ex(1, self->mtu, self->window_size, init.crc_type);
     self->buffer = PyObject_Malloc(init.buffer_size);
@@ -377,7 +402,22 @@ static int Fd_set_on_send(Fd *self, PyObject *value, void *closure)
     return 0;
 }
 
-static PyObject* Fd_get_crc(Fd *self, void * closure)
+static PyObject *Fd_get_on_connect_event(Fd *self, void *closure)
+{
+    Py_INCREF(self->on_connect_event);
+    return self->on_connect_event;
+}
+
+static int Fd_set_on_connect_event(Fd *self, PyObject *value, void *closure)
+{
+    PyObject *tmp = self->on_connect_event;
+    Py_INCREF(value);
+    self->on_connect_event = value;
+    Py_XDECREF(tmp);
+    return 0;
+}
+
+static PyObject *Fd_get_crc(Fd *self, void *closure)
 {
     return PyLong_FromLong( self->crc_type );
 }
@@ -406,7 +446,9 @@ static int Fd_set_crc(Fd *self, PyObject *value)
 static PyGetSetDef Fd_getsetters[] = {
     {"on_read", (getter)Fd_get_on_read, (setter)Fd_set_on_read, "Callback for incoming messages", NULL},
     {"on_send", (getter)Fd_get_on_send, (setter)Fd_set_on_send, "Callback for successfully sent messages", NULL},
-    {"crc",     (getter)Fd_get_crc,     (setter)Fd_set_crc,     "CRC value", NULL},
+    {"on_connect_event", (getter)Fd_get_on_connect_event, (setter)Fd_set_on_connect_event,
+     "Callback for connection status change events", NULL},
+    {"crc", (getter)Fd_get_crc, (setter)Fd_set_crc, "CRC value", NULL},
     {NULL} /* Sentinel */
 };
 
