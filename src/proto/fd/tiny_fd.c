@@ -388,7 +388,10 @@ static void __switch_to_connected_state(tiny_fd_handle_t handle, uint8_t peer)
         tiny_fd_queue_reset_for( &handle->frames.i_queue, __peer_to_address_field( handle, peer ) );
         handle->peers[peer].last_ka_ts = tiny_millis();
         tiny_events_set(&handle->peers[peer].events, FD_EVENT_CAN_ACCEPT_I_FRAMES);
-        tiny_events_set(&handle->events, FD_EVENT_TX_DATA_AVAILABLE);
+        tiny_events_set(
+            &handle->events,
+            FD_EVENT_TX_DATA_AVAILABLE |
+                (tiny_fd_queue_has_free_slots(&handle->frames.i_queue) ? FD_EVENT_QUEUE_HAS_FREE_SLOTS : 0));
         LOG(TINY_LOG_CRIT, "[%p] Connection is established\n", handle);
         if ( handle->on_connect_event_cb )
         {
