@@ -301,6 +301,11 @@ public:
     {
     }
 
+    explicit Packet(char *buf, int size)
+        : IPacket(buf, size)
+    {
+    }
+
     ~Packet()
     {
         delete[](uint8_t *) data();
