@@ -238,6 +238,12 @@ public:
         return (char *)m_buf;
     }
 
+    inline void set_len(int new_len)
+    {
+        m_len = new_len;
+        m_p = 0;
+    }
+
     /**
      * Returns size of remaining bytes (not yet accessed through get*()) in the received packet.
      * @return size of remaining payload data.

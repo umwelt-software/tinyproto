@@ -212,6 +212,8 @@ public:
      */
     bool enableCrc32();
 
+    void user_data(void * data) { this->m_data.user_data = data; };
+
 private:
     STinyLightData m_data{};
 
