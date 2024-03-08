@@ -57,7 +57,7 @@ extern "C"
 /**
  * This macro defines buffer size required for tiny light protocol
  */
-#define LIGHT_BUF_SIZE (sizeof(uintptr_t) * 16)
+#define LIGHT_BUF_SIZE (sizeof(uintptr_t) * 16 * 2)
 
     /**
      * This structure contains information about communication channel and its state.

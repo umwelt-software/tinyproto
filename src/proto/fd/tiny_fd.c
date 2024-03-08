@@ -569,7 +569,7 @@ static int on_frame_read(void *user_data, void *data, int len)
     tiny_fd_handle_t handle = (tiny_fd_handle_t)user_data;
     if ( len < 2 )
     {
-        LOG(TINY_LOG_WRN, "FD: received too small frame\n");
+        LOG(TINY_LOG_WRN, "FD: received too small frame%c\n", ' ');
         return TINY_ERR_FAILED;
     }
     uint8_t peer = __address_field_to_peer( handle, ((uint8_t *)data)[0] );
@@ -686,7 +686,7 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
         init->mtu = (init->buffer_size - size) / (init->window_frames + 1);
         if ( init->mtu < 1 )
         {
-            LOG(TINY_LOG_CRIT, "Calculated mtu size is zero, no payload transfer is available\n");
+            LOG(TINY_LOG_CRIT, "Calculated mtu size is zero, no payload transfer is available%c\n", ' ');
             return TINY_ERR_INVALID_DATA;
         }
     }
@@ -698,12 +698,12 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     }
     if ( init->window_frames < 2 )
     {
-        LOG(TINY_LOG_CRIT, "HDLC doesn't support less than 2-frames queue\n");
+        LOG(TINY_LOG_CRIT, "HDLC doesn't support less than 2-frames queue%c\n", ' ');
         return TINY_ERR_INVALID_DATA;
     }
     if ( !init->retry_timeout && !init->send_timeout )
     {
-        LOG(TINY_LOG_CRIT, "HDLC uses timeouts for ACK, at least retry_timeout, or send_timeout must be specified\n");
+        LOG(TINY_LOG_CRIT, "HDLC uses timeouts for ACK, at least retry_timeout, or send_timeout must be specified%c\n", ' ');
         return TINY_ERR_INVALID_DATA;
     }
     memset(init->buffer, 0, init->buffer_size);
@@ -771,7 +771,7 @@ int tiny_fd_init(tiny_fd_handle_t *handle, tiny_fd_init_t *init)
     int result = hdlc_ll_init(&protocol->_hdlc, &_init);
     if ( result != TINY_SUCCESS )
     {
-        LOG(TINY_LOG_CRIT, "HDLC low level initialization failed");
+        LOG(TINY_LOG_CRIT, "HDLC low level initialization failed%c", ' ');
         return result;
     }
 
@@ -983,7 +983,7 @@ static void tiny_fd_connected_check_idle_timeout(tiny_fd_handle_t handle, uint8_
         if ( handle->peers[peer].retries > 0 )
         {
             LOG(TINY_LOG_WRN,
-                "[%p] Timeout, resending unconfirmed frames: last(%" PRIu32 " ms, now(%" PRIu32 " ms), timeout(%" PRIu32
+                "[%p] Timeout, resending unconfirmed frames: last(%" PRIu32 " ms, now(%" PRIu32 " ms), timeout(%" PRIu16
                 " ms))\n",
                 handle, handle->peers[peer].last_i_ts, tiny_millis(), handle->retry_timeout);
             handle->peers[peer].retries--;
@@ -1184,7 +1184,7 @@ int tiny_fd_send_packet_to(tiny_fd_handle_t handle, uint8_t address, const void 
     uint32_t start_ms = tiny_millis();
     if ( len > tiny_fd_queue_get_mtu( &handle->frames.i_queue ) )
     {
-        LOG(TINY_LOG_ERR, "[%p] PUT frame error\n", handle);
+        LOG(TINY_LOG_ERR, "[%p] PUT frame error: len: %d, mtu:%d\n", handle, len, tiny_fd_queue_get_mtu( &handle->frames.i_queue ));
         result = TINY_ERR_DATA_TOO_LARGE;
     }
     // Wait until there is room for new frame

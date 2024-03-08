@@ -39,7 +39,7 @@ extern "C"
 #include <inttypes.h>
 
 #ifndef TINY_LOG_LEVEL_DEFAULT
-#define TINY_LOG_LEVEL_DEFAULT 0
+#define TINY_LOG_LEVEL_DEFAULT 4
 #endif
 
     extern uint8_t g_tiny_log_level;
@@ -63,7 +63,7 @@ extern "C"
 #define TINY_LOG(lvl, fmt, ...)                                                                                        \
     {                                                                                                                  \
         if ( lvl < g_tiny_log_level )                                                                                  \
-            fprintf(stderr, "%08" PRIu32 " ms: " fmt, tiny_millis(), ##__VA_ARGS__);                                   \
+            printf("%08" PRIu32 " ms: " fmt, tiny_millis(), ##__VA_ARGS__);                                   \
     }
 #else
 #define TINY_LOG(...)

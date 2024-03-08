@@ -52,6 +52,10 @@
 #define TINY_ESCAPE_CHAR 0x7D
 #define TINY_ESCAPE_BIT 0x20
 
+#ifdef SOC_UART_FIFO_LEN
+#define TINY_LIGHT_STREAM_BUFF_LEN  SOC_UART_FIFO_LEN
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 /**************************************************************
@@ -118,7 +122,11 @@ int tiny_light_send(STinyLightData *handle, const uint8_t *pbuf, int len)
     hdlc_ll_put(handle->_hdlc, pbuf, len);
     while ( handle->_hdlc->tx.origin_data )
     {
+#ifdef TINY_LIGHT_STREAM_BUFF_LEN
+        uint8_t stream[TINY_LIGHT_STREAM_BUFF_LEN];
+#else
         uint8_t stream[1];
+#endif
         int stream_len = hdlc_ll_run_tx(handle->_hdlc, stream, sizeof(stream));
         do
         {

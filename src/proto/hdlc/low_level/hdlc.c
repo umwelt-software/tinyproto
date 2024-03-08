@@ -479,15 +479,15 @@ static int hdlc_ll_read_end(hdlc_ll_handle_t handle, const uint8_t *data, int le
     {
 // CRC calculate issue
 #if TINY_HDLC_DEBUG
-        LOG(TINY_LOG_ERR, "[HDLC:%p] RX: WRONG CRC (calc:%08X != %08X)\n", handle, calc_crc, read_crc);
+        LOG(TINY_LOG_ERR, "[HDLC:%p] RX: WRONG CRC (calc:%lu != %0lu)\n", handle, calc_crc, read_crc);
         if ( TINY_LOG_DEB < g_tiny_log_level )
             for ( int i = 0; i < len; i++ )
                 fprintf(stderr, " %c ", (char)((uint8_t *)handle->rx_buf)[i]);
-        LOG(TINY_LOG_DEB, "\n");
+        LOG(TINY_LOG_DEB, "%c\n", '_');
         if ( TINY_LOG_DEB < g_tiny_log_level )
             for ( int i = 0; i < len; i++ )
                 fprintf(stderr, " %02X ", ((uint8_t *)handle->rx_buf)[i]);
-        LOG(TINY_LOG_DEB, "\n-----------\n");
+        LOG(TINY_LOG_DEB, "\n----------%c\n", '-');
 #endif
         return TINY_ERR_WRONG_CRC;
     }
