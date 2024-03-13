@@ -57,7 +57,9 @@ extern "C"
 #elif defined(_WIN32)
 #include "win32/win32_hal.h"
 #else
+#ifndef CPU_S32K144HFT0VLLT
 #info "Platform not supported. Multithread support is disabled"
+#endif
 #include "no_platform/no_platform_hal.h"
 #endif
 
