@@ -28,10 +28,17 @@
 
 #pragma once
 
+#ifndef CPU_S32K144HFT0VLLT
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "freertos/event_groups.h"
+#else
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "event_groups.h"
+#endif
 
 #ifndef CONFIG_ENABLE_CHECKSUM
 #define CONFIG_ENABLE_CHECKSUM
